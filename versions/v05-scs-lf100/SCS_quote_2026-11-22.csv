@@ -1,0 +1,22 @@
+part,material,services,qty,each_usd,total_usd,note
+body_half_A,5052 .063,"11 bends, 8 M4 taps, 2 M3 nuts, Gloss Red",1,148.43,148.43,
+body_half_B,5052 .063,"9 bends, 6 M4 taps, 2 M3 nuts, Gloss Red",1,130.38,130.38,
+lid,5052 .063,"6 bends, 8 M3 nuts, Gloss Red",1,115.11,115.11,
+plate_front,6061 .187,Metallic Grey,1,256.74,256.74,459 holes: pierce-heavy (5052 .125 quoted ~33% less)
+plate_rear,6061 .187,Metallic Grey,1,299.48,299.48,625 holes (5052 .125 = 199.69)
+tray1,5052 .063,"2 bends, 4 M3x6 standoffs, 4 M4x10 studs",1,58.33,58.33,
+tray2,5052 .063,-,1,22.57,22.57,
+g10_floor,G10 .187,-,1,87.08,87.08,
+g10_frame,G10 .187,-,1,83.05,83.05,.125 out of stock -> .187
+module_endplate,6061 .313,-,2,39.29,78.58,
+busbar_link,Copper .125,-,3,15.06,45.18,
+bus_pack_neg,Copper .125,1 bend,1,55.22,55.22,
+bus_pack_pos,Copper .125,1 bend,1,27.42,27.42,
+diffuser,Acrylic White .118,-,1,12.93,12.93,
+light_pipe,Acrylic Clear .118,-,1,2.00,2.00,
+mylar_tray1,Mylar .010,-,1,16.28,16.28,
+cell_spacers,Mylar .010 (sub for G10 .063 - out of stock),-,5,3.88,19.40,
+CART TOTAL (USD; US shipping free; Canada shipping not computed),,,,,1458.18,arrives as soon as Sat Dec 5
+g10_top (not in cart),Mylar .010 sub,-,1,14.31,14.31,G10 .063 out of stock
+1S4P kit plates (not in cart),Copper .125,-,2,175.48,350.96,optional
+1S4P kit insulator (not in cart),Mylar .010,-,1,10.79,10.79,optional

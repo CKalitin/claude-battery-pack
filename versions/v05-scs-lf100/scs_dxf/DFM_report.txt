@@ -1,0 +1,51 @@
+SCS 5052 .063: BA90 2.452  OSSB90 2.489  BD90 2.526 mm (SCS lists .096" = 2.438)
+               BA30 0.817  OSSB30 0.667  BD30 0.517
+body_half_A: flat (390.0, 335.3)  bends [(114.0, 30, 'down'), (128.5, 30, 'down'), (143.0, 30, 'down')] + 8 tab bends
+  segment 0: flat 113.6 mm  (need >= 6.5)  OK
+  segment 1: flat 13.7 mm  (need >= 6.6)  OK
+  segment 2: flat 13.7 mm  (need >= 6.6)  OK
+  segment 3: flat 191.9 mm  (need >= 6.5)  OK
+  closest hole edge to a bend centre line: 48.0 mm  (need >= 6.0)  OK
+  tab flanges (formed) [45.0, 22.6, 22.6, 22.6] mm  (min formed flange 7.7)
+body_half_B: flat (390.0, 287.3)  bends [(66.0, 30, 'up'), (80.5, 30, 'up'), (95.0, 30, 'up')] + 6 tab bends
+  segment 0: flat 65.6 mm  (need >= 6.5)  OK
+  segment 1: flat 13.7 mm  (need >= 6.6)  OK
+  segment 2: flat 13.7 mm  (need >= 6.6)  OK
+  segment 3: flat 191.9 mm  (need >= 6.5)  OK
+  closest hole edge to a bend centre line: 48.0 mm  (need >= 6.0)  OK
+  tab flanges (formed) [22.6, 22.6, 22.6] mm  (min formed flange 7.7)
+lid: flat (309.0, 284.5)  bends [(21.3, 30, 'down'), (35.7, 30, 'down'), (50.2, 30, 'down'), (234.3, 30, 'down'), (248.8, 30, 'down'), (263.3, 30, 'down')]
+  segment 0: flat 20.8 mm  (need >= 6.5)  OK
+  segment 1: flat 13.7 mm  (need >= 6.6)  OK
+  segment 2: flat 13.7 mm  (need >= 6.6)  OK
+  segment 3: flat 183.3 mm  (need >= 6.6)  OK
+  segment 4: flat 13.7 mm  (need >= 6.6)  OK
+  segment 5: flat 13.7 mm  (need >= 6.6)  OK
+  segment 6: flat 20.8 mm  (need >= 6.5)  OK
+  closest hole edge to a bend centre line: 10.0 mm  (need >= 6.0)  OK
+  U-channel 2:1: base 183 vs 2 x leg 84  OK
+tray1: flat (277.0, 198.1)
+  segment 0: flat 11.1 mm  (need >= 6.5)  OK
+  segment 1: flat 171.0 mm  (need >= 6.6)  OK
+  segment 2: flat 11.1 mm  (need >= 6.5)  OK
+  closest hole edge to a bend centre line: 11.2 mm  (need >= 6.0)  OK
+  U-channel 2:1: base 171 vs 2 x flange 24  OK
+one-piece U body would be: base 181 vs 2 x leg 426 -> FAIL (so split into 2 L halves)
+plate_front: 6061 .187  flat (238.0, 306.1)  qty 1
+plate_rear: 6061 .187  flat (238.0, 306.1)  qty 1
+tray2: 5052 .063  flat (191.0, 158.0)  qty 1
+g10_floor: G10 .187  flat (225.3, 176.0)  qty 1
+g10_frame: G10 .125  flat (236.3, 190.0)  qty 1
+g10_top: G10 .063  flat (226.3, 164.0)  qty 1
+g10_spacer: G10 .063  flat (160.0, 115.7)  qty 5
+module_endplate: 6061 .313  flat (184.0, 105.7)  qty 2
+busbar_link: Copper .125  flat (76.7, 25.0)  qty 3
+diffuser: Acrylic .063 white  flat (194.8, 173.5)  qty 1
+light_pipe: Acrylic .118 clear  flat (10.3, 185.8)  qty 1
+mylar_tray1: Mylar .010  flat (273.0, 171.8)  qty 1
+kit_plate_pos_lower: Copper .125  flat (199.1, 125.0)  qty 1
+kit_plate_neg_upper: Copper .125  flat (199.1, 125.0)  qty 1
+kit_insulator: G10 .063  flat (199.1, 125.0)  qty 1
+kit_spacer: Copper .187  flat (18.0, 18.0)  qty 4
+bus_pack_pos: Cu .125 flat 50.7 x 25.0  1 bend 90 (min formed flange .471" = 12.0: legs 37.1 / 18.8)
+bus_pack_neg: Cu .125 flat 226.8 long, 1 bend 90 (legs 213.2 / 18.8)
