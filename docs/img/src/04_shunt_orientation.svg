@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 520"><defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<g class="c-teal"><rect x="30" y="20" width="150" height="48" rx="8" stroke-width="0.5"/><text class="th" x="105" y="38" text-anchor="middle" dominant-baseline="central">Control board GND</text><text class="ts" x="105" y="56" text-anchor="middle" dominant-baseline="central">At node A, by design</text></g>
+<g class="c-gray"><rect x="240" y="20" width="220" height="70" rx="8" stroke-width="0.5"/><text class="th" x="350" y="36" text-anchor="middle" dominant-baseline="central">Shunt module</text><text class="ts" x="350" y="54" text-anchor="middle" dominant-baseline="central">Correct: VSS at node A</text><text class="ts" x="262" y="78" text-anchor="middle" dominant-baseline="central">VSS</text><text class="ts" x="330" y="78" text-anchor="middle" dominant-baseline="central">RSHL</text><text class="ts" x="410" y="78" text-anchor="middle" dominant-baseline="central">RSHH</text></g>
+<text class="ts" x="210" y="30" text-anchor="middle">R_h</text>
+<path d="M180 44 L198 44 L200 38 L205 50 L210 38 L215 50 L220 38 L222 44 L240 44" fill="none" stroke="#1D9E75" stroke-width="1.5"/>
+<line x1="105" y1="68" x2="105" y2="148" stroke="#1D9E75" stroke-width="2.5"/>
+<text class="ts" x="205" y="112" text-anchor="middle">VSS bond</text>
+<path d="M262 90 L262 120 L150 120 L150 148" fill="none" stroke="#BA7517" stroke-width="2"/>
+<g class="c-gray"><rect x="60" y="150" width="120" height="44" rx="8" stroke-width="0.5"/><text class="th" x="120" y="164" text-anchor="middle" dominant-baseline="central">Node A</text><text class="ts" x="120" y="182" text-anchor="middle" dominant-baseline="central">Pack B−, cell side</text></g>
+<g class="c-gray"><rect x="460" y="150" width="120" height="44" rx="8" stroke-width="0.5"/><text class="th" x="520" y="164" text-anchor="middle" dominant-baseline="central">Node B</text><text class="ts" x="520" y="182" text-anchor="middle" dominant-baseline="central">To loads −</text></g>
+<line x1="180" y1="172" x2="340" y2="172" stroke="#BA7517" stroke-width="6"/>
+<line x1="400" y1="172" x2="460" y2="172" stroke="#BA7517" stroke-width="6"/>
+<path d="M340 172 L346 164 L355 180 L364 164 L373 180 L382 164 L391 180 L400 172" fill="none" stroke="#BA7517" stroke-width="2.5"/>
+<text class="ts" x="370" y="152" text-anchor="middle">R_sh</text>
+<line x1="330" y1="90" x2="330" y2="168" stroke="#1D9E75" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="410" y1="90" x2="410" y2="168" stroke="#1D9E75" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="330" cy="172" r="3" fill="#0F6E56"/><circle cx="410" cy="172" r="3" fill="#0F6E56"/>
+<line x1="440" y1="214" x2="200" y2="214" stroke="#D85A30" stroke-width="2" marker-end="url(#arrow)"/>
+<text class="ts" x="320" y="232" text-anchor="middle">I (discharge), I_h = 0</text>
+<g class="c-teal"><rect x="30" y="280" width="150" height="48" rx="8" stroke-width="0.5"/><text class="th" x="105" y="298" text-anchor="middle" dominant-baseline="central">Control board GND</text><text class="ts" x="105" y="316" text-anchor="middle" dominant-baseline="central">At node A, by design</text></g>
+<g class="c-red"><rect x="240" y="280" width="220" height="70" rx="8" stroke-width="0.5"/><text class="th" x="350" y="296" text-anchor="middle" dominant-baseline="central">Shunt module</text><text class="ts" x="350" y="314" text-anchor="middle" dominant-baseline="central">Wrong: VSS at node B</text><text class="ts" x="330" y="338" text-anchor="middle" dominant-baseline="central">RSHH</text><text class="ts" x="400" y="338" text-anchor="middle" dominant-baseline="central">RSHL</text><text class="ts" x="440" y="338" text-anchor="middle" dominant-baseline="central">VSS</text></g>
+<text class="ts" x="210" y="290" text-anchor="middle">R_h</text>
+<path d="M240 304 L222 304 L220 298 L215 310 L210 298 L205 310 L200 298 L198 304 L184 304" fill="none" stroke="#E24B4A" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="105" y1="328" x2="105" y2="408" stroke="#E24B4A" stroke-width="2.5"/>
+<text class="ts" x="472" y="372" text-anchor="middle">VSS bond</text>
+<path d="M440 350 L440 380 L505 380 L505 408" fill="none" stroke="#E24B4A" stroke-width="2"/>
+<g class="c-gray"><rect x="60" y="410" width="120" height="44" rx="8" stroke-width="0.5"/><text class="th" x="120" y="424" text-anchor="middle" dominant-baseline="central">Node A</text><text class="ts" x="120" y="442" text-anchor="middle" dominant-baseline="central">Pack B−, cell side</text></g>
+<g class="c-gray"><rect x="460" y="410" width="120" height="44" rx="8" stroke-width="0.5"/><text class="th" x="520" y="424" text-anchor="middle" dominant-baseline="central">Node B</text><text class="ts" x="520" y="442" text-anchor="middle" dominant-baseline="central">To loads −</text></g>
+<line x1="180" y1="432" x2="340" y2="432" stroke="#BA7517" stroke-width="6"/>
+<line x1="400" y1="432" x2="460" y2="432" stroke="#BA7517" stroke-width="6"/>
+<path d="M340 432 L346 424 L355 440 L364 424 L373 440 L382 424 L391 440 L400 432" fill="none" stroke="#BA7517" stroke-width="2.5"/>
+<text class="ts" x="370" y="412" text-anchor="middle">R_sh</text>
+<line x1="330" y1="350" x2="330" y2="428" stroke="#1D9E75" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="400" y1="350" x2="400" y2="428" stroke="#1D9E75" stroke-width="1" stroke-dasharray="4 3"/>
+<circle cx="330" cy="432" r="3" fill="#0F6E56"/><circle cx="400" cy="432" r="3" fill="#0F6E56"/>
+<line x1="440" y1="474" x2="200" y2="474" stroke="#D85A30" stroke-width="2" marker-end="url(#arrow)"/>
+<text class="ts" x="320" y="492" text-anchor="middle">I − I_h through R_sh</text>
+</svg>

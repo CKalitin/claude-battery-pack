@@ -46,6 +46,9 @@ Tower A: a portable LiFePO4 pack. All fabricated parts come from SendCutSend; th
 
 Not included: SendCutSend shipping to Canada. The v9 cell module (4S1P) weighs 10.4 kg; see `versions/v09-inverter-front-bay/module_renders/`.
 
+## Control board
+Electrical architecture: series and parallel modes, current paths, contactor, Tesla shunt grounding. See [`docs/control-board-electrical.md`](docs/control-board-electrical.md).
+
 ## Repo layout
 - `cad/`: parametric build123d models and scripts. Each version has three files:
   - `towerN.py`: the model;
