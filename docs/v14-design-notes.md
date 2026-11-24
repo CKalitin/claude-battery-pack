@@ -239,3 +239,31 @@ R4 is resolved: **one board, controls only**. It carries the BQ76952, ESP32, con
   - (a) Shrink the panel to the module zone: fewer LEDs, but the top third goes unlit.
   - (c) Offset perforation with an air gap: every hole glows, but it needs a ~2 mm spacer between plate and diffuser, which adds parts, and it is the most restrictive path.
 - **Check in the v14 CAD:** the current front panel spans y ±97.4, past the body's ±93.4 interior. Fit it inside the walls.
+
+### 9a. Wake, power-on sequence and anti-oscillation (2026-11-24)
+
+**Power chain:** pack → 2 A fuse → 5 V buck (EN ← BQ76952 REG1) → 3.3 V regulator → ESP32. With the 5 V regulator off, everything is off except the BQ76952 (1 µA) and the IMD divider (4.6 µA).
+
+**Push-button (lid, momentary):**
+- **From SHUTDOWN:** the button pulls TS2 low → the BQ76952 boots → REG1 on → 5 V and 3.3 V up → the ESP32 boots and self-checks (cells, temperatures, IMD). Then precharge → contactor closed → inverter enabled if configured. **One press = pack on.**
+- **When on:** the same button also goes to an ESP32 GPIO. A long press tells the BQ76952 to enter SHUTDOWN, which is pack off.
+- It must be momentary: TS2 held low during shutdown entry sticks the device in Soft SHUTDOWN.
+
+**Charger wake: no oscillation loop.**
+- LD is driven from the **charger's +12Vaux** through a divider, **not from the load bus**.
+- So LD only reflects "AC present". Opening or closing the contactor doesn't change LD, so there is no on/off/on loop.
+- BQ76952 wake is **edge-triggered** (a rising edge through VWAKEONLD ≈ 1.45 V).
+- While AC is present, LD stays high. The device can't fully enter SHUTDOWN and parks in Soft SHUTDOWN; it doesn't cycle. That's intended: the charger is present, so stay on and charge.
+- ⚠️ **To verify:** +12Vaux is assumed to come from the charger's AC-side auxiliary supply, i.e. absent when AC is off. MEAN WELL's spec doesn't say. Bench test on arrival: battery connected, AC off → measure pin 8.
+- **Fallback if aux is battery-fed:** use the NPB's *Charger OK* status pin, or one optocoupler on AC-present.
+
+**Under-voltage relaxation latch.**
+- The real oscillation risk: at low charge, cutting the load lets the cells relax upward, e.g. 2.9 V under load → about 3.1 V at rest. A cutoff that auto-recovers would reconnect, sag and cut again.
+- **Rule:** every under-voltage trip (the firmware 2.90 V cutoff and BQ SHUTDOWN at 2.60 V) **latches**. Re-enabling needs the charger plugged in or a button press with the minimum cell ≥ 3.00 V, giving ≥ 100 mV of hysteresis.
+
+### 10a. Diffuser and LED board mounting: one drop-in sandwich
+
+- **Stack:** diffuser and LED board are one sandwich with the same 4 hole positions.
+- **Mounting:** **4 M3 screws** through both into **4 M3 standoffs on the module's front end plate** (SendCutSend-tapped M3). Installed before the front plate, with no separate alignment step.
+- **Tolerance:** the stack is located by the module and the front plate by the body tabs, a chain of about ±1 mm. So the air holes in the diffuser and LED board are **Ø6.0 mm against Ø4.8 mm in the front plate**, keeping airflow under misalignment. The lit holes need no precise registration.
+- **Fallback:** if CAD shows the tolerance chain is worse, locate the stack on the front plate instead (2 locating pins in text pixels).
