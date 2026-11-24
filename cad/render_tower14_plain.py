@@ -78,3 +78,6 @@ if __name__ == "__main__":
     if "top" in which:
         shot("v14p_08_terminals.png", "M10 terminals: both risers in one plane (x 62), holes at the same height, 114 mm apart", M,
              view=(0.9, -0.35, 0.55), focal=(65, 0, 330), dist=520, zoom=1.0)
+    if "bays" in which:
+        shot("v14p_12_service_bays.png", "Service bays: fan 18 mm | charger front 27 mm | inverter front 21-37 mm (section y = +30)", M,
+             hide=hide + ("body_half_B",), view=(0.02, -1.4, 0.05), clip=((0, -1, 0), (0, 30.0, 0), ""), focal=(-10, 0, 255), dist=520, zoom=1.0)

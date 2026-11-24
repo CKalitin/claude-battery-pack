@@ -303,3 +303,24 @@ $$\Delta T = \frac{P}{\rho c_p Q + UA}$$
   - 44 W in the cells. Their mass of 16 kg × ~1000 J/(kg·K) = 16 kJ/K gives about 2.8 K/h, and the pack only lasts about 1 h at 210 A, so this is negligible.
   - About 30 W in the power path (contactor, fuse, joints) in the deck zone: less than the UPS case above.
 - **Bench check:** at 400 W inverter load, log inlet and exhaust air temperature (telemetry list). Target ≤ 15 K.
+
+## 12. Converter service bays (option 2, decided 2026-11-24)
+
+**Problem.** v13 and v14 left 10–13 mm at the converter ends, too little to plug anything in. The NTS-400P DC input is an Anderson 1327 (SB50-style) and its AC output a JST VH 6-pin; the NPB-450 has an AC input with an on/off switch and DC output V+/V− (MEAN WELL spec sheets). Which end each connector is on is **not yet confirmed**; get the mechanical drawing.
+
+**Option 2 as built** (same 365 mm box):
+
+| Gap | v14 first cut | Now | How |
+|---|---|---|---|
+| Fan face → converter rears | 10 mm | **18 mm** | Both converters moved 8 mm forward |
+| Charger front → contactor (y −5 … 67) | 12 mm | **27 mm** | Contactor moved forward to x 87–153. It stops there because the module's front standoff screw heads at (158, ±55) sit under it. The first plan said 37 mm; that wasn't achievable. |
+| Charger front → line riser / − riser / G10 deck (y −86 … −16) | — | 1–2.5 mm | **The charger's connectors must face the +y half** of its front end. |
+| Inverter front → MRBFs (y 37 … 83) | 13 mm | **37 mm** | MRBF riser moved behind the contactor, above the charger |
+| Inverter front → line bar / + terminal tab (z ≥ 292) | — | 21 mm | — |
+
+**Consequences:**
+- **Charger:** use a right-angle C13 (about 25–30 mm); 27 mm is marginal.
+- **Inverter:** replace the SB50 plug with ring lugs on its DC terminals, as planned in option 2.
+- **Lid:** inlet moved to y −17 in the front column; push-button moved to (100, −60).
+- **Board:** third standoff moved to (141, −10).
+- **Open:** confirm the connector ends from the MEAN WELL drawings. If the charger's AC inlet sits in its −y half, flip the charger 180° about z (its terminals then face the +y side) or move the line riser.

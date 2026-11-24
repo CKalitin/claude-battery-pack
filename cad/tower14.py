@@ -531,10 +531,10 @@ FUSE_X1 = XT - CU2 - 0.2                           # front blade tip, just behin
 FUSE_X0 = FUSE_X1 - FUSE_L
 FUSE_Z = Z_PD + FUSE_D / 2                         # body rests on the G10 deck
 Z_BLADE = FUSE_Z - FUSE_BT / 2                     # blade underside = top of the bars it bolts to
-SH_X0, SH_L, SH_W = 60.0, 83.5, 35.0               # Tesla shunt bar (UNCONFIRMED dims)
+SH_X0, SH_L, SH_W = 61.5, 83.5, 35.0               # Tesla shunt bar (UNCONFIRMED dims)
 SH_Y = -68.5                                       # bar centre line y
 SH_BOLT = [SH_X0 + 15.0, SH_X0 + SH_L - 15.0]      # node B (load side), node A (cell side)
-CT_X, CT_Y = 97.0, 29.5                            # EV200 centre (UNCONFIRMED outline: 66 x 81 base, ~85 tall)
+CT_X, CT_Y = 120.0, 35.0                            # EV200 centre (UNCONFIRMED outline: 66 x 81 base, ~85 tall)
 CT_BASE, CT_H, CT_STUD = (66.0, 81.0), 72.3, 12.6
 Z_CT = Z_T1TOP + CT_H                              # stud seat (top of contactor body)
 CT_STUDS = [(CT_X, CT_Y - 26.0), (CT_X, CT_Y + 26.0)]   # line (from fuse), load (to outputs)
@@ -568,7 +568,7 @@ def power_train():
     """Bolted copper power path. All envelopes; UNCONFIRMED dims flagged in docs/v14-baseline.md."""
     p = {}
     # G10 power deck (insulates shunt + fuse from tray 1 / chassis)
-    deck = box(58.0, 143.0, -86.0, -15.0, Z_T1TOP, Z_PD)
+    deck = box(61.0, 143.0, -86.0, -15.0, Z_T1TOP, Z_PD)
     deck -= box(XT - CU2 - 1.0, XT + 1.0, RET_Y0 - 1, RET_Y1 + 1, Z_T1TOP - 1, Z_PD + 1)
     for x in SH_BOLT:
         deck -= cyl_z(x, SH_Y, Z_T1TOP - 1, Z_PD + 1, 4.3)
@@ -590,11 +590,13 @@ def power_train():
     br = box(FUSE_X1 - FUSE_BL, FUSE_X1, FUSE_Y - FUSE_BW / 2, FUSE_Y + FUSE_BW / 2, Z_BLADE, Z_BLADE + FUSE_BT)
     p["fuse_jjn500"] = body + bl + br
     # line bar: fuse rear blade -> down the drop zone? no: up the x~60 riser -> over to the contactor line stud
-    xr0, xr1 = 59.2, 59.2 + CU2
+    xr0, xr1 = FUSE_X0 - CU2, FUSE_X0
     yl0, yl1 = FUSE_Y - 13.0, FUSE_Y + 11.0
     line = box(xr0, FUSE_X0 + FUSE_BL + 1.0, yl0, yl1, Z_BLADE - CU2, Z_BLADE)
     line += box(xr0, xr1, yl0, yl1, Z_BLADE - CU2, Z_CT + CU2)
-    line += box(xr0, CT_X + 12.5, yl0, CT_STUDS[0][1] + 12.5, Z_CT, Z_CT + CU2)
+    line += box(xr0, CT_X - 12.5, yl0 + 15.5, yl0 + 40.5, Z_CT, Z_CT + CU2)                 # band along x
+    line += box(CT_X - 12.5, CT_X + 12.5, CT_STUDS[0][1] - 12.5, CT_STUDS[0][1] + 12.5, Z_CT, Z_CT + CU2)   # stud pad
+    line += box(CT_X - 12.5 - 25.0, CT_X - 12.5, yl0 + 15.5, CT_STUDS[0][1] + 12.5, Z_CT, Z_CT + CU2)  # corner
     line -= cyl_z(FUSE_X0 + FUSE_BL / 2, FUSE_Y, Z_BLADE - CU2 - 1, Z_BLADE + 1, 5.25)
     line -= cyl_z(*CT_STUDS[0], Z_CT - 1, Z_CT + CU2 + 1, 4.3)
     p["bus_line"] = line
@@ -607,11 +609,12 @@ def power_train():
     p["contactor_ev200"] = ct
     # load bus: MRBF bar on the load stud, drop riser at x 54 with 2 MRBFs (inverter 50 A, charger 30 A)
     yl, ym0, ym1 = CT_STUDS[1][1], 36.0, 84.0
-    mb = box(54.0, CT_X + 12.5, ym0, ym1, Z_CT, Z_CT + CU2)
-    mb += box(54.0, 54.0 + CU2, ym0, ym1, Z_CT - 18.0, Z_CT + CU2)
+    XM0 = 86.0
+    mb = box(XM0, CT_X + 12.5, ym0, ym1, Z_CT, Z_CT + CU2)
+    mb += box(XM0, XM0 + CU2, ym0, ym1, Z_CT - 18.0, Z_CT + CU2)
     mb -= cyl_z(*CT_STUDS[1], Z_CT - 1, Z_CT + CU2 + 1, 4.3)
     p["bus_load"] = mb
-    p["mrbf"] = Compound([box(46.0, 54.0, yc - 11.0, yc + 11.0, Z_CT - 16.0, Z_CT + 4.0) for yc in (48.0, 72.0)])   # MRBF ~22 x 20 x 8 (UNCONFIRMED)
+    p["mrbf"] = Compound([box(XM0 - 8.0, XM0, yc - 11.0, yc + 11.0, Z_CT - 16.0, Z_CT + 4.0) for yc in (48.0, 72.0)])   # MRBF ~22 x 20 x 8 (UNCONFIRMED)
     # DC output terminal risers (COP-250) through lid slots; M10 hole horizontal near the top
     ztop = H + 30.0
     XTR = 62.0                                      # both terminal risers share this x plane (faces at x 62 / 68.35)
@@ -676,8 +679,8 @@ def sense_flex():
 
 # ======================= decks =======================
 DECK_SH = XR + 29.0 - (-136.0)                     # decks keep their position relative to the rear plate
-CHG_X0 = XR + 35.0; CHG_X1 = CHG_X0 + CHG[0]   # clears the rear tray-1 screw heads
-INV_X0 = XR + 35.0; INV_X1 = INV_X0 + INV[0]
+CHG_X0 = XR + 43.0; CHG_X1 = CHG_X0 + CHG[0]   # v14: 18 mm from the fan face (was 10) for assembly
+INV_X0 = XR + 43.0; INV_X1 = INV_X0 + INV[0]
 TRAY1_X0, TRAY1_X1 = XR + 28.0, XF - 8.0          # v14: ends before the LED board (XL0)
 TRAY1_Y, TRAY1_FL = 88.0, 12.0
 INV_POST_XY = [(x, s * 73.5) for x in (INV_X0 + 12.0, INV_X1 - 12.0) for s in (-1, 1)]
@@ -686,7 +689,7 @@ CBX0, CBX1 = 82.0, 150.0                         # v14 controls-only board, abov
 CBY0, CBY1 = -86.0, -14.0                        # main body y; plus a tongue x 131..150 to y -2 for the flex tail
 CBZ0 = Z_PD + FUSE_D + 3.8 if False else 262.0   # board underside (fuse top ~258)
 CBZ1 = CBZ0 + CB_T
-CB_SO_XY = [(86.25, -48.25), (125.0, -48.25), (141.0, -8.0)]   # M3 standoffs (non-plated holes: board GND is pack-)
+CB_SO_XY = [(86.25, -48.25), (125.0, -48.25), (141.0, -10.0)]   # M3 standoffs (non-plated holes: board GND is pack-)
 CHG_SCREW_XY = [(x, y) for x in (CHG_X0 + 15, CHG_X1 - 15) for y in (-CHG[1] / 2 + 15, CHG[1] / 2 - 15)]
 INV_SCREW_XY = [(x, y) for x in ((INV_X0 + INV_X1) / 2 - 87.3, (INV_X0 + INV_X1) / 2 + 87.3) for y in (-44.3, 44.3)]
 
@@ -819,8 +822,8 @@ CONN_HOLE = 7.5                                  # clinch-nut hole centre beyond
 CONN_XC = XF - 0.5 - 6.5 - 22.5                  # front column over the board (bodies end above the contactor)
 CONNS = {
     "outlet_nema515": (CONN_XC, -56.0, 30.0, 38.0, 30.0, "x"),
-    "inlet_iec_c14": (CONN_XC, 28.0, 20.0, 27.0, 25.0, "x"),
-    "pushbutton": (CONN_XC, 62.0, 19.0, 19.0, 30.0, "n"),        # 19 mm illuminated momentary, own nut (no clinch nuts)
+    "inlet_iec_c14": (CONN_XC, -17.0, 20.0, 27.0, 25.0, "x"),
+    "pushbutton": (100.0, -60.0, 19.0, 19.0, 30.0, "n"),        # 19 mm illuminated momentary, own nut (no clinch nuts)
 }
 
 def conn_holes(c):
@@ -883,9 +886,9 @@ def cables():
     return {
         "ac_out": cable([(INV_X1, -30, zi), (xd, -30, zi), (o[0] - 25, o[1], zi), (o[0], o[1], H - T - o[4])], 3.5),
         "ac_in": cable([(i_[0], i_[1], H - T - i_[4]), (i_[0] - 14, i_[1], 284.0), (xd, 45, 284.0), (xd, 45, zc), (CHG_X1, 45, zc)], 3.5),
-        "chg_dc_pos": cable([(CHG_X1, 20, zc), (xd, 20, zc), (xd, 72, Z_CT - 6.0), (46.0, 72, Z_CT - 6.0)], 3.6),
+        "chg_dc_pos": cable([(CHG_X1, 20, zc), (xd, 20, zc), (xd, 72, Z_CT - 6.0), (78.0, 72, Z_CT - 6.0)], 3.6),
         "chg_dc_neg": cable([(CHG_X1, -20, zc), (xd, -20, zc), (xd, -62, zc), (64, -62, 240.0)], 3.6),
-        "inv_dc_pos": cable([(INV_X1, 10, zi), (40.0, 48, Z_CT - 6.0), (46.0, 48, Z_CT - 6.0)], 5.0),
+        "inv_dc_pos": cable([(INV_X1, 10, zi), (INV_X1 + 8.0, 48, Z_CT - 6.0), (78.0, 48, Z_CT - 6.0)], 5.0),
         "inv_dc_neg": cable([(INV_X1, -10, zi), (xd, -10, zi), (xd, -62, 250.0), (64, -62, 250.0)], 5.0),
         "fan": cable([(XR + FAN[1] - 1, 62, Z_T1TOP + 5), (XR + FAN[1] + 4, 84, Z_T1TOP + 5), (CBX0 + 4, 84, Z_T1TOP + 5),
                       (CBX0 + 4, -60, CBZ1 + 6)], 1.5),
