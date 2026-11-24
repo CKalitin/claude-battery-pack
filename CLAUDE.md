@@ -1,6 +1,6 @@
 # Handoff for the next Claude
 
-Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v14**.
+Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v15** (Concept D power bay, 175 A; see `versions/v15-concept-d/README.md` and `docs/power-train.md`).
 
 ## Read first
 1. `docs/v14-baseline.md`: one-page spec.
@@ -8,7 +8,7 @@ Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery
 3. `docs/v14-design-notes.md`: design justifications (flex, floating pack + IMD, wake/latch, cooling calc, service bays).
 4. `docs/tesla-shunt.md`: the only source for shunt data. Dims are unconfirmed.
 4a. `docs/cells.md`: cell selection, sourcing, import and incoming inspection.
-5. `cad/tower14.py`: the model. `versions/v14-4s2p-power-train/`: renders and STEP.
+5. `cad/tower15.py` + `cad/run_tower15.py` + `cad/clearance_v15.py`: the model, interference check and clearance check. `versions/v15-concept-d/`: renders and STEP. (`tower14.py` is the previous version.)
 
 ## Working rules (from the owner)
 - Never add a part without need. The best part is no part.
@@ -20,7 +20,9 @@ Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery
 - Run long jobs (builds, renders) in the background and keep working. Never block on a polling loop.
 - Use the fast render for iteration. The beautiful render is for milestones only (see Rendering).
 - No dead space. Chris likes the full rear hole grid.
-- Every interference pair must be either fixed or listed in `run_tower14.py`'s ALLOW list.
+- Every interference pair must be either fixed or listed in `run_tower15.py`'s ALLOW list.
+- Run `clearance_v15.py` after any power-bay change: no pack copper through chassis metal, + to − ≥ 10 mm, pack copper to chassis ≥ 7 mm.
+- Every part must be installable top-down in the order written in the version README. A clean interference check does not prove that.
 - Terse answers, conclusion first, units on every variable.
 
 ## Document every exploration of the design space

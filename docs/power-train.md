@@ -1,6 +1,6 @@
 # Power train: fuse, contactor, shunt, conductors, DC output
 
-**Status 2026-11-24 (11:40):** v14 power train rejected. **Owner baselined 175 A DC out (SB175).** Owner prefers busbars to cables for assembly effort. Concept D (§7) proposed: no CAD yet. ⚠️ marks unconfirmed values.
+**Status 2026-11-24 (11:40):** v14 power train rejected. **Owner baselined 175 A DC out (SB175).** Owner prefers busbars to cables for assembly effort. Concept D in CAD as **v15** (`versions/v15-concept-d/`). ⚠️ marks unconfirmed values.
 
 ---
 
@@ -153,3 +153,10 @@ No. Two-pole switching is for HV packs (> 60 V DC), where a stuck pole must not 
 - Air holes: the checkerboard has Ø6 holes on a 7.78 mm pitch. Routing the BQ76952 + ESP32 cluster between them is impractical, so a solid zone of ≈ 60 × 80 mm loses ≈ 40 of ≈ 287 air holes (≈ −14 % inlet area) ⚠️. Re-run the cooling check (N §11).
 - Board ground = pack−. Mounting holes into the end-plate standoffs are non-plated, with a ≥ 2 mm copper keep-out (floating pack, IMD).
 - Harness lengths: flex tail over the end-plate top into an FPC connector on the back (≈ 40 mm); shunt SPI ≈ 80 mm; contactor coil ≈ 100 mm; converter CAN/remote ≈ 150 mm; fan (rear) ≈ 350 mm; lid button ≈ 150 mm.
+
+## 9. v15 CAD (2026-11-24): what changed from the §7 concept
+- **Contactor → Gigavac GX12** (225 A continuous, M10 studs, dual-coil economizer, $125 at Waytek ⚠️ outline not fetched). The EV200 (81 × 66) left no room for the SB175 and both fuses. The M10 studs also take Blue Sea MRBF blocks directly.
+- **Shunt stands vertical**, bolted to the − riser tab with horizontal bolts. That lets the riser stand outside the tray outline, so the tray can be lowered after it (the v14 Z-flange trap).
+- **+ tab flange sits in a tray notch open to the front edge**, for the same reason.
+- **Control circuit on the front PCB's back, facing the bay** (owner, 2026-11-24), not facing the module end plate. The bay side has ≥ 18 mm depth, versus 8 mm in front of the end plate.
+- Measured: + to − ≥ 13.7 mm; pack to chassis ≥ 7.4 mm; 0 pass-throughs (`clearance_v15.py`).
