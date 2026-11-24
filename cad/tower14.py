@@ -92,8 +92,9 @@ H = Z_T2TOP + INV[2] + 3.4                       # lid outer top
 W = 190.0                                        # body outer width (v4 width)
 
 # ======================= shell layout =======================
-L_IN = 365.0
-DX = -(L_IN / 2 - (STACK_L / 2 + 1.0 + 25.0))   # rear plate inner face = module rear - 1 mm - fan depth
+L_IN = 375.0                                     # v14: +10 mm, all at the rear (front plate unchanged) -> 37 mm charger bay
+REAR_EXTRA = 10.0
+DX = -(L_IN / 2 - (STACK_L / 2 + 1.0 + 25.0 + REAR_EXTRA))   # rear plate inner face = module rear - 1 mm - fan depth - extra
 XF = L_IN / 2 - DX                               # front plate inner face  (+145)
 XR = -(L_IN / 2 + DX)                            # rear plate inner face   (-165)
 XM = (XF + XR) / 2                               # shell centre x (-10)

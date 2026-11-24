@@ -324,3 +324,15 @@ $$\Delta T = \frac{P}{\rho c_p Q + UA}$$
 - **Lid:** inlet moved to y −17 in the front column; push-button moved to (100, −60).
 - **Board:** third standoff moved to (141, −10).
 - **Open:** confirm the connector ends from the MEAN WELL drawings. If the charger's AC inlet sits in its −y half, flip the charger 180° about z (its terminals then face the +y side) or move the line riser.
+
+**Update (owner OK'd +5–10 mm):** inside length **365 → 375 mm**, all of it added at the rear (front plate unchanged). Converters move back with the rear plate:
+
+| Gap | Value |
+|---|---|
+| Fan → converters | **18 mm** |
+| Charger front → contactor | **37 mm** |
+| Charger front → line riser / − riser (−y half) | 12.5 mm |
+| Inverter front → line bar | **31.5 mm** |
+| Inverter front → MRBFs | **47 mm** |
+
+Overall envelope 389 × 206 × 390 mm.

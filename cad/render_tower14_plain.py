@@ -81,3 +81,29 @@ if __name__ == "__main__":
     if "bays" in which:
         shot("v14p_12_service_bays.png", "Service bays: fan 18 mm | charger front 27 mm | inverter front 21-37 mm (section y = +30)", M,
              hide=hide + ("body_half_B",), view=(0.02, -1.4, 0.05), clip=((0, -1, 0), (0, 30.0, 0), ""), focal=(-10, 0, 255), dist=520, zoom=1.0)
+    def keep(*pre):
+        return {k: v for k, v in M.items() if k.startswith(pre)}
+    if "all" in which or "hero" in which:
+        shot("v14p_01_hero.png", "Tower A v14", M, view=(1.0, -1.25, 0.55), focal=(0, 0, 175), dist=1150)
+    if "all" in which or "rear" in which:
+        shot("v14p_02_rear.png", "Rear: full grid, NF-A14 exhaust", M, view=(-1.1, 0.9, 0.45), focal=(0, 0, 175), dist=1150)
+    if "all" in which or "open" in which:
+        shot("v14p_03_lid_off.png", "Lid off", M, hide=("lid", "screws_lid", "pem_body_lid", "pem_lid_panel", "screws_panel", "panel_", "term_plates"),
+             view=(0.9, -0.75, 1.05), focal=(20, 0, 245), dist=950, zoom=1.1)
+    if "all" in which:
+        shot("v14p_04_power_pcb.png", "Power train with the control board installed", M, hide=hide, view=(0.85, -1.0, 0.75), focal=(100, -20, 255), dist=520)
+        bb = keep("cell_", "g10_spacers", "g10_top", "module_endplates", "rods", "rodnuts", "bus_A", "bus_B", "bus_C", "bus_pack", "screws_term", "screws_tap", "flex")
+        shot("v14p_05_busbars.png", "4S2P busbars + sense flex (5 M3 taps, NTC on each tab)", bb, view=(0.55, -0.6, 1.3), focal=(0, 0, 200), dist=650)
+        shot("v14p_06_front.png", "Front: checkerboard (lit + air holes)", M, view=(1.0, -0.35, 0.25), focal=(177, 0, 170), dist=650)
+        shot("v14p_07_panel.png", "LED panel sandwich on module standoffs", M, hide=("plate_front", "screws_f", "pipe", "lid", "screws_lid", "panel_", "term_plates", "pem_lid_panel", "screws_panel"),
+             view=(1.0, -0.6, 0.35), focal=(170, 0, 160), dist=600)
+        shot("v14p_08_terminals.png", "Lid: M10 terminals in one plane, outlet, C14 inlet, push-button", M, view=(0.9, -0.35, 0.75), focal=(60, 0, 330), dist=600)
+        shot("v14p_09_section.png", "Section at the fuse axis (y = -27.5)", M, view=(0.02, 1.4, 0.05), clip=((0, 1, 0), (0, -27.5, 0), ""), focal=(0, 0, 200), dist=950)
+        ex = {"lid": (0, 0, 420), "screws_lid": (0, 0, 420), "pem_lid_panel": (0, 0, 420), "panel_": (0, 0, 470), "screws_panel": (0, 0, 490),
+              "term_plates": (0, 0, 440), "ctrl_": (0, 0, 190), "cb_standoffs": (0, 0, 95), "inverter": (0, 0, 120), "tray2": (0, 0, 100), "inv_posts": (0, 0, 80), "cable_": (0, 0, 3000)}
+        shot("v14p_10_pcb_exploded.png", "Control board lifted 190 mm from its spot above the fuse + shunt", M, explode=ex,
+             hide=("body_half_A", "plate_front", "screws_f", "ledboard", "diffuser", "pipe", "screws_panelmount", "panel_standoffs", "antenna"),
+             view=(0.75, -1.0, 0.85), focal=(90, -30, 300), dist=800)
+        shot("v14p_11_connections.png", "Converter wiring: + via MRBFs, - to shunt node B", M, hide=hide + ("body_half_B",), view=(0.55, 1.0, 0.7), focal=(40, 10, 265), dist=560)
+        shot("v14p_12_service_bays.png", "Service bays: fan 18 mm | charger 37 mm | inverter 31-47 mm", M, hide=hide + ("body_half_B",),
+             view=(0.02, -1.4, 0.05), clip=((0, -1, 0), (0, 30.0, 0), ""), focal=(-15, 0, 255), dist=540)

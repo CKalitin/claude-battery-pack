@@ -14,7 +14,7 @@
 | Power path | Straps bolted *to the PCB* ✗ | **Bolted copper:** Class T JJN-500 → TE EV200 → loads; Tesla shunt low side |
 | Board | Power + control | **Controls only** |
 | Converters | NTS-400P-124 / NPB-450-24 | NTS-400P-112 / NPB-450-12 |
-| Envelope (L × W × H) | 379 × 206 × 389 mm | **379 × 206 × 390 mm** (terminals stay below the handle tops) |
+| Envelope (L × W × H) | 379 × 206 × 389 mm | **389 × 206 × 390 mm** (+10 mm at the rear for converter service bays; terminals stay below the handle tops) |
 | Body height | 316.6 mm | 318.1 mm (G10 deck 2 is 1.575 mm thicker) |
 | Mass | 26.2 kg | **≈ 27.7 kg** (+1.1 kg copper, +0.4 kg power parts) |
 | CAD | 83 parts | **90 parts, interference check clean** |
@@ -65,7 +65,18 @@
 - **SendCutSend COP-187 / COP-250 bend rules:** min flange and joggle not yet checked; both risers are long (≥ 22 mm).
 - **LF105 pole thread.**
 
-## Gallery
+## Plain renders (fast, current)
+
+| | |
+|---|---|
+| ![](renders/v14p_01_hero.jpg) | ![](renders/v14p_02_rear.jpg) |
+| ![](renders/v14p_03_lid_off.jpg) | ![](renders/v14p_04_power_pcb.jpg) |
+| ![](renders/v14p_05_busbars.jpg) | ![](renders/v14p_06_front.jpg) |
+| ![](renders/v14p_07_panel.jpg) | ![](renders/v14p_08_terminals.jpg) |
+| ![](renders/v14p_09_section.jpg) | ![](renders/v14p_10_pcb_exploded.jpg) |
+| ![](renders/v14p_11_connections.jpg) | ![](renders/v14p_12_service_bays.jpg) |
+
+## Gallery (studio drafts; predate the service-bay change)
 
 | | |
 |---|---|
