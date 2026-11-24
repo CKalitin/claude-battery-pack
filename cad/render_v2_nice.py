@@ -1,4 +1,4 @@
-"""Studio renders of Tower A v12: PBR materials, procedural studio environment map, SSAO, ground shadow."""
+"""Studio renders of Claude battery pack v12: PBR materials, procedural studio environment map, SSAO, ground shadow."""
 import os, sys, glob
 os.environ.setdefault("DISPLAY", ":99")
 import numpy as np
@@ -62,7 +62,7 @@ B = np.array([m.bounds for m in M.values()])
 ZMIN = B[:, 4].min()
 
 def shot(fname, title, keep=None, hide=(), explode=None, view=(1.0, -1.1, 0.6), focal=(0, 0, 150), dist=900, zoom=1.0,
-         clip=None, floor=True, sub="Tower A v2-v3  |  8S1P EVE LF50K, 25.6 V 50 Ah 1.28 kWh  |  R22 rolled corners, joggle lid"):
+         clip=None, floor=True, sub="Claude battery pack v2-v3  |  8S1P EVE LF50K, 25.6 V 50 Ah 1.28 kWh  |  R22 rolled corners, joggle lid"):
     p = pv.Plotter(off_screen=True, window_size=(1920, 1440), lighting="none")
     p.set_background("black")
     p.set_environment_texture(CUBE, is_srgb=True)
@@ -130,5 +130,5 @@ def shot(fname, title, keep=None, hide=(), explode=None, view=(1.0, -1.1, 0.6), 
     print(fname)
 
 if __name__ == "__main__":
-    shot("v02_01_hero.png", "Tower A v2-v3: first exterior", view=(1.0, -1.25, 0.55), focal=(0, 0, 140), dist=1500)
+    shot("v02_01_hero.png", "Claude battery pack v2-v3: first exterior", view=(1.0, -1.25, 0.55), focal=(0, 0, 140), dist=1500)
     shot("v02_02_cutaway.png", "v2-v3 cutaway: v1 internal stack inside the tower", clip=((0, -1, 0), (0, 0, 0)), view=(0.4, -1.0, 0.35), focal=(0, 0, 140), dist=1500, floor=False)

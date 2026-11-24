@@ -1,4 +1,4 @@
-"""Tower A v5: 4S1P EVE LF100MA, every fabricated part made by SendCutSend.
+"""Claude battery pack v5: 4S1P EVE LF100MA, every fabricated part made by SendCutSend.
 Units mm. x = length (front plate at +x), y = width, z = up. Body bottom at z = 0. One coordinate system for everything.
 
 SendCutSend rules this file is built to (sources: sendcutsend.com bending guidelines + bending calculator, Nov 2026):

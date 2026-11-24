@@ -1,4 +1,4 @@
-"""Tower A v8 compact: 4S1P EVE LF105 upright, busbars on top, control board standing in front of the cells, 270 inside.
+"""Claude battery pack v8 compact: 4S1P EVE LF105 upright, busbars on top, control board standing in front of the cells, 270 inside.
 Every fabricated part made by SendCutSend. Module centred at x = 0; the shell and decks are placed around it.
 Units mm. x = length (front plate at +x), y = width, z = up. Body bottom at z = 0. One coordinate system for everything.
 

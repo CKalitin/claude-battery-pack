@@ -1,4 +1,4 @@
-"""BEAUTIFUL render of Tower A v14 (slow): PBR materials, procedural studio environment map, SSAO, SSAA, ground shadow.
+"""BEAUTIFUL render of Claude battery pack v14 (slow): PBR materials, procedural studio environment map, SSAO, SSAA, ground shadow.
 DRAFT=1 -> ~50 s/view. Milestones only; use render_tower14_plain.py (FAST render) for iteration."""
 import os, sys, glob
 os.environ.setdefault("DISPLAY", ":99")
@@ -66,7 +66,7 @@ B = np.array([m.bounds for m in M.values()])
 ZMIN = B[:, 4].min()
 
 def shot(fname, title, keep=None, hide=(), explode=None, view=(1.0, -1.1, 0.6), focal=(0, 0, 150), dist=900, zoom=1.0,
-         clip=None, floor=True, sub="Tower A v14  |  4S2P EVE LF105, 12.8 V 210 Ah 2.69 kWh  |  500 A for 30 s"):
+         clip=None, floor=True, sub="Claude battery pack v14  |  4S2P EVE LF105, 12.8 V 210 Ah 2.69 kWh  |  500 A for 30 s"):
     p = pv.Plotter(off_screen=True, window_size=(1920, 1440), lighting="none")
     p.set_background("black")
     p.set_environment_texture(CUBE, is_srgb=True)
@@ -139,7 +139,7 @@ if __name__ == "__main__":
     which = sys.argv[1:] or ["all"]
     w = lambda n: "all" in which or n in which
     if w("hero"):
-        shot("v14_01_hero.png", "Tower A v14", sub="4S2P, 2.69 kWh, 500 A for 30 s", view=(1.0, -1.25, 0.55), focal=(0, 0, 170), dist=1550, zoom=1.0)
+        shot("v14_01_hero.png", "Claude battery pack v14", sub="4S2P, 2.69 kWh, 500 A for 30 s", view=(1.0, -1.25, 0.55), focal=(0, 0, 170), dist=1550, zoom=1.0)
     if w("rear"):
         shot("v14_02_rear.png", "Rear", sub="Exhaust grille only inside the fan circle", view=(-1.1, 0.9, 0.45), focal=(0, 0, 170), dist=1550, zoom=1.0)
     if w("open"):

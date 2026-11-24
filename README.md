@@ -1,7 +1,7 @@
 # claude-battery-pack
 Claude make me a 1 kWh battery pack. It must be beautiful.
 
-Tower A: a portable LiFePO4 pack. All fabricated parts come from SendCutSend; the enclosure is powder-coated Roadster red.
+A portable LiFePO4 pack designed end to end by Claude. All fabricated parts come from SendCutSend; the enclosure is powder-coated Roadster red.
 
 ![v14](versions/v14-4s2p-power-train/renders/v14p_01_hero.jpg)
 

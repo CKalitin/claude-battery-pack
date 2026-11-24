@@ -1,6 +1,6 @@
 # v13 · Current design: full justification
 
-> **Tower A, 8S1P EVE LF105, 2.69 kWh.** Built entirely from SendCutSend parts and off-the-shelf electronics. Every decision below is traced to a requirement and checked with a calculation.
+> **8S1P EVE LF105, 2.69 kWh.** Built entirely from SendCutSend parts and off-the-shelf electronics. Every decision below is traced to a requirement and checked with a calculation.
 
 ![hero](renders/v13_01_hero.jpg)
 
@@ -35,7 +35,7 @@
 | R8 | Off-the-shelf monitoring chip (AFE) | TI BQ76952 (3–16 cells in series) | ✓ |
 | R9 | No parts that need emailing vendors; no doubtful datasheets | EVE, MEAN WELL, TI, Panasonic, all with web checkout | ✓ |
 | R10 | Busbars on top | Upright LF105, series links on top of the module | ✓ |
-| R11 | Tall, narrow Tower A look, Roadster red | 190 mm body, Gloss Red RAL 3002 powder coat, end plates as handles | ✓ |
+| R11 | Tall, narrow tower look, Roadster red | 190 mm body, Gloss Red RAL 3002 powder coat, end plates as handles | ✓ |
 
 ## 2. Cell selection
 

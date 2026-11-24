@@ -1,4 +1,4 @@
-"""Tower A v13: v12 + body lead-in lip (30 deg, nests the lid facet), tie rods at 0.207h/0.793h, Z (joggle) pack straps.
+"""Claude battery pack v13: v12 + body lead-in lip (30 deg, nests the lid facet), tie rods at 0.207h/0.793h, Z (joggle) pack straps.
 Was v12: 8S1P LF105 (25.6 V, 105 Ah, 2.69 kWh). Inverter stacked on the charger (v8 decks); control board flat on deck 1 in front of the stack.
 Was v8 compact: 4S1P EVE LF105 upright, busbars on top, control board standing in front of the cells, 270 inside.
 Every fabricated part made by SendCutSend. Module centred at x = 0; the shell and decks are placed around it.

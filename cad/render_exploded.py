@@ -1,4 +1,4 @@
-"""Exploded views of Tower A v4, one per subsystem. Reuses the material table from render_tower2.py."""
+"""Exploded views of Claude battery pack v4, one per subsystem. Reuses the material table from render_tower2.py."""
 import os, glob
 import numpy as np
 import pyvista as pv
@@ -133,7 +133,7 @@ def shot(fname, title, rules, only=None, hide=(), view=(1.0, -1.2, 0.8), zoom=1.
         disp.append((x * SC, (size[1] - y) * SC))
     path = os.path.join(EX, fname)
     p.screenshot(path, scale=SC)
-    annotate(path, title, sub or "Tower A v4  |  1.28 kWh 8S LFP  |  build123d", disp, txt)
+    annotate(path, title, sub or "Claude battery pack v4  |  1.28 kWh 8S LFP  |  build123d", disp, txt)
     p.close()
     print("ok", fname)
 

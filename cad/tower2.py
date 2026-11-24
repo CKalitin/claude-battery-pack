@@ -1,4 +1,4 @@
-"""Tower A v3 assembly: 400 W NTS-400P inverter + NPB-450 charger + single front control board.
+"""Claude battery pack v3 assembly: 400 W NTS-400P inverter + NPB-450 charger + single front control board.
 Units mm. x = length (front plate / control end at +x), y = width, z = up. Body bottom at z = 0.
 
 Stack:  cells module (as v2) -> tray 1 (5052, z 200) carrying the charger (rear) and control board (front)

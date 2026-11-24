@@ -1,6 +1,6 @@
 # Tesla Model S shunt module (1016792-00-C): pack integration notes
 
-This is the single source of truth for the shunt in Tower A. Reverse-engineering detail (netlist, protocol, firmware) lives in the shunt repo: [CKalitin/tesla-model-s-2012-shunt-resistor](https://github.com/CKalitin/tesla-model-s-2012-shunt-resistor).
+This is the single source of truth for the shunt in the pack. Reverse-engineering detail (netlist, protocol, firmware) lives in the shunt repo: [CKalitin/tesla-model-s-2012-shunt-resistor](https://github.com/CKalitin/tesla-model-s-2012-shunt-resistor).
 
 > ⚠️ Values marked **(U)** are **unconfirmed**: first hand measurements or one-count meter readings. Re-measure before freezing CAD or firmware constants.
 

@@ -1,4 +1,4 @@
-"""Tower A exterior + v1 internal stack, as one build123d assembly.
+"""Claude battery pack exterior + v1 internal stack, as one build123d assembly.
 Units mm. x = pack length (front plate at +x), y = width, z = up. Body bottom at z = 0.
 """
 import math, os

@@ -1,6 +1,6 @@
 # Handoff for the next Claude
 
-Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack ("Tower A") end to end. Current version **v14**.
+Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v14**.
 
 ## Read first
 1. `docs/v14-baseline.md`: one-page spec.
@@ -14,6 +14,7 @@ Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery
 - Never add a part without need. The best part is no part.
 - Every fabricated part comes from SendCutSend or a catalog. No parts that need emailing a vendor. No sketchy datasheets. Give buy links.
 - Busbars on top.
+- The pack has no name. Never call it "Tower A" (old placeholder, removed 2026-11-24); say "the pack" or "Claude battery pack".
 - Do checks yourself (datasheets, vendor sites, browser). Don't ask Chris to check things; report results at the end.
 - Flag every unconfirmed value with ⚠️.
 - Run long jobs (builds, renders) in the background and keep working. Never block on a polling loop.

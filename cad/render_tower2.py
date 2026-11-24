@@ -77,14 +77,14 @@ def shot(fname, title, hide=(), only=None, explode=False, view=(1.0, -1.15, 0.62
     p.camera.zoom(zoom)
     tc = "#EEEEEE" if dark else "#111111"
     p.add_text(title, position=(50, size[1] - 80), font_size=15, color=tc, font="arial")
-    p.add_text("Tower A  |  1.28 kWh 8S LFP  |  320 x 206 x 369 mm (body 297)  |  build123d", position=(50, size[1] - 118),
+    p.add_text("Claude battery pack  |  1.28 kWh 8S LFP  |  320 x 206 x 369 mm (body 297)  |  build123d", position=(50, size[1] - 118),
                font_size=9, color="#9A9AA0", font="courier")
     p.screenshot(os.path.join(OUT, fname))
     p.close()
 
 INT = ("fan_", "int_", "tray", "mica_tray", "inv_posts", "cb_standoffs", "screws_trays", "charger", "inverter", "ctrl_", "cable_", "panel_")
 SHELL = ("u_body", "lid", "pem_lid", "screws_lid", "plate_", "screws_f", "screws_r", "feet_", "pipe_f", "tabs_", "pem_tab", "diffuser", "ledboard", "screws_hold", "int_liner")
-shot("t_hero.png", "Tower A v4", hide=("fan_", "int_", "tray", "mica_tray", "inv_posts", "cb_standoffs", "screws_trays", "charger", "inverter", "ctrl_", "cable_", "ledboard"), zoom=1.15)
+shot("t_hero.png", "Claude battery pack v4", hide=("fan_", "int_", "tray", "mica_tray", "inv_posts", "cb_standoffs", "screws_trays", "charger", "inverter", "ctrl_", "cable_", "ledboard"), zoom=1.15)
 shot("t_rear_flat.png", "Rear elevation: fan visible through the grid", hide=(), view=(-1, -0.0001, 0), parallel=True, zoom=1.2, size=(1400, 1800))
 shot("t_screw_detail.png", "Detail: M4 button heads on the grid", hide=INT + ("ledboard",), view=(-1.0, 0.35, 0.25), zoom=3.2)
 shot("t_rear.png", "Rear: 21x30 grid, 7.78 mm pitch, 11 button heads on nodes", hide=INT + ("ledboard",), view=(-1.0, 1.1, 0.55), zoom=1.15)

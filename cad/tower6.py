@@ -1,4 +1,4 @@
-"""Tower A v6: 4S1P EVE LF100MA lying on their narrow edge (terminals face +y wall), every fabricated part from SendCutSend.
+"""Claude battery pack v6: 4S1P EVE LF100MA lying on their narrow edge (terminals face +y wall), every fabricated part from SendCutSend.
 Cell axes: thickness 50.1 along x (stack), the 160 width vertical (z), the 118.5 height along y with terminals at +y.
 Units mm. x = length (front plate at +x), y = width, z = up. Body bottom at z = 0. One coordinate system for everything.
 
