@@ -45,7 +45,7 @@
 
 | Item | Baseline | Ref |
 |---|---|---|
-| AFE | BQ76952, 5 sense taps (VC0–VC4), thermistors: 4 on the flex + 1 near the fuse and contactor | R m5 |
+| AFE | BQ76952, 5 sense taps (VC0–VC4). **Thermistors: one 0603 NTC on each of the 5 flex tap tabs**, right beside the M3-clamped ring, so it senses the busbar and terminal, which is the cells' best thermal path, between each cell pair; plus 1 on the board near the fuse and contactor. 6 of the BQ76952's 9 thermistor inputs | R m5 |
 | MCU | **ESP32-S3-WROOM-1U** + flex antenna behind the light-pipe slot | R C5 |
 | Supply | Battery side of the contactor, 2 A fuse → 5 V buck (EN ← BQ REG1) → 3.3 V. No 12 V rail | N §9 |
 | Shunt interface | 5 V supply; level shifter (TXU0104) on SPI; J1 = 10-pin Mini-Fit ⚠️ | S §3 |
