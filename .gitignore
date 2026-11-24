@@ -2,3 +2,5 @@ __pycache__/
 cad/out*/
 cad/dist*/
 *.zip
+cad/concepts/*/ctx/
+cad/concepts/*/out/
