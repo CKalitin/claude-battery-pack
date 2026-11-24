@@ -197,3 +197,45 @@ $$\tau = R_\text{loop}\, C_\text{eff}$$
 That gives τ ≈ 36 min. At mid-charge, 0.1 V of difference means about 60 Ah of charge difference. So match the cells at full charge (3.65 V), where the curve is steep and equal voltage really means equal charge. This happens **once** in fixed 4S2P; it would happen on every reconfiguration in the dual-mode design, which is another argument against dual-mode.
 
 **Matching:** buy all cells from one date code, then pair them by 1 kHz AC resistance or a 4-wire measurement.
+
+## 8. Control board = controls only (decided 2026-11-24)
+
+R4 is resolved: **one board, controls only**. It carries the BQ76952, ESP32, contactor and precharge drive, IMD, CAN, sense connectors and the low-current rails. All power current is in bolted copper (fuse, contactor, shunt, MRBF branches); no separate slot-in BMS board.
+
+## 9. Board power and the "critically low" mechanism
+
+- **Supply:** taken **battery-side of the contactor**, from pack+ through a 2 A fuse. It has to be there so the board can close the contactor in the first place.
+- **Power tree:** pack 10–14.6 V → buck 5 V (shunt module, fan) → 3.3 V (ESP32).
+- **The buck's EN pin is driven from the BQ76952's REG1 output.** When the BQ76952 enters SHUTDOWN, REG1 drops and the whole board turns off.
+- **Autonomous hardware cutoff, independent of firmware.** The BQ76952 enters SHUTDOWN by itself when the minimum cell voltage falls below *Power:Shutdown:Shutdown Cell Voltage*, or the stack falls below *Shutdown Stack Voltage* (TI datasheet). SHUTDOWN draws **1 µA**.
+- **Threshold ladder:**
+  - 2.90 V/cell: firmware opens the contactor, turns the inverter off and puts the ESP32 to sleep.
+  - 2.80 V: BQ76952 undervoltage protection.
+  - 2.75 V: the inverter's own low-voltage shutdown (11 V).
+  - **2.60 V: BQ76952 SHUTDOWN**, taking the board with it.
+  - 2.50 V: EVE cutoff.
+- **Draw in SHUTDOWN:**
+
+  | Item | Current |
+  |---|---|
+  | BQ76952 | 1 µA |
+  | Buck in shutdown | ≈ 1 µA |
+  | IMD divider | 14.6 V / 3.2 MΩ = 4.6 µA |
+  | **Total** | **≈ 7 µA** |
+
+  At 7 µA, even 1 Ah left below 2.6 V lasts 1 / 7×10⁻⁶ h ≈ 16 years, so LFP self-discharge dominates.
+- **Wake, with no extra parts:**
+  - **Push-button → TS2.** A falling edge below 0.7–1.1 V wakes the device; TS2 is weakly driven to ~5 V in SHUTDOWN.
+  - **Charger plugged in → LD pin.** The LD pin sits on the load bus. With the contactor open, the charger's output appears there, and a rising edge above VWAKEONLD (≈ 1.45 V) wakes the device.
+- **Caveat (TI FAQ):** if TS2 is held low or LD is held high when SHUTDOWN starts, the device sticks in "Soft SHUTDOWN". The button must be momentary, and LD must read low with the contactor open and the charger unplugged.
+
+## 10. Front panel airflow: checkerboard perforation (baseline)
+
+- **Problem:** the diffuser and LED board block the whole front grid (review C4).
+- **Baseline:** lit and air holes alternate in a checkerboard. Air holes go straight through matching holes in the diffuser and the LED board. Lit holes are backed by solid diffuser with an LED behind it. No spacers, no new parts.
+  - Open area ≈ 287 holes × 18.1 mm² ≈ **5,200 mm²**, against 3,420 mm² for the "shrink the panel" option, and the full face still glows.
+  - The "WE WILL WIN" text pixels stay unholed (dark).
+- **Alternatives considered:**
+  - (a) Shrink the panel to the module zone: fewer LEDs, but the top third goes unlit.
+  - (c) Offset perforation with an air gap: every hole glows, but it needs a ~2 mm spacer between plate and diffuser, which adds parts, and it is the most restrictive path.
+- **Check in the v14 CAD:** the current front panel spans y ±97.4, past the body's ±93.4 interior. Fit it inside the walls.
