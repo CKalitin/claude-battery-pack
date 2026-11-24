@@ -206,3 +206,77 @@ class Concept:
         for n, pts in self.paths.items():
             # copper centre line from the cells to the output connector's terminal (part bodies bridged at terminal height) as a thin tube so it shows in renders
             export_stl(tube([(x, y, z) for x, y, z in pts], 1.2), os.path.join(d, f"path_{n}.stl"), tolerance=0.1, angular_tolerance=0.3)
+
+# ---------------- Blue Sea MRBF terminal fuse blocks (5191 single, 2151 dual) ----------------
+# Outline from Blue Sea's dimensioned drawing (bluesea.com/products/2151 -> "Dimensioned Drawing", 5191.jpg, read 2026-11-24):
+#   2151: 88.5 long, 20.0 wide, body 56.5 long x 11.0 high, tab 2.5 thick, M10 hole d 9.525, stud tops 44.5 above the base,
+#         0.47 in (11.9 mm) from the latch rib to the outer stud. Positions along the length scaled off the drawing:
+#         hole 13.0, studs 47.2 and 73.4 (pitch 26.2), rib 58.9-61.7 (18.4 high). UNCONFIRMED (scaled, +-0.5 mm).
+#   5191: 60.9 long, body 29.0, hole 12.0, stud 46.4 (14.5 from the end), latch at the end 21 high. UNCONFIRMED (scaled).
+# Internals are inferred from the drawing's side view (the tab bends up at the body and runs along its top as a
+# strap under the studs; each stud has an insulating collar). UNCONFIRMED.
+# MRBF fuse: 27.8 x 23.0 x 16.3 (reseller 12voltplanet, Solar4RVs). It is a stack fuse: bottom face = source
+# contact (sits on the block's strap), top face = load contact (the cable lug sits on it). The stud only clamps.
+BS = {"2151": dict(L=88.5, hole=13.0, body=31.8, studs=(47.2, 73.4), ribs=((58.9, 61.7, 18.4),)),
+      "5191": dict(L=60.9, hole=12.0, body=31.5, studs=(46.4,), ribs=((58.9, 60.9, 21.0),))}
+MRBF_L, MRBF_W, MRBF_H = 27.8, 23.0, 16.3
+
+def _place(hx, hy, hole_u, d):
+    """Local block frame -> world box. u along the block from the tab end, v across, origin = M10 hole."""
+    dx, dy = d
+    def B(u0, u1, v0, v1, z0, z1):
+        xs = [hx + dx * (u - hole_u) - dy * v for u in (u0, u1) for v in (v0, v1)]
+        ys = [hy + dy * (u - hole_u) + dx * v for u in (u0, u1) for v in (v0, v1)]
+        return box(min(xs), max(xs), min(ys), max(ys), z0, z1)
+    def P(u, v=0.0):
+        return (hx + dx * (u - hole_u) - dy * v, hy + dy * (u - hole_u) + dx * v)
+    return B, P
+
+def bs_block(kind, hx, hy, z0, d=(1, 0), prefix="bs"):
+    """Blue Sea MRBF terminal fuse block with fuses fitted. Tab bottom at z0, M10 hole at (hx, hy),
+    block runs along d from the hole. Returns (parts {name: (shape, role)}, stud xy list, z of the fuse tops)."""
+    s = BS[kind]; B, P = _place(hx, hy, s["hole"], d)
+    L, ub, t = s["L"], s["body"], 2.5
+    parts = {}
+    strap = B(0, ub + t, -10, 10, z0, z0 + t)                       # tab (on the M10 stud)
+    strap += B(ub, ub + t, -8, 8, z0, z0 + 11.0)                     # bends up at the body
+    strap += B(ub, L - 2.0, -8, 8, z0 + 11.0 - t, z0 + 11.0)          # runs along the top under the studs (width UNCONFIRMED)
+    strap -= cyl_z(*P(s["hole"]), z0 - 1, z0 + t + 1, 9.525 / 2)
+    for u in s["studs"]:
+        strap -= cyl_z(*P(u), z0, z0 + 12, 6.0)                      # clearance round the stud: stud is isolated
+    parts[f"{prefix}_strap"] = (strap, "pos")
+    body = B(ub + t, L, -10, 10, z0, z0 + 11.0) - B(ub, L - 2.0, -8, 8, z0 + 11.0 - t, z0 + 11.0)
+    for (r0, r1, h) in s["ribs"]:
+        body += B(r0, r1, -10, 10, z0 + 11.0, z0 + h)
+    for u in s["studs"]:
+        body += cyl_z(*P(u), z0 + 11.0 - t, z0 + 15.0, 6.0)          # insulating collar (centres the fuse)
+    parts[f"{prefix}_body"] = (body, "ins")
+    zf0, zf1 = z0 + 11.0, z0 + 11.0 + MRBF_H
+    for i, u in enumerate(s["studs"]):
+        x, y = P(u)
+        parts[f"{prefix}_stud_{i}"] = (cyl_z(x, y, z0 + 1.0, z0 + 44.5, 4.0), "pos")   # M8, isolated from the strap
+        hous = B(u - MRBF_W / 2, u + MRBF_W / 2, -MRBF_L / 2, MRBF_L / 2, zf0 + 1.0, zf1 - 1.0)
+        hous -= cyl_z(x, y, zf0, zf0 + 5.0, 6.4) + cyl_z(x, y, zf0, zf1, 4.5)
+        parts[f"{prefix}_fuse_{i}_body"] = (hous, "ins")                                # clear housing, fuse element inside
+        parts[f"{prefix}_fuse_{i}_bot"] = (cyl_z(x, y, zf0, zf0 + 1.0, 10.0) - cyl_z(x, y, zf0 - 1, zf0 + 2, 6.4), "pos")  # source contact
+        parts[f"{prefix}_fuse_{i}_top"] = (cyl_z(x, y, zf1 - 1.0, zf1, 10.0) - cyl_z(x, y, zf1 - 2, zf1 + 1, 4.3), "pos")  # load contact
+    return parts, [P(u) for u in s["studs"]], zf1
+
+def bs_cap(kind, hx, hy, z0, d=(1, 0)):
+    """Insulating cap over the body (render only, shown ghosted). Outline UNCONFIRMED."""
+    s = BS[kind]; B, _ = _place(hx, hy, s["hole"], d)
+    return B(s["body"] - 1.0, s["L"] + 1.0, -15.0, 15.0, z0, z0 + 46.0) - B(s["body"] + 0.5, s["L"] - 0.5, -14.0, 14.0, z0 - 1, z0 + 45.0)
+
+def lug90(x, y, z, d=(-1, 0), r_ring=8.5, t=1.8, off=17.0, r_barrel=5.0, h=24.0):
+    """90 deg ring lug (Del City 929605 6 AWG / MAX 5950 8 AWG style), ring on the stud at z, barrel up, offset along d.
+    Outline UNCONFIRMED. Returns (lug, barrel top xyz)."""
+    bx, by = x + d[0] * off, y + d[1] * off
+    lug = cyl_z(x, y, z, z + t, r_ring) - cyl_z(x, y, z - 1, z + t + 1, 4.2)
+    lug += box(min(x, bx) - (4.5 if d[0] == 0 else 0), max(x, bx) + (4.5 if d[0] == 0 else 0),
+               min(y, by) - (4.5 if d[1] == 0 else 0), max(y, by) + (4.5 if d[1] == 0 else 0), z, z + t)
+    lug += cyl_z(bx, by, z, z + h, r_barrel)
+    return lug, (bx, by, z + h)
+
+def stud_stack(x, y, z, r_w=8.5):
+    """Flat washer + M8 nut (13 AF) on a stud from z."""
+    return cyl_z(x, y, z, z + 1.6, r_w) + cyl_z(x, y, z + 1.6, z + 8.1, 7.5)

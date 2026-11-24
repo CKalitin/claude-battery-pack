@@ -17,7 +17,18 @@ COL = {"pos": "#D8452F", "neg": "#19B5C4", "ins": "#C9C46A", "other": "#2A2A2D"}
 SPECIAL = {"contactor": ("#232325", 0.3, 1), "fet": ("#1E5631", 0.2, 1), "sb175": ("#8A8D93", 0.3, 1), "mrbf": ("#E8E2D0", 0.2, 1),
            "shunt_module": ("#1E5631", 0.2, 1), "path_pos": ("#FFD23F", 0.1, 1), "path_neg": ("#7CF2FF", 0.1, 1),
            "cable_out_pos": ("#C0282E", 0.3, 1), "cable_out_neg": ("#151517", 0.3, 1), "lid_ghost": ("#B0121C", 0.3, 0.18),
-           "mlrbs_knob": ("#D8452F", 0.3, 1)}
+           "mlrbs_knob": ("#D8452F", 0.3, 1),
+           # Blue Sea MRBF blocks: tinned strap, dark body, clear fuse housings, stainless studs, tinned lugs
+           "bs2151_strap": ("#C9CCD1", 0.5, 1), "bs5191_strap": ("#C9CCD1", 0.5, 1), "bs2151_body": ("#2E2F33", 0.2, 1),
+           "bs5191_body": ("#2E2F33", 0.2, 1), "bs2151_stud": ("#9AA0A6", 0.5, 1), "bs5191_stud": ("#9AA0A6", 0.5, 1),
+           "bs2151_fuse_0_body": ("#F4A6C8", 0.3, 0.55), "bs2151_fuse_1_body": ("#E04848", 0.3, 0.55),
+           "bs5191_fuse_0_body": ("#E9E4D4", 0.3, 0.55),
+           "bs2151_fuse_0_bot": ("#B87333", 0.5, 1), "bs2151_fuse_0_top": ("#B87333", 0.5, 1),
+           "bs2151_fuse_1_bot": ("#B87333", 0.5, 1), "bs2151_fuse_1_top": ("#B87333", 0.5, 1),
+           "bs5191_fuse_0_bot": ("#B87333", 0.5, 1), "bs5191_fuse_0_top": ("#B87333", 0.5, 1),
+           "lug_": ("#C9CCD1", 0.5, 1), "hw_": ("#9AA0A6", 0.5, 1), "cable_charger": ("#C0282E", 0.3, 1),
+           "cable_inverter": ("#C0282E", 0.3, 1), "cap_": ("#B0121C", 0.3, 0.15), "path_": ("#FFD23F", 0.1, 1),
+           "strap_main": ("#D8452F", 0.5, 1)}
 
 def mat(n, role):
     k = max((k for k in SPECIAL if n.startswith(k)), key=len, default=None)

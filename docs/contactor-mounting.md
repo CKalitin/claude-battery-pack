@@ -216,3 +216,39 @@ Plan views: [L0](img/contactor/c1_module_gv14up_lvl0_pack_copper.jpg), [L1](img/
 - ⚠️ Lid hole clearance from the real tolerance stack (≥ 3 mm/side assumed).
 - ⚠️ 1/8 in copper from SendCutSend: confirm thickness offered and the minimum square-hole size for M8 carriage bolts.
 - Owner decisions: accept a bench-built module (A1 as written means every bolt in the pack); keep high-side switching; GV14 vs FET board.
+
+## 11. Blue Sea MRBF blocks: real geometry (added 2026-11-24)
+
+![2151 iso](img/contactor/mrbf_2151_iso.jpg)
+![2151 current path](img/contactor/mrbf_2151_xray.jpg)
+![2151 exploded](img/contactor/mrbf_2151_exploded.jpg)
+
+Model: `cad/concepts/contactor/lib.py` (`bs_block`, `bs_cap`, `lug90`, `stud_stack`), close-up `mrbf_block.py` + `shoot_mrbf.py`.
+
+**Geometry.** Source: Blue Sea dimensioned drawing (bluesea.com/products/2151 → "Dimensioned Drawing", file 5191.jpg, covers 5191 and 2151), read 2026-11-24.
+- **2151:** 88.5 long × 20.0 wide ✓. Body 56.5 long × 11.0 high ✓. Tab 2.5 thick ✓. M10 hole Ø9.525 ✓. Stud tops 44.5 above the base ✓.
+- **2151 positions along the length** (scaled off the drawing ⚠️ ±0.5 mm): hole 13.0, studs 47.2 / 73.4 (pitch 26.2), latch rib 58.9–61.7 (18.4 high). The drawing's "0.47 in / 2.0 mm" label is a dropped digit (0.47 in = 11.9 mm, matches the scale).
+- **5191:** 60.9 long ✓, body 29.0 ✓, hole 12.0 ⚠️ (scaled), stud 46.4 (14.5 from the end ✓).
+- **MRBF fuse:** 27.8 × 23.0 × 16.3 mm ⚠️ (reseller: 12voltplanet, Solar4RVs). The 23 mm side runs along the block: 2 × 11.5 + rib fits the 26.2 mm pitch exactly, a consistency check on the scaled positions.
+
+**How it works.** The MRBF is a stack fuse: bottom face = source contact, top face = load contact. The cable lug sits on the fuse top; the M8 stud is isolated and only clamps. Current path: bar → M10-clamped tab → tinned strap bends up at the body and runs under both fuses (inferred from the side view ⚠️) → fuse bottom → element → fuse top → lug.
+
+**Traps found**
+- **T6. An MRBF cannot bridge two bars.** C1 §6 drew the main MRBF as a flat link between two studs; that is wrong. The output comes out on top of the fuse, ~27 mm above the copper (11 block + 16.3 fuse). The main fuse needs a 5191 on an M10 stud plus a strap or cable from the fuse top back down to the in-bar: +1 part, +2 joints vs §6. Rule: model stack fuses as stacks.
+- **T7. No bare MRBF on a stud.** Blue Sea (resources/640): "Terminal Fuses must be used only with a Terminal Fuse Block."
+- **T8. Two studs in a row, cables leaving along that row: the far lug hits the near stud.** In C1 ±y is blocked by the wall (7 mm rule) and the contactor. Use 90° lugs (barrel up), one pointing −x, one +x. Buy: Del City 929605 (6 AWG, 5/16", ~$2.55 ea, min 5) and Zoro MAX 5950-050EL (8 AWG, 90°, $14.29 per 50), checked 2026-11-24.
+- **T9. ALLOW-list wildcard `("hw_","")` hid a real clash.** The M10 bolt head under the + flange at (144, −33.5) overlaps the + riser at x 138–142.76. Fix: move the riser to x 124 and enlarge the flange to x 124–152.
+
+**Fit in C1 (worked out, not yet applied to `c1_power_module.py`)**
+- **Contactor:** −11 mm in y (CY 41.2 → 30.2).
+- **2151:** along x at y 76, M10 hole at (70.7, 76) on a load-bar branch x 62.7–88.7, y 43.2–86. Fuses land at x 105/131 beside the contactor. Metal to the +y wall 7.4 mm.
+- **Load bar near the SB175:** must stay y ≥ 42.4 to keep 10 mm to the − tab.
+- **Standoff:** (58, 82) → (58, 60), clear of the M10 head.
+- **Main fuse:** 5191 at (144, −33.5) pointing −x, stud at x 109.6. A Z-strap from the fuse top down to a new in-bar at x 101.6–117.6, y −15..8.85.
+
+**Open**
+- ⚠️ 2151 internals and cap outline.
+- ⚠️ MRBF contact-face sizes.
+- ⚠️ 90° lug dims.
+- ⚠️ SendCutSend copper bend for the Z-strap.
+- Apply the C1 changes above and re-run the checks.
