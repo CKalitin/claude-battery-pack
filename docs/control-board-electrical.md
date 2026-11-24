@@ -1,5 +1,9 @@
 # Control board: electrical architecture (draft, 2026-11-23)
 
+> ⚠️ **Partly superseded (2026-11-24).**
+> - The pack is now **4S2P fixed, rated 500 A for 30 s** (v14-design-review §0a). The 8S / 1S8P dual-mode content below is historical.
+> - Tesla shunt details (R_sh ≈ 20 µΩ, not 100 µΩ; grounding; interface) moved to [`tesla-shunt.md`](tesla-shunt.md).
+
 The control board is a single PCB that serves two swappable busbar configurations of the 8 × EVE LF105 pack:
 
 | Mode | Configuration | Nominal voltage | Burst current (3C, 30 s) | Outputs |
@@ -122,74 +126,7 @@ No reasonably priced contactor switches 2,520 A, so parallel mode is bolted and 
 
 ### Shunt: Tesla Model S HV shunt module (1016792-00-C)
 
-Source: [CKalitin/tesla-model-s-2012-shunt-resistor](https://github.com/CKalitin/tesla-model-s-2012-shunt-resistor)
-
-| Item | Value |
-|---|---|
-| Resistance | 100 µΩ |
-| Measurement front end | Isabellenhütte IHM-A-1500, 16-bit |
-| Interface | STM8AF6266 microcontroller as SPI slave. ⚠️ Harness: first noted as 8-pin; measured 2026-11-24 as a **10-pin Molex Mini-Fit** with a key slot between pins 1 and 2. **NOT YET CONFIRMED**; see v14-design-review §M9 |
-| Physical (⚠️ unconfirmed) | Bar 35 × 83.5 mm; bolts on the centre line, 15 mm from each end (53.5 mm apart), size unknown; PCB 25 mm wide, centred, overhanging 8 mm |
-| Hardware overcurrent detection | LM2903 comparator |
-| Rating per the IHM-A-1500 datasheet | 1,500 A *starter* (cranking pulse); ±300 A continuous |
-| Series mode, 315 A | 31.5 mV, 9.9 W: OK |
-| 1S8P through the shunt, 2,520 A | 252 mV, which the chip can measure (gain 1 range −300 to +800 mV), but 635 W in the element. Too much: use Kelvin taps instead. |
-
-**Interface:**
-- Supply: the IHM needs VDDA of 4.7–5.3 V, so the module runs at 5 V and its STM8 does too.
-- Logic levels:
-  - The STM8's VIH is 0.7·VDD = 3.5 V.
-  - The ESP32's GPIO absolute maximum is VDD + 0.3 V = 3.6 V.
-  - So the board needs a 4-channel level shifter on NSS/SCK/MOSI/MISO (e.g. TXU0104).
-  - The STM32F103 bench test worked without one because the F103's SPI pins tolerate 5 V, but its 3.3 V drive was 0.2 V below the STM8's VIH.
-- Isolation: not needed. The shunt sits low-side in B−, and the control board's ground is pack B−.
-
-## 5. Shunt module grounding and orientation
-
-![Shunt orientation](img/04_shunt_orientation.svg)
-
-| Symbol | Meaning | Value |
-|---|---|---|
-| Node A | Shunt-bar end facing the cells (pack B−). Control board GND connects here, by design. | — |
-| Node B | Shunt-bar end facing the loads (charger, inverter, Anderson −). | — |
-| R_sh | Manganin resistive element between A and B. | 100 µΩ |
-| VSS bond | The module's supply ground, bonded to the bar inside the module. Which end is not yet known. | — |
-| Kelvin RSHL / RSHH (dashed) | Sense lines from the element ends to IHM pins 1 and 2. Carry ≤ 1 nA, so only the drop across R_sh is read. | — |
-| R_h | Harness ground wire (J1 pin 2) between module VSS and control board GND. 22 AWG, 52.96 mΩ/m × 0.5 m. | ≈ 26 mΩ |
-| I | Pack current. | ≤ 315 A in series mode |
-| I_h | Current in the harness ground wire. | — |
-
-**Correct orientation (VSS bond at node A).** Both ends of R_h sit at node A:
-
-    I_h ≈ 0          V_sh = I · R_sh
-
-- V_sh = shunt voltage [V]
-- I = pack current [A]
-- R_sh = shunt resistance [Ω]
-
-**Wrong orientation (module rotated, VSS bond at node B).** R_h joins node B to node A, in parallel with R_sh:
-
-    I_h = I · R_sh / (R_sh + R_h) ≈ 0.38 % · I       V_sh = (I − I_h) · R_sh
-
-- I_h = harness ground current [A]
-- R_h = harness ground wire resistance [Ω]
-
-| Case | I | I_h | Reading error | Module-to-board ground offset |
-|---|---|---|---|---|
-| Series burst | 315 A | 1.2 A | −0.38 % | 31.5 mV |
-| Hypothetical 1S8P through the shunt | 2,520 A | 9.7 A | −0.38 % | 252 mV |
-
-RSHL and RSHH also swap ends, so the reading's sign flips. The 0.38 % error is small enough to go unnoticed; what you'd actually notice is a hot or melted signal-gauge ground wire. The Kelvin lines don't help: they measure the voltage across R_sh correctly, but less current is flowing through R_sh.
-
-**Rules:**
-1. The control board's single ground point is at node A, pack B−.
-2. Mount the shunt with its VSS-bonded end at node A. Fix a wrong orientation mechanically: a firmware sign flip doesn't remove the ground loop.
-3. All load and charger negatives land on node B, so every amp crosses R_sh.
-
-**Pre-install test:**
-1. Pass 1–5 A through the bar from a bench supply.
-2. Measure from J1 pin 2 to each bolt.
-3. The bonded end reads ≈ 0 mV. The other end reads I × 100 µΩ, or 0.1–0.5 mV.
+Moved to **[`tesla-shunt.md`](tesla-shunt.md)**: physical envelope, J1 pinout, level shifting, R_sh ≈ 20 µΩ, grounding and orientation with updated numbers, and bench tests.
 
 ## 6. Monitoring per mode
 

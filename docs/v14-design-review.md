@@ -34,7 +34,7 @@ Severity:
 | Pack straps | COP-125, 25 / 12 mm | **COP-187 (4.76 mm), 25 mm** | J = 4.2 A/mm², ΔT over 30 s = 2.6 K ✓. Check the SendCutSend COP-187 bend rules in CAD. |
 | Main fuse | JJN-300 | **Bussmann JJN-500** (Littelfuse JLLN-500 / Mersen A3T500): 1.25" × 3.06" (31.8 × 77.8 mm), bolted blades, 20 kA at 160 VDC | Carries 100 % (500 A) without opening. Prospective short circuit 6.5 kA ≪ 20 kA ✓ |
 | Contactor | Panasonic EV-B, 250 A continuous | **TE Kilovac EV200** (e.g. EV200AAANA): **500 A continuous** (at 85 °C, 400 kcmil conductors), M8 terminals, about 81 × 66 mm footprint, 0.43 kg | Rated for 500 A, not just by I²t. The built-in coil economizer holds at **1.7 W** at 12 V (vs 6 W), and the 9–36 V coil runs straight off the 10–14.6 V pack. |
-| Shunt | Tesla, 315 A | Tesla, 500 A for 30 s: 50 mV, 25 W | Above the IHM-A-1500's ±300 A continuous figure but in its starter class. 750 J into the bar is a few-tens-of-K rise. Accept; verify by bench test at ≥ 300 A if possible. Continuous 210 A ✓ |
+| Shunt | Tesla, 315 A | Tesla, 500 A for 30 s: **10 mV, 5 W** at R_sh ≈ 20 µΩ (see `tesla-shunt.md`) | Above the IHM-A-1500's ±300 A continuous figure but in its starter class. 750 J into the bar is a few-tens-of-K rise. Accept; verify by bench test at ≥ 300 A if possible. Continuous 210 A ✓ |
 | DC output | Anderson SB50, 30 A | **2 × M10 terminals.** The ends of COP-250 output bars (159 mm², J at 500 A = 3.1 A/mm²) come up through a **G10 .250 terminal plate** in the lid (the pack floats, so it must not touch the aluminium lid), with insulating boots. | No Anderson connector is rated for 500 A (the SB350 is the largest at 350 A). Studs are standard practice. |
 | Branch fuses | ATO on the PCB | **MRBF terminal fuses on the load bus**: inverter 50 A, charger 30 A | 12 V inverter draws 40 A typical (MEAN WELL) → 6 AWG. MRBF interrupt rating is 10 kA at 14 V vs 6.5 kA prospective (pack max 14.6 V). **The power-on-PCB rule is fully restored.** |
 | Converters | NTS-400P-124 / NPB-450-24 | **NTS-400P-112** (10–16.5 V in, 11 V shutdown = 2.75 V/cell, 16.5 V over-voltage > 14.6 V ✓) / **NPB-450-12**, 25 A | Charge time 210 / 25 = **8.4 h** |
@@ -143,42 +143,9 @@ Superseded below: C2 (fuse size), C6 (contactor part), M1 (branch fuses move to 
 | M8 | The lid is tethered by 4 connectors' wiring. | Use 150 mm service loops. FASTON tabs on the inlet and outlet, ring lugs on the Anderson. Write down the disconnect order. | Lid removal ≤ 2 min. |
 | M9 | ⚠️ Partly measured (unconfirmed, see the M9 update). The Tesla shunt is a 34 × 18 × 10 mm placeholder, and its bonded end is still unknown. | **Chris measures:** overall length, bolt spacing, bolt size, height, harness exit. Then run the ≥ 5 A bolt-to-bolt test in the repo's probe plan. | Physical part: can't be checked online. |
 
-### M9 update: Tesla shunt measurements (Chris, 2026-11-24). ⚠️ NOT YET CONFIRMED: take better measurements before freezing the CAD
+### M9 update
 
-| Feature | Value (⚠️ unconfirmed) | Notes |
-|---|---|---|
-| Bar outline | **35 × 83.5 mm** | Thickness not measured |
-| Bolts | Size **unknown**. On the bar's long centre line, **15 mm from each end**, so **53.5 mm** apart | Measure thread and head |
-| Module PCB | **25 mm wide**, centred along the bar length. It **overhangs the bar's long edge by 8 mm**, so its footprint is **43 × 25 mm** | Height above the bar not measured |
-| Connector | **10-pin Molex Mini-Fit** (exact series and part TBD), with a **key slot between pins 1 and 2** | ⚠️ Conflicts with the "8-pin harness" in `control-board-electrical.md` §4. Re-check the pin count and pinout. |
-
-| Bar thickness | **1/8" (3.175 mm) copper** | |
-| PCB stack (bar flat, PCB on top) | PCB **2 mm** thick; components reach **5 mm** above the copper | |
-| Connector height | **5 mm above the PCB, i.e. 7 mm above the copper**; at one end of the module | |
-| Wire exit | Wires leave the connector **straight up** (normal to the bar) | **Keepout:** connector footprint × **≥ 35 mm** above the connector top, for the mated plug plus the wire bend radius (estimate; confirm with the real plug and harness) |
-
-**Bench test, 2026-11-24 (⚠️ PRELIMINARY: meter at its 0.1 mV resolution limit, 200 mV range):**
-
-| Measurement at 5 A | Reading | Inference |
-|---|---|---|
-| Bolt to bolt | 0.1 mV | **R_sh ≈ 20 µΩ** (one count, so 10–30 µΩ), **not 100 µΩ** |
-| GND pin → bolt "A", current on/off | 0.0 / 0.0 mV, in both current directions | Lean: VSS bonded at bolt "A" |
-| GND pin → bolt "B", current on/off | +0.1 / 0.0 mV; reversed −0.0 mV | Consistent with an unbonded end, but the sign flip sits below one count |
-
-- **Orientation is inconclusive.** Bolt "A" (the one on supply negative in the first run) is the lean for the bonded end. **Physically mark which bolt is "A".**
-- **With R_sh ≈ 20 µΩ, orientation matters little:**
-  - Wrong orientation puts I·R_sh/(R_sh + R_h) = 20 µ / 26 m ≈ **0.08 %** of pack current into the harness ground: 0.38 A at 500 A, which 22 AWG carries easily.
-  - The ground offset is 10 mV at 500 A.
-  - Keep the orientation rule, but it is no longer a safety item.
-- **Effect on the design if R_sh ≈ 20 µΩ:** at 500 A, 10 mV and 5 W, instead of 50 mV and 25 W. Check that 10 mV still uses enough of the IHM-A-1500's input range to resolve low currents.
-
-**Deferred: characterise the shunt properly** (owner, later):
-- 4-wire resistance with a µV-resolution meter (5½ digit or better), or 20–50 A of current.
-- Temperature coefficient.
-- Compare with the module's own SPI reading.
-- Repeat the bonded-end test with real resolution.
-
-**Still needed:** bolt thread, exact connector part number and orientation.
+All Tesla shunt data (unconfirmed measurements, bench test, R_sh ≈ 20 µΩ, interface, grounding, open items) now lives in **[`docs/tesla-shunt.md`](tesla-shunt.md)**. This review only tracks the finding: the CAD needs the shunt's real envelope plus a ≥ 35 mm vertical wire keepout above its connector.
 
 ## 3. Minor findings
 
