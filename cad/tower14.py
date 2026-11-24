@@ -614,22 +614,23 @@ def power_train():
     p["mrbf"] = Compound([box(46.0, 54.0, yc - 11.0, yc + 11.0, Z_CT - 16.0, Z_CT + 4.0) for yc in (48.0, 72.0)])   # MRBF ~22 x 20 x 8 (UNCONFIRMED)
     # DC output terminal risers (COP-250) through lid slots; M10 hole horizontal near the top
     ztop = H + 30.0
-    pr = box(CT_X - 12.5, CT_X + 12.5, yl - 12.5, yl + 12.5, Z_CT + CU2, Z_CT + CU2 + CU3)
-    pr += box(CT_X + 12.5 - CU3, CT_X + 12.5, yl - 12.5, yl + 12.5, Z_CT + CU2, ztop)
+    XTR = 62.0                                      # both terminal risers share this x plane (faces at x 62 / 68.35)
+    pr = box(XTR, CT_X + 12.5, yl - 12.5, yl + 12.5, Z_CT + CU2, Z_CT + CU2 + CU3)
+    pr += box(XTR, XTR + CU3, yl - 12.5, yl + 12.5, Z_CT + CU2, ztop)
     pr -= cyl_z(*CT_STUDS[1], Z_CT - 1, Z_CT + 2 * CU2 + 1, 4.3)
-    pr -= cyl_x(CT_X, CT_X + 14, yl, ztop - 12.0, 5.25)
+    pr -= cyl_x(XTR - 2, XTR + CU3 + 2, yl, ztop - 12.0, 5.25)
     p["term_pos"] = pr
     xb = SH_BOLT[0]
     nr = box(62.0, 83.5, -81.0, -46.0, zb + CU, zb + CU + CU3)
     nr += box(62.0, 62.0 + CU3, -71.0, -46.0, zb + CU, ztop)
     nr -= cyl_z(xb, SH_Y, zb - 1, zb + CU + CU3 + 1, 4.3)
-    nr -= cyl_x(60, 70, -58.5, ztop - 12.0, 5.25)
+    nr -= cyl_x(60, 70, -58.5, ztop - 12.0, 5.25)   # same z and x plane as the + hole
     p["term_neg"] = nr
     return p
 
 def terminal_slots():
     yl = CT_STUDS[1][1]
-    return [(CT_X + 12.5 - CU3 - 3.0, CT_X + 12.5 + 3.0, yl - 15.5, yl + 15.5),
+    return [(62.0 - 3.0, 62.0 + CU3 + 3.0, yl - 15.5, yl + 15.5),
             (62.0 - 3.0, 62.0 + CU3 + 3.0, -74.0, -43.0)]
 
 def terminal_plates():
