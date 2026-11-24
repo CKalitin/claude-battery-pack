@@ -113,7 +113,22 @@
   - Most public reading (SendCutSend specs, datasheets) went through plain web fetch, not a browser at all.
   - The perceived structure is probably mostly on the human side.
 
-## 8. Open threads, to resolve before writing
+## 8. Bad requirements put the power train on a bad branch
+
+- **[C]** The control board / power train (contactor, shunt, fuse, PCB) is the clearest case in the project of Chris not setting the requirements correctly, and the design ending up on a bad branch of the design space as a result.
+- **[C]** Quote for the post: **"NEVER FUCK UP YOUR REQUIREMENTS."**
+- **[C]** Saw the limits of a long context window: the session got holed into one idea and didn't step back to reconsider it. Each version patched the previous layout instead of asking whether the layout was right.
+- **[C]** Routing wires and busbars through a complex assembly looks like a current limitation of Claude doing mechanical design. Caveat: humans are mostly no better at routing cables in complex assemblies unless they're really forced into it.
+- **[C]** What it looked like at the bench (v14): a busbar passes through the bottom metal plate (tray 1) and Chris could not physically install it; the busbar has 1 mm of clearance to that plate, a shorting risk. The right fix for a short or arc risk is distance between the two pieces of metal, not plastic around one of them, because plastic can tear.
+- **[Claude]** Evidence from the repo, 2026-11-24:
+  - The original requirement was **"one PCB for all contactors and shunt"**. That put the power parts in one spot on top of the board, and every later version kept that spot even after the requirement was dropped (v14: "controls only").
+  - v13 → v14 fixed the symptom (315 A through PCB pads, review C1) by bolting copper to the parts instead, but kept the geometry: both pack straps still converge on one corner of the front bay.
+  - Result in `cad/tower14.py`: pack− is dragged ≈ 300 mm along the cell tops from the rear pair to sit 10 mm from pack+. Both rise through the same aluminium tray in slots with 1 mm clearance (`TRAY1_CUTS`), so a single shift of the tray bridges + and − through the tray at ≈ 6 kA. The Z-straps' top flanges are wider than the slots, so the tray can't be lowered over them, and the cell screws underneath can't be reached after the tray is in. It is unassemblable, and the interference checker passed it because "touching with 1 mm to spare" is not an interference and "can it be assembled?" was never a check.
+  - The "500 A DC out" decision (review D2) arrived late and was layered on top: Class T fuse, EV200, COP-250 risers through the lid. Each part was justified on its own; nobody re-asked what the whole power path should look like.
+- **[Claude]** Possible framing: a requirement is load-bearing long after it is deleted. Removing it from the spec doesn't remove its consequences from the geometry; you have to go back to the branch point and re-derive.
+- **[Claude]** Possible rule for the post: checks that only test "do parts overlap?" miss the two failures that mattered here, assembly sequence and clearance between opposite potentials. Both need to be explicit, coded checks.
+
+## 9. Open threads, to resolve before writing
 
 - [ ] Multiple Claude agents in parallel: one branch or worktree each, split by area (electronics, CAD, docs). Worth trying, and worth a paragraph either way.
 - [ ] Obsidian access for Claude, so the principles list and notes are shared.
