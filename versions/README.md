@@ -31,4 +31,5 @@ v01 concept ──► v02–v04 Tower A form ──► v05 SendCutSend rules ─
 
 Supporting docs:
 - [`docs/control-board-electrical.md`](../docs/control-board-electrical.md): dual-mode electrical architecture.
+- [`docs/blog-notes.md`](../docs/blog-notes.md): running notes for the project blog post.
 - [`docs/mechanical-v13.md`](../docs/mechanical-v13.md): v13 change notes.
