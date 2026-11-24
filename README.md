@@ -3,33 +3,22 @@ Claude make me a 1 kWh battery pack. It must be beautiful.
 
 Tower A: a portable LiFePO4 pack. All fabricated parts come from SendCutSend; the enclosure is powder-coated Roadster red.
 
-![v12](versions/v12-8s-stacked-board-on-deck/renders/v12_01_hero.jpg)
+![v14](versions/v14-4s2p-power-train/renders/v14p_01_hero.jpg)
 
-## Current design: v12
+## Current design: v14
+Start with [`docs/v14-baseline.md`](docs/v14-baseline.md) (one-page spec). The reasoning is in [`docs/v14-design-review.md`](docs/v14-design-review.md) and [`docs/v14-design-notes.md`](docs/v14-design-notes.md).
 
 | | |
 |---|---|
-| Cells | 8 × EVE LF105, 8S1P |
-| Pack | 25.6 V nominal, 105 Ah, 2.69 kWh |
-| Current | 1C (105 A) continuous; 3C (315 A) for 30 s, per the cell spec |
-| Charger | MEAN WELL NPB-450-24, 120 VAC in through an IEC C14 inlet |
-| Inverter | MEAN WELL NTS-400P-124, 400 W pure sine, NEMA 5-15 outlet |
-| DC out | Anderson connector |
-| Control | One PCB: BQ76952 AFE, contactor, shunt, fuse, precharge, ESP32 (Wi-Fi debug) |
-| Size | about 379 × 206 × 317 mm (365 mm inside length) |
-| Mass | about 26 kg, of which the cells are 15.8 kg |
+| Cells | 8 × EVE LF105, **4S2P** |
+| Pack | 12.8 V nominal, 210 Ah, 2.69 kWh |
+| Current | 500 A for 30 s, 210 A continuous |
+| Power train | Bolted copper: Class T JJN-500 → TE EV200 contactor, Tesla shunt on the low side, MRBF branch fuses, M10 terminals through the lid |
+| Control | Controls-only PCB (BQ76952 + ESP32); flex sense board with 5 M3 taps and an NTC on each |
+| Charger / inverter | MEAN WELL NPB-450-12 / NTS-400P-112 |
+| Size | 389 × 206 × 390 mm (375 mm inside length) |
 
-### Layout
-- The 8 cells stand upright with their busbars on top.
-- An NF-A14 fan in the rear plate pulls air along the stack.
-- **Deck 1** (5052 tray on standoffs over the cells) carries:
-  - the charger at the rear;
-  - the control board, flat, at the front.
-- **Deck 2** sits on posts above the charger and carries the inverter.
-- The pack+ and pack− copper straps are Z-bent. They rise through slots in deck 1 and bolt to the underside of the board with M6 bolts.
-- The 4 lid connectors (outlet, Anderson, C14 inlet, M12 data) are in one column at the front, directly above the board.
-
-## Budget (USD, ±10%, 2026-11-23)
+## Budget (USD, ±10%, 2026-11-23) ⚠️ predates v14 (4S2P, 500 A power train); not yet re-estimated
 | Item | 4S (v9) | 8S (v12) |
 |---|---|---|
 | SendCutSend parts (v5 quote $1,458, scaled) | 1,450 | 1,700 |
@@ -69,14 +58,10 @@ Electrical architecture: series and parallel modes, current paths, contactor, Te
 ```
 pip install -r cad/requirements.txt
 cd cad
-python run_tower12.py            # build, interference check, STEP + STL into cad/out_tower12/
-xvfb-run python render_tower12.py
+python run_tower14.py            # build, interference check, STEP + STL into cad/out_tower14/ (~2 min; --fast = check only)
+xvfb-run python render_tower14_plain.py all   # fast plain renders, ~10 s/view
+xvfb-run python render_v14_nice.py            # studio renders, slow; DRAFT=1 for ~50 s/view
 ```
 
 ## Open items
-- SendCutSend flat patterns and a quote for v12. The last quote was for v5: $1,458.18.
-- Contactor selection.
-- 0.063" G10 sheet is out of stock at SendCutSend; it's needed for the cell top plate.
-- Confirm SendCutSend can bend 0.125" C110 copper for the Z-straps.
-- Cooling vents for the charger/inverter stack.
-- The NPB-450 and NTS-400P hole patterns and terminal positions in the model are placeholders.
+See `CLAUDE.md` (handoff) and `docs/v14-design-review.md`.
