@@ -141,7 +141,18 @@ Superseded below: C2 (fuse size), C6 (contactor part), M1 (branch fuses move to 
 | M6 | Inverter isolation via nylon posts: creep and drop-load concern. | **Make deck 2 from G10** (SendCutSend G10BLACK-125, in stock). The aluminium posts stay. The inverter bolts to an insulating plate: no creep, no added part, and G10's flexural strength is about 8× nylon's. Supersedes v14-notes §3. | Inverter screws through 3.175 mm G10: **M3 × 5** gives 1.8 mm penetration (≤ 2.5 mm limit) and 3.6 threads of engagement, enough for 0.75 kg. M3 × 6 would give 2.8 mm. ✗ |
 | M7 | No earth bond. | Bond inlet PE and outlet ground to the body with a ring lug under an existing front-plate M4 screw. No new part. | Chassis earthed while charging (the NPB FG is isolated from its output); the IMD keeps working. |
 | M8 | The lid is tethered by 4 connectors' wiring. | Use 150 mm service loops. FASTON tabs on the inlet and outlet, ring lugs on the Anderson. Write down the disconnect order. | Lid removal ≤ 2 min. |
-| M9 | The Tesla shunt is a 34 × 18 × 10 mm placeholder, and its bonded end is still unknown. | **Chris measures:** overall length, bolt spacing, bolt size, height, harness exit. Then run the ≥ 5 A bolt-to-bolt test in the repo's probe plan. | Physical part: can't be checked online. |
+| M9 | ⚠️ Partly measured (unconfirmed, see the M9 update). The Tesla shunt is a 34 × 18 × 10 mm placeholder, and its bonded end is still unknown. | **Chris measures:** overall length, bolt spacing, bolt size, height, harness exit. Then run the ≥ 5 A bolt-to-bolt test in the repo's probe plan. | Physical part: can't be checked online. |
+
+### M9 update: Tesla shunt measurements (Chris, 2026-11-24). ⚠️ NOT YET CONFIRMED: take better measurements before freezing the CAD
+
+| Feature | Value (⚠️ unconfirmed) | Notes |
+|---|---|---|
+| Bar outline | **35 × 83.5 mm** | Thickness not measured |
+| Bolts | Size **unknown**. On the bar's long centre line, **15 mm from each end**, so **53.5 mm** apart | Measure thread and head |
+| Module PCB | **25 mm wide**, centred along the bar length. It **overhangs the bar's long edge by 8 mm**, so its footprint is **43 × 25 mm** | Height above the bar not measured |
+| Connector | **10-pin Molex Mini-Fit** (exact series and part TBD), with a **key slot between pins 1 and 2** | ⚠️ Conflicts with the "8-pin harness" in `control-board-electrical.md` §4. Re-check the pin count and pinout. |
+
+**Still needed:** bar thickness, bolt thread, module height, connector part number and orientation, and which end is bonded to VSS (≥ 5 A test).
 
 ## 3. Minor findings
 

@@ -128,7 +128,8 @@ Source: [CKalitin/tesla-model-s-2012-shunt-resistor](https://github.com/CKalitin
 |---|---|
 | Resistance | 100 µΩ |
 | Measurement front end | Isabellenhütte IHM-A-1500, 16-bit |
-| Interface | STM8AF6266 microcontroller as SPI slave on an 8-pin harness |
+| Interface | STM8AF6266 microcontroller as SPI slave. ⚠️ Harness: first noted as 8-pin; measured 2026-11-24 as a **10-pin Molex Mini-Fit** with a key slot between pins 1 and 2. **NOT YET CONFIRMED**; see v14-design-review §M9 |
+| Physical (⚠️ unconfirmed) | Bar 35 × 83.5 mm; bolts on the centre line, 15 mm from each end (53.5 mm apart), size unknown; PCB 25 mm wide, centred, overhanging 8 mm |
 | Hardware overcurrent detection | LM2903 comparator |
 | Rating per the IHM-A-1500 datasheet | 1,500 A *starter* (cranking pulse); ±300 A continuous |
 | Series mode, 315 A | 31.5 mV, 9.9 W: OK |
