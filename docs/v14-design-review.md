@@ -213,7 +213,7 @@ All Tesla shunt data (unconfirmed measurements, bench test, R_sh ≈ 20 µΩ, in
 
 ## 6. v14 change list
 
-**CAD**
+**CAD** (✅ done in [v14](../versions/v14-4s2p-power-train/README.md), 2026-11-24; envelopes marked ⚠️ there still need real drawings)
 1. Straps land on the fuse and shunt; contactor on tray 1 through a board cutout; real EV-B and JJN-300 envelopes (C1, C2, C6).
 2. Terminal screws M4 × 8 (C3).
 3. LED panel limited to z ≲ 210, front intake rows open, rear deck-zone holes removed (C4).
