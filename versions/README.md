@@ -31,5 +31,7 @@ v01 concept ──► v02–v04 Tower A form ──► v05 SendCutSend rules ─
 
 Supporting docs:
 - [`docs/control-board-electrical.md`](../docs/control-board-electrical.md): dual-mode electrical architecture.
+- [`docs/v14-design-notes.md`](../docs/v14-design-notes.md): baselined decisions for the next version (sense flex mount, floating pack, IMD, converter isolation).
+- [`docs/telemetry-ideas.md`](../docs/telemetry-ideas.md): running telemetry list and dashboard plan.
 - [`docs/blog-notes.md`](../docs/blog-notes.md): running notes for the project blog post.
 - [`docs/mechanical-v13.md`](../docs/mechanical-v13.md): v13 change notes.

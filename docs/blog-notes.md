@@ -95,6 +95,8 @@
   - Most telling: the tie-rod heights for the LF100MA cell (v05) were silently carried through v07–v12, 7 versions on a different cell.
   - Lesson: reusing parameters spreads stale assumptions. Checks need to be written as code that runs on every build, not as an occasional prompt.
 
+- **[C]** Keep the human at the end of the loop, not in the middle. If Claude can do a check itself (a datasheet, a vendor site), it should do it and report the result, not ask Chris to look. Example: Claude asked Chris about the inverter's outlet isolation when the datasheet was one fetch away.
+
 ## 6. Session length and autonomy
 
 - **[C]** Over 10 hours of conversation in one session, and still going strong. Insane.
