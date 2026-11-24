@@ -14,4 +14,5 @@ Each folder holds the renders for one design iteration. Its source is `cad/tower
 | v09-inverter-front-bay | LF105 4S1P | Inverter stands beside the board in the front bay; one deck; 279 mm tall. `module_renders/` holds 8 views of the cell module alone (10.4 kg) | Decided to increase capacity |
 | v10-8s-inverter-front-bay | LF105 8S1P | 8 cells in series, 24 V gear | Wanted converters on top, not at the side |
 | v11-8s-single-deck | LF105 8S1P | Charger + inverter end to end on one deck | Wanted them stacked as in v8 |
-| v12-8s-stacked-board-on-deck | LF105 8S1P | Inverter stacked on the charger; control board flat on deck 1; Z-straps rise to the board | **Current** |
+| v12-8s-stacked-board-on-deck | LF105 8S1P | Inverter stacked on the charger; control board flat on deck 1; Z-straps rise to the board | Superseded by v13 |
+| v13-lip-rods-zstraps | LF105 8S1P | v12 + 30° body lead-in lip under the lid facet, tie rods at 0.207 h / 0.793 h (8.4× stiffer end plates), Z-joggle copper straps (pass SendCutSend COP-125 rules) | **Current** |
