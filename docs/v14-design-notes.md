@@ -4,7 +4,7 @@ Decisions made after v13, to be built into the v14 CAD and schematic. Each item 
 
 | # | Item | Status |
 |---|---|---|
-| 1 | Sense flex: M3 tapped hole + S-loop tab per node | **Baselined** |
+| 1 | Sense flex: M3 tapped hole + S-loop tab per node. 4S2P → 5 taps. **Flex chosen over rigid FR4 (2026-11-24)** | **Baselined** |
 | 2 | Pack floats from chassis | **Baselined** |
 | 3 | Inverter electrically isolated from chassis | **Baselined**, superseded by the review (§M6): deck 2 becomes G10, not nylon posts |
 | 4 | Simple insulation monitor (IMD): asymmetric divider read by the ESP32 | **Baselined** |
@@ -46,7 +46,20 @@ SendCutSend taps the holes. Each flex tab ends in a ring pad with an FR4 stiffen
 - **Why preload loss doesn't matter here:** the joint carries µA, so even 10 mΩ of contact resistance gives a µV error. ✓
 - **S-loop:** cell thickness tolerance accumulates over 8 cells, and swelling plus thermal expansion move the busbars relative to the spine by a few mm. A straight tab fixed at both ends would put that strain into the trace or the screw. The meander flexes like a spring instead. Commercial cell-contact flexes use the same feature. No extra part.
 
-**Part cost:** 9 M3 × 6 mm screws. Accepted; it beats a hot-plate process.
+**Part cost:** M3 × 6 mm screws, 5 in 4S2P. Accepted; it beats a hot-plate process.
+
+**Flex vs rigid FR4 (decided 2026-11-24: flex).**
+- Rigid FR4 with slotted pads would need a separate harness, 1 cable and 1 connector more, because it can't make the 90° turn up through tray 1.
+- Cost difference: JLCPCB flex starts at $2 for 5 boards (≤ 100 × 100 mm). At ~330 × 70 mm with stiffeners, an estimated $20–60 vs $10–25 rigid, so tens of dollars. Owner preference plus no harness decides it.
+- MOQ 5, so 4 spares. A swap is about 15 min (5 screws + 1 connector).
+
+**Flex robustness rules:**
+- Inside corners R ≥ 1 mm, with copper tear-stops at slit ends and tab roots.
+- Tail bend radius ≥ 3 mm (static, once). No vias, pads or pours in the bend; traces perpendicular to the bend line.
+- FR4 stiffener behind every ring pad.
+- Spine taped down at 2–3 points, clear of busbar edges and screw heads.
+- **Fusible necked trace at each tap**, so a damaged flex shorting two taps opens in ms instead of dumping a cell pair into a hair trace.
+- A broken trace fails safe: the BQ76952 detects the open wire and the contactor opens.
 
 ## 2. Pack floats from chassis
 
