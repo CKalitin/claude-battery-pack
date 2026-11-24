@@ -1,8 +1,8 @@
 # Tower A: version history
 
-Thirteen iterations, from a shoebox concept to a SendCutSend-manufacturable 2.69 kWh tower. Each folder has a `README.md` covering what changed from the previous version, why, the calculations behind it, and renders.
+Fourteen iterations, from a shoebox concept to a SendCutSend-manufacturable 2.69 kWh tower. Each folder has a `README.md` covering what changed from the previous version, why, the calculations behind it, and renders.
 
-**[v13](v13-lip-rods-zstraps/README.md) is the current design and carries the full justification.**
+**[v14](v14-4s2p-power-train/README.md) is the current design**; its spec is [`docs/v14-baseline.md`](../docs/v14-baseline.md). v13's README carries the full justification of the mechanical base.
 
 Sources: `cad/packmodel.py` (v1), `cad/tower.py` / `tower2.py` (v2–v4), `cad/towerN.py` (v5 onward).
 
@@ -19,7 +19,8 @@ Sources: `cad/packmodel.py` (v1), `cad/tower.py` / `tower2.py` (v2–v4), `cad/t
 | <img src="v10-8s-inverter-front-bay/renders/v10_01_hero.jpg" width="160"> | [**v10** 8S, 24 V](v10-8s-inverter-front-bay/README.md) | LF105 **8S1P** | **2.69 kWh** | 24 V gear, ½ the current of 4S2P | Wanted the converters on top |
 | <img src="v11-8s-single-deck/renders/v11_01_hero.jpg" width="160"> | [**v11** Single deck](v11-8s-single-deck/README.md) | LF105 8S1P | 2.69 kWh | Converters end to end; 6 mm device standoffs | 77 mm longer than stacked |
 | <img src="v12-8s-stacked-board-on-deck/renders_studio/v12_01_hero.jpg" width="160"> | [**v12** Stacked + board on deck](v12-8s-stacked-board-on-deck/README.md) | LF105 8S1P | 2.69 kWh | Final architecture, 379 mm long, 26.2 kg | Review: strap U-rule, rod heights, lid lead-in |
-| <img src="v13-lip-rods-zstraps/renders/v13_01_hero.jpg" width="160"> | [**v13** Current](v13-lip-rods-zstraps/README.md) | LF105 8S1P | 2.69 kWh | Lead-in lip, rods at 0.207 / 0.793 h, Z-straps | — |
+| <img src="v13-lip-rods-zstraps/renders/v13_01_hero.jpg" width="160"> | [**v13** Lip, rods, Z-straps](v13-lip-rods-zstraps/README.md) | LF105 8S1P | 2.69 kWh | Lead-in lip, rods at 0.207 / 0.793 h, Z-straps | Whole-pack review: power through PCB, no fuse, no air inlet, no Wi-Fi path |
+| <img src="v14-4s2p-power-train/renders/v14_01_hero.jpg" width="160"> | [**v14** Current](v14-4s2p-power-train/README.md) | LF105 **4S2P** | 2.69 kWh | 500 A power train in bolted copper (JJN-500, EV200, Tesla shunt), M10 terminals, controls-only board, checkerboard airflow | — |
 
 ## How the design converged
 
