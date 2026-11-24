@@ -249,13 +249,10 @@ R4 is resolved: **one board, controls only**. It carries the BQ76952, ESP32, con
 - **When on:** the same button also goes to an ESP32 GPIO. A long press tells the BQ76952 to enter SHUTDOWN, which is pack off.
 - It must be momentary: TS2 held low during shutdown entry sticks the device in Soft SHUTDOWN.
 
-**Charger wake: no oscillation loop.**
-- LD is driven from the **charger's +12Vaux** through a divider, **not from the load bus**.
-- So LD only reflects "AC present". Opening or closing the contactor doesn't change LD, so there is no on/off/on loop.
-- BQ76952 wake is **edge-triggered** (a rising edge through VWAKEONLD ≈ 1.45 V).
-- While AC is present, LD stays high. The device can't fully enter SHUTDOWN and parks in Soft SHUTDOWN; it doesn't cycle. That's intended: the charger is present, so stay on and charge.
-- ⚠️ **To verify:** +12Vaux is assumed to come from the charger's AC-side auxiliary supply, i.e. absent when AC is off. MEAN WELL's spec doesn't say. Bench test on arrival: battery connected, AC off → measure pin 8.
-- **Fallback if aux is battery-fed:** use the NPB's *Charger OK* status pin, or one optocoupler on AC-present.
+**Charger wake: DEFERRED (owner, 2026-11-24). Do not rely on the charger for wake.**
+- **Baseline: wake is button-only (TS2).** A charger plugged into a shut-down pack does nothing until the button is pressed.
+- LD is not used as a wake source. Hold it low, so it can never stick the device in Soft SHUTDOWN. Exact termination per TI, set in the schematic.
+- Candidates for later: +12Vaux (first check whether it's live with AC off), the NPB *Charger OK* pin, or an AC-present optocoupler. Edge-triggered either way, decoupled from contactor state.
 
 **Under-voltage relaxation latch.**
 - The real oscillation risk: at low charge, cutting the load lets the cells relax upward, e.g. 2.9 V under load → about 3.1 V at rest. A cutoff that auto-recovers would reconnect, sag and cut again.

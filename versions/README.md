@@ -32,6 +32,7 @@ v01 concept ──► v02–v04 Tower A form ──► v05 SendCutSend rules ─
 Supporting docs:
 - [`docs/control-board-electrical.md`](../docs/control-board-electrical.md): dual-mode electrical architecture.
 - [`docs/v14-design-notes.md`](../docs/v14-design-notes.md): baselined decisions for the next version (sense flex mount, floating pack, IMD, converter isolation).
+- [`docs/v14-baseline.md`](../docs/v14-baseline.md): **one-page v14 spec** (everything decided, unconfirmed inputs, deferred).
 - [`docs/v14-design-review.md`](../docs/v14-design-review.md): full pre-CAD audit of v13 (7 critical, 9 major findings, 3 owner decisions).
 - [`docs/tesla-shunt.md`](../docs/tesla-shunt.md): Tesla shunt integration (single source of truth).
 - [`docs/telemetry-ideas.md`](../docs/telemetry-ideas.md): running telemetry list and dashboard plan.
