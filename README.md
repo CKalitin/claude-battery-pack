@@ -64,8 +64,6 @@ xvfb-run python render_tower14_plain.py all   # FAST render (plain, v1–v11 sty
 DRAFT=1 xvfb-run python render_v14_nice.py    # BEAUTIFUL render (studio, v12+), ~50 s/view draft; drop DRAFT for final quality (slow)
 ```
 See `CLAUDE.md` § Rendering for the full comparison.
-```
-```
 
 ## Open items
 See `CLAUDE.md` (handoff) and `docs/v14-design-review.md`.
