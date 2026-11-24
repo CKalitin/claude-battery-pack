@@ -22,6 +22,30 @@ Severity:
 | D2 | Anderson DC-out rating | 30 A (fused on the PCB) · 50 A (fused on copper) · high-current stud | **30 A on an SB50**: 770 W at 25.6 V, enough for tools and accessories. It lets every branch live on the PCB (§M1). |
 | D3 | Tesla shunt vs a plain shunt into the BQ76952 | keep Tesla module · $10 busbar shunt on the BQ76952 coulomb counter | **Keep the Tesla shunt** (owner's want, and it showcases the project), with the costs stated: 5 V rail, level shifter, SPI port, orientation test. A plain shunt would remove 3 board parts and one risk. |
 
+## 0a. Decisions taken (Chris, 2026-11-24) and what they change
+
+**D1 = 4S2P fixed. D2 = the DC output must deliver 500 A, with everything rated for it. D3 = keep the Tesla shunt.**
+
+**What "500 A" means for the cells.** Each LF105 is rated 1C continuous and 3C for 30 s (EVE). Per pair that's 210 A continuous and 630 A for 30 s. So the **pack rating is 500 A for ≤ 30 s and 210 A continuous**: 250 A per cell, 2.38C. Sustaining 500 A would take 5 cells in parallel. Every power part below is rated for **500 A for 30 s and 210 A continuous**.
+
+| Item | Was (8S1P) | Now (4S2P, 500 A) | Rating check |
+|---|---|---|---|
+| Configuration | 8 cells in series, 7 links | **3 series bars spanning 4 terminals each** (A: +y, cells 1–4; B: −y, cells 3–6; C: +y, cells 5–8), plus pack− collector (−y, cells 1–2) and pack+ collector (−y, cells 7–8). Pairs alternate orientation. | Bar 25 × 3.175 at 500 A: J = 6.3 A/mm², ΔT over 30 s = **5.9 K** ✓ |
+| Pack straps | COP-125, 25 / 12 mm | **COP-187 (4.76 mm), 25 mm** | J = 4.2 A/mm², ΔT over 30 s = 2.6 K ✓. Check the SendCutSend COP-187 bend rules in CAD. |
+| Main fuse | JJN-300 | **Bussmann JJN-500** (Littelfuse JLLN-500 / Mersen A3T500): 1.25" × 3.06" (31.8 × 77.8 mm), bolted blades, 20 kA at 160 VDC | Carries 100 % (500 A) without opening. Prospective short circuit 6.5 kA ≪ 20 kA ✓ |
+| Contactor | Panasonic EV-B, 250 A continuous | **TE Kilovac EV200** (e.g. EV200AAANA): **500 A continuous** (at 85 °C, 400 kcmil conductors), M8 terminals, about 81 × 66 mm footprint, 0.43 kg | Rated for 500 A, not just by I²t. The built-in coil economizer holds at **1.7 W** at 12 V (vs 6 W), and the 9–36 V coil runs straight off the 10–14.6 V pack. |
+| Shunt | Tesla, 315 A | Tesla, 500 A for 30 s: 50 mV, 25 W | Above the IHM-A-1500's ±300 A continuous figure but in its starter class. 750 J into the bar is a few-tens-of-K rise. Accept; verify by bench test at ≥ 300 A if possible. Continuous 210 A ✓ |
+| DC output | Anderson SB50, 30 A | **2 × M10 terminals.** The ends of COP-250 output bars (159 mm², J at 500 A = 3.1 A/mm²) come up through a **G10 .250 terminal plate** in the lid (the pack floats, so it must not touch the aluminium lid), with insulating boots. | No Anderson connector is rated for 500 A (the SB350 is the largest at 350 A). Studs are standard practice. |
+| Branch fuses | ATO on the PCB | **MRBF terminal fuses on the load bus**: inverter 50 A, charger 30 A | 12 V inverter draws 40 A typical (MEAN WELL) → 6 AWG. MRBF interrupt rating is 10 kA at 14 V vs 6.5 kA prospective (pack max 14.6 V). **The power-on-PCB rule is fully restored.** |
+| Converters | NTS-400P-124 / NPB-450-24 | **NTS-400P-112** (10–16.5 V in, 11 V shutdown = 2.75 V/cell, 16.5 V over-voltage > 14.6 V ✓) / **NPB-450-12**, 25 A | Charge time 210 / 25 = **8.4 h** |
+| Charger setting | 28.4 V | **14.2 V** (3.55 V/cell) over CAN. The LFP preset's 14.6 V = 3.65 V/cell, which is at the limit. | — |
+| Board rails | 12 V buck + 5 V + 3.3 V | **No 12 V rail.** The EV200 coil runs from the pack. Buck 10–14.6 V → **5 V / 2 A** (Tesla shunt, **NF-A14 5 V PWM fan**), then → 3.3 V. | The 12 V NF-A14 would be 22 % over-voltage at 14.6 V, hence the 5 V fan. |
+| Flex taps | 9 (VC0–VC8) | **5** (VC0–VC4): pack−, A, B, C, pack+ | Unused BQ76952 cell inputs are tied per TI's guidance (unverified) |
+| IMD | k/8 nodes | k/4 = 0, 0.25, 0.5, 0.75, 1; r₀ = 0.312 still matches none ✓ | — |
+| Lid connectors | NEMA, IEC, Anderson, M12 | NEMA, IEC, **M10 terminal plate**, push-button | M12 removed (m4) |
+
+Superseded below: C2 (fuse size), C6 (contactor part), M1 (branch fuses move to copper), M5 (rails), m6 (charger voltage), D2.
+
 ## 1. Critical findings
 
 ### C1. Power current enters the PCB at the strap bolts
