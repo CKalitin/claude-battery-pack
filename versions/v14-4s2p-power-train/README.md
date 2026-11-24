@@ -4,6 +4,8 @@
 
 ![hero](renders/v14_01_hero.jpg)
 
+*Renders are drafts (no anti-aliasing) for fast iteration; studio versions come at the next milestone.*
+
 | At a glance | v13 | **v14** |
 |---|---|---|
 | Configuration | 8S1P, 25.6 V, 105 Ah | **4S2P, 12.8 V, 210 Ah** (2.69 kWh unchanged) |
@@ -33,7 +35,7 @@
 | 9 | **Terminal screws M4 × 8** (pole thread M4 × 6 ⚠️) | EVE spec rev B | R C3 |
 | 10 | **Flex:** spine at y −17, 5 M3 taps into tapped busbars, ring + FR4 stiffener, **NTC on each tap tab**, tail up at x 146–148 to the board | Flex baselined; fusible taps; thermistors on the clamped joint | N §1 |
 | 11 | **Front checkerboard:** 287 air holes (Ø6 in the diffuser and LED board vs Ø4.8 in the plate); panel fitted inside the ±93.4 mm interior; 4 M3 screws behind text pixels into module standoffs | No air inlet in v13 (review C4); v13 panel clashed with the walls | N §10, §10a |
-| 12 | **Rear grille only inside the fan circle** (213 holes, was 703) | Stops the fan short-circuiting | R C4 |
+| 12 | **Rear grid kept full** (looks). Cooling check: ≈ 10 K air rise at 75 W, thanks to the front air holes | Through-flow needs an inlet at the opposite end | N §11 |
 | 13 | **G10 deck 2** (inverter isolation); inverter screws M3 × 5 (1.8 mm penetration ≤ 2.5) | Floating pack; inverter DC input assumed bonded to its case | R M6 |
 | 14 | **Antenna** behind the light-pipe slot; ESP32-S3-WROOM-1U | Metal box ≈ 26 dB loss | R C5 |
 | 15 | **Lid:** outlet, C14 inlet, **push-button**, 2 terminal slots; M12 and Anderson removed | Button-only wake; CAN is internal | N §9a |
@@ -74,7 +76,9 @@
 | ![panel](renders/v14_07_panel.jpg) | ![top](renders/v14_08_top.jpg) |
 | LED panel sandwich | Lid |
 | ![rear](renders/v14_02_rear.jpg) | ![section](renders/v14_09_section.jpg) |
-| Rear grille | Section at the fuse axis |
+| Rear grid | Section at the fuse axis |
+| ![pcb](renders/v14_10_pcb_exploded.jpg) | |
+| Control board lifted from its spot | |
 
 ---
 ← [v13](../v13-lip-rods-zstraps/README.md) · [index](../README.md)

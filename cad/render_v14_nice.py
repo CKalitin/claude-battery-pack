@@ -95,10 +95,12 @@ def shot(fname, title, keep=None, hide=(), explode=None, view=(1.0, -1.1, 0.6), 
     p.camera.up = (0, 0, 1)
     p.camera.view_angle = 24
     p.camera.zoom(zoom)
-    p.enable_ssao(radius=12, bias=0.5, kernel_size=128, blur=True)
-    p.enable_anti_aliasing("ssaa")
+    DRAFT = os.environ.get("DRAFT") == "1"            # draft: no SSAA, light SSAO, 1x scale (~10x faster)
+    p.enable_ssao(radius=12, bias=0.5, kernel_size=32 if DRAFT else 128, blur=True)
+    if not DRAFT:
+        p.enable_anti_aliasing("ssaa")
     f = os.path.join(OUT, fname)
-    p.screenshot(f, scale=2, transparent_background=True)
+    p.screenshot(f, scale=1 if os.environ.get("DRAFT") == "1" else 2, transparent_background=True)
     p.close()
     fg = Image.open(f).convert("RGBA")
     W, Hh = fg.size
@@ -163,6 +165,13 @@ if __name__ == "__main__":
     if w("top"):
         shot("v14_08_top.png", "Lid", sub="Outlet, C14 inlet, push-button, M10 DC terminals", view=(0.35, -0.55, 1.4), focal=(40, 0, 320),
              dist=1200, zoom=1.15)
+    if w("pcb"):
+        ex = {"lid": (0, 0, 420), "screws_lid": (0, 0, 420), "pem_lid_panel": (0, 0, 420), "panel_": (0, 0, 470), "screws_panel": (0, 0, 490),
+              "term_plates": (0, 0, 440), "ctrl_": (0, 0, 190), "cb_standoffs": (0, 0, 95), "screws_trays": (0, 0, 0),
+              "inverter": (0, 0, 120), "tray2": (0, 0, 100), "inv_posts": (0, 0, 80), "cable_": (0, 0, 2000)}
+        shot("v14_10_pcb_exploded.png", "Where the control board sits", sub="Lifted 190 mm: it lives above the Class T fuse and Tesla shunt, on 3 standoffs",
+             explode=ex, hide=("body_half_A", "plate_front", "screws_f", "ledboard", "diffuser", "pipe", "screws_panelmount", "panel_standoffs", "antenna"),
+             view=(0.75, -1.0, 0.85), focal=(90, -30, 300), dist=1100, zoom=1.0)
     if w("section"):
         shot("v14_09_section.png", "Section at y = -29 (fuse axis)", clip=((0, 1, 0), (0, -29.0, 0)),
              view=(0.05, 1.0, 0.12), focal=(40, 0, 200), dist=1300, zoom=1.0, floor=False)
