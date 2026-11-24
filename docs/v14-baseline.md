@@ -11,8 +11,8 @@
 
 | Item | Baseline | Ref |
 |---|---|---|
-| Cells | 8 × EVE LF105, **4S2P fixed**. 12.8 V nominal (10.0–14.6 V), 210 Ah, 2.69 kWh | R §0a |
-| Rating | **500 A for ≤ 30 s, 210 A continuous** (1C continuous, 3C for 30 s per cell) | R §0a |
+| Cells | 8 × EVE LF105, **4S2P fixed**. 12.8 V nominal (10.0–14.6 V), 210 Ah, 2.69 kWh | R §0a, [cells](cells.md) |
+| Rating | **500 A for ≤ 30 s, 210 A continuous** (1C continuous, 3C for 30 s per cell ⚠️ reseller source, see cells.md T4) | R §0a |
 | Busbars | COP-125, 25 mm. Series bars A (+y, cells 1–4), B (−y, 3–6), C (+y, 5–8); collectors pack− (−y, 1–2) and pack+ (−y, 7–8); pairs alternate orientation | R §0a |
 | Terminal screws | M4 × 8 A2 flange head + washer, ≈ 2 N·m. Holes 6.6 mm (also fit M6) ⚠️ thread | R C3 |
 | Pack straps | COP-187, 25 mm, Z-joggles; land on the fuse and shunt, never the PCB | R C1, §0a |

@@ -6,7 +6,7 @@ Tower A: a portable LiFePO4 pack. All fabricated parts come from SendCutSend; th
 ![v14](versions/v14-4s2p-power-train/renders/v14p_01_hero.jpg)
 
 ## Current design: v14
-Start with [`docs/v14-baseline.md`](docs/v14-baseline.md) (one-page spec). The reasoning is in [`docs/v14-design-review.md`](docs/v14-design-review.md) and [`docs/v14-design-notes.md`](docs/v14-design-notes.md).
+Start with [`docs/v14-baseline.md`](docs/v14-baseline.md) (one-page spec). Cells: [`docs/cells.md`](docs/cells.md). The reasoning is in [`docs/v14-design-review.md`](docs/v14-design-review.md) and [`docs/v14-design-notes.md`](docs/v14-design-notes.md).
 
 | | |
 |---|---|
