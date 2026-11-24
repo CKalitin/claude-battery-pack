@@ -157,7 +157,28 @@ Superseded below: C2 (fuse size), C6 (contactor part), M1 (branch fuses move to 
 | Connector height | **5 mm above the PCB, i.e. 7 mm above the copper**; at one end of the module | |
 | Wire exit | Wires leave the connector **straight up** (normal to the bar) | **Keepout:** connector footprint × **≥ 35 mm** above the connector top, for the mated plug plus the wire bend radius (estimate; confirm with the real plug and harness) |
 
-**Still needed:** bolt thread, exact connector part number and orientation, and which end is bonded to VSS (5 A test, `control-board-electrical.md` §5).
+**Bench test, 2026-11-24 (⚠️ PRELIMINARY: meter at its 0.1 mV resolution limit, 200 mV range):**
+
+| Measurement at 5 A | Reading | Inference |
+|---|---|---|
+| Bolt to bolt | 0.1 mV | **R_sh ≈ 20 µΩ** (one count, so 10–30 µΩ), **not 100 µΩ** |
+| GND pin → bolt "A", current on/off | 0.0 / 0.0 mV, in both current directions | Lean: VSS bonded at bolt "A" |
+| GND pin → bolt "B", current on/off | +0.1 / 0.0 mV; reversed −0.0 mV | Consistent with an unbonded end, but the sign flip sits below one count |
+
+- **Orientation is inconclusive.** Bolt "A" (the one on supply negative in the first run) is the lean for the bonded end. **Physically mark which bolt is "A".**
+- **With R_sh ≈ 20 µΩ, orientation matters little:**
+  - Wrong orientation puts I·R_sh/(R_sh + R_h) = 20 µ / 26 m ≈ **0.08 %** of pack current into the harness ground: 0.38 A at 500 A, which 22 AWG carries easily.
+  - The ground offset is 10 mV at 500 A.
+  - Keep the orientation rule, but it is no longer a safety item.
+- **Effect on the design if R_sh ≈ 20 µΩ:** at 500 A, 10 mV and 5 W, instead of 50 mV and 25 W. Check that 10 mV still uses enough of the IHM-A-1500's input range to resolve low currents.
+
+**Deferred: characterise the shunt properly** (owner, later):
+- 4-wire resistance with a µV-resolution meter (5½ digit or better), or 20–50 A of current.
+- Temperature coefficient.
+- Compare with the module's own SPI reading.
+- Repeat the bonded-end test with real resolution.
+
+**Still needed:** bolt thread, exact connector part number and orientation.
 
 ## 3. Minor findings
 
