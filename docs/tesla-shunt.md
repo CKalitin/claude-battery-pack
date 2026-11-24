@@ -49,6 +49,10 @@ This is the single source of truth for the shunt in Tower A. Reverse-engineering
 
 ## 5. Grounding and orientation (updated for R_sh ≈ 20 µΩ)
 
+![Shunt orientation](img/04_shunt_orientation.svg)
+
+*(Figure from the 8S design: the topology is unchanged, but its numbers assume 100 µΩ. Use the table below.)*
+
 - **Correct orientation:** the module's VSS bond sits at node A, the cell side, where the board ground is. Then no current flows in the harness ground wire.
 - **Wrong orientation:** the bond sits at node B. The harness ground wire (R_h ≈ 26 mΩ, 22 AWG × 0.5 m) then runs in parallel with R_sh:
 
