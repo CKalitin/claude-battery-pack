@@ -25,7 +25,39 @@
 
 ## 3. Write the principles first
 
-- **[C]** Chris gave Claude a set of design principles as extra notes in one of the prompts. Claude followed them for the rest of the project. *(The original list is in Chris's Obsidian; paste it here.)*
+- **[C]** Chris gave Claude a set of design principles as extra notes in one of the prompts. Claude followed them for the rest of the project.
+- **[C]** The original list, verbatim:
+
+  > **Fundamental requirements**
+  > * Minimal assembly time
+  >    * Solar takes 6 man hours per module for 32 modules. I will not spend 200 hours doing assembly.
+  >    * I enjoy using a wrench, a night of assembly is fine, but not 17 hours
+  > * All parts machined / assembled by suppliers
+  >    * If send cut send can't do it, you're likely incorrect
+  > * 1 kWh
+  > * One PCB for all contractors and shunt
+  >    * BMS PCB slots on top of it
+  >    * V5 BMS made early!
+  > * 120 V in with charger built in, 120 V outlet.
+  > * DC outlet also available
+  >    * Anderson connector?
+  > * Easily accessible debug info (wifi?)
+
+- **[Claude]** How v13 tracks against the list:
+
+  | Principle | v13 | |
+  |---|---|---|
+  | One night of assembly, not 200 h | PEM and captive hardware, one module, about 83 parts | ✓ |
+  | Supplier-made parts | SendCutSend for every fabricated part | ✓ |
+  | 1 kWh | 2.69 kWh | Changed: the target was raised at v10 (cost per Wh, then the sponsorship) |
+  | One PCB for contactor and shunt | Contactor and Tesla shunt bolted at the control board | ✓ |
+  | BMS PCB slots on top | BMS merged onto the same board (BQ76952 + ESP32) | **Deviates:** one board instead of two. Decide whether to keep the slot-in BMS board |
+  | 120 V in, charger, 120 V out | NPB-450-24 + NTS-400P-124 | ✓ |
+  | DC outlet (Anderson) | Lid Anderson | ✓ |
+  | Debug over Wi-Fi | ESP32 | ✓ |
+
+- **[Claude]** Insight candidate: "If SendCutSend can't do it, you're likely incorrect" is taste encoded as a manufacturability prior. It turned one supplier's design-rule sheet into the design-space boundary, and it is the reason v05's 3 × 30° corners exist.
+- **[Claude]** Insight candidate: the principles came with numbers. "6 man-hours × 32 modules ≈ 200 h" turns "minimal assembly time" from a wish into a constraint Claude can check designs against.
 - **[Claude]** Rules collected during the session, which read like that list grew in use:
   - Best part is no part.
   - Adding a part is a sin.
