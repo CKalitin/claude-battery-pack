@@ -1,4 +1,5 @@
-"""Studio renders of Tower A v12: PBR materials, procedural studio environment map, SSAO, ground shadow."""
+"""BEAUTIFUL render of Tower A v14 (slow): PBR materials, procedural studio environment map, SSAO, SSAA, ground shadow.
+DRAFT=1 -> ~50 s/view. Milestones only; use render_tower14_plain.py (FAST render) for iteration."""
 import os, sys, glob
 os.environ.setdefault("DISPLAY", ":99")
 import numpy as np

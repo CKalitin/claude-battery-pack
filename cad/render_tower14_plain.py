@@ -1,3 +1,4 @@
+"""FAST render of Tower A v14: plain v1-v11 style (flat colours, edge lines), ~10 s/view. Default for iteration."""
 import os, glob, sys
 os.environ.setdefault("DISPLAY", ":99")
 import pyvista as pv

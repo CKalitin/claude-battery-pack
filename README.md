@@ -45,7 +45,8 @@ Electrical architecture: series and parallel modes, current paths, contactor, Te
 - `cad/`: parametric build123d models and scripts. Each version has three files:
   - `towerN.py`: the model;
   - `run_towerN.py`: builds it, checks every pair of parts for interference, and exports STEP/STL;
-  - `render_towerN.py`: makes the 4K pyvista renders.
+  - `render_towerN.py` / `render_towerN_plain.py`: the **fast render** (plain, v1–v11 style);
+  - `render_vN_nice.py`: the **beautiful render** (studio PBR, v12 onward).
 
   Older non-tower concepts are `packmodel.py` with `run.py` and `render*.py`. `flats5.py` unfolds the v5 sheet-metal parts into SendCutSend DXFs and runs DFM checks.
 - `versions/`: renders for every version, plus:
@@ -59,8 +60,11 @@ Electrical architecture: series and parallel modes, current paths, contactor, Te
 pip install -r cad/requirements.txt
 cd cad
 python run_tower14.py            # build, interference check, STEP + STL into cad/out_tower14/ (~2 min; --fast = check only)
-xvfb-run python render_tower14_plain.py all   # fast plain renders, ~10 s/view
-xvfb-run python render_v14_nice.py            # studio renders, slow; DRAFT=1 for ~50 s/view
+xvfb-run python render_tower14_plain.py all   # FAST render (plain, v1–v11 style), ~10 s/view
+DRAFT=1 xvfb-run python render_v14_nice.py    # BEAUTIFUL render (studio, v12+), ~50 s/view draft; drop DRAFT for final quality (slow)
+```
+See `CLAUDE.md` § Rendering for the full comparison.
+```
 ```
 
 ## Open items

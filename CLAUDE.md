@@ -16,10 +16,25 @@ Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery
 - Do checks yourself (datasheets, vendor sites, browser). Don't ask Chris to check things; report results at the end.
 - Flag every unconfirmed value with ⚠️.
 - Run long jobs (builds, renders) in the background and keep working. Never block on a polling loop.
-- Use the plain renderer for iteration. Studio renders only at milestones.
+- Use the fast render for iteration. The beautiful render is for milestones only (see Rendering).
 - No dead space. Chris likes the full rear hole grid.
 - Every interference pair must be either fixed or listed in `run_tower14.py`'s ALLOW list.
 - Terse answers, conclusion first, units on every variable.
+
+## Rendering: two renderers
+Chris calls these **"fast render"** and **"beautiful render"**.
+
+| | **Fast render** (plain, v1–v11 style) | **Beautiful render** (studio, v12 onward) |
+|---|---|---|
+| Script | `cad/render_tower14_plain.py` | `cad/render_v14_nice.py` |
+| Lineage | `render_tower.py` … `render_tower12.py` | `render_v2_nice.py`, `render_v12_nice.py`, `render_v13_nice.py` |
+| Look | Flat colours, black edge lines, white background | PBR materials, procedural studio cubemap, SSAO, SSAA, ground shadow, transparent background |
+| Time | ~10 s/view (12 views in ~2 min on 2 cores) | `DRAFT=1`: ~50 s/view (no SSAA, light SSAO, 1× scale). Full: several min/view ⚠️ not timed |
+| Output | `cad/out_tower14/img/v14p_*.png` | `cad/out_tower14/img_nice/v14_*.png` |
+| Run | `xvfb-run python render_tower14_plain.py all` (or named views: `hero rear open power conn top bays`) | `DRAFT=1 xvfb-run python render_v14_nice.py` |
+| Use | **Default.** Every design iteration, checking clearances, exploded/section views | Milestones only, when Chris asks for it |
+
+Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders in the background, and one job at a time on a small VM. Save JPGs to `versions/<version>/renders/`: plain ones are `v14p_*`, studio ones are `v14_*`.
 
 ## Environment notes
 - `pip install -r cad/requirements.txt`. Renders need `xvfb-run` on a headless box.
