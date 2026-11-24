@@ -138,3 +138,18 @@ Note on arcing: at ≤ 14.6 V a 1 mm air gap cannot break down (Paschen minimum 
 
 ### Contactor on both poles?
 No. Two-pole switching is for HV packs (> 60 V DC), where a stuck pole must not leave a lethal touch voltage. At ≤ 14.6 V the pack is SELV, and it floats, so opening + alone breaks every load loop. A second contactor would add a part, a coil, precharge logic and a failure mode, to protect against a single welded contact. That case is covered by the fuse plus the charger and inverter remote-off.
+
+## 8. Control PCB placement: merged into the front LED PCB (proposed 2026-11-24)
+
+| Option | Result |
+|---|---|
+| Vertical board on the −y wall (§7) | Works, but it's a separate PCB, needs mounting that depends on body assembly order, and needs a harness to the LED board and antenna |
+| **Integrated into the front LED PCB** | **Recommended.** One PCB fewer, no LED harness, antenna already at the front light pipe. LED/air-hole side faces out; control components on the back |
+| Mezzanine slotted onto the LED PCB | Rejected: the gap from the LED board's back face to the module front end plate is **8.0 mm** (`XL0` − end-plate face in `tower14.py`). A stacked board plus board-to-board connector needs ≈ 15–18 mm ⚠️, so the front plate would move forward ≈ 10 mm (dead length) |
+
+- Board: 187 × 246 mm (±93.4 mm wide, z ≈ 36–282).
+- Control zone on the back, z 40–190: in front of the aluminium module end plate, away from the bay copper (bay starts at z 218). That is ≈ 187 × 150 mm vs v14's 68 × 72 mm.
+- Back-side height limit: 8.0 mm minus clearance → components ≤ 5 mm ⚠️. ESP32-S3-WROOM-1U is 3.2 mm thick ⚠️ (check the datasheet). Harness connectors must be low-profile right-angle at the board's top edge.
+- Air holes: the checkerboard has Ø6 holes on a 7.78 mm pitch. Routing the BQ76952 + ESP32 cluster between them is impractical, so a solid zone of ≈ 60 × 80 mm loses ≈ 40 of ≈ 287 air holes (≈ −14 % inlet area) ⚠️. Re-run the cooling check (N §11).
+- Board ground = pack−. Mounting holes into the end-plate standoffs are non-plated, with a ≥ 2 mm copper keep-out (floating pack, IMD).
+- Harness lengths: flex tail over the end-plate top into an FPC connector on the back (≈ 40 mm); shunt SPI ≈ 80 mm; contactor coil ≈ 100 mm; converter CAN/remote ≈ 150 mm; fan (rear) ≈ 350 mm; lid button ≈ 150 mm.
