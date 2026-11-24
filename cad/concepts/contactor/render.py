@@ -39,7 +39,7 @@ def load(key, roles, with_lid=False):
     return M
 
 def shot(key, roles, labels, fname, title, subtitle, view=(1.0, -0.9, 0.75), focal=(100, 0, 250), dist=520,
-         size=(1600, 1200), hide=(), with_lid=False, ghost_lid=False, clip_x=None, xray=(), up=(0, 0, 1), explode=None, only=None, ctx_only=None, ghost=(), parallel=None):
+         size=(1600, 1200), hide=(), with_lid=False, ghost_lid=False, clip_x=None, xray=(), up=(0, 0, 1), explode=None, only=None, ctx_only=None, ghost=(), parallel=None, cut=None):
     M = load(key, roles, with_lid=with_lid or ghost_lid)
     p = pv.Plotter(off_screen=True, window_size=size)
     p.set_background("#141416", top="#3A3A40")
@@ -48,6 +48,13 @@ def shot(key, roles, labels, fname, title, subtitle, view=(1.0, -0.9, 0.75), foc
     for n, (m, role) in M.items():
         if any(n.startswith(h) for h in hide):
             continue
+        if cut is not None:
+            try:
+                m = m.clip_closed_surface(normal=cut[0], origin=cut[1])
+            except Exception:
+                m = m.clip(normal=cut[0], origin=cut[1], invert=False)
+            if m.n_points == 0:
+                continue
         if role == "ctx" and ctx_only is not None and not n.startswith(ctx_only):
             continue
         if role != "ctx" and only is not None and not n.startswith(only):

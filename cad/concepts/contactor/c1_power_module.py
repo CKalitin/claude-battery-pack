@@ -22,6 +22,12 @@ def build(variant="gv14"):
     sb, sbc, (sbn, sbp), z_bus = sb175_bbs(SBX, SBY, Zp1 + 89.8, axis="y")
     c.add("sb175_housing", sb); c.add("sb175_contact_neg", sbc[0], "neg"); c.add("sb175_contact_pos", sbc[1], "pos")
     c.notes.append(f"SB175 mating face z {Zp1 + 89.8:.1f} = {Zp1 + 89.8 - Z_LID_TOP:.1f} mm above the lid top (v15: 10.0)")
+    for i, (x, y) in enumerate((sbn, sbp)):
+        c.add(f"hw_stud_sb_{i}", cyl_z(x, y, Zp0 - 3.175 - 7.0, z_bus, 3.175))             # 180BBS 1/4-20 stud
+        c.add(f"hw_locknut_sb_{i}", cyl_z(x, y, Zp0 - 3.175 - 5.6, Zp0 - 3.175, 6.4))     # 110G56 lock nut
+    for i, (x, y) in enumerate(((144.0, -33.5), (144.0, -1.0), (SBX, sh_y1 - 68.5 if False else -54.5))):
+        c.add(f"hw_carriage_{i}", cyl_z(x, y, Zp0 - 4.5, Zp1 + 22.0, 4.0))                 # M8 carriage bolt, square neck in a square hole
+        c.add(f"hw_carriage_head_{i}", cyl_z(x, y, Zp0 - 4.5 - 4.6, Zp0 - 4.5 + 0.01, 10.0))
     for i, x0 in enumerate((SBX - 12.7 - 3.2, SBX + 12.7)):        # G10 cheeks bolted through the housing's two mounting holes
         c.add(f"g10_sb_cheek_{i}", box(x0, x0 + 3.2, SBY - 22, SBY + 22, Zp1, Zp1 + 52), "ins")
     # ---------- switch ----------
@@ -39,7 +45,8 @@ def build(variant="gv14"):
             ct += cyl_z(x, y, Zp1, Zp1 + 2.0, 8.0)                          # terminal boss on the bar
         c.add("contactor_gv141bax_inverted", ct)
         for i, (x, y) in enumerate((t1, t2)):
-            c.add(f"nut_m8_{i}", cyl_z(x, y, Zp0 - 3.175 - 7.0, Zp0 - 3.175, 7.5))   # flange nut under the plate
+            c.add(f"hw_stud_ct_{i}", cyl_z(x, y, Zp0 - 3.175 - 8.0, Zp1 + 2.0, 4.0))          # M8 stud of the contactor
+            c.add(f"nut_m8_{i}", cyl_z(x, y, Zp0 - 3.175 - 6.5, Zp0 - 3.175, 7.3))            # M8 flange nut under the plate
     else:   # back-to-back FET board bridging the in-bar and the load bar
         t1, t2 = (CX, CY - 13.35), (CX, CY + 13.35)
         c.add("fet_board", box(CX - 30, CX + 30, CY - 28, CY + 28, Zp1, Zp1 + 1.6), "ins")
@@ -85,7 +92,7 @@ def build(variant="gv14"):
                              ("g10_sb_cheek", "sb175_housing"), ("g10_sb_cheek", "g10_plate"), ("g10_sb_cheek", "bus_mod"), ("mrbf_branch", "bus_mod_load"),
                              ("sb175_housing", "lid"), ("bus_pack", "g10_top"), ("bus_pack", "flex_ccs"), ("bus_pack", "screws_term"),
                              ("bus_pack", "cell_"), ("bus_pack", "screws_tap"), ("bus_pack", "tray1"), ("fet_", "fet_"), ("sb175", "bus_mod"), ("contactor", "g10_plate"),
-                             ("bus_pack_pos", "bus_mod_in")]
+                             ("bus_pack_pos", "bus_mod_in"), ("hw_", "")]
     # ---------- current paths (centre lines) and joint/bend counts ----------
     zcol = (Z0 + Z1) / 2
     c.paths["pos"] = [(134.0, -33.5, zcol), (140.4, -33.5, zcol), (140.4, -33.5, zc), (144.0, -33.5, zc), (144.0, -1.0, zc),
@@ -98,7 +105,7 @@ def build(variant="gv14"):
                 "Module assembled upside-down on the bench; installs top-down; 2 bolts + MRBF join it to the pack",
                 "MRBF bridges + riser and module: installed last = service disconnect",
                 "Lid hole moves to the SB175 (x 58-83, y 10-66); v15 hole at x 89-116 must be re-cut"]
-    c.labels = [("contactor_gv14_pcb", "Gigavac GV14 PCB-mount (terminals down)"), ("contactor_gv141", "Gigavac GV141BAX, upside-down"), ("fet_board", "FET switch board"),
+    c.labels = [("contactor_gv14_pcb", "Gigavac GV14 PCB-mount (terminals down)"), ("contactor_gv141", "Gigavac GV141BAX, upside-down"), ("hw_stud_ct", "Contactor M8 stud"), ("nut_m8", "M8 nut under the plate"), ("hw_stud_sb", "SB175 contact stud 1/4-20"), ("hw_locknut", "Lock nut under the plate"), ("hw_carriage_head", "Carriage bolt head"), ("hw_carriage_", "M8 carriage bolt"), ("fet_board", "FET switch board"),
                 ("sb175_housing", "SB175, busbar contacts, facing up"), ("mrbf_main", "MRBF 250 A = service disconnect"),
                 ("mrbf_branch", "Dual MRBF: charger, inverter"), ("shunt_module", "Tesla shunt (flat)"), ("g10_plate", "G10 module plate"),
                 ("bus_pack_pos", "+ riser from cells 7-8"), ("bus_pack_neg", "- band + riser"), ("bus_mod_load", "+ load bar"),

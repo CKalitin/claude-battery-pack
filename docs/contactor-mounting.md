@@ -147,6 +147,9 @@ Prices USD unless noted, distributor stock on the date checked. ✓ = manufactur
 | L3 | Module copper, one flat plane: + in-bar, + load bar, − tab, shunt bar; riser flanges flush with it | 235.1–238.3 |
 | L4 | Parts standing on L3, terminals down: contactor, SB175, MRBFs, shunt board, SB175 cheeks | 238.3–298 (SB175 to 328.1) |
 
+**"PCB-style" is a metaphor:** there is no circuit board in the module (only the shunt's own sensing board). The G10 plate (L2) plays the bare FR4 board, the flat copper bars (L3) lying directly on it play the traces, and the contactor and SB175 bolt down through bar and plate like through-hole parts. The copper is not bonded to the plate; the bolts clamp it.
+
+![true sections through the contactor and the SB175](img/contactor/c1_sections.png)
 ![levels, side elevation](img/contactor/c1_levels_elevation.png)
 ![exploded by level](img/contactor/c1_module_gv14up_exploded.jpg)
 
