@@ -152,7 +152,12 @@ Superseded below: C2 (fuse size), C6 (contactor part), M1 (branch fuses move to 
 | Module PCB | **25 mm wide**, centred along the bar length. It **overhangs the bar's long edge by 8 mm**, so its footprint is **43 × 25 mm** | Height above the bar not measured |
 | Connector | **10-pin Molex Mini-Fit** (exact series and part TBD), with a **key slot between pins 1 and 2** | ⚠️ Conflicts with the "8-pin harness" in `control-board-electrical.md` §4. Re-check the pin count and pinout. |
 
-**Still needed:** bar thickness, bolt thread, module height, connector part number and orientation, and which end is bonded to VSS (≥ 5 A test).
+| Bar thickness | **1/8" (3.175 mm) copper** | |
+| PCB stack (bar flat, PCB on top) | PCB **2 mm** thick; components reach **5 mm** above the copper | |
+| Connector height | **5 mm above the PCB, i.e. 7 mm above the copper**; at one end of the module | |
+| Wire exit | Wires leave the connector **straight up** (normal to the bar) | **Keepout:** connector footprint × **≥ 35 mm** above the connector top, for the mated plug plus the wire bend radius (estimate; confirm with the real plug and harness) |
+
+**Still needed:** bolt thread, exact connector part number and orientation, and which end is bonded to VSS (5 A test, `control-board-electrical.md` §5).
 
 ## 3. Minor findings
 
