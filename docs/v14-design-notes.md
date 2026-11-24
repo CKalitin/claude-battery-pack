@@ -6,7 +6,7 @@ Decisions made after v13, to be built into the v14 CAD and schematic. Each item 
 |---|---|---|
 | 1 | Sense flex: M3 tapped hole + S-loop tab per node | **Baselined** |
 | 2 | Pack floats from chassis | **Baselined** |
-| 3 | Inverter electrically isolated from chassis | **Baselined** |
+| 3 | Inverter electrically isolated from chassis | **Baselined**, superseded by the review (§M6): deck 2 becomes G10, not nylon posts |
 | 4 | Simple insulation monitor (IMD): asymmetric divider read by the ESP32 | **Baselined** |
 | 5 | Per-group resistance check in firmware (detects an open cell) | **Baselined** |
 | 6 | Charger current corrected; 4S2P vs 8S1P charge time | Correction |
