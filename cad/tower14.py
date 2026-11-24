@@ -184,17 +184,10 @@ def panel_screw_yz():
     return c
 
 def rear_holes():
-    """v14: exhaust grille only inside the fan circle (holes elsewhere let the fan short-circuit)."""
+    """Full rear grid (owner: looks better). Cooling check (docs/v14-design-notes.md section 11): with the front checkerboard open,
+    ~37 % of the fan flow still goes through the box -> ~10 K air rise at 75 W; blanking the extra holes would give ~5.5 K."""
     sk = {(round(y, 3), round(z, 3)) for (y, z) in SCREW_YZ + FAN_SCREW_YZ}
-    out = []
-    for k in range(ROWS_R):
-        for j in range(COLS):
-            y, z = node(k, j)
-            if (round(y, 3), round(z, 3)) in sk:
-                continue
-            if math.hypot(y - FAN_YZ[0], z - FAN_YZ[1]) <= 64.0:
-                out.append((y, z))
-    return out
+    return [node(k, j) for k in range(ROWS_R) for j in range(COLS) if (round(node(k, j)[0], 3), round(node(k, j)[1], 3)) not in sk]
 
 # ======================= sheet profile tools =======================
 def offset_polyline(pts, d):
@@ -533,7 +526,7 @@ CB_SO = 6.0                                      # SCS flush standoffs (M3 x .23
 Z_PD = Z_T1TOP + G10_PWR                           # G10 power deck top (shunt + fuse sit on it)
 FUSE_L, FUSE_D, FUSE_BL = 77.8, 31.8, 14.0         # JJN-500 overall 3.06", body dia 1.25"; blade length ~14 (UNCONFIRMED)
 FUSE_BT, FUSE_BW = 4.8, 25.4                       # blade thickness / width (UNCONFIRMED)
-FUSE_Y = -29.0                                     # fuse axis y
+FUSE_Y = -27.5                                     # fuse axis y
 FUSE_X1 = XT - CU2 - 0.2                           # front blade tip, just behind the pack+ riser
 FUSE_X0 = FUSE_X1 - FUSE_L
 FUSE_Z = Z_PD + FUSE_D / 2                         # body rests on the G10 deck
@@ -541,7 +534,7 @@ Z_BLADE = FUSE_Z - FUSE_BT / 2                     # blade underside = top of th
 SH_X0, SH_L, SH_W = 60.0, 83.5, 35.0               # Tesla shunt bar (UNCONFIRMED dims)
 SH_Y = -68.5                                       # bar centre line y
 SH_BOLT = [SH_X0 + 15.0, SH_X0 + SH_L - 15.0]      # node B (load side), node A (cell side)
-CT_X, CT_Y = 97.0, 28.0                            # EV200 centre (UNCONFIRMED outline: 66 x 81 base, ~85 tall)
+CT_X, CT_Y = 97.0, 29.5                            # EV200 centre (UNCONFIRMED outline: 66 x 81 base, ~85 tall)
 CT_BASE, CT_H, CT_STUD = (66.0, 81.0), 72.3, 12.6
 Z_CT = Z_T1TOP + CT_H                              # stud seat (top of contactor body)
 CT_STUDS = [(CT_X, CT_Y - 26.0), (CT_X, CT_Y + 26.0)]   # line (from fuse), load (to outputs)
@@ -587,7 +580,8 @@ def power_train():
         bar -= cyl_z(x, SH_Y, zb - 1, zb + CU + 1, 4.3)
     xc = SH_X0 + SH_L / 2
     pcb = box(xc - 12.5, xc + 12.5, SH_Y - SH_W / 2, SH_Y + SH_W / 2 + 8.0, zb + CU, zb + CU + 5.0)
-    conn = box(xc + 6.0, xc + 12.5, SH_Y - 6.0, SH_Y + 10.0, zb + CU + 2.0, zb + CU + 7.0)
+    # owner 2026-11-24: connector sits on top of the 8 mm overhang strip, at one end (exact spot UNCONFIRMED)
+    conn = box(xc + 2.0, xc + 12.5, SH_Y + SH_W / 2 - 2.5, SH_Y + SH_W / 2 + 7.5, zb + CU + 2.0, zb + CU + 7.0)
     p["shunt_bar"] = bar
     p["shunt_module"] = pcb + conn
     # Class T JJN-500, horizontal along x, body resting on the deck
@@ -777,7 +771,7 @@ def control_board():
     """Controls only (v14). Power never touches it. Cutout for the shunt connector's vertical wire keepout."""
     pcb = box(CBX0, CBX1, CBY0, CBY1, CBZ0, CBZ1) + box(131.0, CBX1, CBY1, -2.0, CBZ0, CBZ1)
     xc = SH_X0 + SH_L / 2
-    pcb -= box(xc + 4.0, xc + 14.5, SH_Y - 8.0, SH_Y + 12.0, CBZ0 - 1, CBZ1 + 1)       # shunt harness keepout (>= 35 mm up)
+    pcb -= box(xc + 1.5, xc + 13.0, SH_Y + SH_W / 2 - 4.5, SH_Y + SH_W / 2 + 9.5, CBZ0 - 1, CBZ1 + 1)   # shunt harness keepout (>= 35 mm straight up)
     for (x, y) in CB_SO_XY:
         pcb -= cyl_z(x, y, CBZ0 - 1, CBZ1 + 1, 1.7)
     def c(x0, x1, y0, y1, h):
@@ -790,7 +784,7 @@ def control_board():
         "precharge_relay": c(122.0, 142.0, -40.0, -28.0, 15.0),
         "precharge_r": c(122.0, 146.0, -26.0, -18.0, 8.0),
         "can_txu_photomos": c(108.0, 120.0, -26.0, -18.0, 2.0),
-        "conn_npb_inv_fan_led_btn": c(90.0, 104.0, -64.0, -53.0, 9.0),
+        "conn_npb_inv_fan_led_btn": c(88.0, 102.0, -64.0, -53.0, 9.0),
         "conn_shunt": c(120.0, 130.0, -84.0, -74.0, 9.0),
         "fuse_2a": c(132.0, 146.0, -84.0, -78.0, 6.0),
         "ccs_conn": box(144.0, 150.0, FLEX_Y - 6, FLEX_Y + 6, CBZ0 - 4.0, CBZ0),

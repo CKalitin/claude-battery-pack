@@ -18,7 +18,7 @@ This is the single source of truth for the shunt in Tower A. Reverse-engineering
 | Bolts | On the long centre line, **15 mm from each end**, so **53.5 mm** apart. Thread and size **unknown** |
 | Module PCB | **2 mm** thick, **25 mm** wide, centred along the bar; overhangs the bar's long edge by **8 mm**, so the footprint is **43 × 25 mm** |
 | Component height | **5 mm** above the copper |
-| Connector | At one end of the module. Top is **5 mm above the PCB (7 mm above the copper)**. Wires exit **straight up**, normal to the bar. |
+| Connector | **On top of the 8 mm overhang strip** (the part of the PCB that hangs past the bar's long edge), at one end of the module. Top is **5 mm above the PCB (7 mm above the copper)**. Wires exit **straight up**, normal to the bar. |
 | Keepout | Connector footprint × **≥ 35 mm** above the connector top, for the mated plug and the wire bend (estimate) |
 | Still unknown | Bolt thread, exact connector part number, which way the connector faces |
 

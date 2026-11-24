@@ -264,3 +264,42 @@ R4 is resolved: **one board, controls only**. It carries the BQ76952, ESP32, con
 - **Mounting:** **4 M3 screws** through both into **4 M3 standoffs on the module's front end plate** (SendCutSend-tapped M3). Installed before the front plate, with no separate alignment step.
 - **Tolerance:** the stack is located by the module and the front plate by the body tabs, a chain of about ±1 mm. So the air holes in the diffuser and LED board are **Ø6.0 mm against Ø4.8 mm in the front plate**, keeping airflow under misalignment. The lit holes need no precise registration.
 - **Fallback:** if CAD shows the tolerance chain is worse, locate the stack on the front plate instead (2 locating pins in text pixels).
+
+## 11. Cooling: is through-flow needed? (2026-11-24)
+
+**Heat in the deck zone, worst sustained case.** Inverter at 400 W out and charger at full, i.e. UPS pass-through:
+
+| Source | Heat |
+|---|---|
+| NTS-400P-112, η 91 % (MEAN WELL) | 400 (1/0.91 − 1) = **39.6 W** |
+| NPB-450-12, 25 A × 14.2 V, η 92 % (**assumed**) | **30.9 W** |
+| Control board + EV200 hold coil | **4.7 W** |
+| **Total** | **P = 75 W** |
+
+**Air temperature rise inside the box:**
+
+$$\Delta T = \frac{P}{\rho c_p Q + UA}$$
+
+- $\Delta T$ = rise of the internal air above ambient [K]
+- $P$ = heat [W]
+- $\rho$ = 1.2 [kg/m³]
+- $c_p$ = 1005 [J/(kg·K)]
+- $Q$ = airflow through the box [m³/s]
+- $A$ = enclosure surface, 0.49 [m²]
+- $U$ = overall wall coefficient: 9.5 W/(m²·K) outside (convection plus radiation, powder coat ε ≈ 0.9) in series with 7 W/(m²·K) inside, so $UA$ = 1.98 [W/K]
+
+| Case | Q through the box | ΔT at 75 W |
+|---|---|---|
+| Sealed (walls only) | 0 | **38 K**, so 63 °C at 25 °C ambient. The inverter derates toward its 70 °C limit (MEAN WELL). ✗ |
+| Rear only: intake and exhaust both at the rear, front holes closed | ≈ 0 to a few m³/h (only what the converter fans mix in) | **20–38 K** ✗ |
+| **Full rear grid + front checkerboard** (crude area-ratio split: 5,193 mm² front / (5,193 + 8,867) = 37 % through; fan ≈ 45 m³/h) | ≈ 17 m³/h | **≈ 10 K** ✓ |
+| Rear grille only inside the fan circle (blanked) | 35–60 m³/h | **3.4–5.5 K** ✓ |
+
+**Conclusions:**
+- **Through-flow matters.** The **front air holes are what make it work**: without an inlet on the opposite end, the box behaves close to sealed.
+- **The full rear grid is acceptable**, at about 10 K. The area-ratio split ignores the through path's extra restriction, so allow 10–15 K. **Decision: full rear grid restored** for looks.
+- A blanking sheet behind the rear plate is the drop-in upgrade if bench ΔT exceeds 15 K. A **second Noctua isn't needed**, and at the rear it wouldn't fix the short circuit anyway.
+- **DC 210 A continuous case:**
+  - 44 W in the cells. Their mass of 16 kg × ~1000 J/(kg·K) = 16 kJ/K gives about 2.8 K/h, and the pack only lasts about 1 h at 210 A, so this is negligible.
+  - About 30 W in the power path (contactor, fuse, joints) in the deck zone: less than the UPS case above.
+- **Bench check:** at 400 W inverter load, log inlet and exhaust air temperature (telemetry list). Target ≤ 15 K.
