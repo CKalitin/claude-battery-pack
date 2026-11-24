@@ -1,6 +1,6 @@
 # Power train: fuse, contactor, shunt, conductors, DC output
 
-**Status 2026-11-24:** v14 power train rejected by the owner (unassemblable, 1 mm clearance to the tray). Three concepts (A, B, C) drafted as diagrams; **no CAD yet, awaiting owner decision.** ⚠️ marks unconfirmed values.
+**Status 2026-11-24 (11:40):** v14 power train rejected. **Owner baselined 175 A DC out (SB175).** Owner prefers busbars to cables for assembly effort. Concept D (§7) proposed: no CAD yet. ⚠️ marks unconfirmed values.
 
 ---
 
@@ -94,3 +94,47 @@ Note on arcing: at ≤ 14.6 V a 1 mm air gap cannot break down (Paschen minimum 
 - ⚠️ Converter connector ends (B moves the charger forward).
 - ⚠️ ML-RBS outline drawing; Anderson SB175 panel mount.
 - Add coded checks to `run_tower14.py`: min clearance between opposite-potential copper and to chassis; assembly order.
+
+## 7. Update 2026-11-24: 175 A baselined → Concept D
+
+### Owner inputs
+- DC out **175 A** (Anderson SB175). 500 A dropped.
+- **Busbars preferred over cables** (assembly effort).
+- The control PCB must have a defined zone (v14 left it floating in the middle of the power copper).
+- Converter cable runs must be supported.
+
+### Why D replaces B
+- The SB175 brings + and − together at one shrouded connector anyway, so B's 290 mm pole separation buys little.
+- B needed 3 long cables: SB175 −, inverter −, charger −. D needs one long rigid − bar, with both ends on the module.
+
+### Concept D
+| Item | D |
+|---|---|
+| Decks | Tray 1 → G10 .187, ends at the charger (x ≈ 50). The front bay floor is a G10 power deck on the module. No metal plate over any pack copper. |
+| − path | P1 collector → COP-187 bar, 20 mm wide, along the −y cell-top edge (y −60…−80: 14 mm to busbar B, 13 mm to the wall) → rises in the bay → shunt node A; node B → − bus → SB175 − contact + converter − stud |
+| + path | P4 collector extended to a tab at the front end (x 147–152), rising at the bay centre → MRBF 250 A (5191 block) → contactor line stud; load stud → + bus → SB175 + contact + dual MRBF 2151 (inverter 50 A, charger 30 A) |
+| Polarity zoning | Bay −y half = − (shunt, − bus); +y half = + (contactor, MRBFs). ≥ 25 mm between opposite potentials everywhere ⚠️ verify in CAD |
+| Output | SB175 mounted on a G10 bracket on the power deck with Anderson 924 bracket kit; busbar contacts bolted to the + and − buses; the face pokes through a lid opening. **No cables in the main path. Lid carries no power copper.** |
+| Control PCB | Vertical, on the −y body wall beside the charger: x −150…+45, z 230–312 (≈ 195 × 82 mm, 3.3× v14's 68 × 72 mm). ≥ 20 mm above the − bar; + hardware ≥ 100 mm away. Short runs: flex tail (−y taps), shunt SPI, charger CAN and inverter remote (DC ends face front), fan (rear), LED board and antenna (front). ⚠️ mounting: PEM standoffs in the body wall vs a G10 bracket, depends on body assembly order |
+| Converters | **Both DC ends face the front bay** (checked: the NPB-450 and NTS-400P each have DC and AC on opposite ends). Leads ≤ 150 mm, tied through slots cut in the G10 decks (no added parts). Inverter: Anderson PP75 (1327/1327G6) on the unit, so it unplugs. Charger: screw terminal block. AC ends face the rear: charger IEC C14 inlet + fan; inverter CN500 |
+| Joints after the cells | 7 |
+
+### MEAN WELL connector check (datasheet photos, 2026-11-24)
+| Unit | DC end | Other end | Source |
+|---|---|---|---|
+| NPB-450-12 | "DC output side": screw terminal block V+/V−, DIP switch, LEDs, DF11-14 signal connector | "AC input side": IEC 320-C14 inlet, on/off switch, fan | MEAN WELL NPB-450-SPEC (2023) p.1 photos ✓ |
+| NTS-400P-112 | "DC input side": TB1 Anderson 1327 (red) / 1327G6 (black), contact 261G2-LPBK; CN301 remote on/off | "AC output side": CN500 JST B6P-VH, DIP switch, CN50 TX/RX | NTS-400P-SPEC (2026-03-26) p.1 photos ✓ |
+
+### Main fuse: Class T vs MRBF (prices checked 2026-11-24, USD)
+| | Class T (JJN / JLLN) | MRBF + 5191 block |
+|---|---|---|
+| Price at 200–250 A | JLLN-200 $40 (Zoro), JJN-200 $88–145 | fuse ≈ $22 + block ≈ $27–32 |
+| Price at 500 A | JJN-500 $185 (Zoro) to $445 | not available (max 300 A) |
+| Interrupt rating | 20 kA at 160 VDC | 10 kA at 14 VDC (5 kA at 32 V) vs 6.5–6.9 kA prospective: 1.45× margin ⚠️ pack max 14.6 V is just above the 14 V rating point |
+| Current limiting | Yes: clears in under ½ cycle, low let-through I²t (protects contactor contacts from welding) | Not marketed as current-limiting ⚠️ |
+| Mounting | Bolted blades: needs 2 bars + 2 joints | Stacks on a 3/8" stud; ring ≥ 3/8"; must use the terminal block |
+| Size | JJN-200: 0.88" × 2.44" | ≈ 25 × 25 × 13 mm |
+- **Choice for 175 A: MRBF 250 A.** Max discharge = 175 A out + ≈ 40 A inverter = 215 A. Cheaper by ~$15–120, one bar and one joint fewer, adequate AIC. What you give up is current limiting.
+
+### Contactor on both poles?
+No. Two-pole switching is for HV packs (> 60 V DC), where a stuck pole must not leave a lethal touch voltage. At ≤ 14.6 V the pack is SELV, and it floats, so opening + alone breaks every load loop. A second contactor would add a part, a coil, precharge logic and a failure mode, to protect against a single welded contact. That case is covered by the fuse plus the charger and inverter remote-off.
