@@ -67,11 +67,20 @@ SendCutSend taps the holes. Each flex tab ends in a ring pad with an FR4 stiffen
 - **No DC I/P to FG rating is given**, and the block diagram doesn't show how −V relates to FG.
 - An unlisted rating is not an isolation guarantee. **Assume the DC input is referenced to FG and the case.**
 
-**Decision.** Mount the inverter isolated from the chassis.
-- The existing 6 mm deck standoffs and M3 screws become **nylon (PA66)**. This changes a material, not the part count.
-- Its 0.75 kg mass on 4 nylon M3 standoffs is fine.
-- The 6 mm gap gives far more than enough creepage at 29 V.
-- Do **not** connect the inverter's FG terminal to the chassis.
+**Decision.** Isolate **deck 2 and the inverter together** from the chassis by making deck 2's 4 hex posts **nylon (PA66), M4, 57.5 mm long, female-female**.
+- **Correction:** an earlier note said the inverter sits on 6 mm nylon standoffs. In the CAD it bolts flat to aluminium tray 2 with 4 M3 screws from below. Tray 2 sits on 4 M4 hex posts, which sit on FH-M4 clinch studs in tray 1.
+- The steel studs and screws stay metal. Inside each post, the stud reaches 10 mm in and the screw tip 6.4 mm, leaving **41 mm of nylon** between them. Nothing metal bridges to the chassis.
+- **Can't be forgotten:** the posts are the only support for the deck, so there is no washer to leave out. Same part count; only the material changes.
+- **Strength check** (5 g lateral shock, deck plus inverter about 1.05 kg):
+  - Force: 5 × 9.81 × 1.05 = 51.5 N, so 12.9 N per post.
+  - Moment at the 57.5 mm length: M = 0.74 N·m.
+  - Section modulus, treating the 8 mm hex as Ø8: W = πd³/32 = 50 mm³.
+  - Bending stress: σ = 0.74×10³ / 50 = **15 MPa**. Conditioned PA66 is about 50 MPa, so the margin is 3.3×. ✓
+  - Nylon creeps, so check post preload once after the first month.
+- Tray 2 sits 14 mm from the body walls (y ±79 vs ±93.4) and touches nothing else. ✓
+- Do **not** connect the inverter's FG terminal to anything.
+- **Inverter screw length:** the datasheet drawing carries a "2.5 mm (Max.)" note. Treat it as a screw-penetration limit. Use **M3 × 4** screws: tray 1.6 mm + 2.4 mm into the case, ≤ 2.5 mm. The CAD currently shows 5 mm of penetration; fix this in v14.
+- **Self-check:** if the isolation is ever bypassed, the IMD (§4) reads a hard short at node 0 (r ≈ 0.000) on first power-up and alarms.
 
 This baseline doesn't depend on measuring the unit first. When the inverter arrives, a continuity check from DC− to its case confirms whether the precaution was needed.
 
