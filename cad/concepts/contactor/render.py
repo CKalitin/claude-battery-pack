@@ -39,7 +39,7 @@ def load(key, roles, with_lid=False):
     return M
 
 def shot(key, roles, labels, fname, title, subtitle, view=(1.0, -0.9, 0.75), focal=(100, 0, 250), dist=520,
-         size=(1600, 1200), hide=(), with_lid=False, ghost_lid=False, clip_x=None, xray=(), up=(0, 0, 1)):
+         size=(1600, 1200), hide=(), with_lid=False, ghost_lid=False, clip_x=None, xray=(), up=(0, 0, 1), explode=None, only=None, ctx_only=None, ghost=(), parallel=None):
     M = load(key, roles, with_lid=with_lid or ghost_lid)
     p = pv.Plotter(off_screen=True, window_size=size)
     p.set_background("#141416", top="#3A3A40")
@@ -48,6 +48,14 @@ def shot(key, roles, labels, fname, title, subtitle, view=(1.0, -0.9, 0.75), foc
     for n, (m, role) in M.items():
         if any(n.startswith(h) for h in hide):
             continue
+        if role == "ctx" and ctx_only is not None and not n.startswith(ctx_only):
+            continue
+        if role != "ctx" and only is not None and not n.startswith(only):
+            continue
+        if explode:
+            dz = next((v for k, v in sorted(explode.items(), key=lambda kv: -len(kv[0])) if n.startswith(k)), 0.0)
+            if dz:
+                m = m.translate((0, 0, dz), inplace=False)
         if clip_x is not None and role == "ctx":
             m = m.clip(normal="x", origin=(clip_x, 0, 0), invert=False)
             if m.n_points == 0:
@@ -58,6 +66,8 @@ def shot(key, roles, labels, fname, title, subtitle, view=(1.0, -0.9, 0.75), foc
             col, spec, op = mat(n, role)
             if any(n.startswith(x) for x in xray):
                 op = 0.22
+            if any(n.startswith(g) for g in ghost):
+                col, op = "#8A8A90", 0.12
         p.add_mesh(m, color=col, opacity=op, smooth_shading=True, split_sharp_edges=True, specular=spec, specular_power=40,
                    ambient=0.2, diffuse=0.85)
         if role in ("pos", "neg", "ins") or n.startswith(("contactor", "sb175", "body_half", "tray")):
@@ -66,6 +76,8 @@ def shot(key, roles, labels, fname, title, subtitle, view=(1.0, -0.9, 0.75), foc
             shown[n] = m
     p.camera.position = (focal[0] + view[0] * dist, focal[1] + view[1] * dist, focal[2] + view[2] * dist)
     p.camera.focal_point = focal; p.camera.up = up
+    if parallel:
+        p.camera.parallel_projection = True; p.camera.parallel_scale = parallel
     p.show(auto_close=False)
     depth = p.get_image_depth(fill_value=np.inf)
     cam = np.array(p.camera.position); vdir = np.array(p.camera.focal_point) - cam; vdir /= np.linalg.norm(vdir)

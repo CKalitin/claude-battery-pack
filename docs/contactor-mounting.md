@@ -137,6 +137,21 @@ Prices USD unless noted, distributor stock on the date checked. ✓ = manufactur
 - **Shunt:** the Tesla shunt lies flat, node A on the − riser flange, node B over a narrow − tab that runs to the SB175 − contact.
 - **Fuses:** the MRBF 250 A main fuse bridges the + riser flange and the module's + in-bar, on top of both. A dual MRBF block on a tab of the + load bar feeds the charger and inverter.
 
+**Levels (bottom to top).**
+
+| Level | What | z (mm) |
+|---|---|---|
+| L0 | Pack copper: + collector on cells 7–8, − band from cells 1–2, series bars. The two risers belong to L0 and reach up to L3 | 206.9–210.0, risers to 238.3 |
+| L1 | G10 tray 1 (open notches let the risers pass) | 218.5–221.6 |
+| L2 | G10 module plate on 5 standoffs; contactor stud nuts hang under it | 232.0–235.1 |
+| L3 | Module copper, one flat plane: + in-bar, + load bar, − tab, shunt bar; riser flanges flush with it | 235.1–238.3 |
+| L4 | Parts standing on L3, terminals down: contactor, SB175, MRBFs, shunt board, SB175 cheeks | 238.3–298 (SB175 to 328.1) |
+
+![levels, side elevation](img/contactor/c1_levels_elevation.png)
+![exploded by level](img/contactor/c1_module_gv14up_exploded.jpg)
+
+Plan views: [L0](img/contactor/c1_module_gv14up_lvl0_pack_copper.jpg), [L1](img/contactor/c1_module_gv14up_lvl1_tray.jpg), [L2](img/contactor/c1_module_gv14up_lvl2_plate.jpg), [L3](img/contactor/c1_module_gv14up_lvl3_copper.jpg), [L4](img/contactor/c1_module_gv14up_lvl4_parts.jpg).
+
 **Current path.** + : cells 7–8 collector → one vertical riser (28 mm) → flange → MRBF → in-bar → contactor T1 → T2 → load bar → SB175 +. − : band → one vertical riser → flange → shunt → − tab → SB175 −. Every module joint is in the plane; no bar is bent.
 
 **Assembly.**
