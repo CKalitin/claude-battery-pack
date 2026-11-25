@@ -93,8 +93,8 @@ H = Z_T2TOP + INV[2] + 3.4                       # lid outer top
 W = 190.0                                        # body outer width (v4 width)
 
 # ======================= shell layout =======================
-L_IN = 375.0                                     # v14: +10 mm, all at the rear (front plate unchanged) -> 37 mm charger bay
-REAR_EXTRA = 10.0
+L_IN = 417.0                                     # 2026-11-24 option A: +42 mm, all at the rear (front plate unchanged):
+REAR_EXTRA = 52.0                                # converters -27 mm (DC lead/plug room in the bay), +15 mm behind them (rear plugs)
 DX = -(L_IN / 2 - (STACK_L / 2 + 1.0 + 25.0 + REAR_EXTRA))   # rear plate inner face = module rear - 1 mm - fan depth - extra
 XF = L_IN / 2 - DX                               # front plate inner face  (+145)
 XR = -(L_IN / 2 + DX)                            # rear plate inner face   (-165)
@@ -675,8 +675,8 @@ def sense_flex():
 
 # ======================= decks =======================
 DECK_SH = XR + 29.0 - (-136.0)                     # decks keep their position relative to the rear plate
-CHG_X0 = XR + 43.0; CHG_X1 = CHG_X0 + CHG[0]   # v14: 18 mm from the fan face (was 10) for assembly
-INV_X0 = XR + 43.0; INV_X1 = INV_X0 + INV[0]
+CHG_X0 = XR + 58.0; CHG_X1 = CHG_X0 + CHG[0]   # 33 mm from the fan face: right-angle C13 on the charger, CN500 plug on the inverter
+INV_X0 = XR + 58.0; INV_X1 = INV_X0 + INV[0]
 TRAY1_X0, TRAY1_X1 = XR + 28.0, XF - 8.0          # v14: ends before the LED board (XL0)
 TRAY1_Y, TRAY1_FL = 88.0, 12.0
 INV_POST_XY = [(x, s * 73.5) for x in (INV_X0 + 12.0, INV_X1 - 12.0) for s in (-1, 1)]
@@ -749,6 +749,26 @@ def inverter():
     b -= box(INV_X0 - 1, INV_X0 + 2, -20, 20, Z_T2TOP + 6, Z_T2TOP + 26)
     return b
 
+# ---- converter terminals (MEAN WELL spec photos: DC and AC on opposite ends; see docs/power-train.md) ----
+# Positions on each face UNCONFIRMED (+y half for the charger DC end per v14 note). Keep-outs = mating plug + cable bend room.
+def converter_terminals():
+    zc, zi = Z_T1TOP, Z_T2TOP
+    term = {
+        "chg_dc_tb": box(CHG_X1, CHG_X1 + 3, 2, 32, zc + 12.5, zc + 27.5),            # screw terminal block V+/V-
+        "chg_sig_df11": box(CHG_X1, CHG_X1 + 2, 40, 50, zc + 30, zc + 36),            # DF11-14 signal (CAN/PMBus, remote)
+        "chg_ac_c14": box(CHG_X0 + 2, CHG_X0 + 6, -13.5, 13.5, zc + 17, zc + 37),     # IEC C14 inlet, in the rear recess
+        "inv_dc_pp75": box(INV_X1, INV_X1 + 3, -16, 16, zi + 1, zi + 33),             # Anderson PP75 1327 (red) + 1327G6 (black)
+        "inv_sig_cn301": box(INV_X1, INV_X1 + 2, 22, 30, zi + 12, zi + 20),           # remote on/off
+        "inv_ac_cn500": box(INV_X0 + 2, INV_X0 + 6, -12, 12, zi + 8, zi + 18),        # JST B6P-VH AC output, in the rear recess
+    }
+    keep = {
+        "chg_dc": box(CHG_X1 + 3, CHG_X1 + 30, 0, 34, zc + 5, zc + 45),               # 8 AWG ring/ferrule + bend: 27 mm
+        "inv_dc": box(INV_X1 + 3, INV_X1 + 45, -20, 20, zi, zi + INV[2]),          # PP75 plug + 6 AWG bend: 42 mm UNCONFIRMED
+        "chg_ac": box(CHG_X0 - 30, CHG_X0 + 2, -20, 20, zc + 12, zc + 42),            # right-angle C13: 30 mm UNCONFIRMED
+        "inv_ac": box(INV_X0 - 20, INV_X0, -16, 16, zi + 4, zi + 28),             # VH plug + wire bend: 20 mm
+    }
+    return term, keep
+
 def front_pcb_comps():
     """v15: the control circuit lives on the BACK of the front LED PCB (one board), in the zone facing the power bay (z 222-285).
     Keepout y +-22 below z 245: the + tab is 18 mm behind the board there."""
@@ -786,8 +806,10 @@ def fan():
 # lid connectors: name: (x, y, sx, sy, depth below lid, clinch-nut axis)
 CONN_HOLE = 7.5                                  # clinch-nut hole centre beyond the cutout edge (SCS edge rule)
 CONNS = {                                           # v15: all over the power bay, clear of the SB175 and the contactor
-    "outlet_nema515": (142.0, -61.0, 30.0, 38.0, 30.0, "x"),
-    "inlet_iec_c14": (137.0, -22.0, 20.0, 27.0, 25.0, "x"),
+    # 2026-11-24: AC pass-throughs at the REAR (both converters' AC ends face the rear), in the 33 mm column between the fan
+    # and the converter rear ends, either side of the inverter's CN500 plug. DC stays at the front (SB175).
+    "outlet_nema515": (XR + 41.5, -40.0, 30.0, 38.0, 30.0, "y"),  # clinch nuts along y: off the inverter top
+    "inlet_iec_c14": (XR + 41.5, 45.0, 20.0, 27.0, 25.0, "y"),
     "pushbutton": (75.0, -70.0, 19.0, 19.0, 30.0, "n"),
 }
 
@@ -856,9 +878,8 @@ def cables():
         "inv_dc_neg": cable([(INV_X1 + 20, -8, zi), (60, -30, zi - 10), (64, -46, SH_Z0 + 14), (70.0, -40.0, SH_Z0 + 6)], 4.2),
         "shunt_spi": cable([(SH_NODE_A - 22, SH_Y0 + CU + 6, SH_Z0 + SH_W + 8), (SH_NODE_A - 22, SH_Y0 + 20, 282.0), (158.0, -40.0, 282.0), (XL0 - 6.5, -40.0, 276.0)], 2.0),
         "coil": cable([(CT_X1, 60, TT + 20), (160.0, 60, TT + 20), (XL0 - 6.0, 45.0, 276.0)], 1.5),
-        "ac_out": cable([(INV_X0 + 2, -30, zi), (INV_X0 - 6, -30, zi), (INV_X0 - 6, -86, zi), (o[0] - 30, -86, zi), (o[0] - 10, o[1] - 12, H - T - o[4] - 3)], 3.5),
-        "ac_in": cable([(i_[0], i_[1], H - T - i_[4] - 3), (118.0, -50.0, 299.0), (40.0, -82.0, 299.0), (-150.0, -82.0, 299.0),
-                        (-164.0, -60.0, 260.0), (CHG_X0 - 2.0, -40.0, 250.0)], 3.5),
+        "ac_out": cable([(INV_X0 - 14, 0, Z_T2TOP + 13), (o[0] - 6, -14, Z_T2TOP + 13), (o[0], o[1] + 10, H - T - o[4] - 3)], 3.5),   # CN500 -> outlet
+        "ac_in": cable([(i_[0], i_[1], H - T - i_[4] - 3), (i_[0] - 6, 30, 272.0), (CHG_X0 - 24, 18, Z_T1TOP + 27)], 3.5),               # inlet -> right-angle C13
         "fan": cable([(XR + FAN[1] - 1, 62, Z_T1TOP + 5), (XR + FAN[1] + 4, 84, Z_T1TOP + 5), (XB0 + 2, 84, Z_T1TOP + 5),
                       (158.0, 88, Z_T1TOP + 30), (XL0 - 6.0, 50, 278.0)], 1.5),
     }
@@ -920,6 +941,11 @@ def build():
     p["inverter_nts400p_112"] = inverter()
     for k, v in front_pcb_comps().items():
         p[f"ctrl_{k}"] = v
+    term, keep = converter_terminals()
+    for k, v in term.items():
+        p[f"term_{k}"] = v
+    for k, v in keep.items():
+        p[f"keepout_{k}"] = v
     p["fan_nfa14"] = fan()
     for k, v in lid_connectors().items():
         p[f"panel_{k}"] = v

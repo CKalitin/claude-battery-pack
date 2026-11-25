@@ -160,3 +160,60 @@ No. Two-pole switching is for HV packs (> 60 V DC), where a stuck pole must not 
 - **+ tab flange sits in a tray notch open to the front edge**, for the same reason.
 - **Control circuit on the front PCB's back, facing the bay** (owner, 2026-11-24), not facing the module end plate. The bay side has ≥ 18 mm depth, versus 8 mm in front of the end plate.
 - Measured: + to − ≥ 13.7 mm; pack to chassis ≥ 7.4 mm; 0 pass-throughs (`clearance_v15.py`).
+
+## Converter plug room: pack +42 mm at the rear (option A, 2026-11-24)
+
+![DC ends](img/contactor/terms_dc_front.jpg)
+![AC ends](img/contactor/terms_ac_rear.jpg)
+
+**Problem.** C1 left too little room in front of the converters' DC ends:
+- **Charger:** 3.2 mm to tray 1, the shunt and the plate.
+- **Inverter:** 23.8 mm to the SB175 cheek.
+
+The rear had 18 mm to the fan, which is too little for a right-angle C13 (~30 mm ⚠️).
+
+**Requirements** (plug depth + cable bend, ⚠️ estimates):
+
+| Lead | Room needed |
+|---|---|
+| Charger DC: 8 AWG into a screw terminal + bend | 27 mm |
+| Inverter DC: PP75 plug + 6 AWG bend (R ≈ 4 × OD ≈ 34 mm) | 42 mm |
+| Charger AC: right-angle C13 | 30 mm |
+| Inverter AC: CN500 VH plug + wires | 20 mm |
+
+**Options:**
+- **A. +40 mm, pass-throughs to the rear: chosen.**
+- B. +30 mm at the front only: the rear C13 still doesn't fit, and the 300 mm AC run stays.
+- C. No growth, pigtails pre-wired on the bench: the bend room is still needed right at the converter.
+- D. Shorter converters: not searched.
+
+**What changed (`tower15.py`):**
+- `L_IN` 375 → 417 and `REAR_EXTRA` 10 → 52. The front plate and everything in the bay stay where they were.
+- Converters at `XR + 58`: they move 27 mm toward the rear, relative to the cells.
+- Gap from the converter rear ends to the fan: 33 mm.
+- Room in front of the DC ends: charger 30.2 mm, inverter 50.8 mm.
+- AC pass-throughs moved to the rear of the lid, in the 33 mm column between the fan and the converter rear ends:
+  - NEMA 5-15 outlet at y −40;
+  - IEC C14 inlet at y +45;
+  - both clear of the CN500 plug, with clinch nuts along y so they stay off the inverter top.
+- AC wiring is now about 60 mm, down from ~300.
+- AC is at the rear and DC at the front.
+
+**New parts:**
+- `converter_terminals()` adds `term_*` markers (positions on each face ⚠️; the charger DC block is in the +y half per the v14 note) and `keepout_*` volumes.
+- C1 treats the keep-outs as obstacles.
+- The C1 + leads now end at the charger terminal block and the inverter PP75.
+
+**Checks:**
+- `run_tower15`: 0 interferences.
+- `clearance_v15`: pack to chassis 7.4 mm.
+- C1, all 3 variants: 0 interferences, keep-outs clear, + to − 10.5 mm, pack to chassis 7.3 mm, all fuses lift out.
+
+**Open:**
+- ⚠️ Exact terminal positions from the MEAN WELL mechanical drawings.
+- ⚠️ PP75 mated length.
+- ⚠️ Right-angle C13 depth (pick a part).
+- − leads for both converters not placed.
+- Every shell part (body halves, lid, tray 1, G10 floor) gets longer: re-check the SendCutSend sheet limits ⚠️.
+- Rear plate fan grid unchanged.
+- The pack mass estimate rises slightly.

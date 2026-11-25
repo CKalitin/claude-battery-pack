@@ -11,7 +11,8 @@ from render_tower15_plain import place_labels, mat as v15mat   # same label plac
 CTX_STL = os.path.join(CAD, "out_tower15", "stl")
 OUT = os.path.join(HERE, "out")
 CTX_KEEP = ("cell_", "bus_A", "bus_B", "bus_C", "g10_top", "flex_ccs", "charger", "inverter", "tray2", "body_half_A",
-            "module_endplates", "ledboard_f", "ctrl_", "so_upper", "inv_posts", "screws_term")
+            "module_endplates", "ledboard_f", "ctrl_", "so_upper", "inv_posts", "screws_term",
+            "term_", "keepout_", "panel_inlet", "panel_outlet", "cable_ac", "fan_")
 LID_KEEP = ("lid", "panel_")
 COL = {"pos": "#D8452F", "neg": "#19B5C4", "ins": "#C9C46A", "other": "#2A2A2D"}
 SPECIAL = {"contactor": ("#232325", 0.3, 1), "fet": ("#1E5631", 0.2, 1), "sb175": ("#8A8D93", 0.3, 1), "mrbf": ("#E8E2D0", 0.2, 1),
@@ -28,7 +29,8 @@ SPECIAL = {"contactor": ("#232325", 0.3, 1), "fet": ("#1E5631", 0.2, 1), "sb175"
            "bs5191_fuse_0_bot": ("#B87333", 0.5, 1), "bs5191_fuse_0_top": ("#B87333", 0.5, 1),
            "lug_": ("#C9CCD1", 0.5, 1), "hw_": ("#9AA0A6", 0.5, 1), "cable_charger": ("#C0282E", 0.3, 1),
            "cable_inverter": ("#C0282E", 0.3, 1), "cap_": ("#B0121C", 0.3, 0.15), "path_": ("#FFD23F", 0.1, 1),
-           "strap_main": ("#D8452F", 0.5, 1)}
+           "strap_main": ("#D8452F", 0.5, 1), "term_": ("#FFB000", 0.3, 1), "keepout_": ("#3FA7FF", 0.1, 0.22),
+           "panel_inlet": ("#2A2A2A", 0.3, 1), "panel_outlet": ("#2A2A2A", 0.3, 1)}
 
 def mat(n, role):
     k = max((k for k in SPECIAL if n.startswith(k)), key=len, default=None)

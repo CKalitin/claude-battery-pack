@@ -9,7 +9,8 @@ print(f"built {len(parts)} parts in {time.time()-t0:.1f}s")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out_tower15")
 os.makedirs(os.path.join(OUT, "stl"), exist_ok=True)
 
-ALLOW = [("screws_f", "plate_front"), ("screws_f", "body_half"), ("screws_r", "plate_rear"), ("screws_r", "body_half"),
+ALLOW = [("term_", "charger"), ("term_", "inverter"), ("keepout_", "term_"), ("keepout_", "cable_"),
+         ("screws_f", "plate_front"), ("screws_f", "body_half"), ("screws_r", "plate_rear"), ("screws_r", "body_half"),
          ("screws_fan", "plate_rear"), ("screws_fan", "fan_"), ("feet", "plate_"), ("pipe_f", "plate_front"),
          ("screws_lid", "lid"), ("screws_lid", "body_half"), ("screws_lid", "pem_body_lid"), ("pem_body_lid", "body_half"),
          ("screws_hold", "body_half"), ("screws_hold", "g10_floor"), ("screws_hold", "tnuts"), ("screws_hold", "module_endplates"),

@@ -87,8 +87,9 @@ def build(variant="gv14"):
         c.add(n, sh, r)
     c.add("hw_m10nut_2151", cyl_z(70.7, 76.0, Zp1 + 2.5, Zp1 + 10.5, 9.25) - cyl_z(70.7, 76.0, Zp1, Zp1 + 12, 5.0))
     for (x, y), d, nm, rc, route in zip(bst, ((-1, 0), (1, 0)), ("charger", "inverter"), (3.4, 4.0),
-                                        (lambda p: [p, (p[0], p[1], 298.0), (40.0, p[1], 298.0)],
-                                         lambda p: [p, (p[0], p[1], 306.0), (p[0], 80.0, 308.0), (40.0, 80.0, 308.0)])):
+                                        # to the converter DC terminals (tower15.converter_terminals; charger TB x 23, inverter PP75 x 4)
+                                        (lambda p: [p, (p[0], p[1], 298.0), (45.0, p[1], 298.0), (38.0, 25.0, 262.0), (28.0, 17.0, 241.6)],
+                                         lambda p: [p, (p[0], p[1], 306.0), (p[0], 80.0, 308.0), (50.0, 80.0, 308.0), (30.0, 10.0, 300.0), (9.0, 8.0, 300.0)])):
         lug, top = lug90(x, y, bzt, d=d)
         c.add(f"lug_{nm}", lug - cyl_z(x, y, bzt - 1, bzt + 3, 4.0), "pos")
         c.add(f"hw_nut_{nm}", stud_stack(x, y, bzt + 1.8) - cyl_z(x, y, bzt, bzt + 12, 4.0))
@@ -130,7 +131,7 @@ def build(variant="gv14"):
                              ("hw_carriage", "shunt_bar"), ("hw_stud", "bus_mod"), ("hw_stud", "g10_plate"), ("hw_stud", "contactor"),
                              ("hw_stud", "sb175"), ("hw_stud", "nut_m8"), ("hw_locknut", "g10_plate"), ("hw_locknut", "hw_stud"),
                              ("hw_nut", "bs"), ("hw_nut", "lug_"), ("hw_nut", "strap_main"), ("lug_", "bs2151"),
-                             ("strap_main", "bs5191"), ("strap_main", "bus_mod_in"), ("cable_", "lug_"), ("cap_", ""), ("hw_carriage", "hw_carriage")]
+                             ("strap_main", "bs5191"), ("strap_main", "bus_mod_in"), ("cable_", "lug_"), ("cable_", "keepout_"), ("cable_", "term_"), ("cap_", ""), ("hw_carriage", "hw_carriage")]
     # ---------- current paths (centre lines) and joint/bend counts ----------
     zcol = (Z0 + Z1) / 2
     c.paths["pos"] = [(100.0, -33.5, zcol), (126.4, -33.5, zcol), (126.4, -33.5, zc), (144.0, -33.5, zc), (144.0, -33.5, Zp1 + 1.25),

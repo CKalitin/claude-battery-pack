@@ -111,7 +111,7 @@ def tesla_shunt_flat(x0, x1, yc, z_bot):
 CHASSIS = ("body_half", "lid", "plate_front", "plate_rear", "module_endplates", "tray2", "rods", "so_upper", "so_lower",
            "pem_", "screws_lid", "screws_f", "screws_panel")
 MID_COPPER = ("bus_A", "bus_B", "bus_C")
-OBSTACLES = ("screws_trays", "screws_term", "screws_tap", "charger", "inverter", "ledboard_f", "ctrl_", "panel_", "flex_ccs", "g10_top", "inv_posts", "cell_",
+OBSTACLES = ("keepout_", "term_", "screws_trays", "screws_term", "screws_tap", "charger", "inverter", "ledboard_f", "ctrl_", "panel_", "flex_ccs", "g10_top", "inv_posts", "cell_",
              "antenna", "diffuser_f", "panel_standoffs")
 
 _ctx = {}
