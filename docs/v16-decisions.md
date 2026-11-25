@@ -34,8 +34,8 @@ Every number here comes from `cad/concepts/contactor/calcs_v16.py`; its output i
 
 ## Open items
 - ~~Inverter − lug 1.25 mm from the sense board~~: gone with D14 (now 5.75 mm).
-- ⚠️ **Shunt node-B stack:** − tab + shunt bar + 2 lug rings + washer + nut on the shunt's own fastener. Its thread and size are unknown, and so is whether the factory bushings visible in the photo take a through bolt (tesla-shunt.md §7).
-- ⚠️ **Shunt connector end:** modelled at the −y end of the module, away from node B. Not confirmed.
+- **Shunt node-B stack:** − tab + shunt bar + 2 lug rings + washer + nut on a **through bolt** (owner ✓). Size unknown, modelled M8 ⚠️.
+- **Shunt connector:** on the overhang side ✓ (owner). Which end of the strip it sits at is still unknown ⚠️; modelled at the end away from node B.
 - ⚠️ **Inverter lead ampacity.** 10 AWG (the PP45 maximum) carries 36.6 A against a 40 A rating at 90 °C, only 1.09× before any derating for heat inside the box. Peak power not yet read from the datasheet.
 - ⚠️ **NTS drawing view.** It's assumed to be the top view; the mirrored keep-out passes too, so the layout works either way.
 - ⚠️ **Blue Sea block internals and cap outline, MRBF contact faces, 90° lug dimensions:** all modelled from drawing outlines and typical values.

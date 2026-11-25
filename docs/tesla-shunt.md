@@ -15,12 +15,12 @@ This is the single source of truth for the shunt in the pack. Reverse-engineerin
 | Feature | Value |
 |---|---|
 | Bar | 1/8" (3.175 mm) copper, **35 × 83.5 mm** |
-| Bolts | On the long centre line, **15 mm from each end**, so **53.5 mm** apart. Thread and size **unknown** |
+| Bolts | On the long centre line, **15 mm from each end**, so **53.5 mm** apart. **Through bolts** (owner, 2026-11-24 ✓). Thread and size **unknown**: modelled as **M8** until measured ⚠️ |
 | Module PCB | **2 mm** thick, **25 mm** wide, centred along the bar; overhangs the bar's long edge by **8 mm**, so the footprint is **43 × 25 mm** |
 | Component height | **5 mm** above the copper |
-| Connector | **On top of the 8 mm overhang strip** (the part of the PCB that hangs past the bar's long edge), at one end of the module. Top is **5 mm above the PCB (7 mm above the copper)**. Wires exit **straight up**, normal to the bar. |
+| Connector | **On the side that overhangs the copper** (owner, 2026-11-24 ✓): **on top of the 8 mm overhang strip** (the part of the PCB that hangs past the bar's long edge), at one end of the module. Top is **5 mm above the PCB (7 mm above the copper)**. Wires exit **straight up**, normal to the bar. |
 | Keepout | Connector footprint × **≥ 35 mm** above the connector top, for the mated plug and the wire bend (estimate) |
-| Still unknown | Bolt thread, exact connector part number, which way the connector faces |
+| Still unknown | Bolt thread, exact connector part number, which way the connector faces, which end of the strip it sits at (v16 models the end away from node B ⚠️) |
 
 ## 3. Interface
 
