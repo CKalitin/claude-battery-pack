@@ -33,16 +33,16 @@ def build(variant="gv14"):
     for i, x0 in enumerate((SBX - 12.7 - 3.2, SBX + 12.7)):        # G10 cheeks bolted through the housing's two mounting holes
         c.add(f"g10_sb_cheek_{i}", box(x0, x0 + 3.2, SBY - 22, SBY + 22, Zp1, Zp1 + 52), "ins")
     # ---------- switch ----------
-    CX, CY = 120.0, 30.2                 # -11 mm in y vs 2026-11-23: makes room for the 2151 along the +y wall
+    CX, CY = 122.0, 32.0                 # turned 90 deg (terminals along x, flange along x): flange stops at y 59.9, so the 2151 fuses lift out
     if variant == "gv14":
-        ct, (t1, t2) = gv14_pcb(CX, CY, Zp1, axis="y", flip=True)
+        ct, (t1, t2) = gv14_pcb(CX, CY, Zp1, axis="x", flip=True)
         c.add("contactor_gv14_pcb", ct)
     elif variant == "gv14up":
         # GV141BAX upright version mounted upside-down: studs (M8, ~12.7 long UNCONFIRMED) down through the bars,
         # nuts underneath (bench). Body 59.9 x 55.7, mounting flange 72.5 long at the top, unused. UNCONFIRMED outline.
-        t1, t2 = (CX, CY - 13.35), (CX, CY + 13.35)
-        ct = box(CX - 27.85, CX + 27.85, CY - 29.95, CY + 29.95, Zp1 + 2.0, Zp1 + 59.9)
-        ct += box(CX - 27.85, CX + 27.85, CY - 36.25, CY + 36.25, Zp1 + 53.9, Zp1 + 59.9)
+        t1, t2 = (CX - 13.35, CY), (CX + 13.35, CY)                      # t1 = line (-x, over the in-bar), t2 = load (+x)
+        ct = box(CX - 29.95, CX + 29.95, CY - 27.85, CY + 27.85, Zp1 + 2.0, Zp1 + 59.9)
+        ct += box(CX - 36.25, CX + 36.25, CY - 27.85, CY + 27.85, Zp1 + 53.9, Zp1 + 59.9)
         for (x, y) in (t1, t2):
             ct += cyl_z(x, y, Zp1, Zp1 + 2.0, 8.0)                          # terminal boss on the bar
         c.add("contactor_gv141bax_inverted", ct)
@@ -50,7 +50,7 @@ def build(variant="gv14"):
             c.add(f"hw_stud_ct_{i}", cyl_z(x, y, Zp0 - 3.175 - 8.0, Zp1 + 2.0, 4.0))          # M8 stud of the contactor
             c.add(f"nut_m8_{i}", cyl_z(x, y, Zp0 - 3.175 - 6.5, Zp0 - 3.175, 7.3))            # M8 flange nut under the plate
     else:   # back-to-back FET board bridging the in-bar and the load bar
-        t1, t2 = (CX, CY - 13.35), (CX, CY + 13.35)
+        t1, t2 = (CX - 13.35, CY), (CX + 13.35, CY)
         c.add("fet_board", box(CX - 30, CX + 30, CY - 28, CY + 28, Zp1, Zp1 + 1.6), "ins")
         c.add("fet_parts", box(CX - 26, CX + 26, CY - 8, CY + 8, Zp1 + 1.6, Zp1 + 8.0))
         c.add("fet_driver", box(CX - 26, CX - 10, CY + 12, CY + 24, Zp1 + 1.6, Zp1 + 4.0))
@@ -60,7 +60,7 @@ def build(variant="gv14"):
     pc += box(124.0, 128.76, -46.0, -21.0, Z0, Zp1)                    # riser (moved from x 138: the M10 head under the flange hit it)
     pc += box(124.0, 152.0, -46.0, -21.0, Zp0, Zp1)                     # flange = 5191 seat, top flush with the module copper
     c.add("bus_pack_pos", pc, "pos")
-    inb = box(101.6, t1[0] + 8.0, t1[1] - 8.0, t1[1] + 8.0, Zp0, Zp1) + box(101.6, 117.6, -15.0, t1[1] - 8.0, Zp0, Zp1)
+    inb = box(101.6, 117.6, -15.0, t1[1] + 8.0, Zp0, Zp1)               # straight column: strap foot -> T1
     c.add("bus_mod_in", inb, "pos")                                       # flat-cut L: no bends
     # main fuse: Blue Sea 5191 on the M10 stud in the + flange, pointing -x; MRBF 250 A on it. Output is the fuse TOP,
     # so a Z-strap (1/8 in copper, 22 wide, 2 bends) brings it back down to the in-bar. Strap = last part in = service disconnect.
@@ -75,8 +75,9 @@ def build(variant="gv14"):
     c.add("strap_main", st, "pos")
     c.add("hw_nut_main", stud_stack(sx, sy, zs1) - cyl_z(sx, sy, zs1 - 1, zs1 + 10, 4.0))
     c.add("hw_nut_strapfoot", stud_stack(sx, -9.5, Zp1 + 3.175) - cyl_z(sx, -9.5, Zp1, Zp1 + 14, 4.0))
-    ld = box(88.7, t2[0] + 8.0, t2[1] - 8.0, t2[1] + 8.0, Zp0, Zp1)      # load bar from T2 (x >= 88.7: 10 mm to the - tab corner)
-    ld += box(SBX - 8.0, 88.7, 43.2, 86.0, Zp0, Zp1)                       # SB+ pad + branch to the 2151 (y >= 43.2: 10.8 mm to the - tab)
+    ld = box(t2[0] - 8.0, t2[0] + 8.0, t2[1] - 8.0, 50.0, Zp0, Zp1)        # T2 pad (x >= 127.35: 9.75 mm to the in-bar)
+    ld += box(SBX - 8.0, t2[0] + 8.0, 50.0, 86.0, Zp0, Zp1)                # wide bar y 50-86 (10 mm above the in-bar), under the 2151
+    ld += box(SBX - 8.0, 88.7, 43.2, 50.0, Zp0, Zp1)                       # SB+ pad (y >= 43.2: 10.8 mm to the - tab)
     c.add("bus_mod_load", ld, "pos")
     # Blue Sea 2151 dual MRBF on the M10 stud in the branch, along +x by the +y wall; fuses land beside the contactor
     bp, bst, bzt = bs_block("2151", 70.7, 76.0, Zp1, d=(1, 0), prefix="bs2151")
@@ -130,7 +131,7 @@ def build(variant="gv14"):
     c.paths["pos"] = [(100.0, -33.5, zcol), (126.4, -33.5, zcol), (126.4, -33.5, zc), (144.0, -33.5, zc), (144.0, -33.5, Zp1 + 1.25),
                       (123.25, -33.5, Zp1 + 1.25), (123.25, -33.5, Zp1 + 9.75), (sx + 8.0, -33.5, Zp1 + 9.75), (sx + 8.0, -33.5, mzt + 1.6),
                       (sx, -12.4, mzt + 1.6), (sx, -12.4, zc), (sx, -8.0, zc), (sx, t1[1], zc), (t1[0], t1[1], zc), (t2[0], t2[1], zc),
-                      (SBX, t2[1], zc), (SBX, sbp[1], zc)]
+                      (t2[0], 58.0, zc), (SBX, 58.0, zc), (SBX, sbp[1], zc)]
     c.paths["neg"] = neg_band_path(71.0, -63.6) + [(71.0, -63.6, zc), (71.0, sh_y1 - 68.5, zc), (71.0, sh_y1 - 15.0, zc),
                       (SBX, sbn[1], zc)]
     c.joints = {"pos (after cell collector)": "5191 tab (M10), fuse bottom, fuse top, strap foot, T1, T2, SB+ = 7", "neg (after band)": "shunt A, shunt B, SB- = 3"}
@@ -145,12 +146,35 @@ def build(variant="gv14"):
                 ("bus_pack_pos", "+ riser from cells 7-8"), ("bus_pack_neg", "- band + riser"), ("bus_mod_load", "+ load bar"),
                 ("bus_mod_in", "+ in-bar"), ("bus_mod_neg", "- tab to SB175"), ("tray1", "G10 tray 1"), ("charger", "Charger"),
                 ("g10_sb_cheek", "G10 cheeks (SB175 mount)"), ("path_pos", "+ current path"), ("path_neg", "- current path")]
+    c.lift = {n: 44.5 - 11.0 for n in c.parts if n.startswith(("bs2151_fuse_", "bs5191_fuse_")) and n.endswith("_body")}
     return c
+
+def lift_check(c):
+    """Fuse removal: lid, cables, lugs, nuts and the Z-strap off; slide each fuse housing straight up by the stud length."""
+    from build123d import Pos
+    C = ctx(tuple(p for p in CHASSIS + OBSTACLES if p not in ("lid", "panel_", "screws_lid", "pem_")))
+    gone = ("lug_", "hw_nut", "cable_", "strap_main", "cap_", "hw_m10nut", "path_")
+    out = {}
+    for n, dz in c.lift.items():
+        pre = n.split("_fuse_")[0]; me = n.replace("_body", "")
+        sweep = c.parts[n]
+        for k in range(1, 8):
+            sweep = sweep + Pos(0, 0, dz * k / 7) * c.parts[n]
+        hits = []
+        for m, sh in list(c.parts.items()) + list(C.items()):
+            if m.startswith(gone) or m.startswith(me) or m.startswith(pre + "_stud") or m.startswith(pre + "_body") or m == n:
+                continue
+            x = sweep & sh
+            if x is not None and x.volume > 0.5:
+                hits.append((m, round(x.volume, 1)))
+        out[n] = hits
+    return out
 
 if __name__ == "__main__":
     import json
     for v in sys.argv[1:] or ["gv14"]:
         c = build(v)
         r = c.check()
+        r["fuse_lift_out"] = lift_check(c)
         c.export()
         print(json.dumps(r, indent=1))

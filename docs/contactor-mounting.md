@@ -257,3 +257,16 @@ Model: `cad/concepts/contactor/lib.py` (`bs_block`, `bs_cap`, `lug90`, `stud_sta
 
 ![C1 with real fuse blocks](img/contactor/c1_module_gv14up_iso.jpg)
 ![C1 top](img/contactor/c1_module_gv14up_top.jpg)
+
+**Rev 2026-11-24 b: contactor turned 90° (fuse service).** The GV141BAX mounting flange (at z 292–298, out to y 66.45) blocked both 2151 fuses from sliding off their studs. The fuses have to rise 33.5 mm, and their housings start at y 62.1. A fuse that can't come out without pulling the module fails A-rules.
+- **Options:**
+  - A. GV14 PCB-mount, which has no flange: 0 in stock.
+  - B. Turn the GV141BAX 90°: chosen.
+  - C. Move it another 4.3 mm toward −y: strap foot clash, and + to − drops to 10.07 mm.
+  - D. Pull the module to change a fuse.
+- **Now:** contactor at (122, 32), terminals along x. T1 (line) at x 108.65 sits on a straight in-bar column from the strap foot. T2 (load) at x 135.35 feeds a wide load bar at y 50–86 that runs under the 2151 to the SB+ pad. The flange stops at y 59.9.
+- **Main fuse:** the strap-foot nut now has 5 mm to the contactor (was 1.25).
+- **New check `lift_check`:** with the lid, cables, lugs, nuts and strap off, each fuse is swept up its stud. All 3 fuses are clear in all 3 variants.
+- **Other checks:** 0 interferences; + to − 10.4 mm; pack to chassis 7.3 mm.
+- **Cost:** the + path is now 352 mm, up from 306, because the load bar detours around the in-bar.
+- **Trap T10:** static interference checks miss removal paths. Rule: every serviceable part gets a sweep check.
