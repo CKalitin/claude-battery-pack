@@ -283,3 +283,6 @@ Model: `cad/concepts/contactor/lib.py` (`bs_block`, `bs_cap`, `lug90`, `stud_sta
   - First find which end the terminals are on (NPB-450 datasheet: AC input and DC output are on opposite ends). Then either flip the converters so DC faces the bay and move the module +x, or route the leads to the far ends.
 
 - **T11. I drilled two holes through the purchased Tesla shunt for the converter − leads (2026-11-24), and the model had no fastener in the shunt's own node-B hole.** Rule: a bought part keeps its factory geometry. Fasteners use only its own holes, and every factory hole that carries current gets a modelled fastener. Fix: both converter − lugs now stack on the node-B bolt (v16-decisions D14).
+
+## 12. v16.1 traps (2026-11-25)
+T12–T18 (strap-foot nut didn't fit, leads over nuts, harness across the service-disconnect prism, missing node-A nut, leads lost in the v16 merge, control parts on air holes, fuse-holder envelope) are written up in [signal-wiring.md](signal-wiring.md) §4. New check: `cad/assembly_v16.py` (insertion sweeps + socket access + service removal).

@@ -1,23 +1,27 @@
 == 1. Currents ==
-I_inv = P/(V*eta) = 400.0/(12.0*0.91) = 36.6 A
-I_main (worst: SB175 out + inverter) = 175.0 + 36.6 = 211.6 A  vs MRBF 250 A -> 1.18x
-charger fuse 30 A / 25.0 A = 1.20x ; inverter fuse 50 A / 36.6 A = 1.36x
-PP45 rating 45 A / 36.6 A = 1.23x (continuous)
+I_inv = P/(V*eta) = 400.0/(11.0*0.91) = 40.0 A
+I_main (worst: SB175 out + inverter) = 175.0 + 40.0 = 215.0 A  vs MRBF 250 A -> 1.16x
+charger fuse 30 A / 25.0 A = 1.20x ; inverter fuse 50 A / 40.0 A = 1.25x
+PP45 rating 45 A / 40.0 A = 1.13x (continuous)
 
 == 2. + path copper (C1, 1/8 in = 3.175 mm bars) ==
-riser (2 x 3/16 in pack strap)                   L    28 mm  A  119.0 mm^2  J  1.8 A/mm^2  R    4.0 uOhm  P  0.18 W
-flange to M10 stud                               L    18 mm  A   79.4 mm^2  J  2.7 A/mm^2  R    3.9 uOhm  P  0.17 W
-5191 tab + strap (Blue Sea, UNCONFIRMED width)   L    40 mm  A   40.0 mm^2  J  5.3 A/mm^2  R   17.2 uOhm  P  0.77 W
-Z-strap (pad + run + leg + foot)                 L   100 mm  A   60.3 mm^2  J  3.5 A/mm^2  R   28.5 uOhm  P  1.28 W
-in-bar column to T1                              L    41 mm  A   44.4 mm^2  J  4.8 A/mm^2  R   15.9 uOhm  P  0.71 W
-load bar T2 pad                                  L    25 mm  A   50.8 mm^2  J  4.2 A/mm^2  R    8.5 uOhm  P  0.38 W
-load bar wide run y 50-86                        L    70 mm  A  114.3 mm^2  J  1.9 A/mm^2  R   10.5 uOhm  P  0.47 W
+riser (2 x 3/16 in pack strap)                   L    28 mm  A  119.0 mm^2  J  1.8 A/mm^2  R    4.0 uOhm  P  0.19 W
+flange to M10 stud                               L    18 mm  A   79.4 mm^2  J  2.7 A/mm^2  R    3.9 uOhm  P  0.18 W
+5191 tab + strap (Blue Sea, UNCONFIRMED width)   L    40 mm  A   40.0 mm^2  J  5.4 A/mm^2  R   17.2 uOhm  P  0.79 W
+Z-strap (pad + run + leg + foot)                 L   100 mm  A   60.3 mm^2  J  3.6 A/mm^2  R   28.5 uOhm  P  1.32 W
+in-bar column to T1                              L    41 mm  A   44.4 mm^2  J  4.8 A/mm^2  R   15.9 uOhm  P  0.73 W
+load bar T2 pad                                  L    25 mm  A   50.8 mm^2  J  4.2 A/mm^2  R    8.5 uOhm  P  0.39 W
+load bar wide run y 50-86                        L    70 mm  A  114.3 mm^2  J  1.9 A/mm^2  R   10.5 uOhm  P  0.49 W
 SB+ pad                                          L     8 mm  A   82.5 mm^2  J  2.1 A/mm^2  R    1.7 uOhm  P  0.05 W
-total copper (excl. joints, fuse, contactor): R 90 uOhm, P 4.0 W at 212 A
+total copper (excl. joints, fuse, contactor): R 90 uOhm, P 4.1 W at 215 A
 
-== 3. Leads ==
-inverter (PP45 max 10 AWG): 10 AWG 40 A @90C vs 36.6 A -> 1.09x ; bend R = 4*OD = 22 mm
-charger: 8 AWG 55 A @90C vs 25.0 A -> 2.20x ; bend R = 4*OD = 28 mm
+== 3. Leads (v16.1: ABYC E-11 / 33 CFR 183.425 table 5, 105 C insulation, single conductor) ==
+inverter (PP45 max 10 AWG): 10 AWG 60 A @30C x 0.85 = 51 A @50C vs 40.0 A continuous -> 1.28x ; bend R = 4*OD = 22 mm
+charger: 8 AWG 80 A @30C x 0.85 = 68 A @50C vs 25.0 A continuous -> 2.72x ; bend R = 4*OD = 28 mm
+inverter 3 min over-rated: 460 W -> 46.0 A = 0.92 x the 50 A MRBF (Bussmann MRBF: 100 % >100 h, 135 % <=900 s, 200 % <=60 s, 350 % 0.1-1 s); 0.90 x the 10 AWG 50 C rating
+inverter 10 s peak: 600 W -> 59.9 A = 1.20 x the 50 A MRBF (Bussmann MRBF: 100 % >100 h, 135 % <=900 s, 200 % <=60 s, 350 % 0.1-1 s); 1.18 x the 10 AWG 50 C rating
+inverter 30-cycle surge: 800 W -> 79.9 A = 1.60 x the 50 A MRBF (Bussmann MRBF: 100 % >100 h, 135 % <=900 s, 200 % <=60 s, 350 % 0.1-1 s); 1.57 x the 10 AWG 50 C rating
+PP45 contact 45 A (Anderson) vs 40.0 A typ continuous = 1.13x: the inverter's own connector, MEAN WELL's choice
 
 == 4. Plug keep-outs (room needed vs room in v16) ==
 charger DC (8 AWG ring + bend)                               need  27.0  have  30.2  margin  +3.2 mm
@@ -35,13 +39,29 @@ MRBF lift = stud above block top = 44.5 - 11.0 = 33.5 mm; fuse top while lifting
 GV141BAX flange (turned 90 deg) reaches y 59.85; 2151 fuse housings start y 62.1 -> 2.25 mm clear
 
 == 7. Clearances (model checks, all 3 contactor variants) ==
-gv14up  interferences 0  + to - 10.5 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
-gv14    interferences 0  + to - 10.5 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
-fet     interferences 0  + to - 10.5 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
+gv14up  interferences 0  + to - 10.4 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
+gv14    interferences 0  + to - 10.4 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
+fet     interferences 0  + to - 10.4 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
 
 == 8. Converter - lugs on the shunt node-B bolt (shunt unmodified) ==
 lug_neg_inverter to shunt_module: 5.75 mm
 lug_neg_charger to shunt_module: 5.75 mm
-lug_neg_inverter to contactor_gv141bax_inverted: 5.67 mm
+lug_neg_inverter to contactor_gv141bax_inverted: 3.97 mm
 lug_neg_charger to sb175_housing: 5.77 mm
-keepout_shunt_conn to strap_main: 10.40 mm
+plug_shunt_j1 to strap_main: 10.20 mm
+
+== 9. Signal and low-power wiring (harness.py, modelled routes) ==
+shunt      7 x            22  route  188 mm  bundle r 2.84 mm  Tesla shunt J1 (Mini-Fit Jr 2x5) -> j_shunt (Micro-Fit 3.0 2x4)
+gnd        1 x            18  route  217 mm  bundle r 1.68 mm  node A nut (ring M8) -> j_pwr pin 3
+bplus2     1 x            18  route  106 mm  bundle r 1.68 mm  Z-strap foot stud (ring M6) + 2 A ATM inline fuse -> j_pwr pin 1
+loadplus2  1 x            18  route   78 mm  bundle r 1.68 mm  2151 inverter-fuse stud (ring M8, on the lug) + 2 A ATM inline fuse -> j_pwr pin 2
+coil       2 x            20  route   53 mm  bundle r 1.91 mm  GV141BAX flying leads (red X1+, black X2-) -> j_coil
+chg_ctl    4 x            24  route   95 mm  bundle r 1.98 mm  charger DF11 (remote ON/OFF + CAN H/L) -> junction
+inv_ctl    2 x            24  route   47 mm  bundle r 1.49 mm  inverter CN301 (JST XH 2-pin: short = remote off) -> junction
+conv       6 x            24  route  183 mm  bundle r 2.36 mm  junction -> j_conv (2x4)
+button     2 x            22  route  114 mm  bundle r 1.66 mm  lid push-button -> j_btn
+fan        4 x            24  route  418 mm  bundle r 1.98 mm  NF-A14 5V PWM 4-pin -> j_fan
+ac_in      3 x            16  route    0 mm  bundle r 3.5 mm  lid IEC C14 inlet -> charger C14 via right-angle C13 (L-com ACPWRC-C13LR)
+ac_out     3 x            16  route    0 mm  bundle r 3.5 mm  inverter CN500 (JST VH) -> lid NEMA 5-15 outlet
+coax       1 x  1.13 mm coax  route  110 mm  bundle r 0.7 mm  ESP32 U.FL -> antenna U.FL
+B+ and LOAD+ (18 AWG) are each fused 2 A at the source end; 18 AWG 105 C = 20 A (table 5), so any 2 A ATM fuse protects it

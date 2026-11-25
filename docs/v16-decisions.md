@@ -21,6 +21,16 @@ Every number here comes from `cad/concepts/contactor/calcs_v16.py`; its output i
 | D14 | **Converter − leads stack on the shunt's own node-B bolt** (one bolt up through our − tab and the shunt's factory hole 15 mm from its end; charger lug ring on the bar, inverter lug ring on top; barrels −x and +x) | *two new M8 holes drilled through the shunt bar (my error: the shunt is a purchased part and can't be modified, T11)*; *on the − flange (bypasses the shunt)*; *on the − tab (no free tab area ≥ 10 mm from + copper)* | Uses only the shunt's own holes. Converter current enters the bar on the node-B side, so it is measured. The model had no node-B fastener at all before (second miss) | Lugs 5.75 mm from the sense board, 5.67 mm from the contactor; shunt connector keep-out 10.4 mm from the Z-strap. Shunt bolt size and thread unknown (tesla-shunt.md) ⚠️, modelled M8 |
 | D15 | **Copper sizes** (1/8″ plane) | — | Worst current density is 5.3 A/mm² in the Blue Sea strap; the copper plane's worst is 4.8 A/mm² | + path copper 90 µΩ, 4.0 W at 212 A (excludes joints, fuse and contactor) |
 | D17 | **Purchased parts are modelled as fixed**: only their own holes and faces may be used | — | From the owner: "I'm not going to drill holes in it" | Rule added to CLAUDE.md |
+| D18 | **v16.1: Z-strap foot stud M8 → M6**, at y −4.3; strap leg 3 mm further −y, in-bar extended to y −17 | *keep M8 (the washer and nut didn't fit: 14.9 mm between leg and contactor for a 17 mm washer, T12)*; *move the contactor +y (blocks the 2151 lift-out)* | CDA busbar practice: M6 for a 14 mm wide bar. Washer, nut and a 15 mm socket now clear the leg and the contactor | assembly_v16.py socket check ✓ |
+| D19 | **v16.1: 2151 moved y 76 → 74; its M10 nut is a DIN 439 thin nut (5 mm)** | *leave at 76 (fuses at y 89.9 hit the body's top facets, opening ±88.6 above z 300)*; *standard 8 mm nut (top at z 248.8, under the SB175 housing at 248.5)* | The fuses can be fitted and removed vertically; the nut is torqued on the bench before the SB175 goes on | Fuse lift ✓; fuse removal sweep 150 mm ✓ |
+| D20 | **v16.1: front board + diffuser 175 mm wide (was 185.8)** | *install the board before the shell closes (then the front plate has to go on after the bay)* | They now drop in from the top past the walls' top facets; LED columns end at ±80.8, 6.7 mm inside the edge | assembly step 3 ✓ |
+| D21 | **v16.1: control parts get solid board: 43 air holes removed** (287 → 244) | *keep the holes (parts sat on them, T17)* | A part can't sit on a hole | `tower15.CTRL`, `ctrl_blocks` |
+| D22 | **Signal wiring as modelled parts** (harness.py): board headers on the top edge, two runs (S over the contactor, N along the −y wall) outside every service prism | see [signal-wiring.md](signal-wiring.md) §3 | Z-strap and all 3 fuses come out with every lead in place; every nut takes a socket | 0 interferences; assembly check all clear |
+| D23 | **B+ tap: ring under the Z-strap foot nut; LOAD+ tap: ring on the 2151 inverter-fuse stud; GND: ring under a new node-A nut.** 2 A ATM inline fuse at each + tap | signal-wiring.md §3b–3d | No new holes in purchased parts; the strap removal also kills the board | 18 AWG 105 °C = 20 A ✓ |
+| D24 | **Inverter leads re-routed**: + lead over the contactor (y 55, z 309), − lug barrel offset 12 → 14 mm, − lead out along y −13 | *runs over the 2151 nuts and the node-B nut (T13)* | Sockets reach every nut; no lead crosses a fuse lift-out prism | assembly check ✓ |
+| D25 | **Inverter lead ampacity re-rated with ABYC E-11 / 33 CFR 183.425 table 5** (105 °C insulation, single conductor) | *NEC 310.16 90 °C bundled table (40 A, 1.09×)* | The lead is a short single conductor in air, not in conduit: 60 A at 30 °C × 0.85 at 50 °C = 51 A vs 40.0 A typ = **1.28×**. 3-min 460 W = 46 A (0.90× rating); 10 s 600 W = 60 A for 10 s (MRBF 50 A at 120 %: holds, Bussmann ">100 h at 100 %, ≤900 s at 135 %") | v16-calcs §3 ✓ |
+| D26 | **Inverter current is 40.0 A** (MEAN WELL "DC current typ. 40 A"; = 400 W / (11.0 V × 0.91)) | *36.6 A at 12.0 V* | MEAN WELL's own figure; main fuse load 215 A vs 250 A = 1.16× | ✓ |
+| D27 | **Cooling: NF-A14 flipped to intake**; inverter at 400 W continuous to be proven on the bench | B: rear blanking sheet; C: MEAN WELL 4020 fan on CN100; D: 240 W firmware limit | Free; the jet lands on the converter AC ends 40 mm away. Box rise 12.7 K ✓ | [cooling.md](cooling.md) |
 | D16 | **Check rules added**: fuse lift-out sweep; plug keep-outs as obstacles; no `("hw_","")` wildcard in ALLOW | — | Each rule came from a miss: T9 (a wildcard hid a real clash), T10 (static checks miss removal paths) | contactor-mounting.md §11 |
 
 ## SendCutSend limits (read 2026-11-24, sendcutsend.com/materials/processing-min-max, in Chrome)
@@ -33,10 +43,13 @@ Every number here comes from `cad/concepts/contactor/calcs_v16.py`; its output i
 | Copper .125″: min flange after bend | .471″ = 12.0 mm | Z-strap leg 30.5 ✓, foot 12.0 (exactly at the limit) | ✓ |
 
 ## Open items
-- ~~Inverter − lug 1.25 mm from the sense board~~: gone with D14 (now 5.75 mm).
-- **Shunt node-B stack:** − tab + shunt bar + 2 lug rings + washer + nut on a **through bolt** (owner ✓). Size unknown, modelled M8 ⚠️.
-- **Shunt connector:** on the overhang side ✓ (owner). Which end of the strip it sits at is still unknown ⚠️; modelled at the end away from node B.
-- ⚠️ **Inverter lead ampacity.** 10 AWG (the PP45 maximum) carries 36.6 A against a 40 A rating at 90 °C, only 1.09× before any derating for heat inside the box. Peak power not yet read from the datasheet.
-- ⚠️ **NTS drawing view.** It's assumed to be the top view; the mirrored keep-out passes too, so the layout works either way.
-- ⚠️ **Blue Sea block internals and cap outline, MRBF contact faces, 90° lug dimensions:** all modelled from drawing outlines and typical values.
-- **The power-bay figures in contactor-mounting.md §6 (sections, levels, profile) predate D3–D14.**
+- **Inverter at 400 W continuous**: the pack fan gives it 0.2–0.6× MEAN WELL's forced-air condition. Bench test, then option B or C ([cooling.md](cooling.md)).
+- **Shunt node-B stack:** through bolt, size unknown, modelled M8 ⚠️.
+- **Shunt J1:** on the overhang side ✓; which end of the strip ⚠️ (the modelled plug envelope covers both).
+- ⚠️ **NTS drawing view** (top vs bottom view): both pass for the DC keep-out; the CN301 lead re-routes along +y if it's a bottom view.
+- ⚠️ NPB-450 DF11 pinout; GV141BAX coil lead exit; Tesla J1 part number ([signal-wiring.md](signal-wiring.md) §7).
+- ⚠️ 90° lug barrel offset/height (pad 16.3 × 14.2 × 1.3 mm from T&B 54131UB for 8 AWG 5/16″; the model's Ø17 × 1.8 ring covers it).
+- ⚠️ Right-angle C13 depth: the L-com drawing's two candidates are 35.6 and 37.9 mm; the 40 mm gap fits either. L-com's price is **$28.09** (not $14).
+- ✓ **Blue Sea 2151/5191 outline** now matches Eaton Bussmann's "CF" bar drawing (MRBF brochure, Cooper Bussmann catalog pp. 76–77): 88.5 long, body 56.5, 20.0 wide, 2.5 tab, 11.0 body height, stud height "A" 44.5, hole Ø10.3 (3/8″ version). The single block is **61.9** long there (model 60.9 ⚠️ +1 mm). MRBF 27.8 × 23.0 ✓; MRBF height and the insulating cap (cover 82.2 / 22.0 / 6.0 dims, unlabelled) still ⚠️.
+- **The power-bay figures in contactor-mounting.md §6 (sections, levels, profile) predate D3–D27.**
+- **Pack copper `bus_pack_pos/neg` are fused boxes, not one bendable part** (found in the SCS pass): needs a bend-legal redesign before ordering.

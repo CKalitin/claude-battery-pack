@@ -94,6 +94,10 @@ An earlier attempt measured against the NUCLEO GND through a jumper and read abo
 - Leaning towards VSS bonded at bolt "A". The sign flip on bolt "B" sits below one meter count, so this is **not conclusive**.
 - **Action:** physically mark bolt "A".
 
+## 6a. Harness (v16.1, modelled)
+- J1 plug (Mini-Fit Jr 2×5 envelope 9.6 × 21 × 13 mm ⚠️) on the **+x overhang**, the side facing the front board. Wires go straight up 30 mm, then +y to y 7 to stay out of the Z-strap's lift-out prism, over the contactor, and down into j_shunt (Micro-Fit 3.0 2×4) on the board's top edge. 7 × 22 AWG (J1 pins 1–7), 188 mm. Details: [signal-wiring.md](signal-wiring.md).
+- Board ground is a separate 18 AWG wire from a ring under the **node-A nut** (the cell side), per §5. J1 pin 2 still connects to the same ground through the bar, as analysed in §5.
+
 ## 7. Open items (deferred: characterise the shunt properly)
 
 - [ ] 4-wire R_sh with a µV-resolution meter (5½ digit or better), or 20–50 A of test current. Measure at 2+ temperatures for the temperature coefficient.

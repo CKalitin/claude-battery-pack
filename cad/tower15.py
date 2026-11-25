@@ -170,10 +170,12 @@ def front_holes():
     skip = set(SCREW_KJ) | text_mask()
     return [node(k, j) for k in range(ROWS_F) for j in range(COLS) if (k, j) not in skip]
 
-def air_holes():
-    """Checkerboard: every other front hole passes straight through diffuser + LED board."""
+def air_holes(all_=False):
+    """Checkerboard: every other front hole passes straight through diffuser + LED board. v16: no air hole where a control part
+    sits on the board's back (CTRL, below); those positions become lit pixels."""
     skip = set(SCREW_KJ) | text_mask()
-    return [node(k, j) for k in range(ROWS_F) for j in range(COLS) if (k, j) not in skip and (k + j) % 2 == 1]
+    h = [node(k, j) for k in range(ROWS_F) for j in range(COLS) if (k, j) not in skip and (k + j) % 2 == 1]
+    return h if all_ else [p for p in h if not ctrl_blocks(*p)]
 
 def panel_screw_yz():
     """4 panel screws hidden behind text pixels (solid metal in front), within the module end plate (z <= 185)."""
@@ -343,7 +345,7 @@ def feet():
 
 # ======================= front light: diffuser, LED board, pipe =======================
 PANEL_GAP = 2.5                                   # diffuser face to front plate: room for M3 button heads
-PANEL_Y = W / 2 - T - 0.5                         # fit inside the walls (v13 panel at +-97.4 clashed with the +-93.4 interior)
+PANEL_Y = 87.5                                    # v16.1: 175 wide, so board + diffuser drop in past the walls' top facets (opening +-88.6); was W/2 - T - 0.5 = 92.9
 def _front_panel(x0, x1):
     y1 = PANEL_Y
     p = box(x0, x1, -y1, y1, ZB - 4.0, PIPE_Z - ACR_PIPE / 2 - 1.0)   # top edge under the light pipe (edge-lit from LEDs on this edge)
@@ -715,7 +717,11 @@ def tray2():
         t -= cyl_z(x, y, Z_TRAY2 - 1, Z_T2TOP + 1, 2.2)
     for (x, y) in INV_SCREW_XY:
         t -= cyl_z(x, y, Z_TRAY2 - 1, Z_T2TOP + 1, 1.7)
+    for (x, y) in TIE_SLOTS2:                                              # v16.1: cable-tie slots for the fan lead (lies on tray 2 at y 64)
+        t -= box(x - 1.5, x + 1.5, y - 2.5, y + 2.5, Z_TRAY2 - 1, Z_T2TOP + 1)
     return t
+
+TIE_SLOTS2 = [(-150.0, 59.5), (-150.0, 68.5), (-20.0, 59.5), (-20.0, 68.5)]
 
 def posts():
     return Compound([Pos(x, y, Z_T1TOP) * extrude(RegularPolygon(8 / math.sqrt(3), 6), Z_TRAY2 - Z_T1TOP) for (x, y) in INV_POST_XY])
@@ -774,25 +780,39 @@ def converter_terminals():
     }
     return term, keep
 
+# v16 back-side layout of the front board (one board: LEDs on the front, control on the back, all above the module end
+# plate, z > 192, where the bay gives up to 15 mm of depth). Harness connectors sit at the top edge, mate from above (top-down
+# assembly) and point their wires up into the bay. name: (y0, y1, z0, z1, height behind the board)
+CTRL = {
+    "esp32s3_1u": (-86.0, -68.0, 248.0, 273.5, 3.2),       # ESP32-S3-WROOM-1U 18 x 25.5 x 3.2 (U.FL to the flex antenna)
+    "bq76952": (-56.0, -47.0, 248.0, 257.0, 1.2),          # TQFP-48 7 x 7 + leads
+    "lvl_shift": (-44.0, -40.0, 250.0, 254.0, 1.0),        # TXU0104 (shunt SPI 3.3 <-> 5 V)
+    "precharge_relay": (-84.0, -64.0, 228.0, 240.0, 15.0),
+    "precharge_r": (-60.0, -36.0, 230.0, 238.0, 8.0),
+    "buck_5v": (30.0, 42.0, 262.0, 272.0, 4.0),
+    "ldo_3v3": (46.0, 52.0, 262.0, 268.0, 2.0),
+    "can_photomos": (56.0, 68.0, 248.0, 256.0, 2.0),
+    "coil_driver": (46.0, 54.0, 248.0, 256.0, 2.0),          # low-side MOSFET + TVS for the GV141BAX coil (0.23 A hold, 3.9 A pick-up)
+    "fuse_2a": (26.0, 40.0, 244.0, 250.0, 6.0),
+    "ccs_fpc": (FLEX_Y - 6, FLEX_Y + 6, 236.0, 242.0, 2.0),
+    # harness headers (Molex Micro-Fit 3.0 right-angle, vertical mating at the top edge; Noctua fan = 2.54 mm 4-pin)
+    "j_btn": (-80.0, -72.0, 277.0, 285.3, 9.0),             # lid push-button, 1 x 2
+    "j_conv": (-64.0, -49.0, 277.0, 285.3, 9.0),            # charger DF11 + inverter CN301, 2 x 4
+    "j_shunt": (-44.0, -29.0, 277.0, 285.3, 9.0),           # Tesla shunt, 2 x 4 (5V, GND, NSS, SCK, MISO, MOSI, OC, spare)
+    "j_pwr": (-6.0, 4.0, 277.0, 285.3, 9.0),                # B+ (line), LOAD+ (precharge), GND (node A), 1 x 3, 18 AWG
+    "j_coil": (8.0, 15.5, 277.0, 285.3, 9.0),               # contactor coil, 1 x 2
+    "j_fan": (46.0, 57.0, 277.0, 285.3, 9.0),               # NF-A14 4-pin
+}
+CTRL_KEEP = 1.0 + 1.5     # copper keep-out around the Dia 6 air holes + part courtyard [mm]
+
+def ctrl_blocks(y, z):
+    """True if an air hole at (y, z) would cut into a control part footprint (hole radius 3 + keep-out)."""
+    r = 3.0 + CTRL_KEEP
+    return any(y0 - r < y < y1 + r and z0 - r < z < z1 + r for (y0, y1, z0, z1, h) in CTRL.values())
+
 def front_pcb_comps():
-    """v15: the control circuit lives on the BACK of the front LED PCB (one board), in the zone facing the power bay (z 222-285).
-    Keepout y +-22 below z 245: the + tab is 18 mm behind the board there."""
     xb = XL0
-    def c(y0, y1, z0, z1, h):
-        return box(xb - h, xb, y0, y1, z0, z1)
-    return {
-        "esp32s3_1u": c(-82.0, -64.0, 255.0, 280.5, 3.2),
-        "bq76952": c(-50.0, -41.0, 248.0, 257.0, 1.2),
-        "buck_5v": c(30.0, 42.0, 262.0, 272.0, 4.0),
-        "ldo_3v3": c(46.0, 52.0, 262.0, 268.0, 2.0),
-        "precharge_relay": c(-84.0, -64.0, 228.0, 240.0, 15.0),
-        "precharge_r": c(-60.0, -36.0, 230.0, 238.0, 8.0),
-        "can_photomos": c(56.0, 68.0, 248.0, 256.0, 2.0),
-        "conn_harness": c(30.0, 60.0, 274.0, 281.0, 6.0),
-        "conn_shunt": c(-46.0, -32.0, 270.0, 278.0, 6.0),
-        "fuse_2a": c(26.0, 40.0, 244.0, 250.0, 6.0),
-        "ccs_fpc": c(FLEX_Y - 6, FLEX_Y + 6, 236.0, 242.0, 2.0),
-    }
+    return {k: box(xb - h, xb, y0, y1, z0, z1) for k, (y0, y1, z0, z1, h) in CTRL.items()}
 
 def fan():
     x0 = XR

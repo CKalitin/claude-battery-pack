@@ -1,6 +1,6 @@
 # Handoff for the next Claude
 
-Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v16** (C1 power module, Blue Sea 5191/2151 fuse blocks, pack 424 mm inside with AC at the rear; see `versions/v16-c1-power-module/README.md`, `docs/v16-decisions.md`, `docs/v16-calcs.txt`, `docs/contactor-mounting.md`).
+Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v16.1** (C1 power module, Blue Sea 5191/2151 fuse blocks, pack 424 mm inside with AC at the rear; v16.1 adds the modelled signal wiring, the top-down assembly proof and the cooling re-run). See `versions/v16-c1-power-module/README.md`, `docs/v16-decisions.md` (D1–D27), `docs/v16-calcs.txt`, `docs/signal-wiring.md`, `docs/cooling.md`, `docs/v16-assembly-check.txt`, `docs/contactor-mounting.md`.
 
 ## Read first
 1. `docs/v14-baseline.md`: one-page spec.
@@ -21,6 +21,7 @@ Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery
 - Use the fast render for iteration. The beautiful render is for milestones only (see Rendering).
 - No dead space. Chris likes the full rear hole grid.
 - Every interference pair must be either fixed or listed in `run_tower15.py`'s ALLOW list.
+- Run `cad/assembly_v16.py` after any bay or harness change: every part is swept along its insertion path, every nut gets a socket, and the Z-strap and all MRBF fuses must come out with every lead in place.
 - Run `clearance_v15.py` after any power-bay change: no pack copper through chassis metal, + to − ≥ 10 mm, pack copper to chassis ≥ 7 mm.
 - Purchased parts (Tesla shunt, Blue Sea blocks, converters, contactor, SB175) are never modified: no new holes, cuts or bends. Fasten only through their own holes and model a fastener in every current-carrying factory hole.
 - Every part must be installable top-down in the order written in the version README. A clean interference check does not prove that.
@@ -88,6 +89,11 @@ Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders i
 - `pip install -r cad/requirements.txt`. Renders need `xvfb-run` on a headless box.
 - On a 2-core, 8 GB VM, running a rebuild alongside renders got the rebuild OOM-killed. Run them one at a time.
 - `cad/out*/` is gitignored. Regenerate it with `run_tower14.py`; the committed STEP lives in `versions/v14-4s2p-power-train/`.
+
+## Open items (v16.1)
+- ⚠️ **Inverter at 400 W continuous isn't proven**: the pack fan gives it 0.2–0.6× MEAN WELL's forced-air condition (docs/cooling.md). Bench test; then rear blanking sheet or the MEAN WELL 4020 fan.
+- ⚠️ NPB-450 DF11 pinout; GV141BAX coil-lead exit; Tesla J1 part number and strip end; NTS drawing view (docs/signal-wiring.md §7).
+- Pack copper `bus_pack_pos/neg` aren't bend-legal single parts; G10 .063/.125 out of stock at SCS (docs/v16-bom.md).
 
 ## Open items (v14)
 - ⚠️ **LF105 burst rating (3C / 30 s) comes from a reseller page only.** The 500 A rating depends on it. Find EVE's own pulse-discharge row (`cells.md` T4).

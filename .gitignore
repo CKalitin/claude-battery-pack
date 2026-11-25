@@ -4,3 +4,4 @@ cad/dist*/
 *.zip
 cad/concepts/*/ctx/
 cad/concepts/*/out/
+outbox/

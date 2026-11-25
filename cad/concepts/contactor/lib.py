@@ -279,6 +279,6 @@ def lug90(x, y, z, d=(-1, 0), r_ring=8.5, t=1.8, off=17.0, r_barrel=5.0, h=24.0)
     lug += cyl_z(bx, by, z, z + h, r_barrel)
     return lug, (bx, by, z + h)
 
-def stud_stack(x, y, z, r_w=8.5):
-    """Flat washer + M8 nut (13 AF) on a stud from z."""
-    return cyl_z(x, y, z, z + 1.6, r_w) + cyl_z(x, y, z + 1.6, z + 8.1, 7.5)
+def stud_stack(x, y, z, r_w=8.5, r_n=7.5, h_n=6.5):
+    """Flat washer + nut on a stud from z. Default M8 (DIN 125 washer 17 mm, 13 AF nut: corners r 7.5)."""
+    return cyl_z(x, y, z, z + 1.6, r_w) + cyl_z(x, y, z + 1.6, z + 1.6 + h_n, r_n)

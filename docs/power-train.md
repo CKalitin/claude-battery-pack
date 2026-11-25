@@ -267,3 +267,10 @@ The rear had 18 mm to the fan, which is too little for a right-angle C13 (~30 mm
 - ⚠️ NTS drawing view orientation.
 - ⚠️ ACPWRC-C13LR depth label.
 - ⚠️ Inverter − lug is 1 mm from the shunt board.
+
+## 10. v16.1 updates (2026-11-25)
+- **NTS-400P-112 ratings** (MEAN WELL NTS-400P-SPEC 2026-03-26): 400 W continuous, 460 W for 3 min, 600 W for 10 s, 800 W for 30 cycles; DC current 40 A typ; input 10–16.5 V; no internal fan: CN100 drives an optional 12 V 0.4 A PWM fan.
+- **Derating:** forced air (10 CFM fan, 5 cm from the DC end) 100 % to 40 °C → 40 % at 70 °C; natural convection ≈ 60 % to ≈ 55 °C. The pack fan delivers 0.2–0.6× of that condition: see [cooling.md](cooling.md).
+- **Inverter 10 AWG lead: resolved.** 33 CFR 183.425 table 5 / ABYC E-11, 105 °C, single conductor: 60 A at 30 °C, 51 A at 50 °C, vs 40 A = 1.28×. Peaks: 46 A for 3 min, 60 A for 10 s, 80 A for 0.5 s, all inside the 50 A MRBF's curve (Bussmann: >100 h at 100 %, ≤900 s at 135 %, ≤60 s at 200 %).
+- **NPB-450-12:** 25 A max, 420 W max power, efficiency 92 % typ (MEAN WELL NPB-450-SPEC 2026-07-06) — the v14 assumption is confirmed.
+- **Right-angle C13** (L-com ACPWRC-C13LR): $28.09 at L-com, 2026-11-25 (37 in stock); depth still 35.6 or 37.9 mm ⚠️, the 40 mm gap fits either.

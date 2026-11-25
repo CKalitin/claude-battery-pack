@@ -8,8 +8,8 @@ def r_bar(L_mm, w_mm, t_mm):
 
 print("== 1. Currents ==")
 I_OUT = 175.0                                   # A, SB175 DC output (pack spec)
-P_INV, V_PACK, ETA_INV = 400.0, 12.0, 0.91     # W, V (low-ish pack voltage, conservative), NTS-400P-112 efficiency (spec)
-I_INV = P_INV / (V_PACK * ETA_INV)
+P_INV, V_PACK, ETA_INV = 400.0, 11.0, 0.91     # W, V (v16.1: 11.0 V = the NTS-400P-112 low-battery alarm, worst case), efficiency (MEAN WELL spec 2026-03-26)
+I_INV = P_INV / (V_PACK * ETA_INV)              # = 40.0 A, matches MEAN WELL's "DC current (typ.) 40 A"
 I_CHG = 25.0                                    # A, NPB-450-12 rated output (Digi-Key attribute)
 print(f"I_inv = P/(V*eta) = {P_INV}/({V_PACK}*{ETA_INV}) = {I_INV:.1f} A")
 print(f"I_main (worst: SB175 out + inverter) = {I_OUT} + {I_INV:.1f} = {I_OUT + I_INV:.1f} A  vs MRBF 250 A -> {250/(I_OUT+I_INV):.2f}x")
@@ -34,11 +34,19 @@ for n, L, w, t, I in segs:
     print(f"{n:48s} L {L:5.0f} mm  A {w*t:6.1f} mm^2  J {I/(w*t):4.1f} A/mm^2  R {R*1e6:6.1f} uOhm  P {P:5.2f} W")
 print(f"total copper (excl. joints, fuse, contactor): R {Rt*1e6:.0f} uOhm, P {Pt:.1f} W at {I_OUT+I_INV:.0f} A")
 
-print("\n== 3. Leads ==")
-AMP_90C = {10: 40, 8: 55, 6: 75}               # A, NEC Table 310.16, 90 C copper (not more than 3 conductors)
+print("\n== 3. Leads (v16.1: ABYC E-11 / 33 CFR 183.425 table 5, 105 C insulation, single conductor) ==")
+AMP_105 = {10: 60, 8: 80, 6: 120}              # A at 30 C ambient, outside engine spaces (33 CFR 183.425 table 5)
+K_50C = 0.85                                    # note 1: 105 C insulation at 50 C ambient ('engine space'); covers the box at <= 25 C + 12.6 K
 OD = {10: 5.6, 8: 6.9, 6: 8.6}                 # mm, fine-strand 105 C insulated, typical UNCONFIRMED
+P_3MIN, P_10S, P_SURGE = 460.0, 600.0, 800.0   # W: NTS-400P-112 over-rated 3 min, peak 10 s, surge 30 cycles (MEAN WELL spec 2026-03-26)
 for awg, I, who in ((10, I_INV, "inverter (PP45 max 10 AWG)"), (8, I_CHG, "charger")):
-    print(f"{who}: {awg} AWG {AMP_90C[awg]} A @90C vs {I:.1f} A -> {AMP_90C[awg]/I:.2f}x ; bend R = 4*OD = {4*OD[awg]:.0f} mm")
+    A = AMP_105[awg] * K_50C
+    print(f"{who}: {awg} AWG {AMP_105[awg]} A @30C x {K_50C} = {A:.0f} A @50C vs {I:.1f} A continuous -> {A/I:.2f}x ; bend R = 4*OD = {4*OD[awg]:.0f} mm")
+for name, P in (("3 min over-rated", P_3MIN), ("10 s peak", P_10S), ("30-cycle surge", P_SURGE)):
+    I = P / (V_PACK * ETA_INV)
+    print(f"inverter {name}: {P:.0f} W -> {I:.1f} A = {I/50:.2f} x the 50 A MRBF (Bussmann MRBF: 100 % >100 h, 135 % <=900 s, 200 % <=60 s, 350 % 0.1-1 s)"
+          f"; {I/(AMP_105[10]*K_50C):.2f} x the 10 AWG 50 C rating")
+print("PP45 contact 45 A (Anderson) vs 40.0 A typ continuous = 1.13x: the inverter's own connector, MEAN WELL's choice")
 
 print("\n== 4. Plug keep-outs (room needed vs room in v16) ==")
 need = {"charger DC (8 AWG ring + bend)": 27, "inverter DC (PP45 24.6 + 10 AWG bend 22 -> 42 with margin)": 42,
@@ -71,5 +79,12 @@ print("\n== 8. Converter - lugs on the shunt node-B bolt (shunt unmodified) ==")
 from c1_power_module import build
 c = build("gv14up")
 for a, b in (("lug_neg_inverter", "shunt_module"), ("lug_neg_charger", "shunt_module"), ("lug_neg_inverter", "contactor_gv141bax_inverted"),
-             ("lug_neg_charger", "sb175_housing"), ("keepout_shunt_conn", "strap_main")):
+             ("lug_neg_charger", "sb175_housing"), ("plug_shunt_j1", "strap_main")):
     print(f"{a} to {b}: {c.parts[a].distance_to(c.parts[b]):.2f} mm")
+
+print("\n== 9. Signal and low-power wiring (harness.py, modelled routes) ==")
+import harness
+for k, v in harness.HARNESS.items():
+    if v.get("frm"):
+        print(f"{k:10s} {v['n']} x {v['awg']:>13s}  route {v['length_mm']:4d} mm  bundle r {v['r']} mm  {v['frm']} -> {v['to']}")
+print("B+ and LOAD+ (18 AWG) are each fused 2 A at the source end; 18 AWG 105 C = 20 A (table 5), so any 2 A ATM fuse protects it")
