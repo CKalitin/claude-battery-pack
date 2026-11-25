@@ -95,18 +95,25 @@ def build(variant="gv14"):
         c.add(f"hw_nut_{nm}", stud_stack(x, y, bzt + 1.8) - cyl_z(x, y, bzt, bzt + 12, 4.0))
         c.add(f"cable_{nm}", tube(route(top), rc))
     c.add("cap_2151", bs_cap("2151", 70.7, 76.0, Zp1, d=(1, 0)))
-    # converter - leads: two M8 carriage bolts through the shunt bar beyond node B (y > -1), so the shunt sees converter current.
-    # 90 deg lugs: charger lug toward -x (barrel past the plate edge), inverter lug toward -y (offset 12, 2 mm short of the board).
+    # Shunt node B: the shunt is a PURCHASED part (Tesla 1016792-00-C) - no new holes. Its own hole 15 mm from the end
+    # (tesla-shunt.md sec 2; thread/size UNKNOWN, modelled M8) takes ONE bolt: up through the - tab (our part, square hole)
+    # and the shunt's node-B hole. Both converter - lugs stack on top of the bar on that bolt: converter current
+    # enters the bar on the node-B side, so the shunt still measures it.
+    nbx, nby = SBX, 14.0 - 15.0                                         # sh_y1 (set below) - 15
     zr = Zp1 + 3.2
-    for nm, (x, y), d, off, rc, route in (
-            ("charger", (62.0, 1.0), (-1, 0), 17.0, 3.4, lambda p: [p, (p[0], p[1], 266.0), (40.0, 22.0, 254.0), (27.5, 17.0, 251.0)]),
-            ("inverter", (82.0, 1.0), (0, -1), 10.0, 3.0, lambda p: [p, (p[0], p[1], 305.0), (20.0, p[1], 305.0), (12.0, 26.0, 300.0), (9.0, 29.4, 299.3)])):
-        c.add(f"hw_carriage_neg_{nm}", cyl_z(x, y, Zp0 - 4.5, zr + 14.0, 4.0))
-        c.add(f"hw_carriage_head_neg_{nm}", cyl_z(x, y, Zp0 - 4.5 - 5.6, Zp0 - 4.5 + 0.01, 10.0))
-        lug, top = lug90(x, y, zr, d=d, off=off)
-        c.add(f"lug_neg_{nm}", lug - cyl_z(x, y, zr - 1, zr + 3, 4.0), "neg")
-        c.add(f"hw_nut_neg_{nm}", stud_stack(x, y, zr + 1.8) - cyl_z(x, y, zr, zr + 12, 4.0))
+    c.add("hw_carriage_nodeB", cyl_z(nbx, nby, Zp0 - 4.5, zr + 3.6 + 12.0, 4.0))
+    c.add("hw_carriage_head_nodeB", cyl_z(nbx, nby, Zp0 - 4.5 - 5.6, Zp0 - 4.5 + 0.01, 10.0))
+    for k, (nm, d, off, rc, route) in enumerate((
+            ("charger", (-1, 0), 17.0, 3.4, lambda p: [p, (p[0], p[1], 266.0), (40.0, 22.0, 254.0), (27.5, 17.0, 251.0)]),
+            ("inverter", (1, 0), 12.0, 3.0, lambda p: [p, (p[0], p[1], 305.0), (20.0, p[1], 305.0), (12.0, 26.0, 300.0), (9.0, 29.4, 299.3)]))):
+        zk = zr + 1.8 * k                                                   # charger ring on the bar, inverter ring on top of it
+        lug, top = lug90(nbx, nby, zk, d=d, off=off, h=24.0 - 1.8 * k)
+        c.add(f"lug_neg_{nm}", lug - cyl_z(nbx, nby, zk - 1, zk + 3, 4.0), "neg")
         c.add(f"cable_neg_{nm}", tube(route(top), rc))
+    # shunt connector (tesla-shunt.md sec 2): on the 8 mm overhang strip, at one end of the module, top 7 mm above the copper,
+    # wires straight up; keep-out = connector footprint x 35 mm above its top. End chosen: -y (away from node B) UNCONFIRMED.
+    c.add("keepout_shunt_conn", box(SBX + 17.5, SBX + 17.5 + 8.0, (14.0 - 41.75) - 12.5, (14.0 - 41.75) - 2.5, Zp1 + 3.2 + 7.0, Zp1 + 3.2 + 7.0 + 35.0))
+    c.add("hw_nut_neg_nodeB", stud_stack(nbx, nby, zr + 3.6) - cyl_z(nbx, nby, zr, zr + 14, 4.0))
     # ---------- - path ----------
     nb = pack_neg_band(80.0)
     nb += box(62.0, 80.0, -66.0, -61.24, Z0, Zp1)                       # riser in the band corridor
@@ -143,7 +150,7 @@ def build(variant="gv14"):
                              ("hw_carriage", "shunt_bar"), ("hw_stud", "bus_mod"), ("hw_stud", "g10_plate"), ("hw_stud", "contactor"),
                              ("hw_stud", "sb175"), ("hw_stud", "nut_m8"), ("hw_locknut", "g10_plate"), ("hw_locknut", "hw_stud"),
                              ("hw_nut", "bs"), ("hw_nut", "lug_"), ("hw_nut", "strap_main"), ("lug_", "bs2151"),
-                             ("strap_main", "bs5191"), ("strap_main", "bus_mod_in"), ("cable_", "lug_"), ("cable_", "keepout_"), ("lug_neg", "shunt_bar"), ("lug_neg_charger", "keepout_chg_dc"), ("hw_carriage_neg", "shunt_bar"), ("hw_carriage_neg", "bus_mod_neg"), ("hw_carriage_neg", "g10_plate"), ("hw_carriage", "lug_"), ("hw_carriage_neg", "hw_nut"), ("cable_", "term_"), ("cap_", ""), ("hw_carriage", "hw_carriage")]
+                             ("strap_main", "bs5191"), ("strap_main", "bus_mod_in"), ("cable_", "lug_"), ("cable_", "keepout_"), ("lug_neg", "shunt_bar"), ("lug_neg_charger", "keepout_chg_dc"), ("hw_carriage_nodeB", "shunt_bar"), ("hw_carriage_nodeB", "bus_mod_neg"), ("hw_carriage_nodeB", "g10_plate"), ("hw_carriage", "lug_"), ("hw_carriage_nodeB", "hw_nut"), ("lug_neg_charger", "lug_neg_inverter"), ("hw_nut_neg", "lug_neg"), ("cable_", "term_"), ("cap_", ""), ("hw_carriage", "hw_carriage")]
     # ---------- current paths (centre lines) and joint/bend counts ----------
     zcol = (Z0 + Z1) / 2
     c.paths["pos"] = [(100.0, -33.5, zcol), (126.4, -33.5, zcol), (126.4, -33.5, zc), (144.0, -33.5, zc), (144.0, -33.5, Zp1 + 1.25),

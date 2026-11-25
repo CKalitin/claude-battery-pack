@@ -67,8 +67,9 @@ for v in ("gv14up", "gv14", "fet"):
     print(f"{v:7s} interferences {len(r['interferences'])}  + to - {r['pos_to_neg'][0]} mm ({r['pos_to_neg'][1]} / {r['pos_to_neg'][2]})  "
           f"pack to chassis {r['pack_to_chassis'][0]} mm  + path {r['paths']['pos']['length_mm']} mm  - path {r['paths']['neg']['length_mm']} mm")
 
-print("\n== 8. Inverter - lug to the shunt board ==")
+print("\n== 8. Converter - lugs on the shunt node-B bolt (shunt unmodified) ==")
 from c1_power_module import build
 c = build("gv14up")
-d = c.parts["lug_neg_inverter"].distance_to(c.parts["shunt_module"])
-print(f"lug_neg_inverter to shunt_module: {d:.2f} mm (same - net; board copper/parts referenced to shunt nodes)")
+for a, b in (("lug_neg_inverter", "shunt_module"), ("lug_neg_charger", "shunt_module"), ("lug_neg_inverter", "contactor_gv141bax_inverted"),
+             ("lug_neg_charger", "sb175_housing"), ("keepout_shunt_conn", "strap_main")):
+    print(f"{a} to {b}: {c.parts[a].distance_to(c.parts[b]):.2f} mm")

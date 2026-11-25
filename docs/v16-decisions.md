@@ -18,8 +18,9 @@ Every number here comes from `cad/concepts/contactor/calcs_v16.py`; its output i
 | D11 | **Charger AC lead: right-angle C13, L-com ACPWRC-C13LR** (rewireable, screw terminals) | *straight C13 (≥ 40 mm)*; *Quail 3514.024S jumper (depth unknown)* | Screw terminals allow a custom 60 mm lead. Rear gap is sized for the worse of the two possible depth readings | Drawing dims 41.9 × 30.1 and 35.6/37.9 mm; depth is 30.1 or 37.9 → gap 40 ✓ |
 | D12 | **The inverter DC connector is Powerpole PP45, not PP75** → 10 AWG lead | — (correction) | Anderson 1327/1327G6 are PP15-45 housings: wire #20 to #10 AWG, housing 24.6 mm, mated 41.2 mm | 36.6 A vs PP45 45 A = 1.23×. 10 AWG at 90 °C = 40 A, only 1.09× ⚠️ (see open items) |
 | D13 | **Converter terminal positions** placed from the MEAN WELL drawings | — | NPB-450: terminal block at y +5…+21, V+ on the −y side. NTS-400P: TB1 at y +25…+41. Mirrored inverter keep-out also checked | Read by extracting the PDFs' vector text (pdf.js); screenshots of PDFs froze |
-| D14 | **Converter − leads on M8 carriage bolts through the shunt bar, beyond node B**: charger at (62, 1), inverter at (82, 1) | *on the − flange (bypasses the shunt)*; *one shared stud (barrels collide)* | The shunt measures converter current | Inverter lug 1.25 mm from the board ⚠️ |
+| D14 | **Converter − leads stack on the shunt's own node-B bolt** (one bolt up through our − tab and the shunt's factory hole 15 mm from its end; charger lug ring on the bar, inverter lug ring on top; barrels −x and +x) | *two new M8 holes drilled through the shunt bar (my error: the shunt is a purchased part and can't be modified, T11)*; *on the − flange (bypasses the shunt)*; *on the − tab (no free tab area ≥ 10 mm from + copper)* | Uses only the shunt's own holes. Converter current enters the bar on the node-B side, so it is measured. The model had no node-B fastener at all before (second miss) | Lugs 5.75 mm from the sense board, 5.67 mm from the contactor; shunt connector keep-out 10.4 mm from the Z-strap. Shunt bolt size and thread unknown (tesla-shunt.md) ⚠️, modelled M8 |
 | D15 | **Copper sizes** (1/8″ plane) | — | Worst current density is 5.3 A/mm² in the Blue Sea strap; the copper plane's worst is 4.8 A/mm² | + path copper 90 µΩ, 4.0 W at 212 A (excludes joints, fuse and contactor) |
+| D17 | **Purchased parts are modelled as fixed**: only their own holes and faces may be used | — | From the owner: "I'm not going to drill holes in it" | Rule added to CLAUDE.md |
 | D16 | **Check rules added**: fuse lift-out sweep; plug keep-outs as obstacles; no `("hw_","")` wildcard in ALLOW | — | Each rule came from a miss: T9 (a wildcard hid a real clash), T10 (static checks miss removal paths) | contactor-mounting.md §11 |
 
 ## SendCutSend limits (read 2026-11-24, sendcutsend.com/materials/processing-min-max, in Chrome)
@@ -32,7 +33,9 @@ Every number here comes from `cad/concepts/contactor/calcs_v16.py`; its output i
 | Copper .125″: min flange after bend | .471″ = 12.0 mm | Z-strap leg 30.5 ✓, foot 12.0 (exactly at the limit) | ✓ |
 
 ## Open items
-- ⚠️ **Inverter − lug 1.25 mm from the shunt sense board** (both are at − potential). Shown in `issue_inv_neg_lug.jpg`. Not resolved, per the owner.
+- ~~Inverter − lug 1.25 mm from the sense board~~: gone with D14 (now 5.75 mm).
+- ⚠️ **Shunt node-B stack:** − tab + shunt bar + 2 lug rings + washer + nut on the shunt's own fastener. Its thread and size are unknown, and so is whether the factory bushings visible in the photo take a through bolt (tesla-shunt.md §7).
+- ⚠️ **Shunt connector end:** modelled at the −y end of the module, away from node B. Not confirmed.
 - ⚠️ **Inverter lead ampacity.** 10 AWG (the PP45 maximum) carries 36.6 A against a 40 A rating at 90 °C, only 1.09× before any derating for heat inside the box. Peak power not yet read from the datasheet.
 - ⚠️ **NTS drawing view.** It's assumed to be the top view; the mirrored keep-out passes too, so the layout works either way.
 - ⚠️ **Blue Sea block internals and cap outline, MRBF contact faces, 90° lug dimensions:** all modelled from drawing outlines and typical values.

@@ -281,3 +281,5 @@ Model: `cad/concepts/contactor/lib.py` (`bs_block`, `bs_cap`, `lug90`, `stud_sta
   - In front of the inverter's +x face (x 31) there is 23.8 mm before the SB175 cheek.
   - If the DC terminals face the power bay, neither can be plugged in: need ≥ 30 mm ⚠️.
   - First find which end the terminals are on (NPB-450 datasheet: AC input and DC output are on opposite ends). Then either flip the converters so DC faces the bay and move the module +x, or route the leads to the far ends.
+
+- **T11. I drilled two holes through the purchased Tesla shunt for the converter − leads (2026-11-24), and the model had no fastener in the shunt's own node-B hole.** Rule: a bought part keeps its factory geometry. Fasteners use only its own holes, and every factory hole that carries current gets a modelled fastener. Fix: both converter − lugs now stack on the node-B bolt (v16-decisions D14).

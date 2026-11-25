@@ -22,6 +22,7 @@ Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery
 - No dead space. Chris likes the full rear hole grid.
 - Every interference pair must be either fixed or listed in `run_tower15.py`'s ALLOW list.
 - Run `clearance_v15.py` after any power-bay change: no pack copper through chassis metal, + to − ≥ 10 mm, pack copper to chassis ≥ 7 mm.
+- Purchased parts (Tesla shunt, Blue Sea blocks, converters, contactor, SB175) are never modified: no new holes, cuts or bends. Fasten only through their own holes and model a fastener in every current-carrying factory hole.
 - Every part must be installable top-down in the order written in the version README. A clean interference check does not prove that.
 - Terse answers, conclusion first, units on every variable.
 

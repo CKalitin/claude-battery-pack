@@ -39,5 +39,9 @@ gv14up  interferences 0  + to - 10.5 mm (strap_main / shunt_module)  pack to cha
 gv14    interferences 0  + to - 10.5 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
 fet     interferences 0  + to - 10.5 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
 
-== 8. Inverter - lug to the shunt board ==
-lug_neg_inverter to shunt_module: 1.25 mm (same - net; board copper/parts referenced to shunt nodes)
+== 8. Converter - lugs on the shunt node-B bolt (shunt unmodified) ==
+lug_neg_inverter to shunt_module: 5.75 mm
+lug_neg_charger to shunt_module: 5.75 mm
+lug_neg_inverter to contactor_gv141bax_inverted: 5.67 mm
+lug_neg_charger to sb175_housing: 5.77 mm
+keepout_shunt_conn to strap_main: 10.40 mm

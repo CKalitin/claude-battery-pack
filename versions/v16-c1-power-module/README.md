@@ -10,7 +10,7 @@
 | Power bay | Parts placed one by one; GX12 upright; 2151 on the contactor stud | **C1 module**: G10 plate + 1/8″ copper plane. GV141BAX upside down and turned 90°; SB175; shunt crosswise |
 | Main fuse | MRBF on a 5191 on the + flange | Same, pointing −y, with a **Z-strap (fuse top → in-bar) as the service disconnect** |
 | Branch fuses | 2151 on the contactor load stud | **2151 on the load-bar branch along the +y wall**, 90° lugs; fuses lift out past the contactor |
-| Converter leads | Envelopes | + leads from the 2151; − leads on M8 bolts through the shunt bar (node B side); all end at the converters' real terminals |
+| Converter leads | Envelopes | + leads from the 2151; − leads stacked on the shunt's own node-B bolt (shunt unmodified); all end at the converters' real terminals |
 | Inside length | 375 mm | **424 mm**, all added at the rear. Converters −27 mm (DC plug room 30.2 / 50.8 mm); rear gap 18 → 40 mm (right-angle C13) |
 | AC pass-throughs | Lid front, beside the SB175 | **Lid rear**, either side of the inverter's CN500 |
 | Inverter DC | "PP75" | **PP45** (Anderson 1327/1327G6), 10 AWG |
@@ -42,7 +42,7 @@
    - Flip upright. Shunt board, G10 cheeks + SB175, Blue Sea 2151 + M10 nut.
 4. **Power module drops into the bay** onto the front standoffs. Its − shunt bar seats on the − flange (node A carriage bolt).
 5. **5191** onto the + flange's M10 stud, nut, MRBF 250 A.
-6. Charger. Its + lead goes to 2151 stud A, its − lead to the shunt-bar stud at (62, 1).
-7. **Deck 2 + inverter.** PP45 plugs on; + lead to 2151 stud B, − lead to the stud at (82, 1).
+6. Charger. Its + lead goes to 2151 stud A, its − lug onto the node-B bolt (bottom ring).
+7. **Deck 2 + inverter.** PP45 plugs on; + lead to 2151 stud B, − lug onto the node-B bolt (top ring), then washer + nut.
 8. **AC:** right-angle C13 onto the charger inlet; CN500 plug onto the inverter.
 9. **Z-strap last** (service disconnect). Then front PCB, then lid with the rear AC pass-throughs, then wire the lid inlet/outlet before closing.
