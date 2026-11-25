@@ -1,6 +1,6 @@
 # Handoff for the next Claude
 
-Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v16.1** (C1 power module, Blue Sea 5191/2151 fuse blocks, pack 424 mm inside with AC at the rear; v16.1 adds the modelled signal wiring, the top-down assembly proof and the cooling re-run). See `versions/v16-c1-power-module/README.md`, `docs/v16-decisions.md` (D1–D27), `docs/v16-calcs.txt`, `docs/signal-wiring.md`, `docs/cooling.md`, `docs/v16-assembly-check.txt`, `docs/contactor-mounting.md`.
+Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v16.2** (C1 power module, Blue Sea 5191/2151 fuse blocks, pack 424 mm inside with AC at the rear; v16.1 adds the modelled signal wiring, the top-down assembly proof and the cooling re-run; v16.2 makes the pack busbars bend-legal Zs, D28). See `versions/v16-c1-power-module/README.md`, `docs/v16-decisions.md` (D1–D27), `docs/v16-calcs.txt`, `docs/signal-wiring.md`, `docs/cooling.md`, `docs/v16-assembly-check.txt`, `docs/contactor-mounting.md`.
 
 ## Read first
 1. `docs/v14-baseline.md`: one-page spec.
@@ -93,7 +93,7 @@ Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders i
 ## Open items (v16.1)
 - ⚠️ **Inverter at 400 W continuous isn't proven**: the pack fan gives it 0.2–0.6× MEAN WELL's forced-air condition (docs/cooling.md). Bench test; then rear blanking sheet or the MEAN WELL 4020 fan.
 - ⚠️ NPB-450 DF11 pinout; GV141BAX coil-lead exit; Tesla J1 part number and strip end (docs/signal-wiring.md §7). NTS-400P terminal side confirmed from MEAN WELL's photo (TB1 at +y).
-- Pack copper `bus_pack_pos/neg` aren't bend-legal single parts; G10 .063/.125 out of stock at SCS (docs/v16-bom.md).
+- Pack busbars are bend-legal Zs since v16.2 (D28) but still priced as v16.1 flat .187 blanks ⚠️ re-quote bent; ⚠️ 14 mm band neck under the − riser (4.9 A/mm²). G10 .063/.125 out of stock at SCS (docs/v16-bom.md).
 
 ## Open items (v14)
 - ⚠️ **LF105 burst rating (3C / 30 s) comes from a reseller page only.** The 500 A rating depends on it. Find EVE's own pulse-discharge row (`cells.md` T4).

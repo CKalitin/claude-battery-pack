@@ -31,6 +31,7 @@ Every number here comes from `cad/concepts/contactor/calcs_v16.py`; its output i
 | D25 | **Inverter lead ampacity re-rated with ABYC E-11 / 33 CFR 183.425 table 5** (105 °C insulation, single conductor) | *NEC 310.16 90 °C bundled table (40 A, 1.09×)* | The lead is a short single conductor in air, not in conduit: 60 A at 30 °C × 0.85 at 50 °C = 51 A vs 40.0 A typ = **1.28×**. 3-min 460 W = 46 A (0.90× rating); 10 s 600 W = 60 A for 10 s (MRBF 50 A at 120 %: holds, Bussmann ">100 h at 100 %, ≤900 s at 135 %") | v16-calcs §3 ✓ |
 | D26 | **Inverter current is 40.0 A** (MEAN WELL "DC current typ. 40 A"; = 400 W / (11.0 V × 0.91)) | *36.6 A at 12.0 V* | MEAN WELL's own figure; main fuse load 215 A vs 250 A = 1.16× | ✓ |
 | D27 | **Cooling: NF-A14 flipped to intake**; inverter at 400 W continuous to be proven on the bench | B: rear blanking sheet; C: MEAN WELL 4020 fan on CN100; D: 240 W firmware limit | Free; the jet lands on the converter AC ends 40 mm away. Box rise 12.7 K ✓ | [cooling.md](cooling.md) |
+| D28 | **v16.2: both pack busbars are one bend-legal 1/8″ Cu part each: flat collector/band + a 25–26 mm tab bent into a Z** (riser + flange, R 0.050″). + tab leaves the collector's −y edge (x 122–148), flange y −51.7…−77; the 5191 M10 stud moves (144, −33.5) → (135, −64.5) and the block turns to point +y over the collector. − tab leaves the band at y −72 (band edge cut back from −66 under the riser) | *C-shape, riser at the collector's +x end, flange folded back (option 2 as proposed)*: SCS U-channel rule base ≥ 2 × flange; base here = riser 31.5 mm, flanges 74.6 and 28 mm → needs ≥ 149 mm. Also tray1 would sit inside the C. *Two parts (flat collector + bolted strap)*: one more 215 A joint and its fasteners. *Z out +x from the collector end*: flange to x ≈ 180, the front board is at x 171.6. *− edge left at −66*: shunt node-A hole edge 1.5 mm from the bend tangent, inside the 16 mm die opening (hole distorts) | One part each, no new joint. Joggle 31.5 mm (SCS 12.9–95 ✓); flanges + 25.3 / − 32.8 mm after bend (≥ 12.0 ✓); hole edges ≥ 8 mm from the bend lines (+ 5191 hole 8.9, − node A 8.8; die 0.63″ ⇒ 8 mm half-width ⚠️ SCS gives no hole-to-bend rule for COP-125, 'N/A'). J: + tab 215 / (26 × 3.175) = 2.6 A/mm², − tab 2.7 A/mm²; ⚠️ the − band is 14 mm wide for the 25 mm under the riser: 4.9 A/mm² locally (band elsewhere 3.4) | module check 0 interferences, + to − 13.7 mm, pack to chassis 7.4 mm, fuse lift-out ✓; assembly check (below) |
 | D16 | **Check rules added**: fuse lift-out sweep; plug keep-outs as obstacles; no `("hw_","")` wildcard in ALLOW | — | Each rule came from a miss: T9 (a wildcard hid a real clash), T10 (static checks miss removal paths) | contactor-mounting.md §11 |
 
 ## SendCutSend limits (read 2026-11-24, sendcutsend.com/materials/processing-min-max, in Chrome)
@@ -41,6 +42,10 @@ Every number here comes from `cad/concepts/contactor/calcs_v16.py`; its output i
 | 5052 powder coat | 30 × 36 in | 17.1 × 16.6 in | ✓ |
 | Copper .125″: bend radius | .050″ | | |
 | Copper .125″: min flange after bend | .471″ = 12.0 mm | Z-strap leg 30.5 ✓, foot 12.0 (exactly at the limit) | ✓ |
+| Copper .125″: min / max joggle (COP-125, sendcutsend-specs.json, read 2026-11-25) | .506″ = 12.9 mm / 3.750″ | pack busbar Zs 31.5 mm | ✓ |
+| Copper .125″: die width / K-factor / bend deduction | .63″ / 0.34 / .205″ | flat tab: + 55.3 mm, − 62.8 mm (BA 3.69 mm per bend) | ✓ |
+| Copper .125″: hole-to-bend | 'N/A' in the specs JSON | used ≥ ½ die width = 8 mm from the bend line | ⚠️ |
+| U-channel (two bends, same direction) | base ≥ 2 × flange (sendcutsend.com/guidelines/bending) | no C-shapes anywhere | ✓ |
 
 ## Open items
 - **Inverter at 400 W continuous**: the pack fan gives it 0.2–0.6× MEAN WELL's forced-air condition. Bench test, then option B or C ([cooling.md](cooling.md)).
@@ -52,4 +57,4 @@ Every number here comes from `cad/concepts/contactor/calcs_v16.py`; its output i
 - ⚠️ Right-angle C13 depth: the L-com drawing's two candidates are 35.6 and 37.9 mm; the 40 mm gap fits either. L-com's price is **$28.09** (not $14).
 - ✓ **Blue Sea 2151/5191 outline** now matches Eaton Bussmann's "CF" bar drawing (MRBF brochure, Cooper Bussmann catalog pp. 76–77): 88.5 long, body 56.5, 20.0 wide, 2.5 tab, 11.0 body height, stud height "A" 44.5, hole Ø10.3 (3/8″ version). The single block is **61.9** long there (model 60.9 ⚠️ +1 mm). MRBF 27.8 × 23.0 ✓; MRBF height and the insulating cap (cover 82.2 / 22.0 / 6.0 dims, unlabelled) still ⚠️.
 - **The power-bay figures in contactor-mounting.md §6 (sections, levels, profile) predate D3–D27.**
-- **Pack copper `bus_pack_pos/neg` are fused boxes, not one bendable part** (found in the SCS pass): needs a bend-legal redesign before ordering.
+- ✓ **Pack copper `bus_pack_pos/neg` are now bend-legal Zs** (D28). ⚠️ Re-quote both at SCS as bent COP-125 parts; ⚠️ the 14 mm band neck under the − riser (4.9 A/mm²).

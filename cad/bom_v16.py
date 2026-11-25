@@ -18,8 +18,8 @@ scs = [  # part, qty, each, basis, conf
     ("g10_top (G10, design .063 → quoted .187)", 1, 213.07, LIVE + "; .063 out of stock", "⚠️"),
     ("g10_spacers (G10, design .063 → quoted .187)", 9, 28.56, LIVE + "; .063 out of stock", "⚠️"),
     ("bus_A/B/C (Cu .125, 140 x 25)", 3, 25.47, LIVE, "✓"),
-    ("bus_pack_pos (Cu .187, 134 x 25 flat)", 1, 46.98, LIVE + "; flat placeholder, bending not priced", "⚠️"),
-    ("bus_pack_neg (Cu .187, 323 x 20 flat)", 1, 89.47, LIVE + "; flat placeholder, bending not priced", "⚠️"),
+    ("bus_pack_pos (Cu .125, 74.6 x 80.3 flat, 2 bends; v16.2)", 1, 46.98, LIVE + "; v16.1 .187 flat price kept, re-quote bent", "⚠️"),
+    ("bus_pack_neg (Cu .125, 229.6 x 76.8 flat, 2 bends; v16.2)", 1, 89.47, LIVE + "; v16.1 .187 flat price kept, re-quote bent", "⚠️"),
     ("bus_mod_in (Cu .125)", 1, 8.95, LIVE, "✓"),
     ("bus_mod_load (Cu .125, deburr)", 1, 34.29, LIVE, "✓"),
     ("bus_mod_neg (Cu .125)", 1, 9.53, LIVE, "✓"),
@@ -74,7 +74,7 @@ L += ["", f"## Total ≈ **${tot:,.0f}** (SCS {ts:,.0f} = {100*ts/tot:.0f} %, ca
       f"- **g10_top + 9 spacers at .187 cost ${213.07+257.04:.0f}.** v5 substituted Mylar .010 for these (≈ ${14.31+9*3.88:.0f}): the biggest lever in the SCS order.",
       f"- **End plates:** ${2*266.17:.0f} for the two hole-grid plates ({100*2*266.17/tot:.0f} % of the pack). v5 found 5052 .125 about 33 % cheaper than 6061 .187.",
       "- **module_endplates_1/2** are priced as two separate parts ($162). If the two files are made identical they become one part at qty 2, which SCS discounts (bus_A went $33.91 → $25.47 each at qty 3).",
-      "- ⚠️ **bus_pack_pos / bus_pack_neg are not one bendable part as modelled** (collector + riser + flange fused from boxes). Priced as flat blanks; the real part needs a redesign into a bend-legal flat pattern (Cu .187 min flange and radius from SCS).",
+      "- **bus_pack_pos / bus_pack_neg are bend-legal 1/8 in Zs since v16.2** (v16-decisions D28). The prices are still the v16.1 .187 flat quotes ⚠️: re-quote as bent COP-125.",
       "- Bending, tapping and powder coat on the flat parts were not added; the bent-part prices include them from v5.",
       ]
 open("docs/v16-bom.md", "w").write("\n".join(L) + "\n")

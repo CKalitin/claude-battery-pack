@@ -34,6 +34,25 @@ def box(x0, x1, y0, y1, z0, z1):
 def cyl_z(x, y, z0, z1, r):
     return Pos(x, y, (z0 + z1) / 2) * Cylinder(r, abs(z1 - z0))
 
+def cyl_x(y, z, x0, x1, r):
+    return Solid.make_cylinder(r, abs(x1 - x0), Plane(origin=(min(x0, x1), y, z), z_dir=(1, 0, 0)))
+
+def zbend_x(x0, x1, y_edge, s, z_low_top, z_high_bot, y_end, t=3.175, r=1.27):
+    """Sheet-metal Z (two 90 deg bends, opposite directions, bend lines along x) leaving a flat sheet
+    whose top is z_low_top at its edge y_edge. Riser goes up on the s side (s = +1/-1 in y), upper flange
+    (bottom z_high_bot) continues in s to y_end. Inside radius r on both bends (SCS copper 1/8 in: 0.050 in)."""
+    zc1 = z_low_top + r                          # bend 1 centre (inside = top of the low sheet)
+    yr0, yr1 = sorted((y_edge + s * r, y_edge + s * (r + t)))
+    q1 = box(x0, x1, *sorted((y_edge, y_edge + s * (r + t + 1))), zc1 - r - t - 1, zc1)
+    b1 = (cyl_x(y_edge, zc1, x0, x1, r + t) - cyl_x(y_edge, zc1, x0, x1, r)) & q1
+    zc2 = z_high_bot - r                         # bend 2 centre (inside = bottom of the flange)
+    yc2 = y_edge + s * (2 * r + t)
+    q2 = box(x0, x1, *sorted((yc2, yc2 - s * (r + t + 1))), zc2, zc2 + r + t + 1)
+    b2 = (cyl_x(yc2, zc2, x0, x1, r + t) - cyl_x(yc2, zc2, x0, x1, r)) & q2
+    riser = box(x0, x1, yr0, yr1, zc1, zc2)
+    fl = box(x0, x1, *sorted((yc2, y_end)), z_high_bot, z_high_bot + t)
+    return b1 + riser + b2 + fl
+
 def cyl_between(p, q, r):
     p, q = Vector(*p), Vector(*q)
     d = q - p

@@ -17,6 +17,7 @@ def build(variant="gv14"):
     T = 3.175                         # 1/8 in copper bars in the module: 25 x 3.2 = 79 mm2, 2.2 A/mm2 at 175 A
     Y2151 = 74.0                      # v16.1: was 76; the fuses (y <= 87.9) now clear the body's top facets (y 88.6 above z 300)
     Zp1 = Zp0 + T                     # copper top = terminal face of contactor and SB175 busbar face
+    X5191, Y5191 = 135.0, -64.5        # v16.2: main-fuse M10 stud on the + flange (was 144, -33.5)
     zc = (Zp0 + Zp1) / 2
     # ---------- output connector ----------
     SBX, SBY = 70.7, 37.8
@@ -27,7 +28,7 @@ def build(variant="gv14"):
         c.add(f"hw_stud_sb_{i}", cyl_z(x, y, Zp0 - 3.175 - 7.0, z_bus, 3.175))             # 180BBS 1/4-20 stud
         c.add(f"hw_locknut_sb_{i}", cyl_z(x, y, Zp0 - 3.175 - 5.6, Zp0 - 3.175, 6.4))     # 110G56 lock nut
     # carriage bolts (square neck in a square hole), heads under the copper; M10 for the MRBF blocks, M8 elsewhere
-    for i, (x, y, r, rh, top) in enumerate(((144.0, -33.5, 5.0, 12.5, Zp1 + 15.0), (SBX, -54.5, 4.0, 10.0, Zp1 + 22.0),
+    for i, (x, y, r, rh, top) in enumerate(((X5191, Y5191, 5.0, 12.0, Zp1 + 15.0), (SBX, -54.5, 4.0, 10.0, Zp1 + 22.0),
                                             (113.6, -4.3, 3.0, 6.5, Zp1 + 3.175 + 11.0), (70.7, Y2151, 5.0, 12.5, Zp1 + 15.0))):
         c.add(f"hw_carriage_{i}", cyl_z(x, y, Zp0 - 4.5, top, r))
         c.add(f"hw_carriage_head_{i}", cyl_z(x, y, Zp0 - 4.5 - 5.6, Zp0 - 4.5 + 0.01, rh))
@@ -57,18 +58,19 @@ def build(variant="gv14"):
         c.add("fet_driver", box(CX - 26, CX - 10, CY + 12, CY + 24, Zp1 + 1.6, Zp1 + 4.0))
     # ---------- + path ----------
     # P4 collector -> vertical riser at the +x end -> flange at the module copper plane (in a plate notch)
+    # v16.2: ONE bend-legal 1/8 in part. The riser is a 26 mm tab off the collector's -y edge, bent up, and the flange
+    # bends back out to -y (a Z, not a C: SCS U-channel rule base >= 2 x flange fails for any C here, base 31 mm).
     pc = pack_pos_collector()
-    pc += box(124.0, 128.76, -46.0, -21.0, Z0, Zp1)                    # riser (moved from x 138: the M10 head under the flange hit it)
-    pc += box(124.0, 152.0, -46.0, -21.0, Zp0, Zp1)                     # flange = 5191 seat, top flush with the module copper
+    pc += zbend_x(122.0, 148.0, -46.0, -1, Z1, Zp0, -77.0)             # riser + flange = 5191 seat, top flush with the module copper
     c.add("bus_pack_pos", pc, "pos")
     inb = box(106.6, 120.6, -17.0, t1[1] + 8.0, Zp0, Zp1)               # straight column: strap foot -> T1 (x >= 106.6: 10.4 mm to the shunt board)
     c.add("bus_mod_in", inb, "pos")                                       # flat-cut L: no bends
     # main fuse: Blue Sea 5191 on the M10 stud in the + flange, pointing -x; MRBF 250 A on it. Output is the fuse TOP,
     # so a Z-strap (1/8 in copper, 22 wide, 2 bends) brings it back down to the in-bar. Strap = last part in = service disconnect.
-    mp, mst, mzt = bs_block("5191", 144.0, -33.5, Zp1, d=(0, -1), prefix="bs5191")   # points -y: clear of the shunt board
+    mp, mst, mzt = bs_block("5191", X5191, Y5191, Zp1, d=(0, 1), prefix="bs5191")   # v16.2: points +y, back over the collector
     for n, (sh, r) in mp.items():
         c.add(n, sh, r)
-    c.add("hw_m10nut_main", cyl_z(144.0, -33.5, Zp1 + 2.5, Zp1 + 10.5, 9.25) - cyl_z(144.0, -33.5, Zp1, Zp1 + 12, 5.0))
+    c.add("hw_m10nut_main", cyl_z(X5191, Y5191, Zp1 + 2.5, Zp1 + 10.5, 9.25) - cyl_z(X5191, Y5191, Zp1, Zp1 + 12, 5.0))
     sx, sy = mst[0]; fx = 113.6                                          # fuse stud; strap foot centre over the in-bar
     zs1 = mzt + 3.175
     st = box(sx - 9.5, sx + 9.5, sy - 11.0, -31.0, mzt, zs1)               # pad on the fuse top, runs +y (flat-cut L in plan)
@@ -117,9 +119,9 @@ def build(variant="gv14"):
     # v16.1: the keep-out is replaced by the modelled Mini-Fit Jr plug + 7-wire bundle (harness.py)
     c.add("hw_nut_neg_nodeB", stud_stack(nbx, nby, zr + 3.6) - cyl_z(nbx, nby, zr, zr + 14, 4.0))
     # ---------- - path ----------
-    nb = pack_neg_band(80.0)
-    nb += box(62.0, 80.0, -66.0, -61.24, Z0, Zp1)                       # riser in the band corridor
-    nb += box(62.0, 80.0, -66.0, -33.5, Zp0, Zp1)                        # flange up to the shunt's node A
+    nb = pack_neg_band(83.0) - box(58.0, 84.0, -72.0, -65.0, Z0 - 1, Z1 + 1)   # v16.2: band edge cut back to y -72 under the riser
+    nb += zbend_x(58.0, 83.0, -72.0, +1, Z1, Zp0, -33.5)               # bend-legal Z, all 1/8 in, 25 wide (2.7 A/mm2 at 215 A); edge at -72 puts
+                                                                         # the node-A hole edge 8.8 mm from the bend line (die 0.63 in: 8 mm half-width)
     c.add("bus_pack_neg", nb, "neg")
     sh_y1 = 14.0                                                          # shunt along +y, node B 15 mm from its end
     c.add("shunt_bar", box(SBX - 17.5, SBX + 17.5, sh_y1 - 83.5, sh_y1, Zp1, Zp1 + 3.2), "neg")
@@ -132,12 +134,12 @@ def build(variant="gv14"):
     c.add("bus_mod_neg", tab, "neg")
     # ---------- G10 plate (the 'PCB') + standoffs, tray 1 ----------
     pl = box(54.0, 150.0, -64.0, 88.0, Zp0 - 3.175, Zp0)
-    pl -= box(121.0, 151.0, -48.0, -19.0, 200, 300)                       # notch for the + riser flange
-    pl -= box(60.0, 82.0, -65.0, -31.5, 200, 300)                         # notch for the - riser flange
+    pl -= box(120.0, 151.0, -80.0, -44.0, 200, 300)                       # notch for the + riser flange (v16.2: open to the -y edge)
+    pl -= box(53.0, 85.0, -65.0, -31.5, 200, 300)                         # notch for the - riser flange (v16.2: 25 wide, open to -x)
     c.add("g10_plate", pl, "ins")
     for i, (x, y) in enumerate(((58, -20), (146, -12), (58, 60), (146, 82), (100, -56))):
         c.add(f"standoff_{i}", cyl_z(x, y, Z_TRAY_TOP, Zp0 - 3.175, 4.0), "ins")
-    c.add("tray1", tray1(cuts=((122.0, 164.0, -48.0, -19.0), (60.0, 82.0, -89.0, -59.0), (44.5, 47.5, -55.0, -50.0), (44.5, 47.5, -44.0, -39.0))), "ins")   # + 2 tie slots for the converter control lead
+    c.add("tray1", tray1(cuts=((120.0, 151.0, -80.0, -44.0), (56.0, 85.0, -89.0, -59.0), (44.5, 47.5, -55.0, -50.0), (44.5, 47.5, -44.0, -39.0))), "ins")   # + 2 tie slots for the converter control lead
     # ---------- allow-list ----------
     c.allow += TRAY_ALLOW + [("standoff", "tray1"), ("standoff", "g10_plate"), ("g10_plate", "bus_mod"), ("g10_plate", "shunt"),
                              ("bus_mod", "contactor"), ("nut_m8", "g10_plate"), ("nut_m8", "bus_mod"), ("bus_mod", "fet"), ("bus_mod", "sb175"), ("bus_mod", "mrbf"), ("bus_pack_pos", "mrbf_main"),

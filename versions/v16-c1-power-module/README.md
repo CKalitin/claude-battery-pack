@@ -4,6 +4,11 @@
 
 ![bay](renders/c1_module_gv14up_close_b.jpg)
 
+## v16.2 (2026-11-25): bend-legal pack busbars
+Both pack busbars are now one 1/8″ copper part each: the flat collector (or band) plus a tab bent into a **Z** (R 0.050″). The proposed C-shape breaks SendCutSend's U-channel rule (base ≥ 2 × flange: 31.5 mm vs 74.6 mm). The + Z leaves the collector's −y edge; the 5191 stud moves to (135, −64.5) and the block points +y; the Z-strap gets shorter. The − Z leaves the band at y −72, so the node-A hole sits 8.8 mm from the bend line. G10 plate and tray 1 notches follow. Details and losing options: [D28](../../docs/v16-decisions.md). Checks: 0 interferences; + to − 13.7 mm; pack to chassis 7.4 mm; assembly check all clear.
+
+![busbars](renders/pack_busbars_fix.jpg)
+
 ## v16.1 (2026-11-25): signal wiring, assembly proof, cooling re-run
 All signal and low-power wiring is now modelled ([docs/signal-wiring.md](../../docs/signal-wiring.md)); a top-down assembly check sweeps every part along its insertion path and puts a socket on every nut ([docs/v16-assembly-check.txt](../../docs/v16-assembly-check.txt)); cooling was re-run with a flow network ([docs/cooling.md](../../docs/cooling.md)). Changes it forced:
 
@@ -50,7 +55,7 @@ All signal and low-power wiring is now modelled ([docs/signal-wiring.md](../../d
 
 ## Assembly order (v16.1, checked by `cad/assembly_v16.py`)
 Shell first: body halves, feet, rear plate, NF-A14 (intake). Then, top-down:
-1. **Pack module** (bench-built) lowered into the body. Before the collectors go on: the M10 carriage bolt in the + flange's square hole and the M8 node-A carriage bolt in the − flange's square hole (heads under the flanges).
+1. **Pack module** (bench-built) lowered into the body. Before the collectors go on: the M10 carriage bolt in the + flange's square hole (v16.2: at x 135, y −64.5, under the outward flange) and the M8 node-A carriage bolt in the − flange's square hole (heads under the flanges).
 2. **Tray 1** with the **charger already screwed on from below** (bench), plus the 5 plate standoffs.
 3. **Front board + diffuser** lowered in front of the module; M3 screws through the diffuser from the front (front plate still off). Flex tail into the FPC from above.
 4. **Front plate + light pipe** (moves in along −x).
