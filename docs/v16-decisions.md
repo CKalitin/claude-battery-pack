@@ -46,7 +46,7 @@ Every number here comes from `cad/concepts/contactor/calcs_v16.py`; its output i
 - **Inverter at 400 W continuous**: the pack fan gives it 0.2–0.6× MEAN WELL's forced-air condition. Bench test, then option B or C ([cooling.md](cooling.md)).
 - **Shunt node-B stack:** through bolt, size unknown, modelled M8 ⚠️.
 - **Shunt J1:** on the overhang side ✓; which end of the strip ⚠️ (the modelled plug envelope covers both).
-- ⚠️ **NTS drawing view** (top vs bottom view): both pass for the DC keep-out; the CN301 lead re-routes along +y if it's a bottom view.
+- ✓ **NTS terminal side confirmed** from MEAN WELL's DC-end photo: TB1 at +y, as modelled ([signal-wiring.md](signal-wiring.md) §7).
 - ⚠️ NPB-450 DF11 pinout; GV141BAX coil lead exit; Tesla J1 part number ([signal-wiring.md](signal-wiring.md) §7).
 - ⚠️ 90° lug barrel offset/height (pad 16.3 × 14.2 × 1.3 mm from T&B 54131UB for 8 AWG 5/16″; the model's Ø17 × 1.8 ring covers it).
 - ⚠️ Right-angle C13 depth: the L-com drawing's two candidates are 35.6 and 37.9 mm; the 40 mm gap fits either. L-com's price is **$28.09** (not $14).

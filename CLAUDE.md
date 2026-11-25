@@ -92,7 +92,7 @@ Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders i
 
 ## Open items (v16.1)
 - ⚠️ **Inverter at 400 W continuous isn't proven**: the pack fan gives it 0.2–0.6× MEAN WELL's forced-air condition (docs/cooling.md). Bench test; then rear blanking sheet or the MEAN WELL 4020 fan.
-- ⚠️ NPB-450 DF11 pinout; GV141BAX coil-lead exit; Tesla J1 part number and strip end; NTS drawing view (docs/signal-wiring.md §7).
+- ⚠️ NPB-450 DF11 pinout; GV141BAX coil-lead exit; Tesla J1 part number and strip end (docs/signal-wiring.md §7). NTS-400P terminal side confirmed from MEAN WELL's photo (TB1 at +y).
 - Pack copper `bus_pack_pos/neg` aren't bend-legal single parts; G10 .063/.125 out of stock at SCS (docs/v16-bom.md).
 
 ## Open items (v14)

@@ -119,5 +119,5 @@ The Tesla module's PCB overhangs the bar by 8 mm on its +x long edge, and J1 sit
 - ⚠️ NPB-450 DF11 pin count and which pins carry remote and CAN.
 - ⚠️ GV141BAX coil lead exit (face and height): route assumes the top of the inverted body.
 - ⚠️ Tesla J1 exact part number and which end of the overhang strip it sits at (the route works for either).
-- ⚠️ NTS-400P drawing view: if it is a bottom view, CN301 is at y +16…+24 and the CN301 lead re-routes along +y (the inverter's own DC keep-out is already checked mirrored).
+- ✓ NTS-400P terminal side **confirmed 2026-11-25** from MEAN WELL's own photos (NTS-400P-SPEC 2026-03-26 p1, "DC input side"; saved as `docs/img/nts400p_dc_end_meanwell.png`, `nts400p_iso_meanwell.png`): cover up, PCB down, looking at the DC end the PP45 pairs (TB1) are on the **right** and the white JST connector left of them. Facing the DC end from outside = facing −x in the pack, right = +y, so TB1 is at +y and the drawing is a top view. The model was right; the mirrored keep-out is no longer needed.
 - The board's schematic must take: 2 A board fuse on B+, precharge relay + resistor between j_pwr 1 and 2, coil driver for 3.9 A pick-up, CN301 dry contact (relay or photo-MOS, it must look like a relay contact), plated IMD mounting hole.
