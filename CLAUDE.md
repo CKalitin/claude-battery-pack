@@ -1,6 +1,6 @@
 # Handoff for the next Claude
 
-Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v15** (Concept D power bay, 175 A; see `versions/v15-concept-d/README.md` and `docs/power-train.md`).
+Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v16** (C1 power module, Blue Sea 5191/2151 fuse blocks, pack 424 mm inside with AC at the rear; see `versions/v16-c1-power-module/README.md`, `docs/v16-decisions.md`, `docs/v16-calcs.txt`, `docs/contactor-mounting.md`).
 
 ## Read first
 1. `docs/v14-baseline.md`: one-page spec.
@@ -8,7 +8,7 @@ Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery
 3. `docs/v14-design-notes.md`: design justifications (flex, floating pack + IMD, wake/latch, cooling calc, service bays).
 4. `docs/tesla-shunt.md`: the only source for shunt data. Dims are unconfirmed.
 4a. `docs/cells.md`: cell selection, sourcing, import and incoming inspection.
-5. `cad/tower15.py` + `cad/run_tower15.py` + `cad/clearance_v15.py`: the model, interference check and clearance check. `versions/v15-concept-d/`: renders and STEP. (`tower14.py` is the previous version.)
+5. `cad/tower15.py` (shell, converters, terminals) + `cad/concepts/contactor/c1_power_module.py` (power bay, its own checks incl. fuse lift-out) + `cad/run_v16.py` (merged STEP); `cad/run_tower15.py` + `cad/clearance_v15.py`: the model, interference check and clearance check. `versions/v15-concept-d/`: renders and STEP. (`tower14.py` is the previous version.)
 
 ## Working rules (from the owner)
 - Never add a part without need. The best part is no part.

@@ -1,0 +1,43 @@
+== 1. Currents ==
+I_inv = P/(V*eta) = 400.0/(12.0*0.91) = 36.6 A
+I_main (worst: SB175 out + inverter) = 175.0 + 36.6 = 211.6 A  vs MRBF 250 A -> 1.18x
+charger fuse 30 A / 25.0 A = 1.20x ; inverter fuse 50 A / 36.6 A = 1.36x
+PP45 rating 45 A / 36.6 A = 1.23x (continuous)
+
+== 2. + path copper (C1, 1/8 in = 3.175 mm bars) ==
+riser (2 x 3/16 in pack strap)                   L    28 mm  A  119.0 mm^2  J  1.8 A/mm^2  R    4.0 uOhm  P  0.18 W
+flange to M10 stud                               L    18 mm  A   79.4 mm^2  J  2.7 A/mm^2  R    3.9 uOhm  P  0.17 W
+5191 tab + strap (Blue Sea, UNCONFIRMED width)   L    40 mm  A   40.0 mm^2  J  5.3 A/mm^2  R   17.2 uOhm  P  0.77 W
+Z-strap (pad + run + leg + foot)                 L   100 mm  A   60.3 mm^2  J  3.5 A/mm^2  R   28.5 uOhm  P  1.28 W
+in-bar column to T1                              L    41 mm  A   44.4 mm^2  J  4.8 A/mm^2  R   15.9 uOhm  P  0.71 W
+load bar T2 pad                                  L    25 mm  A   50.8 mm^2  J  4.2 A/mm^2  R    8.5 uOhm  P  0.38 W
+load bar wide run y 50-86                        L    70 mm  A  114.3 mm^2  J  1.9 A/mm^2  R   10.5 uOhm  P  0.47 W
+SB+ pad                                          L     8 mm  A   82.5 mm^2  J  2.1 A/mm^2  R    1.7 uOhm  P  0.05 W
+total copper (excl. joints, fuse, contactor): R 90 uOhm, P 4.0 W at 212 A
+
+== 3. Leads ==
+inverter (PP45 max 10 AWG): 10 AWG 40 A @90C vs 36.6 A -> 1.09x ; bend R = 4*OD = 22 mm
+charger: 8 AWG 55 A @90C vs 25.0 A -> 2.20x ; bend R = 4*OD = 28 mm
+
+== 4. Plug keep-outs (room needed vs room in v16) ==
+charger DC (8 AWG ring + bend)                               need  27.0  have  30.2  margin  +3.2 mm
+inverter DC (PP45 24.6 + 10 AWG bend 22 -> 42 with margin)   need  42.0  have  50.8  margin  +8.8 mm
+charger AC (RA C13, worst 37.9 + 2)                          need  40.0  have  40.0  margin  +0.0 mm
+inverter AC (VH plug + wires)                                need  20.0  have  40.0  margin +20.0 mm
+
+== 5. Length growth ==
+inside length 375 -> 424 mm (+49): converters -27 mm (DC room) + rear gap 18 -> 40 mm (+22)
+added mass ~ sheet 227 g + G10 101 g = 328 g (UNCONFIRMED estimate)
+body half flat ~ 434 x 422 mm = 17.1 x 16.6 in vs SCS 30 x 44 in (bend), 30 x 36 in (powder)
+
+== 6. Fuse service ==
+MRBF lift = stud above block top = 44.5 - 11.0 = 33.5 mm; fuse top while lifting = z 249.3 + 16.3 + 33.5 = 299.1
+GV141BAX flange (turned 90 deg) reaches y 59.85; 2151 fuse housings start y 62.1 -> 2.25 mm clear
+
+== 7. Clearances (model checks, all 3 contactor variants) ==
+gv14up  interferences 0  + to - 10.5 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
+gv14    interferences 0  + to - 10.5 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
+fet     interferences 0  + to - 10.5 mm (strap_main / shunt_module)  pack to chassis 7.3 mm  + path 411 mm  - path 150 mm
+
+== 8. Inverter - lug to the shunt board ==
+lug_neg_inverter to shunt_module: 1.25 mm (same - net; board copper/parts referenced to shunt nodes)

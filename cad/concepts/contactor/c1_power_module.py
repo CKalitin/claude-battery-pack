@@ -88,7 +88,7 @@ def build(variant="gv14"):
     c.add("hw_m10nut_2151", cyl_z(70.7, 76.0, Zp1 + 2.5, Zp1 + 10.5, 9.25) - cyl_z(70.7, 76.0, Zp1, Zp1 + 12, 5.0))
     for (x, y), d, nm, rc, route in zip(bst, ((-1, 0), (1, 0)), ("charger", "inverter"), (3.4, 3.0),   # 8 AWG charger; 10 AWG inverter (PP45 max wire per Anderson 1327)
                                         # to the converter DC terminals (tower15.converter_terminals; charger TB x 23, inverter PP45 x 4)
-                                        (lambda p: [p, (p[0], p[1], 298.0), (45.0, p[1], 298.0), (38.0, 25.0, 262.0), (26.0, 17.0, 251.0)],   # V+ / V- order on the block UNCONFIRMED
+                                        (lambda p: [p, (p[0], p[1], 298.0), (45.0, p[1], 298.0), (30.0, 5.0, 280.0), (27.5, 9.0, 251.0)],   # V+ on the -y side of the block (NPB drawing: 'V+ V-' left to right, seen from outside)
                                          lambda p: [p, (p[0], p[1], 306.0), (p[0], 80.0, 308.0), (50.0, 80.0, 308.0), (30.0, 40.0, 300.0), (9.0, 37.3, 299.3)])):   # PP45 TB1 at y +25..+41
         lug, top = lug90(x, y, bzt, d=d)
         c.add(f"lug_{nm}", lug - cyl_z(x, y, bzt - 1, bzt + 3, 4.0), "pos")
@@ -99,7 +99,7 @@ def build(variant="gv14"):
     # 90 deg lugs: charger lug toward -x (barrel past the plate edge), inverter lug toward -y (offset 12, 2 mm short of the board).
     zr = Zp1 + 3.2
     for nm, (x, y), d, off, rc, route in (
-            ("charger", (62.0, 1.0), (-1, 0), 17.0, 3.4, lambda p: [p, (p[0], p[1], 272.0), (30.0, 9.0, 258.0), (26.0, 9.0, 251.0)]),
+            ("charger", (62.0, 1.0), (-1, 0), 17.0, 3.4, lambda p: [p, (p[0], p[1], 266.0), (40.0, 22.0, 254.0), (27.5, 17.0, 251.0)]),
             ("inverter", (82.0, 1.0), (0, -1), 10.0, 3.0, lambda p: [p, (p[0], p[1], 305.0), (20.0, p[1], 305.0), (12.0, 26.0, 300.0), (9.0, 29.4, 299.3)])):
         c.add(f"hw_carriage_neg_{nm}", cyl_z(x, y, Zp0 - 4.5, zr + 14.0, 4.0))
         c.add(f"hw_carriage_head_neg_{nm}", cyl_z(x, y, Zp0 - 4.5 - 5.6, Zp0 - 4.5 + 0.01, 10.0))
