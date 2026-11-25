@@ -116,7 +116,7 @@ Note on arcing: at ≤ 14.6 V a 1 mm air gap cannot break down (Paschen minimum 
 | Polarity zoning | Bay −y half = − (shunt, − bus); +y half = + (contactor, MRBFs). ≥ 25 mm between opposite potentials everywhere ⚠️ verify in CAD |
 | Output | SB175 mounted on a G10 bracket on the power deck with Anderson 924 bracket kit; busbar contacts bolted to the + and − buses; the face pokes through a lid opening. **No cables in the main path. Lid carries no power copper.** |
 | Control PCB | Vertical, on the −y body wall beside the charger: x −150…+45, z 230–312 (≈ 195 × 82 mm, 3.3× v14's 68 × 72 mm). ≥ 20 mm above the − bar; + hardware ≥ 100 mm away. Short runs: flex tail (−y taps), shunt SPI, charger CAN and inverter remote (DC ends face front), fan (rear), LED board and antenna (front). ⚠️ mounting: PEM standoffs in the body wall vs a G10 bracket, depends on body assembly order |
-| Converters | **Both DC ends face the front bay** (checked: the NPB-450 and NTS-400P each have DC and AC on opposite ends). Leads ≤ 150 mm, tied through slots cut in the G10 decks (no added parts). Inverter: Anderson PP75 (1327/1327G6) on the unit, so it unplugs. Charger: screw terminal block. AC ends face the rear: charger IEC C14 inlet + fan; inverter CN500 |
+| Converters | **Both DC ends face the front bay** (checked: the NPB-450 and NTS-400P each have DC and AC on opposite ends). Leads ≤ 150 mm, tied through slots cut in the G10 decks (no added parts). Inverter: Anderson Powerpole PP45 (1327/1327G6, PP15-45 housings; corrected 2026-11-24, was mislabelled PP75) on the unit, so it unplugs. Charger: screw terminal block. AC ends face the rear: charger IEC C14 inlet + fan; inverter CN500 |
 | Joints after the cells | 7 |
 
 ### MEAN WELL connector check (datasheet photos, 2026-11-24)
@@ -177,7 +177,7 @@ The rear had 18 mm to the fan, which is too little for a right-angle C13 (~30 mm
 | Lead | Room needed |
 |---|---|
 | Charger DC: 8 AWG into a screw terminal + bend | 27 mm |
-| Inverter DC: PP75 plug + 6 AWG bend (R ≈ 4 × OD ≈ 34 mm) | 42 mm |
+| Inverter DC: PP45 plug (housing 24.6 mm) + 10 AWG bend | 42 mm |
 | Charger AC: right-angle C13 | 30 mm |
 | Inverter AC: CN500 VH plug + wires | 20 mm |
 
@@ -202,7 +202,7 @@ The rear had 18 mm to the fan, which is too little for a right-angle C13 (~30 mm
 **New parts:**
 - `converter_terminals()` adds `term_*` markers (positions on each face ⚠️; the charger DC block is in the +y half per the v14 note) and `keepout_*` volumes.
 - C1 treats the keep-outs as obstacles.
-- The C1 + leads now end at the charger terminal block and the inverter PP75.
+- The C1 + leads now end at the charger terminal block and the inverter PP45.
 
 **Checks:**
 - `run_tower15`: 0 interferences.
@@ -211,9 +211,59 @@ The rear had 18 mm to the fan, which is too little for a right-angle C13 (~30 mm
 
 **Open:**
 - ⚠️ Exact terminal positions from the MEAN WELL mechanical drawings.
-- ⚠️ PP75 mated length.
+- ✓ PP45 mated length: 41.2 mm (resolved below).
 - ⚠️ Right-angle C13 depth (pick a part).
 - − leads for both converters not placed.
 - Every shell part (body halves, lid, tray 1, G10 floor) gets longer: re-check the SendCutSend sheet limits ⚠️.
 - Rear plate fan grid unchanged.
 - The pack mass estimate rises slightly.
+
+### Confirmations (2026-11-24, later)
+
+**1. Terminal positions** (✓ drawing / ⚠️ inferred). Read from the MEAN WELL mechanical drawings. Chrome screenshots of the PDFs froze, so I parsed the vector text and outlines with pdf.js on meanwell.com.
+- **NPB-450 (NPB-450-SPEC p.15, case 284A), DC end:**
+  - The V+/V− screw terminal block sits just +y of centre: about +5 to +21 mm, at about mid-height.
+  - The DF11-14 signal connector, DIP switch, Io adj. and status LED are at the −y end.
+  - The AC end has the IEC C14 inlet with an ON/OFF switch.
+  - ⚠️ Which terminal is V+ and which is V− isn't confirmed.
+- **NTS-400P (NTS-400P-SPEC p.6, 2026-03-26), DC end:**
+  - TB1 is a red + black pair at y about +25 to +41.
+  - CN100 is at about y −3 and the CN301 remote at about y −20.
+  - The AC end has CN500 (JST B6P-VH), the DIP switch and CN50.
+  - ⚠️ Assumes the drawing's top view is seen from above. If it's the bottom view, mirror these in y.
+- Model: `tower15.converter_terminals()`.
+
+**2. The inverter connector is Powerpole PP45, not PP75.**
+- Anderson part 1327 (red) / 1327G6 (black) belongs to the PP15-45 family: housing 7.9 × 7.9 × 24.6 mm, mated length 41.2 mm, wire #20 to #10 AWG (Anderson PP datasheet; drawing 1-9597S1).
+- Consequences:
+  - The inverter lead is **10 AWG max**: lug and cable changed. The 2151 fuse for it stays 50 A.
+  - At 400 W / 12 V / 0.91 ≈ 37 A continuous, PP45 (45 A) is within rating. ⚠️ 10 s peak: 800 W ≈ 73 A.
+  - Keep-out stays 42 mm: 24.6 mm plug + 10 AWG bend.
+
+**3. Right-angle C13: L-com ACPWRC-C13LR** (rewireable, screw terminals, 14–18 AWG; Digi-Key).
+- Its drawing's largest dimensions are 41.9, 37.9 and 35.6 mm. Labels didn't extract, so I assume the depth from the mating face is ≤ 35.6 mm ⚠️.
+- Rear gap raised to **36 mm**: `L_IN` 417 → **420**, converters at `XR + 61`.
+- Alternative: Quail 3514.024S, a snap-in C14 inlet to right-angle C13 jumper, which would replace the lid inlet with one part.
+
+**4. SendCutSend limits** (sendcutsend.com/materials/processing-min-max, read in Chrome 2026-11-24): all ✓ with margin for the longer shell.
+
+| Item | Limit | Ours |
+|---|---|---|
+| 5052 .063" bending: flat size | 30" × 44" | body half ≈ 434 mm long (17.1") × ~450 mm flat (~17.7") ⚠️ flat estimated |
+| 5052 .063" bending: max bend length | 44" | 17.1" |
+| 5052 .063" bending: effective bend radius | .035" | |
+| 5052 .063" bending: min flange (after bend) | .303" | |
+| Powder coat (5052) | 30" × 36" | fits |
+| Copper .125" (Z-strap) | radius .050", min flange .368" flat / .471" (12.0 mm) bent | leg 30.5 mm ✓; foot 12.0 mm, exactly at the limit |
+
+**5. − leads placed.**
+- Two M8 carriage bolts through the shunt bar beyond node B: charger at (62, 1), inverter at (82, 1). Both converters' current goes through the shunt.
+- 90° lugs: charger barrel toward −x, inverter barrel toward −y (offset 10 mm, 1 mm short of the sense board).
+- Leads run to the converter DC terminals.
+- Checks, all 3 variants: 0 interferences; + to − 10.5 mm; pack to chassis 7.3 mm; all fuses lift out.
+
+**Still open:**
+- ⚠️ V+/V− order on the charger terminal block.
+- ⚠️ NTS drawing view orientation.
+- ⚠️ ACPWRC-C13LR depth label.
+- ⚠️ Inverter − lug is 1 mm from the shunt board.

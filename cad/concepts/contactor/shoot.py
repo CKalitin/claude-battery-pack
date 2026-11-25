@@ -12,6 +12,9 @@ V = {"iso": dict(view=(0.75, -0.85, 1.15), focal=(100, 0, 235), dist=430),
                   xray=("contactor", "sb175_housing", "mrbf", "bs2151_body", "bs5191_body", "shunt_module", "g10_sb_cheek", "charger", "fet_parts", "fet_driver")),
      "front": dict(view=(1.0, -0.12, 0.18), focal=(100, 5, 250), dist=520),
      "side": dict(view=(0.0, -1.0, 0.12), focal=(100, 5, 255), dist=520),
+     "close_a": dict(view=(0.9, -0.65, 0.75), focal=(105, 5, 262), dist=300),
+     "close_b": dict(view=(-0.45, 0.95, 0.8), focal=(100, 25, 262), dist=300),
+     "close_c": dict(view=(0.15, -1.0, 0.55), focal=(100, -10, 258), dist=290),
      "lid": dict(view=(1.0, -0.95, 0.85), focal=(100, 5, 265), dist=560)}
 sub = "Claude battery pack, power-bay concept study 2026-11-24 | fast render | lid removed" 
 for v in views:
@@ -20,5 +23,5 @@ for v in views:
     if v == "lid":
         extra = dict(ghost_lid=True)
     f = shot(key, roles, labels, f"{key}_{v}.png", meta["title"], sub if v != "lid" else sub.replace("lid removed", "lid shown transparent"),
-             hide=("inverter", "tray2", "body_half_A", "ledboard_f", "ctrl_", "cap_") if v in ("iso", "top", "iso2", "xray") else (), **kw, **extra)
+             hide=("inverter", "tray2", "body_half_A", "ledboard_f", "ctrl_", "cap_") if v in ("iso", "top", "iso2", "xray", "close_a", "close_b", "close_c") else (), **kw, **extra)
     print(f)

@@ -86,15 +86,27 @@ def build(variant="gv14"):
     for n, (sh, r) in bp.items():
         c.add(n, sh, r)
     c.add("hw_m10nut_2151", cyl_z(70.7, 76.0, Zp1 + 2.5, Zp1 + 10.5, 9.25) - cyl_z(70.7, 76.0, Zp1, Zp1 + 12, 5.0))
-    for (x, y), d, nm, rc, route in zip(bst, ((-1, 0), (1, 0)), ("charger", "inverter"), (3.4, 4.0),
-                                        # to the converter DC terminals (tower15.converter_terminals; charger TB x 23, inverter PP75 x 4)
-                                        (lambda p: [p, (p[0], p[1], 298.0), (45.0, p[1], 298.0), (38.0, 25.0, 262.0), (28.0, 17.0, 241.6)],
-                                         lambda p: [p, (p[0], p[1], 306.0), (p[0], 80.0, 308.0), (50.0, 80.0, 308.0), (30.0, 10.0, 300.0), (9.0, 8.0, 300.0)])):
+    for (x, y), d, nm, rc, route in zip(bst, ((-1, 0), (1, 0)), ("charger", "inverter"), (3.4, 3.0),   # 8 AWG charger; 10 AWG inverter (PP45 max wire per Anderson 1327)
+                                        # to the converter DC terminals (tower15.converter_terminals; charger TB x 23, inverter PP45 x 4)
+                                        (lambda p: [p, (p[0], p[1], 298.0), (45.0, p[1], 298.0), (38.0, 25.0, 262.0), (26.0, 17.0, 251.0)],   # V+ / V- order on the block UNCONFIRMED
+                                         lambda p: [p, (p[0], p[1], 306.0), (p[0], 80.0, 308.0), (50.0, 80.0, 308.0), (30.0, 40.0, 300.0), (9.0, 37.3, 299.3)])):   # PP45 TB1 at y +25..+41
         lug, top = lug90(x, y, bzt, d=d)
         c.add(f"lug_{nm}", lug - cyl_z(x, y, bzt - 1, bzt + 3, 4.0), "pos")
         c.add(f"hw_nut_{nm}", stud_stack(x, y, bzt + 1.8) - cyl_z(x, y, bzt, bzt + 12, 4.0))
         c.add(f"cable_{nm}", tube(route(top), rc))
     c.add("cap_2151", bs_cap("2151", 70.7, 76.0, Zp1, d=(1, 0)))
+    # converter - leads: two M8 carriage bolts through the shunt bar beyond node B (y > -1), so the shunt sees converter current.
+    # 90 deg lugs: charger lug toward -x (barrel past the plate edge), inverter lug toward -y (offset 12, 2 mm short of the board).
+    zr = Zp1 + 3.2
+    for nm, (x, y), d, off, rc, route in (
+            ("charger", (62.0, 1.0), (-1, 0), 17.0, 3.4, lambda p: [p, (p[0], p[1], 272.0), (30.0, 9.0, 258.0), (26.0, 9.0, 251.0)]),
+            ("inverter", (82.0, 1.0), (0, -1), 10.0, 3.0, lambda p: [p, (p[0], p[1], 305.0), (20.0, p[1], 305.0), (12.0, 26.0, 300.0), (9.0, 29.4, 299.3)])):
+        c.add(f"hw_carriage_neg_{nm}", cyl_z(x, y, Zp0 - 4.5, zr + 14.0, 4.0))
+        c.add(f"hw_carriage_head_neg_{nm}", cyl_z(x, y, Zp0 - 4.5 - 5.6, Zp0 - 4.5 + 0.01, 10.0))
+        lug, top = lug90(x, y, zr, d=d, off=off)
+        c.add(f"lug_neg_{nm}", lug - cyl_z(x, y, zr - 1, zr + 3, 4.0), "neg")
+        c.add(f"hw_nut_neg_{nm}", stud_stack(x, y, zr + 1.8) - cyl_z(x, y, zr, zr + 12, 4.0))
+        c.add(f"cable_neg_{nm}", tube(route(top), rc))
     # ---------- - path ----------
     nb = pack_neg_band(80.0)
     nb += box(62.0, 80.0, -66.0, -61.24, Z0, Zp1)                       # riser in the band corridor
@@ -131,7 +143,7 @@ def build(variant="gv14"):
                              ("hw_carriage", "shunt_bar"), ("hw_stud", "bus_mod"), ("hw_stud", "g10_plate"), ("hw_stud", "contactor"),
                              ("hw_stud", "sb175"), ("hw_stud", "nut_m8"), ("hw_locknut", "g10_plate"), ("hw_locknut", "hw_stud"),
                              ("hw_nut", "bs"), ("hw_nut", "lug_"), ("hw_nut", "strap_main"), ("lug_", "bs2151"),
-                             ("strap_main", "bs5191"), ("strap_main", "bus_mod_in"), ("cable_", "lug_"), ("cable_", "keepout_"), ("cable_", "term_"), ("cap_", ""), ("hw_carriage", "hw_carriage")]
+                             ("strap_main", "bs5191"), ("strap_main", "bus_mod_in"), ("cable_", "lug_"), ("cable_", "keepout_"), ("lug_neg", "shunt_bar"), ("lug_neg_charger", "keepout_chg_dc"), ("hw_carriage_neg", "shunt_bar"), ("hw_carriage_neg", "bus_mod_neg"), ("hw_carriage_neg", "g10_plate"), ("hw_carriage", "lug_"), ("hw_carriage_neg", "hw_nut"), ("cable_", "term_"), ("cap_", ""), ("hw_carriage", "hw_carriage")]
     # ---------- current paths (centre lines) and joint/bend counts ----------
     zcol = (Z0 + Z1) / 2
     c.paths["pos"] = [(100.0, -33.5, zcol), (126.4, -33.5, zcol), (126.4, -33.5, zc), (144.0, -33.5, zc), (144.0, -33.5, Zp1 + 1.25),
@@ -148,7 +160,7 @@ def build(variant="gv14"):
                 "Lid hole moves to the SB175 (x 58-83, y 10-66); v15 hole at x 89-116 must be re-cut"]
     c.labels = [("contactor_gv14_pcb", "Gigavac GV14 PCB-mount (terminals down)"), ("contactor_gv141", "Gigavac GV141BAX, upside-down"), ("hw_stud_ct", "Contactor M8 stud"), ("nut_m8", "M8 nut under the plate"), ("hw_stud_sb", "SB175 contact stud 1/4-20"), ("hw_locknut", "Lock nut under the plate"), ("hw_carriage_head", "Carriage bolt head"), ("hw_carriage_", "M8 carriage bolt"), ("fet_board", "FET switch board"),
                 ("sb175_housing", "SB175, busbar contacts, facing up"), ("bs5191_fuse", "MRBF 250 A on 5191 block"), ("strap_main", "Z-strap = service disconnect"),
-                ("bs2151_fuse_0", "MRBF 30 A (charger)"), ("bs2151_fuse_1", "MRBF 50 A (inverter)"), ("bs2151_body", "Blue Sea 2151"), ("lug_", "90° lug"), ("cable_charger", "to charger"), ("cable_inverter", "to inverter"), ("shunt_module", "Tesla shunt (flat)"), ("g10_plate", "G10 module plate"),
+                ("bs2151_fuse_0", "MRBF 30 A (charger)"), ("bs2151_fuse_1", "MRBF 50 A (inverter)"), ("bs2151_body", "Blue Sea 2151"), ("lug_", "90° lug"), ("cable_charger", "to charger"), ("cable_inverter", "to inverter"), ("cable_neg_charger", "charger − lead"), ("cable_neg_inverter", "inverter − lead"), ("lug_neg", "− lugs on the shunt (node B side)"), ("shunt_module", "Tesla shunt (flat)"), ("g10_plate", "G10 module plate"),
                 ("bus_pack_pos", "+ riser from cells 7-8"), ("bus_pack_neg", "- band + riser"), ("bus_mod_load", "+ load bar"),
                 ("bus_mod_in", "+ in-bar"), ("bus_mod_neg", "- tab to SB175"), ("tray1", "G10 tray 1"), ("charger", "Charger"),
                 ("g10_sb_cheek", "G10 cheeks (SB175 mount)"), ("path_pos", "+ current path"), ("path_neg", "- current path")]

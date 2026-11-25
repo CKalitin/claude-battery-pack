@@ -93,8 +93,8 @@ H = Z_T2TOP + INV[2] + 3.4                       # lid outer top
 W = 190.0                                        # body outer width (v4 width)
 
 # ======================= shell layout =======================
-L_IN = 417.0                                     # 2026-11-24 option A: +42 mm, all at the rear (front plate unchanged):
-REAR_EXTRA = 52.0                                # converters -27 mm (DC lead/plug room in the bay), +15 mm behind them (rear plugs)
+L_IN = 420.0                                     # 2026-11-24 option A: +42 mm, all at the rear (front plate unchanged):
+REAR_EXTRA = 55.0                                # converters -27 mm (DC lead/plug room in the bay), +15 mm behind them (rear plugs)
 DX = -(L_IN / 2 - (STACK_L / 2 + 1.0 + 25.0 + REAR_EXTRA))   # rear plate inner face = module rear - 1 mm - fan depth - extra
 XF = L_IN / 2 - DX                               # front plate inner face  (+145)
 XR = -(L_IN / 2 + DX)                            # rear plate inner face   (-165)
@@ -675,8 +675,8 @@ def sense_flex():
 
 # ======================= decks =======================
 DECK_SH = XR + 29.0 - (-136.0)                     # decks keep their position relative to the rear plate
-CHG_X0 = XR + 58.0; CHG_X1 = CHG_X0 + CHG[0]   # 33 mm from the fan face: right-angle C13 on the charger, CN500 plug on the inverter
-INV_X0 = XR + 58.0; INV_X1 = INV_X0 + INV[0]
+CHG_X0 = XR + 61.0; CHG_X1 = CHG_X0 + CHG[0]   # 36 mm from the fan face: right-angle C13 (L-com ACPWRC-C13LR, <= 35.6 deep) + CN500 plug
+INV_X0 = XR + 61.0; INV_X1 = INV_X0 + INV[0]
 TRAY1_X0, TRAY1_X1 = XR + 28.0, XF - 8.0          # v14: ends before the LED board (XL0)
 TRAY1_Y, TRAY1_FL = 88.0, 12.0
 INV_POST_XY = [(x, s * 73.5) for x in (INV_X0 + 12.0, INV_X1 - 12.0) for s in (-1, 1)]
@@ -753,19 +753,23 @@ def inverter():
 # Positions on each face UNCONFIRMED (+y half for the charger DC end per v14 note). Keep-outs = mating plug + cable bend room.
 def converter_terminals():
     zc, zi = Z_T1TOP, Z_T2TOP
+    # Positions read from the MEAN WELL mechanical drawings (vector text + outlines, 2026-11-24): NPB-450-SPEC p.15, NTS-400P-SPEC p.6.
+    # NPB DC end: terminal block V+/V- just +y of centre (+5..+21 mm), ~mid-height; DF11 + DIP + LED at the -y end.
+    # NTS DC end: TB1 = two Anderson 1327 (red) / 1327G6 (black) PP15-45 housings 7.9 x 7.9 mm (NOT PP75) at y +25..+41;
+    #   CN100 ~y -3, CN301 remote ~y -20. Assumes the top view is seen from above (mirror if not).
     term = {
-        "chg_dc_tb": box(CHG_X1, CHG_X1 + 3, 2, 32, zc + 12.5, zc + 27.5),            # screw terminal block V+/V-
-        "chg_sig_df11": box(CHG_X1, CHG_X1 + 2, 40, 50, zc + 30, zc + 36),            # DF11-14 signal (CAN/PMBus, remote)
-        "chg_ac_c14": box(CHG_X0 + 2, CHG_X0 + 6, -13.5, 13.5, zc + 17, zc + 37),     # IEC C14 inlet, in the rear recess
-        "inv_dc_pp75": box(INV_X1, INV_X1 + 3, -16, 16, zi + 1, zi + 33),             # Anderson PP75 1327 (red) + 1327G6 (black)
-        "inv_sig_cn301": box(INV_X1, INV_X1 + 2, 22, 30, zi + 12, zi + 20),           # remote on/off
-        "inv_ac_cn500": box(INV_X0 + 2, INV_X0 + 6, -12, 12, zi + 8, zi + 18),        # JST B6P-VH AC output, in the rear recess
+        "chg_dc_tb": box(CHG_X1, CHG_X1 + 3, 3, 23, zc + 20, zc + 34),
+        "chg_sig_df11": box(CHG_X1, CHG_X1 + 2, -50, -36, zc + 5, zc + 19),
+        "chg_ac_c14": box(CHG_X0 + 2, CHG_X0 + 6, -13.5, 13.5, zc + 17, zc + 37),
+        "inv_dc_pp45": box(INV_X1, INV_X1 + 3, 25.5, 41.3, zi + 13, zi + 21),
+        "inv_sig_cn301": box(INV_X1, INV_X1 + 2, -24, -16, zi + 12, zi + 20),
+        "inv_ac_cn500": box(INV_X0 + 2, INV_X0 + 6, -12, 12, zi + 8, zi + 18),
     }
     keep = {
-        "chg_dc": box(CHG_X1 + 3, CHG_X1 + 30, 0, 34, zc + 5, zc + 45),               # 8 AWG ring/ferrule + bend: 27 mm
-        "inv_dc": box(INV_X1 + 3, INV_X1 + 45, -20, 20, zi, zi + INV[2]),          # PP75 plug + 6 AWG bend: 42 mm UNCONFIRMED
-        "chg_ac": box(CHG_X0 - 30, CHG_X0 + 2, -20, 20, zc + 12, zc + 42),            # right-angle C13: 30 mm UNCONFIRMED
-        "inv_ac": box(INV_X0 - 20, INV_X0, -16, 16, zi + 4, zi + 28),             # VH plug + wire bend: 20 mm
+        "chg_dc": box(CHG_X1 + 3, CHG_X1 + 30, -2, 28, zc + 10, zc + 45),             # 8 AWG ring + bend: 27 mm
+        "inv_dc": box(INV_X1 + 3, INV_X1 + 45, 20, 47, zi, zi + INV[2]),              # PP45 plug housing 24.6 + 10 AWG bend: 42 mm
+        "chg_ac": box(CHG_X0 - 36, CHG_X0 + 2, -20, 20, zc + 12, zc + 42),            # right-angle C13: <= 35.6 mm
+        "inv_ac": box(INV_X0 - 20, INV_X0, -16, 16, zi + 4, zi + 28),                 # VH plug + wire bend: 20 mm
     }
     return term, keep
 
@@ -808,8 +812,8 @@ CONN_HOLE = 7.5                                  # clinch-nut hole centre beyond
 CONNS = {                                           # v15: all over the power bay, clear of the SB175 and the contactor
     # 2026-11-24: AC pass-throughs at the REAR (both converters' AC ends face the rear), in the 33 mm column between the fan
     # and the converter rear ends, either side of the inverter's CN500 plug. DC stays at the front (SB175).
-    "outlet_nema515": (XR + 41.5, -40.0, 30.0, 38.0, 30.0, "y"),  # clinch nuts along y: off the inverter top
-    "inlet_iec_c14": (XR + 41.5, 45.0, 20.0, 27.0, 25.0, "y"),
+    "outlet_nema515": (XR + 43.0, -40.0, 30.0, 38.0, 30.0, "y"),  # clinch nuts along y: off the inverter top
+    "inlet_iec_c14": (XR + 43.0, 45.0, 20.0, 27.0, 25.0, "y"),
     "pushbutton": (75.0, -70.0, 19.0, 19.0, 30.0, "n"),
 }
 
