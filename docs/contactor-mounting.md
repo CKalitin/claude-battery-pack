@@ -270,3 +270,14 @@ Model: `cad/concepts/contactor/lib.py` (`bs_block`, `bs_cap`, `lug90`, `stud_sta
 - **Other checks:** 0 interferences; + to − 10.4 mm; pack to chassis 7.3 mm.
 - **Cost:** the + path is now 352 mm, up from 306, because the load bar detours around the in-bar.
 - **Trap T10:** static interference checks miss removal paths. Rule: every serviceable part gets a sweep check.
+
+**Rev 2026-11-24 c: shunt board crosswise, 5191 points −y.**
+- **Shunt board:** the owner's photo shows the sensing board crosswise on the bar, between the bolts. It is flush with one edge and the connector end overhangs ~8 mm ⚠️. Modelled at x 53.2–96.2, connectors toward +x, role "neg", so the 10 mm + to − rule now applies to it.
+- **5191:** turned to point −y (stud at (144, −67.9)), which clears the board. The Z-strap is now an L in plan, still with 2 bends: fuse top → +y → −x above the flange → leg down to the in-bar foot at (113.6, −9.5).
+- **In-bar column:** x 106.6–120.6, 10.4 mm to the board. Line-to-load gap at T2 is now 6.75 mm, both + across the open contactor.
+- **Checks (all 3 variants):** 0 interferences; + to − 10.5 mm (strap to board); pack to chassis 7.3 mm; all fuses lift out. + path 411 mm.
+- **Open, blocking: converter plug-in access.**
+  - In front of the charger's +x face (x 50) there is 3.2 mm before tray 1, the shunt and the plate.
+  - In front of the inverter's +x face (x 31) there is 23.8 mm before the SB175 cheek.
+  - If the DC terminals face the power bay, neither can be plugged in: need ≥ 30 mm ⚠️.
+  - First find which end the terminals are on (NPB-450 datasheet: AC input and DC output are on opposite ends). Then either flip the converters so DC faces the bay and move the module +x, or route the leads to the far ends.

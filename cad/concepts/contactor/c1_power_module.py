@@ -27,7 +27,7 @@ def build(variant="gv14"):
         c.add(f"hw_locknut_sb_{i}", cyl_z(x, y, Zp0 - 3.175 - 5.6, Zp0 - 3.175, 6.4))     # 110G56 lock nut
     # carriage bolts (square neck in a square hole), heads under the copper; M10 for the MRBF blocks, M8 elsewhere
     for i, (x, y, r, rh, top) in enumerate(((144.0, -33.5, 5.0, 12.5, Zp1 + 15.0), (SBX, -54.5, 4.0, 10.0, Zp1 + 22.0),
-                                            (109.6, -9.5, 4.0, 10.0, Zp1 + 3.175 + 13.0), (70.7, 76.0, 5.0, 12.5, Zp1 + 15.0))):
+                                            (113.6, -9.5, 4.0, 10.0, Zp1 + 3.175 + 13.0), (70.7, 76.0, 5.0, 12.5, Zp1 + 15.0))):
         c.add(f"hw_carriage_{i}", cyl_z(x, y, Zp0 - 4.5, top, r))
         c.add(f"hw_carriage_head_{i}", cyl_z(x, y, Zp0 - 4.5 - 5.6, Zp0 - 4.5 + 0.01, rh))
     for i, x0 in enumerate((SBX - 12.7 - 3.2, SBX + 12.7)):        # G10 cheeks bolted through the housing's two mounting holes
@@ -60,21 +60,23 @@ def build(variant="gv14"):
     pc += box(124.0, 128.76, -46.0, -21.0, Z0, Zp1)                    # riser (moved from x 138: the M10 head under the flange hit it)
     pc += box(124.0, 152.0, -46.0, -21.0, Zp0, Zp1)                     # flange = 5191 seat, top flush with the module copper
     c.add("bus_pack_pos", pc, "pos")
-    inb = box(101.6, 117.6, -15.0, t1[1] + 8.0, Zp0, Zp1)               # straight column: strap foot -> T1
+    inb = box(106.6, 120.6, -15.0, t1[1] + 8.0, Zp0, Zp1)               # straight column: strap foot -> T1 (x >= 106.6: 10.4 mm to the shunt board)
     c.add("bus_mod_in", inb, "pos")                                       # flat-cut L: no bends
     # main fuse: Blue Sea 5191 on the M10 stud in the + flange, pointing -x; MRBF 250 A on it. Output is the fuse TOP,
     # so a Z-strap (1/8 in copper, 22 wide, 2 bends) brings it back down to the in-bar. Strap = last part in = service disconnect.
-    mp, mst, mzt = bs_block("5191", 144.0, -33.5, Zp1, d=(-1, 0), prefix="bs5191")
+    mp, mst, mzt = bs_block("5191", 144.0, -33.5, Zp1, d=(0, -1), prefix="bs5191")   # points -y: clear of the shunt board
     for n, (sh, r) in mp.items():
         c.add(n, sh, r)
     c.add("hw_m10nut_main", cyl_z(144.0, -33.5, Zp1 + 2.5, Zp1 + 10.5, 9.25) - cyl_z(144.0, -33.5, Zp1, Zp1 + 12, 5.0))
-    sx, sy = mst[0]
+    sx, sy = mst[0]; fx = 113.6                                          # fuse stud; strap foot centre over the in-bar
     zs1 = mzt + 3.175
-    st = box(sx - 8, sx + 11, -44.5, -10.8, mzt, zs1) + box(sx - 8, sx + 11, -14.0, -10.8, Zp1, zs1) + box(sx - 8, sx + 11, -14.0, -2.0, Zp1, Zp1 + 3.175)   # x >= 101.6: 10.9 mm to the - stud area
-    st -= cyl_z(sx, sy, mzt - 1, zs1 + 1, 4.3) + cyl_z(sx, -9.5, Zp1 - 1, Zp1 + 4.2, 4.3)
+    st = box(sx - 9.5, sx + 9.5, sy - 11.0, -31.0, mzt, zs1)               # pad on the fuse top, runs +y (flat-cut L in plan)
+    st += box(fx - 7.0, sx + 9.5, -31.0, -10.8, mzt, zs1)                  # runs -x above the flange and the 5191 tab
+    st += box(fx - 7.0, fx + 7.0, -14.0, -10.8, Zp1, zs1) + box(fx - 7.0, fx + 7.0, -14.0, -2.0, Zp1, Zp1 + 3.175)   # leg + foot
+    st -= cyl_z(sx, sy, mzt - 1, zs1 + 1, 4.3) + cyl_z(fx, -9.5, Zp1 - 1, Zp1 + 4.2, 4.3)
     c.add("strap_main", st, "pos")
     c.add("hw_nut_main", stud_stack(sx, sy, zs1) - cyl_z(sx, sy, zs1 - 1, zs1 + 10, 4.0))
-    c.add("hw_nut_strapfoot", stud_stack(sx, -9.5, Zp1 + 3.175) - cyl_z(sx, -9.5, Zp1, Zp1 + 14, 4.0))
+    c.add("hw_nut_strapfoot", stud_stack(fx, -9.5, Zp1 + 3.175) - cyl_z(fx, -9.5, Zp1, Zp1 + 14, 4.0))
     ld = box(t2[0] - 8.0, t2[0] + 8.0, t2[1] - 8.0, 50.0, Zp0, Zp1)        # T2 pad (x >= 127.35: 9.75 mm to the in-bar)
     ld += box(SBX - 8.0, t2[0] + 8.0, 50.0, 86.0, Zp0, Zp1)                # wide bar y 50-86 (10 mm above the in-bar), under the 2151
     ld += box(SBX - 8.0, 88.7, 43.2, 50.0, Zp0, Zp1)                       # SB+ pad (y >= 43.2: 10.8 mm to the - tab)
@@ -99,7 +101,10 @@ def build(variant="gv14"):
     c.add("bus_pack_neg", nb, "neg")
     sh_y1 = 14.0                                                          # shunt along +y, node B 15 mm from its end
     c.add("shunt_bar", box(SBX - 17.5, SBX + 17.5, sh_y1 - 83.5, sh_y1, Zp1, Zp1 + 3.2), "neg")
-    c.add("shunt_module", box(SBX - 12.5, SBX + 12.5, sh_y1 - 63.0, sh_y1 - 20.0, Zp1 + 3.2, Zp1 + 10.2))
+    # sensing board crosswise on the bar between the two bolts (owner photo 2026-11-24): flush with the -x edge,
+    # connector end overhangs ~8 mm past the +x edge (scaled from the photo, UNCONFIRMED). Role neg: its copper is at shunt potential.
+    ym = sh_y1 - 41.75
+    c.add("shunt_module", box(SBX - 17.5, SBX - 17.5 + 43.0, ym - 12.5, ym + 12.5, Zp1 + 3.2, Zp1 + 10.2), "neg")
     tab = box(SBX - 8.0, SBX + 8.0, sh_y1 - 22.0, sbn[1] + 8.0, Zp0, Zp1)      # narrow - tab under the shunt's node-B end
     tab += box(SBX - 8.0, SBX + 20.0, sh_y1 - 22.0, sh_y1 - 6.0, Zp0, Zp1)       # converter - stud area
     c.add("bus_mod_neg", tab, "neg")
@@ -129,8 +134,8 @@ def build(variant="gv14"):
     # ---------- current paths (centre lines) and joint/bend counts ----------
     zcol = (Z0 + Z1) / 2
     c.paths["pos"] = [(100.0, -33.5, zcol), (126.4, -33.5, zcol), (126.4, -33.5, zc), (144.0, -33.5, zc), (144.0, -33.5, Zp1 + 1.25),
-                      (123.25, -33.5, Zp1 + 1.25), (123.25, -33.5, Zp1 + 9.75), (sx + 8.0, -33.5, Zp1 + 9.75), (sx + 8.0, -33.5, mzt + 1.6),
-                      (sx, -12.4, mzt + 1.6), (sx, -12.4, zc), (sx, -8.0, zc), (sx, t1[1], zc), (t1[0], t1[1], zc), (t2[0], t2[1], zc),
+                      (144.0, -54.25, Zp1 + 1.25), (144.0, -54.25, Zp1 + 9.75), (144.0, sy + 8.0, Zp1 + 9.75), (144.0, sy + 8.0, mzt + 1.6),
+                      (sx, -21.0, mzt + 1.6), (fx, -21.0, mzt + 1.6), (fx, -12.4, mzt + 1.6), (fx, -12.4, zc), (fx, -8.0, zc), (fx, t1[1], zc), (t1[0], t1[1], zc), (t2[0], t2[1], zc),
                       (t2[0], 58.0, zc), (SBX, 58.0, zc), (SBX, sbp[1], zc)]
     c.paths["neg"] = neg_band_path(71.0, -63.6) + [(71.0, -63.6, zc), (71.0, sh_y1 - 68.5, zc), (71.0, sh_y1 - 15.0, zc),
                       (SBX, sbn[1], zc)]
