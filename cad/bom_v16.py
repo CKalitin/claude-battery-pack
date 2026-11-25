@@ -1,32 +1,31 @@
-"""v16 BOM cost estimate (USD). Catalog prices dated 2026-11-25 unless noted. SCS lines are estimates from the real
-v5 SCS quote (versions/v05-scs-lf100/SCS_quote_2026-11-22.csv), scaled by flat area or matched by part, until a
-live v16 quote is pulled. Writes docs/v16-bom.md."""
-G10_187 = 87.08 / (324.9 * 144.0)       # $/mm^2, v5 G10 .187 floor
-CU_125 = 15.06 / (25.0 * 139.9)         # $/mm^2, v5 copper .125 link
+"""v16 BOM cost estimate (USD). Catalog prices dated 2026-11-25 unless noted. SCS flat parts are from a live SCS guest
+cart (2026-11-25, $1,661.45 for 20 lines, free shipping, ships Dec 4); bent parts are scaled from the v5 quote. Writes docs/v16-bom.md."""
+LIVE = "live SCS guest cart 2026-11-25"
 scs = [  # part, qty, each, basis, conf
-    ("body_half_A (5052 .063, bends, PEM, gloss red)", 1, 148.43 * 1.1, "v5 quote 148.43 +10 % for +49 mm length", "⚠️"),
-    ("body_half_B (same)", 1, 130.38 * 1.1, "v5 quote 130.38 +10 %", "⚠️"),
-    ("lid (5052 .063, 6 bends, PEM, gloss red)", 1, 115.11 * 1.1, "v5 quote 115.11 +10 %", "⚠️"),
-    ("plate_front (6061 .187, hole grid, grey)", 1, 256.74, "v5 quote", "⚠️"),
-    ("plate_rear (6061 .187, full hole grid, grey)", 1, 299.48, "v5 quote", "⚠️"),
-    ("module_endplates (6061 .313)", 2, 39.29, "v5 quote", "✓ same part"),
-    ("g10_floor (G10 .187)", 1, 87.08, "v5 quote", "⚠️"),
-    ("g10_frame (G10 .187)", 1, 83.05, "v5 quote", "⚠️"),
-    ("tray1 (G10 .125, 333 x 176)", 1, 0.8 * G10_187 * 333 * 176, "G10 .187 area rate x 0.8 for .125", "⚠️"),
-    ("tray2 (G10 .125, 191 x 158)", 1, 0.8 * G10_187 * 191 * 158, "same", "⚠️"),
-    ("g10_plate (G10 .125, 152 x 96)", 1, 0.8 * G10_187 * 152 * 96, "same", "⚠️"),
-    ("g10_sb_cheek (G10 .125, 52 x 44)", 2, max(4.0, 0.8 * G10_187 * 52 * 44), "same, $4 floor", "⚠️"),
-    ("g10_top (G10 .063, 326 x 140)", 1, 14.31, "v5: Mylar .010 sub ($14.31), G10 .063 out of stock", "⚠️"),
-    ("g10_spacers (G10 .063 -> Mylar .010 sub, 196 x 130)", 9, 3.88, "v5 Mylar sub price", "⚠️"),
-    ("bus_A/B/C (Cu .125, 140 x 25)", 3, 15.06, "v5 quote", "✓ same part"),
-    ("bus_pack_pos (Cu .187, ~134 x 25 flat, 2 bends)", 1, 27.42 * 1.5, "v5 .125 strap x1.5 for .187", "⚠️"),
-    ("bus_pack_neg (Cu .187, ~323 x 20 flat, bends)", 1, 55.22 * 1.5, "v5 .125 strap x1.5", "⚠️"),
-    ("bus_mod_in (Cu .125, 55 x 14)", 1, max(6.0, CU_125 * 55 * 14 * 1.5), "Cu .125 area rate x1.5 (small part)", "⚠️"),
-    ("bus_mod_load (Cu .125, 81 x 62 L)", 1, CU_125 * 81 * 62 * 1.2, "Cu .125 area rate", "⚠️"),
-    ("bus_mod_neg (Cu .125, 40 x 28)", 1, max(6.0, CU_125 * 40 * 28 * 1.5), "same", "⚠️"),
-    ("strap_main (Cu .125, ~122 x 19 flat, 2 bends)", 1, 27.42, "v5 1-bend strap", "⚠️"),
-    ("diffuser_f (white acrylic .118)", 1, 12.93, "v5 quote", "✓"),
-    ("pipe_f (clear acrylic .118)", 1, 2.00, "v5 quote", "✓"),
+    ("body_half_A (5052 .063, bends, PEM, gloss red)", 1, 148.43 * 1.1, "v5 quote 148.43 +10 % for +49 mm length; SCS refused the bent STEP", "⚠️"),
+    ("body_half_B (same)", 1, 130.38 * 1.1, "v5 quote 130.38 +10 %; bent STEP refused", "⚠️"),
+    ("lid (5052 .063, 6 bends, PEM, gloss red)", 1, 115.11 * 1.1, "v5 quote 115.11 +10 %; bent STEP refused", "⚠️"),
+    ("plate_front (6061 .187, hole grid, deburr)", 1, 266.17, LIVE + "; no powder coat", "✓"),
+    ("plate_rear (6061 .187, full hole grid)", 1, 266.17, "= plate_front; upload stalled in the SCS UI", "⚠️"),
+    ("module_endplates_1 (6061 .313)", 1, 81.90, LIVE + "; tapping not added", "✓"),
+    ("module_endplates_2 (6061 .313)", 1, 80.74, LIVE + "; tapping not added", "✓"),
+    ("g10_floor (G10 .187)", 1, 97.15, LIVE, "✓"),
+    ("g10_frame (G10 .187)", 1, 95.70, LIVE, "✓"),
+    ("tray1 (G10, design .125 → quoted .187)", 1, 92.85, LIVE + "; .125 out of stock", "⚠️"),
+    ("tray2 (G10, design .125 → quoted .187)", 1, 86.89, LIVE + "; .125 out of stock", "⚠️"),
+    ("g10_plate (G10, design .125 → quoted .187)", 1, 33.36, LIVE + "; .125 out of stock", "⚠️"),
+    ("g10_sb_cheek (G10, design .125 → quoted .187)", 2, 9.23, LIVE, "⚠️"),
+    ("g10_top (G10, design .063 → quoted .187)", 1, 213.07, LIVE + "; .063 out of stock", "⚠️"),
+    ("g10_spacers (G10, design .063 → quoted .187)", 9, 28.56, LIVE + "; .063 out of stock", "⚠️"),
+    ("bus_A/B/C (Cu .125, 140 x 25)", 3, 25.47, LIVE, "✓"),
+    ("bus_pack_pos (Cu .187, 134 x 25 flat)", 1, 46.98, LIVE + "; flat placeholder, bending not priced", "⚠️"),
+    ("bus_pack_neg (Cu .187, 323 x 20 flat)", 1, 89.47, LIVE + "; flat placeholder, bending not priced", "⚠️"),
+    ("bus_mod_in (Cu .125)", 1, 8.95, LIVE, "✓"),
+    ("bus_mod_load (Cu .125, deburr)", 1, 34.29, LIVE, "✓"),
+    ("bus_mod_neg (Cu .125)", 1, 9.53, LIVE, "✓"),
+    ("strap_main (Cu .125, 122 x 19 flat)", 1, 21.63, LIVE + "; 2 bends not priced", "⚠️"),
+    ("diffuser_f (white acrylic .118)", 1, 48.86, LIVE, "✓"),
+    ("pipe_f (acrylic .118)", 1, 2.00, LIVE, "✓"),
 ]
 cat = [  # item, qty, each, source (dated), conf
     ("EVE LF105 cell", 8, 37.50, "18650batterystore US, 2026-11-24 (cells.md)", "✓"),
@@ -54,7 +53,7 @@ other = [("Duty + GST on cells (import to Canada)", 40.00, "README estimate", "�
          ("SCS shipping to Canada", 0.0, "not computed", "⚠️")]
 L = ["# v16 BOM cost estimate (USD, 2026-11-25)", "",
      "Generated by `cad/bom_v16.py`. ✓ = priced from a dated source; ⚠️ = estimate.",
-     "The SendCutSend lines are estimates from the real v5 quote, until a live v16 quote is pulled in Chromium.", "",
+     "SendCutSend flat parts: live guest-cart prices, 2026-11-25 (cart $1,661.45 for 20 lines, free US shipping, ships Dec 4). Bent body halves and lid: SCS offered only CNC for the bent STEPs, so they stay scaled from the v5 quote.", "",
      "## SendCutSend parts", "| Part | Qty | Each | Total | Basis | |", "|---|---|---|---|---|---|"]
 ts = 0
 for p, q, e, b, c in scs:
@@ -69,8 +68,13 @@ for p, e, s, c in other:
     to += e; L.append(f"| {p} | {e:.2f} | {s} | {c} |")
 tot = ts + tc + to
 L += ["", f"## Total ≈ **${tot:,.0f}** (SCS {ts:,.0f} = {100*ts/tot:.0f} %, catalog {tc:,.0f}, other {to:,.0f})", "",
-      "Biggest levers:",
-      f"- **The two hole-grid end plates:** ${256.74+299.48:.0f} together ({100*(256.74+299.48)/tot:.0f} % of the pack). v5 found 5052 .125 about 33 % cheaper than 6061 .187.",
-      "- **Body halves and lid in gloss red:** ≈ $430."]
+      "## Findings from the live SCS pass",
+      "- ⚠️ **SCS has G10 .063 and .125 out of stock** (only .187 / .250 / .375 / .500). tray1, tray2, g10_plate, cheeks, g10_top and the 9 spacers were quoted at .187. That changes the stack heights (+1.6 mm per .125 part, +3.1 mm per .063 part; +28 mm over the 9 spacers) and must be resolved before ordering.",
+      f"- **g10_top + 9 spacers at .187 cost ${213.07+257.04:.0f}.** v5 substituted Mylar .010 for these (≈ ${14.31+9*3.88:.0f}): the biggest lever in the SCS order.",
+      f"- **End plates:** ${2*266.17:.0f} for the two hole-grid plates ({100*2*266.17/tot:.0f} % of the pack). v5 found 5052 .125 about 33 % cheaper than 6061 .187.",
+      "- **module_endplates_1/2** are priced as two separate parts ($162). If the two files are made identical they become one part at qty 2, which SCS discounts (bus_A went $33.91 → $25.47 each at qty 3).",
+      "- ⚠️ **bus_pack_pos / bus_pack_neg are not one bendable part as modelled** (collector + riser + flange fused from boxes). Priced as flat blanks; the real part needs a redesign into a bend-legal flat pattern (Cu .187 min flange and radius from SCS).",
+      "- Bending, tapping and powder coat on the flat parts were not added; the bent-part prices include them from v5.",
+      ]
 open("docs/v16-bom.md", "w").write("\n".join(L) + "\n")
 print(f"SCS {ts:.0f}  catalog {tc:.0f}  other {to:.0f}  total {tot:.0f}")
