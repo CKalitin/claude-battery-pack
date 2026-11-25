@@ -154,14 +154,16 @@ class Concept:
         for a, b in itertools.combinations(self.parts, 2):
             if self.allowed(a, b) or not bb_overlap(bbs[a], bbs[b]):
                 continue
-            v = (self.parts[a] & self.parts[b]).volume
+            x = self.parts[a] & self.parts[b]
+            v = x.volume if x is not None else 0.0
             if v > 0.5:
                 bad.append((a, b, round(v, 1)))
         for a in self.parts:
             for b in C:
                 if self.allowed(a, b) or not bb_overlap(bbs[a], cbb[b]):
                     continue
-                v = (self.parts[a] & C[b]).volume
+                x = self.parts[a] & C[b]
+                v = x.volume if x is not None else 0.0
                 if v > 0.5:
                     bad.append((a, b, round(v, 1)))
         res["interferences"] = bad

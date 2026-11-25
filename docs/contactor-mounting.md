@@ -239,7 +239,7 @@ Model: `cad/concepts/contactor/lib.py` (`bs_block`, `bs_cap`, `lug90`, `stud_sta
 - **T8. Two studs in a row, cables leaving along that row: the far lug hits the near stud.** In C1 ±y is blocked by the wall (7 mm rule) and the contactor. Use 90° lugs (barrel up), one pointing −x, one +x. Buy: Del City 929605 (6 AWG, 5/16", ~$2.55 ea, min 5) and Zoro MAX 5950-050EL (8 AWG, 90°, $14.29 per 50), checked 2026-11-24.
 - **T9. ALLOW-list wildcard `("hw_","")` hid a real clash.** The M10 bolt head under the + flange at (144, −33.5) overlaps the + riser at x 138–142.76. Fix: move the riser to x 124 and enlarge the flange to x 124–152.
 
-**Fit in C1 (worked out, not yet applied to `c1_power_module.py`)**
+**Fit in C1 (applied to `c1_power_module.py` 2026-11-24; all 3 variants: 0 interferences, + to − 10.4 mm (5191 strap to shunt bar), pack to chassis 7.3 mm, + path 306 mm with 59 mm climb / 30 mm drop, 7 joints)**
 - **Contactor:** −11 mm in y (CY 41.2 → 30.2).
 - **2151:** along x at y 76, M10 hole at (70.7, 76) on a load-bar branch x 62.7–88.7, y 43.2–86. Fuses land at x 105/131 beside the contactor. Metal to the +y wall 7.4 mm.
 - **Load bar near the SB175:** must stay y ≥ 42.4 to keep 10 mm to the − tab.
@@ -251,4 +251,9 @@ Model: `cad/concepts/contactor/lib.py` (`bs_block`, `bs_cap`, `lug90`, `stud_sta
 - ⚠️ MRBF contact-face sizes.
 - ⚠️ 90° lug dims.
 - ⚠️ SendCutSend copper bend for the Z-strap.
-- Apply the C1 changes above and re-run the checks.
+- Shown below: `c1_module_gv14up_iso.jpg`, `c1_module_gv14up_top.jpg`. The ALLOW wildcard `("hw_","")` is replaced by explicit pairs; that exposed and fixed a carriage head vs standoff clash (standoff (58,−56) → (58,−20)).
+- §6 figures (sections, levels, profile) predate this change; regenerate them.
+- The − leads for the charger and inverter are not placed yet.
+
+![C1 with real fuse blocks](img/contactor/c1_module_gv14up_iso.jpg)
+![C1 top](img/contactor/c1_module_gv14up_top.jpg)

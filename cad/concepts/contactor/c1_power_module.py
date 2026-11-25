@@ -25,13 +25,15 @@ def build(variant="gv14"):
     for i, (x, y) in enumerate((sbn, sbp)):
         c.add(f"hw_stud_sb_{i}", cyl_z(x, y, Zp0 - 3.175 - 7.0, z_bus, 3.175))             # 180BBS 1/4-20 stud
         c.add(f"hw_locknut_sb_{i}", cyl_z(x, y, Zp0 - 3.175 - 5.6, Zp0 - 3.175, 6.4))     # 110G56 lock nut
-    for i, (x, y) in enumerate(((144.0, -33.5), (144.0, -1.0), (SBX, sh_y1 - 68.5 if False else -54.5))):
-        c.add(f"hw_carriage_{i}", cyl_z(x, y, Zp0 - 4.5, Zp1 + 22.0, 4.0))                 # M8 carriage bolt, square neck in a square hole
-        c.add(f"hw_carriage_head_{i}", cyl_z(x, y, Zp0 - 4.5 - 4.6, Zp0 - 4.5 + 0.01, 10.0))
+    # carriage bolts (square neck in a square hole), heads under the copper; M10 for the MRBF blocks, M8 elsewhere
+    for i, (x, y, r, rh, top) in enumerate(((144.0, -33.5, 5.0, 12.5, Zp1 + 15.0), (SBX, -54.5, 4.0, 10.0, Zp1 + 22.0),
+                                            (109.6, -9.5, 4.0, 10.0, Zp1 + 3.175 + 13.0), (70.7, 76.0, 5.0, 12.5, Zp1 + 15.0))):
+        c.add(f"hw_carriage_{i}", cyl_z(x, y, Zp0 - 4.5, top, r))
+        c.add(f"hw_carriage_head_{i}", cyl_z(x, y, Zp0 - 4.5 - 5.6, Zp0 - 4.5 + 0.01, rh))
     for i, x0 in enumerate((SBX - 12.7 - 3.2, SBX + 12.7)):        # G10 cheeks bolted through the housing's two mounting holes
         c.add(f"g10_sb_cheek_{i}", box(x0, x0 + 3.2, SBY - 22, SBY + 22, Zp1, Zp1 + 52), "ins")
     # ---------- switch ----------
-    CX, CY = 120.0, 41.2
+    CX, CY = 120.0, 30.2                 # -11 mm in y vs 2026-11-23: makes room for the 2151 along the +y wall
     if variant == "gv14":
         ct, (t1, t2) = gv14_pcb(CX, CY, Zp1, axis="y", flip=True)
         c.add("contactor_gv14_pcb", ct)
@@ -55,17 +57,40 @@ def build(variant="gv14"):
     # ---------- + path ----------
     # P4 collector -> vertical riser at the +x end -> flange at the module copper plane (in a plate notch)
     pc = pack_pos_collector()
-    pc += box(138.0, 142.76, -46.0, -21.0, Z0, Zp1)                    # riser (x 138: >= 10 mm from the upper standoff)
-    pc += box(136.0, 152.0, -46.0, -21.0, Zp0, Zp1)                     # flange, top flush with the module copper
+    pc += box(124.0, 128.76, -46.0, -21.0, Z0, Zp1)                    # riser (moved from x 138: the M10 head under the flange hit it)
+    pc += box(124.0, 152.0, -46.0, -21.0, Zp0, Zp1)                     # flange = 5191 seat, top flush with the module copper
     c.add("bus_pack_pos", pc, "pos")
-    inb = box(136.0, 152.0, -9.0, t1[1] + 8.0, Zp0, Zp1) + box(t1[0] - 8.0, 152.0, t1[1] - 8.0, t1[1] + 8.0, Zp0, Zp1)
+    inb = box(101.6, t1[0] + 8.0, t1[1] - 8.0, t1[1] + 8.0, Zp0, Zp1) + box(101.6, 117.6, -15.0, t1[1] - 8.0, Zp0, Zp1)
     c.add("bus_mod_in", inb, "pos")                                       # flat-cut L: no bends
-    c.add("mrbf_main", mrbf_link((144.0, -33.5), (144.0, -1.0), Zp1), "pos")
-    ld = box(SBX - 8.0, t2[0] + 8.0, t2[1] - 8.0, t2[1] + 8.0, Zp0, Zp1)  # load bar: T2 -> SB+ (straight)
-    ld += box(SBX - 8.0, SBX + 8.0, sbp[1] - 8.0, t2[1] + 8.0, Zp0, Zp1)
-    ld += box(78.0, 100.0, t2[1] + 8.0, 84.0, Zp0, Zp1)                  # branch tab for the converter fuses
+    # main fuse: Blue Sea 5191 on the M10 stud in the + flange, pointing -x; MRBF 250 A on it. Output is the fuse TOP,
+    # so a Z-strap (1/8 in copper, 22 wide, 2 bends) brings it back down to the in-bar. Strap = last part in = service disconnect.
+    mp, mst, mzt = bs_block("5191", 144.0, -33.5, Zp1, d=(-1, 0), prefix="bs5191")
+    for n, (sh, r) in mp.items():
+        c.add(n, sh, r)
+    c.add("hw_m10nut_main", cyl_z(144.0, -33.5, Zp1 + 2.5, Zp1 + 10.5, 9.25) - cyl_z(144.0, -33.5, Zp1, Zp1 + 12, 5.0))
+    sx, sy = mst[0]
+    zs1 = mzt + 3.175
+    st = box(sx - 8, sx + 11, -44.5, -10.8, mzt, zs1) + box(sx - 8, sx + 11, -14.0, -10.8, Zp1, zs1) + box(sx - 8, sx + 11, -14.0, -2.0, Zp1, Zp1 + 3.175)   # x >= 101.6: 10.9 mm to the - stud area
+    st -= cyl_z(sx, sy, mzt - 1, zs1 + 1, 4.3) + cyl_z(sx, -9.5, Zp1 - 1, Zp1 + 4.2, 4.3)
+    c.add("strap_main", st, "pos")
+    c.add("hw_nut_main", stud_stack(sx, sy, zs1) - cyl_z(sx, sy, zs1 - 1, zs1 + 10, 4.0))
+    c.add("hw_nut_strapfoot", stud_stack(sx, -9.5, Zp1 + 3.175) - cyl_z(sx, -9.5, Zp1, Zp1 + 14, 4.0))
+    ld = box(88.7, t2[0] + 8.0, t2[1] - 8.0, t2[1] + 8.0, Zp0, Zp1)      # load bar from T2 (x >= 88.7: 10 mm to the - tab corner)
+    ld += box(SBX - 8.0, 88.7, 43.2, 86.0, Zp0, Zp1)                       # SB+ pad + branch to the 2151 (y >= 43.2: 10.8 mm to the - tab)
     c.add("bus_mod_load", ld, "pos")
-    c.add("mrbf_branch_dual", box(77.0, 101.0, 72.0, 92.0, Zp1, Zp1 + 20.0))   # Blue Sea 2151 dual MRBF block UNCONFIRMED size
+    # Blue Sea 2151 dual MRBF on the M10 stud in the branch, along +x by the +y wall; fuses land beside the contactor
+    bp, bst, bzt = bs_block("2151", 70.7, 76.0, Zp1, d=(1, 0), prefix="bs2151")
+    for n, (sh, r) in bp.items():
+        c.add(n, sh, r)
+    c.add("hw_m10nut_2151", cyl_z(70.7, 76.0, Zp1 + 2.5, Zp1 + 10.5, 9.25) - cyl_z(70.7, 76.0, Zp1, Zp1 + 12, 5.0))
+    for (x, y), d, nm, rc, route in zip(bst, ((-1, 0), (1, 0)), ("charger", "inverter"), (3.4, 4.0),
+                                        (lambda p: [p, (p[0], p[1], 298.0), (40.0, p[1], 298.0)],
+                                         lambda p: [p, (p[0], p[1], 306.0), (p[0], 80.0, 308.0), (40.0, 80.0, 308.0)])):
+        lug, top = lug90(x, y, bzt, d=d)
+        c.add(f"lug_{nm}", lug - cyl_z(x, y, bzt - 1, bzt + 3, 4.0), "pos")
+        c.add(f"hw_nut_{nm}", stud_stack(x, y, bzt + 1.8) - cyl_z(x, y, bzt, bzt + 12, 4.0))
+        c.add(f"cable_{nm}", tube(route(top), rc))
+    c.add("cap_2151", bs_cap("2151", 70.7, 76.0, Zp1, d=(1, 0)))
     # ---------- - path ----------
     nb = pack_neg_band(80.0)
     nb += box(62.0, 80.0, -66.0, -61.24, Z0, Zp1)                       # riser in the band corridor
@@ -79,12 +104,12 @@ def build(variant="gv14"):
     c.add("bus_mod_neg", tab, "neg")
     # ---------- G10 plate (the 'PCB') + standoffs, tray 1 ----------
     pl = box(54.0, 150.0, -64.0, 88.0, Zp0 - 3.175, Zp0)
-    pl -= box(133.0, 151.0, -48.0, -19.0, 200, 300)                       # notch for the + riser flange
+    pl -= box(121.0, 151.0, -48.0, -19.0, 200, 300)                       # notch for the + riser flange
     pl -= box(60.0, 82.0, -65.0, -31.5, 200, 300)                         # notch for the - riser flange
     c.add("g10_plate", pl, "ins")
-    for i, (x, y) in enumerate(((58, -56), (146, -12), (58, 82), (146, 82), (100, -56))):
+    for i, (x, y) in enumerate(((58, -20), (146, -12), (58, 60), (146, 82), (100, -56))):
         c.add(f"standoff_{i}", cyl_z(x, y, Z_TRAY_TOP, Zp0 - 3.175, 4.0), "ins")
-    c.add("tray1", tray1(cuts=((136.0, 164.0, -48.0, -19.0), (60.0, 82.0, -89.0, -59.0))), "ins")
+    c.add("tray1", tray1(cuts=((122.0, 164.0, -48.0, -19.0), (60.0, 82.0, -89.0, -59.0))), "ins")
     # ---------- allow-list ----------
     c.allow += TRAY_ALLOW + [("standoff", "tray1"), ("standoff", "g10_plate"), ("g10_plate", "bus_mod"), ("g10_plate", "shunt"),
                              ("bus_mod", "contactor"), ("nut_m8", "g10_plate"), ("nut_m8", "bus_mod"), ("bus_mod", "fet"), ("bus_mod", "sb175"), ("bus_mod", "mrbf"), ("bus_pack_pos", "mrbf_main"),
@@ -92,22 +117,31 @@ def build(variant="gv14"):
                              ("g10_sb_cheek", "sb175_housing"), ("g10_sb_cheek", "g10_plate"), ("g10_sb_cheek", "bus_mod"), ("mrbf_branch", "bus_mod_load"),
                              ("sb175_housing", "lid"), ("bus_pack", "g10_top"), ("bus_pack", "flex_ccs"), ("bus_pack", "screws_term"),
                              ("bus_pack", "cell_"), ("bus_pack", "screws_tap"), ("bus_pack", "tray1"), ("fet_", "fet_"), ("sb175", "bus_mod"), ("contactor", "g10_plate"),
-                             ("bus_pack_pos", "bus_mod_in"), ("hw_", "")]
+                             ("bus_pack_pos", "bus_mod_in"), ("bs2151_", "bs2151_"), ("bs5191_", "bs5191_"), ("bs2151_strap", "bus_mod_load"),
+                             ("bs2151_body", "bus_mod_load"), ("bs5191_strap", "bus_pack_pos"), ("bs5191_body", "bus_pack_pos"),
+                             ("hw_m10nut", "bs"), ("hw_carriage", "bus_"), ("hw_carriage", "g10_plate"), ("hw_carriage", "bs"),
+                             ("hw_carriage", "hw_m10nut"), ("hw_carriage", "strap_main"), ("hw_carriage", "hw_nut_strapfoot"),
+                             ("hw_carriage", "shunt_bar"), ("hw_stud", "bus_mod"), ("hw_stud", "g10_plate"), ("hw_stud", "contactor"),
+                             ("hw_stud", "sb175"), ("hw_stud", "nut_m8"), ("hw_locknut", "g10_plate"), ("hw_locknut", "hw_stud"),
+                             ("hw_nut", "bs"), ("hw_nut", "lug_"), ("hw_nut", "strap_main"), ("lug_", "bs2151"),
+                             ("strap_main", "bs5191"), ("strap_main", "bus_mod_in"), ("cable_", "lug_"), ("cap_", ""), ("hw_carriage", "hw_carriage")]
     # ---------- current paths (centre lines) and joint/bend counts ----------
     zcol = (Z0 + Z1) / 2
-    c.paths["pos"] = [(134.0, -33.5, zcol), (140.4, -33.5, zcol), (140.4, -33.5, zc), (144.0, -33.5, zc), (144.0, -1.0, zc),
-                      (144.0, t1[1], zc), (t1[0], t1[1], zc), (t2[0], t2[1], zc), (SBX, t2[1], zc), (SBX, sbp[1], zc)]
+    c.paths["pos"] = [(100.0, -33.5, zcol), (126.4, -33.5, zcol), (126.4, -33.5, zc), (144.0, -33.5, zc), (144.0, -33.5, Zp1 + 1.25),
+                      (123.25, -33.5, Zp1 + 1.25), (123.25, -33.5, Zp1 + 9.75), (sx + 8.0, -33.5, Zp1 + 9.75), (sx + 8.0, -33.5, mzt + 1.6),
+                      (sx, -12.4, mzt + 1.6), (sx, -12.4, zc), (sx, -8.0, zc), (sx, t1[1], zc), (t1[0], t1[1], zc), (t2[0], t2[1], zc),
+                      (SBX, t2[1], zc), (SBX, sbp[1], zc)]
     c.paths["neg"] = neg_band_path(71.0, -63.6) + [(71.0, -63.6, zc), (71.0, sh_y1 - 68.5, zc), (71.0, sh_y1 - 15.0, zc),
                       (SBX, sbn[1], zc)]
-    c.joints = {"pos (after cell collector)": "MRBF in, MRBF out, T1, T2, SB+ = 5", "neg (after band)": "shunt A, shunt B, SB- = 3"}
-    c.bends = {"pos": "2 (riser) + 0 in the module (flat-cut L)", "neg": "2 (band riser) + 0 in the module"}
+    c.joints = {"pos (after cell collector)": "5191 tab (M10), fuse bottom, fuse top, strap foot, T1, T2, SB+ = 7", "neg (after band)": "shunt A, shunt B, SB- = 3"}
+    c.bends = {"pos": "2 (riser) + 2 (Z-strap) + 0 in the plane bars", "neg": "2 (band riser) + 0 in the module"}
     c.notes += ["Module copper in one plane z 235.1-238.3; contactor/SB terminals face down onto it",
                 "Module assembled upside-down on the bench; installs top-down; 2 bolts + MRBF join it to the pack",
-                "MRBF bridges + riser and module: installed last = service disconnect",
+                "Main MRBF on a 5191 on the + flange; Z-strap fuse top -> in-bar is installed last = service disconnect",
                 "Lid hole moves to the SB175 (x 58-83, y 10-66); v15 hole at x 89-116 must be re-cut"]
     c.labels = [("contactor_gv14_pcb", "Gigavac GV14 PCB-mount (terminals down)"), ("contactor_gv141", "Gigavac GV141BAX, upside-down"), ("hw_stud_ct", "Contactor M8 stud"), ("nut_m8", "M8 nut under the plate"), ("hw_stud_sb", "SB175 contact stud 1/4-20"), ("hw_locknut", "Lock nut under the plate"), ("hw_carriage_head", "Carriage bolt head"), ("hw_carriage_", "M8 carriage bolt"), ("fet_board", "FET switch board"),
-                ("sb175_housing", "SB175, busbar contacts, facing up"), ("mrbf_main", "MRBF 250 A = service disconnect"),
-                ("mrbf_branch", "Dual MRBF: charger, inverter"), ("shunt_module", "Tesla shunt (flat)"), ("g10_plate", "G10 module plate"),
+                ("sb175_housing", "SB175, busbar contacts, facing up"), ("bs5191_fuse", "MRBF 250 A on 5191 block"), ("strap_main", "Z-strap = service disconnect"),
+                ("bs2151_fuse_0", "MRBF 30 A (charger)"), ("bs2151_fuse_1", "MRBF 50 A (inverter)"), ("bs2151_body", "Blue Sea 2151"), ("lug_", "90° lug"), ("cable_charger", "to charger"), ("cable_inverter", "to inverter"), ("shunt_module", "Tesla shunt (flat)"), ("g10_plate", "G10 module plate"),
                 ("bus_pack_pos", "+ riser from cells 7-8"), ("bus_pack_neg", "- band + riser"), ("bus_mod_load", "+ load bar"),
                 ("bus_mod_in", "+ in-bar"), ("bus_mod_neg", "- tab to SB175"), ("tray1", "G10 tray 1"), ("charger", "Charger"),
                 ("g10_sb_cheek", "G10 cheeks (SB175 mount)"), ("path_pos", "+ current path"), ("path_neg", "- current path")]
