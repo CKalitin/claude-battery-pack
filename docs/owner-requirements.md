@@ -78,3 +78,4 @@
 - **Cooling / rear-plate hole spacing at the inverter fan: iterate after the option D CAD** (Chris, 2026-11-27). Options on the table: Ø6.5 holes in front of the 40 mm fan + charge-pause thermostat; blanking sheet; second fan (converters.md §4).
 - Control board schematic: a separate agent, later.
 - Await Zep's answer to the one-round, both-boards ask (sent 2026-11-27).
+- **Next email to Zep (NextPCB): ask whether the sponsorship can also cover the wire harnesses** (≈ 5 assemblies; their cable-assembly tool lists $99 per design; docs/harnesses.md). (Chris, 2026-11-27)
