@@ -1,6 +1,6 @@
 # Handoff for the next Claude
 
-Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v16.2** (C1 power module, Blue Sea 5191/2151 fuse blocks, pack 424 mm inside with AC at the rear; v16.1 adds the modelled signal wiring, the top-down assembly proof and the cooling re-run; v16.2 makes the pack busbars bend-legal Zs, D28). See `versions/v16-c1-power-module/README.md`, `docs/v16-decisions.md` (D1–D27), `docs/v16-calcs.txt`, `docs/signal-wiring.md`, `docs/cooling.md`, `docs/v16-assembly-check.txt`, `docs/contactor-mounting.md`.
+Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v16.3** (C1 power module, Blue Sea 5191/2151 fuse blocks, pack 424 mm inside with AC at the rear; v16.1 adds the modelled signal wiring, the top-down assembly proof and the cooling re-run; v16.2 makes the pack busbars bend-legal Zs, D28; v16.3: Mylar insulators, SCS ≈ $1,825 under the $2,000 sponsorship cap, coil leads, structure check — docs/structure.md). See `versions/v16-c1-power-module/README.md`, `docs/v16-decisions.md` (D1–D35), `docs/v16-calcs.txt`, `docs/signal-wiring.md`, `docs/cooling.md`, `docs/v16-assembly-check.txt`, `docs/contactor-mounting.md`.
 
 ## Read first
 1. `docs/v14-baseline.md`: one-page spec.
@@ -11,6 +11,8 @@ Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery
 5. `cad/tower15.py` (shell, converters, terminals) + `cad/concepts/contactor/c1_power_module.py` (power bay, its own checks incl. fuse lift-out) + `cad/run_v16.py` (merged STEP); `cad/run_tower15.py` + `cad/clearance_v15.py`: the model, interference check and clearance check. `versions/v15-concept-d/`: renders and STEP. (`tower14.py` is the previous version.)
 
 ## Working rules (from the owner)
+- **SendCutSend order must stay under $2,000 USD** (sponsorship). Re-total `cad/bom_v16.py` after any SCS part change.
+- Bent SCS parts are quoted from DXF flats with bend lines (`cad/flats15.py`), never from unioned-box STEPs.
 - Never add a part without need. The best part is no part.
 - Every fabricated part comes from SendCutSend or a catalog. No parts that need emailing a vendor. No sketchy datasheets. Give buy links.
 - Busbars on top.
@@ -66,7 +68,6 @@ Where it goes: a subsystem gets its own `docs/<topic>.md` (as `cells.md` and `te
 - **BQ76952:** chosen in early versions with no recorded comparison.
 - **Enclosure material and Roadster-red powder coat:** no rationale or SendCutSend finish options recorded.
 - **Service bays (`v14-design-notes.md` §12):** only option 2, the chosen one, is written up. Options 1 and 3, and the diagrams of them, aren't in the repo.
-- **Cell burst rating (3C / 30 s):** comes from a reseller page; the 500 A rating depends on it (`cells.md` T4).
 - **Budget (README):** prices undated and unsourced, and it predates v14.
 - **Full Battery:** named as the vendor in v07–v13 with no reason given.
 
@@ -92,15 +93,17 @@ Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders i
 
 ## Open items (v16.1)
 - ⚠️ **Inverter at 400 W continuous isn't proven**: the pack fan gives it 0.2–0.6× MEAN WELL's forced-air condition (docs/cooling.md). Bench test; then rear blanking sheet or the MEAN WELL 4020 fan.
-- ⚠️ NPB-450 DF11 pinout; GV141BAX coil-lead exit; Tesla J1 part number and strip end (docs/signal-wiring.md §7). NTS-400P terminal side confirmed from MEAN WELL's photo (TB1 at +y).
+- ⚠️ Tesla J1 part number and strip end (docs/signal-wiring.md §7). NPB-450 DF11 pinout and GV141BAX coil exit closed 2026-11-27.
+- ⚠️ **EOL swelling ≤ 30 kN (EVE rev E T17) vs M5 rods' 25.6 kN proof** (docs/structure.md §4): M6 A4-80 rods proposed, not done.
+- ⚠️ 4020 inverter fan doesn't fit (35.8 mm under the lid, docs/cooling.md option C). NTS-400P terminal side confirmed from MEAN WELL's photo (TB1 at +y).
 - Pack busbars are bend-legal Zs since v16.2 (D28) but still priced as v16.1 flat .187 blanks ⚠️ re-quote bent; ⚠️ 14 mm band neck under the − riser (4.9 A/mm²). G10 .063/.125 out of stock at SCS (docs/v16-bom.md).
 
 ## Open items (v14)
-- ⚠️ **LF105 burst rating (3C / 30 s) comes from a reseller page only.** The 500 A rating depends on it. Find EVE's own pulse-discharge row (`cells.md` T4).
+- ✓ LF105 3C / 30 s burst: EVE rev E Tables 2, 13 (cells.md T4 closed); firmware derates by SOC/temperature.
 - ⚠️ Which end the MEAN WELL NPB-450 / NTS-400P connectors are on. If the charger's AC inlet is on its −y half, flip the unit: only 12.5 mm to the risers there.
 - ⚠️ True dims for the EV200, the JJN-500 blades and the MRBFs; LF105 terminal thread.
 - ⚠️ SendCutSend bend rules for COP-187/250 copper. Lid slot hole-to-bend distance (2.4 mm).
 - ⚠️ Shunt: bolt thread, connector part number, resistance characterization (deferred).
 - Control board area is tight (4-layer). Schematic not started.
-- Charger-wake behaviour deferred (button-only wake for now).
+- Charger wake: button only (owner decision D33).
 - Later: ESP32-hosted telemetry dashboard (`docs/telemetry-ideas.md`); re-estimate the budget; blog notes (`docs/blog-notes.md`).

@@ -1,0 +1,35 @@
+Pack mass ≈ 26.7 kg; through the module hold-down screws: 22.2 kg = 217 N
+Supports (plates) x -247.0 / 177.0 (span 424.0); module screw lines x -151.9 / 151.9
+Body U section (lid not counted): A 1257 mm², neutral axis z 121.5, I 12.83e6 mm⁴, wall top z 307.4
+
+[standing / carried, 1 g] P = 109 N per screw line; reactions rear 91 N / front 127 N
+  M_max 8.6 N·m; σ wall top 0.12 MPa (compression when standing); σ floor 0.08 MPa; τ walls 0.14 MPa
+  wall plate 287 x 1.6001999999999998 mm: σ_cr (bending) 48.2 MPa -> margin 386x; τ_cr 10.8 MPa -> 77x
+  floor flat 149 x 1.6001999999999998 mm (if it were in compression, carrying the pack upside down): σ_cr 29.93 MPa -> 366.6x
+  5052-H32 yield 193 MPa -> bending margin 1544x
+
+[carried, dropped onto the feet: 5 g] P = 543 N per screw line; reactions rear 454 N / front 633 N
+  M_max 43.1 N·m; σ wall top 0.62 MPa (compression when standing); σ floor 0.41 MPa; τ walls 0.70 MPa
+  wall plate 287 x 1.6001999999999998 mm: σ_cr (bending) 48.2 MPa -> margin 77x; τ_cr 10.8 MPa -> 15x
+  floor flat 149 x 1.6001999999999998 mm (if it were in compression, carrying the pack upside down): σ_cr 29.93 MPa -> 73.3x
+  5052-H32 yield 193 MPa -> bending margin 309x
+
+[Screws, 5 g drop]
+  module hold-down: 4 x M4 carry 1087 N in tension -> 272 N each; floor pull-through (Ø7 head) ≈ 4814 N -> 17.7x
+    M4 8.8: proof 8.8 mm² x 600 MPa ≈ 5268 N -> 19.4x
+  plate -> wall tabs: 7 x M4 per end in single shear, 78 N each; bearing in 1.6 mm 5052 ≈ 4 x 1.6 x 2 x 193 = 2470 N -> 31.8x
+
+[Compression members]
+  Tie rods (4 x M5 A2-70): tension only. The cells push the end plates apart; a tension member cannot buckle.
+  Cells + 9 Mylar insulators: the only parts in compression, 130.3 x 195.5 mm faces bearing on each other -> no slenderness, no buckling.
+  Upper standoffs (M4, 15 mm, hex 7): carry tray 1 + converters + power bay down into the end plates.
+    5 g: 57 N each; Euler (K = 2, Al) 104 kN -> 1833x; σ 1.7 MPa
+
+[EVE LF105 rev E (PBRI-LF105-D06-01 E, 2023-05-31), Tables 16-17]
+  Recommended compression 3000-7000 N, instantaneous max 10000 N; swelling force BOL ≤ 3000 N, EOL (80 % SOH) ≤ 30000 N (rigid fixture)
+  F   2.9 kN: rod σ    52 MPa (OK vs 450 proof, 8.69x); end-plate deflection ≈ 0.08 mm (v13 FE, linear)
+  F   7.0 kN: rod σ   123 MPa (OK vs 450 proof, 3.65x); end-plate deflection ≈ 0.19 mm (v13 FE, linear)
+  F  10.0 kN: rod σ   176 MPa (OK vs 450 proof, 2.56x); end-plate deflection ≈ 0.27 mm (v13 FE, linear)
+  F  30.0 kN: rod σ   528 MPa (YIELDS vs 450 proof, 0.85x); end-plate deflection ≈ 0.80 mm (v13 FE, linear)
+  frame stiffness: rods 33.9 kN/mm, two end plates 18.9 kN/mm, series 12.1 kN/mm
+  rods reach proof at 25.6 kN = 1.87 mm of stack growth past the 2.94 kN preload (0.64 % of 8 x 36.7 mm)

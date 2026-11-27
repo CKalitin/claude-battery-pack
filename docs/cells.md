@@ -62,7 +62,7 @@ These weren't compared at the time. That is a documentation gap, recorded here s
 | 130.3 × 36.7 × 200.5 mm | CAD | EVE spec F, NKON listing | ✓ |
 | ≤ 0.5 mΩ AC IR (0.32 mΩ measured on new cells) | Short-circuit current (5.0–6.9 kA), fuse AIC | EVE spec F, NKON reviews | ✓ |
 | 1C continuous | 210 A continuous (4S2P) | EVE spec F, resellers | ✓ |
-| **3C for 30 s** | **The whole 500 A / 30 s rating** | 18650batterystore listing: it says "1C/3C" for 30 s and doesn't say whether that means charge or discharge | ⚠️ **Weak.** Several resellers (NKON, Fogstar, Battery Junction) list only "max discharge 1C". Get the EVE spec's own pulse-discharge row before baselining 500 A. |
+| **3C for 30 s** | **The whole 500 A / 30 s rating** | **EVE PBRI-LF105-D06-01 rev E (2023-05-31), Table 2:** "Maximum Instantaneous Discharging Current 3C 30 s, ≥ 30 % SOC, 25 ℃"; **Table 13** (30 s pulse MAP): 3C at 25–60 ℃ from 30 % SOC, 2.82C at 20 ℃, 2.18C at 0 ℃, 1.5C at 20 % SOC, 0.75C at 10 % SOC. Spec F (LF105-73103) agrees: "Pulse charge/discharge 1C/3C (30 s)". Copies read 2026-11-27 at static.ticimax.cloud (rev E) and microcharge.de (rev F) ✓ | ✓ for 2 × 315 A = 630 A ≥ 500 A at ≥ 30 % SOC and ≥ 20 ℃. **Firmware must derate the burst by the Table 13 MAP:** 500 A needs ≥ 2.38C per cell, so ≥ 30 % SOC and ≥ 10 ℃ (2.43C). Below that, cap at 2 × 105 × C_MAP(T, SOC) |
 | Charge 0–55 °C | Low-temperature charge inhibit (M3) | EVE spec F | ✓ |
 | Poles: internal M4, 6 mm effective depth | Terminal screws M4 × 8 | EVE spec rev B | ⚠️ Resellers say M6. Check on the first cell. |
 | 300 kgf clamping fixture in EVE cycle tests | Tie-rod preload (736 N per rod) | EVE spec F | ✓ |
@@ -105,7 +105,7 @@ Plan of record: order from a US reseller, ship to a parcel depot in Blaine, WA, 
 | T1 | Cell geometry sets the box | v05→v07: the box width was set by the cell width, and no orientation trick fixed it | Choose the cell from the required envelope, not the other way round |
 | T2 | **Silent carry-over of cell-specific numbers** | The tie-rod heights for the 118.5 mm LF100MA were carried through 7 versions onto the 195.5 mm LF105. End-plate deflection was 0.655 mm, against 0.078 mm with the corrected layout (v13) | When the cell changes, re-derive everything that depends on its dimensions (rods, plates, spacers, straps, flex) |
 | T3 | Terminal thread conflict | EVE rev B says M4; resellers say M6 | 6.6 mm busbar holes fit both. Confirm on the first cell. Torque ≤ 2 N·m for M4 |
-| T4 | Burst rating comes from a reseller | The 500 A spec rests on "3C / 30 s" from a reseller page | ⚠️ Find it in the EVE spec. Otherwise derate to what EVE states |
+| T4 | Burst rating came from a reseller | The 500 A spec rested on "3C / 30 s" from a reseller page | ✓ Closed 2026-11-27: EVE rev E Table 2 and Table 13 (above). Rule: cite the EVE table, and derate by SOC and temperature in firmware |
 | T5 | "Grade A" can't be verified from a listing | Resellers relabel B-grade cells; the cell QR code gives the production date and line | Scan every QR code. Reject date codes older than about 12 months. Ask for the vendor's test report |
 | T6 | Parallel pairs hide a bad cell | The BQ76952 sees pairs, not cells. A 10 % IR mismatch at 630 A puts 3.14C on one cell | Same date code. Pair cells by 1 kHz AC IR. Voltage-match at 3.65 V before bolting (τ ≈ 36 min, 100 A inrush per 0.1 V) |
 | T7 | Clamping | EVE rates cycle life with a 300 kgf fixture | End plates + 4 × M5 rods at 736 N each; assemble at 30–40 % SOC |
@@ -122,7 +122,8 @@ Plan of record: order from a US reseller, ship to a parcel depot in Blaine, WA, 
 6. Run a capacity test on at least 2 cells at 0.5C ⚠️ (rig not designed yet). Also check the burst current on one pair if T4 is still open.
 
 ## 8. Open items
-- ⚠️ T4: EVE's own pulse-discharge rating.
+- ✓ T4 closed (EVE rev E Tables 2, 13). New: firmware burst limit follows the Table 13 MAP (≥ 30 % SOC, ≥ 10 ℃ for 500 A).
+- ⚠️ **EVE rev E Table 17: EOL swelling force ≤ 30 kN in a rigid fixture**, 3× the 10 kN the module was sized for (v13). See docs/v16-structure.txt: the M5 rods reach proof at 25.6 kN, after 1.9 mm of stack growth. Table 16: recommended compression 3–7 kN (preload 300 kgf = 2.94 kN is inside it).
 - ⚠️ China surtax status for 8507.60; BC PST on personal imports.
 - ⚠️ Why Full Battery was picked, and its current price; choose the vendor.
 - ⚠️ Re-estimate the budget at today's prices.

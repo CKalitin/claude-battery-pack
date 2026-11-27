@@ -35,12 +35,14 @@ def cyl_y(x, y0, y1, z, r):
 
 # ======================= materials (SCS stock thicknesses) =======================
 T = 0.063 * IN            # 1.600  5052 sheet: body halves, lid, trays
-PT = 0.187 * IN           # 4.750  6061 end plates
+PT = 0.125 * IN           # 3.175  6061 front/rear plates (v16.3: was .187; SCS rear $300.24 -> $232.39, docs/v16-structure.txt: 1 g handle load is 136 N)
 EP_T = 0.313 * IN         # 7.950  6061 module end plates
 G10_FLOOR = 0.187 * IN    # 4.750
 G10_FRAME = 0.187 * IN   # 4.750  (.125 G10 out of stock at SCS, Nov 2026)
-G10_TOP = 0.063 * IN      # 1.600  (LF100 terminals stand only 2.8 mm proud of the can)
-G10_SPACER = 0.063 * IN   # 1.600  cell-to-cell / end insulators
+# v16.3 (2026-11-27): Mylar .010 replaces G10 .063 for the cell-top sheet and the 9 cell insulators (v5 did the same):
+# G10 .063 is out of stock at SCS, and the .187 that is in stock would cost $470 and 1.3 kg more. docs/v16-decisions.md D29.
+G10_TOP = 0.010 * IN      # 0.254  Mylar cell-top sheet (LF105 terminals stand 2.8 mm proud of the can)
+G10_SPACER = 0.010 * IN   # 0.254  Mylar cell-to-cell / end insulators
 CU = 0.125 * IN           # 3.175  copper busbars (series bars)
 CU2 = 0.187 * IN          # 4.750  COP-187 pack straps, line bar, MRBF bar
 CU3 = 0.250 * IN          # 6.350  COP-250 DC output terminal risers
@@ -79,10 +81,11 @@ Z_CBODY = Z_CELL + CELL_BODY                     # can top
 Z_TERM = Z_CELL + CELL_TOT                       # terminal face
 Z_G10TOP = Z_CBODY                               # G10 top plate sits on the cans
 Z_BB = Z_TERM                                    # busbars on terminals
-EP_TOP = Z_CBODY - 10.0                          # 10 mm lower standoff -> top plate underside
+EP_TOP = Z_CBODY - 10.0 + 0.063 * IN              # v16.3: end plates 1.6 mm taller; the 10 mm lower standoff now meets the upper one hex-to-hex
+                                                 # through a clearance hole in the Mylar sheet, so tray 1 stays at z 218.45
 ROD_Z = [6.35 + 0.207 * 185.5, 6.35 + 0.793 * 185.5]   # end plate z 6.35..191.85: two-row optimum (equal hogging/sagging moment)
 SO_UP = 15.0                                     # upper M-F standoff length
-Z_TRAY1 = Z_G10TOP + G10_TOP + SO_UP
+Z_TRAY1 = EP_TOP + 10.0 + SO_UP
 G10_TRAY1 = 0.125 * IN    # 3.175  v15: tray 1 is G10 (no metal plate over any pack copper)
 Z_T1TOP = Z_TRAY1 + G10_TRAY1
 CHG = (205.0, 135.0, 55.0)                       # MEAN WELL NPB-450-12
@@ -94,7 +97,8 @@ W = 190.0                                        # body outer width (v4 width)
 
 # ======================= shell layout =======================
 L_IN = 424.0                                     # 2026-11-24 option A: +42 mm, all at the rear (front plate unchanged):
-REAR_EXTRA = 59.0                                # converters -27 mm (DC lead/plug room in the bay), +15 mm behind them (rear plugs)
+REAR_EXTRA = 59.0 + 9 * (0.063 - 0.010) * IN / 2   # v16.3: + half the 12.1 mm the Mylar stack lost, so XR/XF stay put
+_RE_NOTE = 0                                # converters -27 mm (DC lead/plug room in the bay), +15 mm behind them (rear plugs)
 DX = -(L_IN / 2 - (STACK_L / 2 + 1.0 + 25.0 + REAR_EXTRA))   # rear plate inner face = module rear - 1 mm - fan depth - extra
 XF = L_IN / 2 - DX                               # front plate inner face  (+145)
 XR = -(L_IN / 2 + DX)                            # rear plate inner face   (-165)
@@ -370,7 +374,7 @@ def led_board():
     return _front_panel(XL0, XD0)
 
 def panel_mount():
-    """4 x M3 x 8 standoffs (module front end plate -> LED board) + 4 x M3 button screws through the diffuser."""
+    """4 x M3 F-F standoffs (module front end plate -> LED board; v16.3: 14 mm, was 8, the Mylar stack ends 6 mm further back) + 4 x M3 button screws through the diffuser."""
     xe = ep_x[1] + EP_T / 2
     so, sc = [], []
     for (y, z) in panel_screw_yz():
@@ -409,9 +413,8 @@ def module_endplates():
             c, n = tslot(x, y, Z_CELL, +1); p -= c; nuts.append(n)
         for y in (-SO_Y, SO_Y):
             c, n = tslot(x, y, EP_TOP, -1); p -= c; nuts.append(n)
-        if x > 0:
-            for (yy, zz) in CB_SO_YZ:                       # SCS-tapped M3 in the front end plate face (board standoffs)
-                p -= cyl_x(x + EP_T / 2 - 6.0, x + EP_T / 2 + 1, yy, zz, 1.25)
+        for (yy, zz) in CB_SO_YZ:                           # SCS-tapped M3 (board standoffs on the front plate). v16.3: cut in BOTH
+            p -= cyl_x(x - EP_T / 2 - 1, x + EP_T / 2 + 1, yy, zz, 1.25)   # plates, through, so they are one part at qty 2 ($53.43 vs $81.35 ea)
         eps.append(p)
     return Compound(eps), Compound(nuts)
 
@@ -469,7 +472,7 @@ def g10_top():
         t -= box(x - 6, x + 6, -12, 12, z0 - 1, z0 + G10_TOP + 1)          # vent window (vent between the poles)
     for x in ep_x:
         for y in (-SO_Y, SO_Y):
-            t -= cyl_z(x, y, z0 - 1, z0 + G10_TOP + 1, 2.2)
+            t -= cyl_z(x, y, z0 - 1, z0 + G10_TOP + 1, 4.5)               # v16.3: clears the standoff hex (7 AF, 8.1 across corners)
     return t
 
 def standoffs():
@@ -477,9 +480,9 @@ def standoffs():
     lo, up, stud = [], [], []
     for x in ep_x:
         for y in (-SO_Y, SO_Y):
-            lo.append(Pos(x, y, EP_TOP) * extrude(RegularPolygon(7 / math.sqrt(3), 6), Z_G10TOP - EP_TOP))
+            lo.append(Pos(x, y, EP_TOP) * extrude(RegularPolygon(7 / math.sqrt(3), 6), 10.0))
             stud.append(cyl_z(x, y, EP_TOP - 10.5, EP_TOP, 1.95))
-            up.append(Pos(x, y, Z_G10TOP + G10_TOP) * extrude(RegularPolygon(7 / math.sqrt(3), 6), Z_TRAY1 - Z_G10TOP - G10_TOP)
+            up.append(Pos(x, y, EP_TOP + 10.0) * extrude(RegularPolygon(7 / math.sqrt(3), 6), Z_TRAY1 - EP_TOP - 10.0)
                       + cyl_z(x, y, Z_G10TOP - 6.0, Z_G10TOP + G10_TOP, 1.95))
     return Compound(lo), Compound(up), Compound(stud)
 
@@ -835,7 +838,7 @@ CONNS = {                                           # v15: all over the power ba
     # and the converter rear ends, either side of the inverter's CN500 plug. DC stays at the front (SB175).
     "outlet_nema515": (XR + 45.0, -40.0, 30.0, 38.0, 30.0, "y"),  # clinch nuts along y: off the inverter top
     "inlet_iec_c14": (XR + 45.0, 45.0, 20.0, 27.0, 25.0, "y"),
-    "pushbutton": (75.0, -70.0, 19.0, 19.0, 30.0, "n"),
+    "pushbutton": (75.0, -58.0, 19.0, 19.0, 30.0, "n"),   # v16.3: y -70 -> -58, the hole crossed the lid's 30 deg bend (flats15 DFM)
 }
 
 def conn_holes(c):
