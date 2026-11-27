@@ -148,3 +148,5 @@ Every harness is a point-to-point cable; unplugging one device leaves the others
 Render of the credit card failure: `bms_cc_split.png` (parts crowded into the corners are fallback-placed).
 
 Not tried: smaller connector families for the 2-wire signals (Loombotic's verified catalog has Molex Micro-Fit / Mini-Fit / Mega-Fit and Amphenol; anything smaller is a custom line, which Chris doesn't want).
+
+**Decided (Chris, 2026-11-27): one connector per destination, on 95 × 55** (option a). The credit-card target is dropped; Chris would allow bigger, but 54 % occupancy doesn't need it. Connectors J1–J9 as listed above, all Micro-Fit 3.0 except the J1 FPC.

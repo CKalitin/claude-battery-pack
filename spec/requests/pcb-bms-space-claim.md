@@ -10,4 +10,5 @@
   - the +x edge, now at x −10 over the inverter (outputs, lid/LED link) ⚠️ please confirm it's free;
   - the −y edge for x −105…−84 (power taps).
 
-- **Final** (Chris, 2026-11-27): keep 95 × 55 reserved. The board itself targets credit-card size (85.6 × 53.98) inside this envelope.
+- **Final** (Chris, 2026-11-27): keep 95 × 55 reserved. The credit-card target was dropped (Chris, 2026-11-27); the board is 95 × 55.
+- Connector edges (Chris approved one connector per destination, 2026-11-27): −x J1 flex, J2 shunt; −y J3 power; +x J4 GV14, J5 LED; **+y** J6 charger relay + AC_SENSE, J7 CN301, J8 button, J9 box NTC. 25 mm of plug room beyond each (the +y room confirmed free by main-battery).
