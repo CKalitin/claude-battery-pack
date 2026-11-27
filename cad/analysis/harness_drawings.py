@@ -15,44 +15,45 @@ COMMON = ("All wire: UL1007/UL1015 or 105 C rated, stranded tinned copper. Lengt
 
 ASSY = [
     ("A  BMS low-voltage harness (multi-branch, one assembly)", [
-        ("A1 B+ tap", "J3 pos 1", MF.format(n=3), "18 AWG thin-wall red", 360, "Inline fuse holder Eaton ATM-FHID with 5 A ATM fuse, holder within 150 mm of the ring; ring terminal 1/4in (M6) for 18 AWG"),
-        ("A2 LOAD+ tap", "J3 pos 2", "(same J3 housing)", "18 AWG thin-wall orange", 280, "Inline ATM-FHID with 2 A ATM fuse within 150 mm of the ring; ring terminal 3/8in (M10)"),
-        ("A3 GND (shunt node A)", "J3 pos 3", "(same J3 housing)", "18 AWG thin-wall black", 220, "Ring terminal 5/16in (M8)"),
+        ("A1 B+ tap", "J3 pos 1", MF.format(n=4), "18 AWG thin-wall red", 380, "Inline fuse holder Eaton ATM-FHID with 5 A ATM fuse, holder within 150 mm of the ring; ring terminal 1/4in (M6) for 18 AWG"),
+        ("A2 LOAD+ tap", "J3 pos 2", "(same J3 housing)", "18 AWG thin-wall orange", 290, "Inline ATM-FHID with 2 A ATM fuse within 150 mm of the ring; ring terminal 3/8in (M10)"),
+        ("A3 GND (shunt node A)", "J3 pos 3", "(same J3 housing)", "18 AWG thin-wall black", 200, "Ring terminal 5/16in (M8)"),
+        ("A3b IMD chassis ref", "J3 pos 4", "(same J3 housing)", "22 AWG green/yellow", 160, "Ring terminal M4 (rear-plate -y top screw)"),
         ("A4 Contactor coil", "J4 pos 1 X1 red, pos 2 X2 black", MF.format(n=2), "contactor's own leads", 380, "Gigavac GV141BAX contactor (vendor-procured or consigned) - terminate its 38 cm flying leads at full length, do not cut"),
-        ("A5 Charger relay coil", "J6 pos 1 = relay 86, pos 2 = relay 85", MF.format(n=3), "20 AWG", 310, "2 x insulated 6.3 mm FASTON receptacles for TE V23134-B1052-C642 relay pins 86/85"),
-        ("A6 AC sense", "J6 pos 3", "(same J6 housing)", "22 AWG", 260, "Insulated 6.3 mm piggyback FASTON on relay pin 30"),
-        ("A7 Inverter remote", "J7 pos 1, 2", MF.format(n=2), "22 AWG", 210, "JST XHP-2 + SXH-001T (to MEAN WELL NTS-400P CN301)"),
-        ("A8 Lid button", "J8 pos 1 BTN, 2 GND", MF.format(n=2), "22 AWG", 400, "2 x insulated 6.3 mm FASTON receptacles (button TBD)"),
-        ("A9 LED board link", "J5 pos 1 5V, 2 DATA, 3 GND", MF.format(n=3), "22 AWG", 310, MF.format(n=3) + " (same pin order)"),
-        ("A10 Box-air NTC", "J9 pos 1, 2", MF.format(n=2), "26 AWG", 200, "10 kOhm NTC, epoxy bead, insulated with heat shrink"),
+        ("A5 Charger relay coil", "J6 pos 1 = relay 86, pos 2 = relay 85", MF.format(n=3), "20 AWG", 150, "2 x insulated 6.3 mm FASTON receptacles for TE V23134-B1052-C642 relay pins 86/85"),
+        ("A6 AC sense", "J6 pos 3", "(same J6 housing)", "22 AWG", 160, "Insulated 6.3 mm piggyback FASTON on relay pin 30"),
+        ("A7 Inverter remote", "J7 pos 1, 2", MF.format(n=2), "22 AWG", 120, "JST XHP-2 + SXH-001T (to MEAN WELL NTS-400P CN301)"),
+        ("A8 Lid button", "J8 pos 1 BTN, 2 GND", MF.format(n=2), "22 AWG", 420, "2 x insulated 6.3 mm FASTON receptacles (button TBD)"),
+        ("A9 LED board link", "J5 pos 1 5V, 2 DATA, 3 GND", MF.format(n=3), "22 AWG", 260, MF.format(n=3) + " (same pin order)"),
+        ("A10 Box-air NTC", "J9 pos 1, 2", MF.format(n=2), "24 AWG", 210, "Vishay NTCLE413E2103F102L 10 kOhm NTC (AWG30 leads): splice to 24 AWG, heat shrink"),
     ]),
     ("B  Charger DC set (3 cables)", [
-        ("B1 Charger + to relay", "MEAN WELL NPB-360-12TB terminal V+", "Bootlace ferrule 10 AWG", "10 AWG red", 90, "Insulated 6.3 mm FASTON receptacle for 10-12 AWG (relay pin 30)"),
-        ("B2 Relay to fuse", "Relay pin 87", "Insulated 6.3 mm FASTON receptacle 10-12 AWG", "10 AWG red", 360, "Ring terminal 3/8in (M10), adhesive heat shrink"),
-        ("B3 Charger -", "NPB-360-12TB terminal V-", "Bootlace ferrule 10 AWG", "10 AWG black", 180, "Ring terminal 5/16in (M8), adhesive heat shrink"),
+        ("B1 Charger + to relay", "MEAN WELL NPB-360-12TB terminal V+", "Bootlace ferrule 10 AWG", "10 AWG red", 150, "Insulated 6.3 mm FASTON receptacle for 10-12 AWG (relay pin 30)"),
+        ("B2 Relay to fuse", "Relay pin 87", "Insulated 6.3 mm FASTON receptacle 10-12 AWG", "10 AWG red", 390, "Ring terminal 3/8in (M10), adhesive heat shrink"),
+        ("B3 Charger -", "NPB-360-12TB terminal V-", "Bootlace ferrule 10 AWG", "10 AWG black", 190, "Ring terminal 5/16in (M8), adhesive heat shrink"),
     ]),
     ("C  Inverter DC set (2 cables)", [
-        ("C1 Inverter +", "MEAN WELL NTS-400P TB1 (+)", "Anderson Powerpole 1327 (red) + 261G2-LPBK contact", "10 AWG red", 240, "Ring terminal 3/8in (M10), adhesive heat shrink"),
-        ("C2 Inverter -", "NTS-400P TB1 (-)", "Anderson Powerpole 1327G6 (black) + 261G2-LPBK, mated to C1 housing", "10 AWG black", 130, "Ring terminal 5/16in (M8), adhesive heat shrink"),
+        ("C1 Inverter +", "MEAN WELL NTS-400P TB1 (+)", "Anderson Powerpole 1327 (red) + 261G2-LPBK contact", "10 AWG red", 340, "Ring terminal 3/8in (M10), adhesive heat shrink"),
+        ("C2 Inverter -", "NTS-400P TB1 (-)", "Anderson Powerpole 1327G6 (black) + 261G2-LPBK, mated to C1 housing", "10 AWG black", 150, "Ring terminal 5/16in (M8), adhesive heat shrink"),
     ]),
     ("D  Mains set (120 VAC)", [
-        ("D1 AC in L/N/PE", "Panel IEC C14 inlet (L, N, PE)", "3 x insulated 6.3 mm FASTON receptacles", "3 x 18 AWG UL1015 black/white/green", 330, "L-com ACPWRC-C13LR right-angle C13 connector (screw terminals) into the charger"),
-        ("D2 AC in PE bond", "D1 PE at inlet end (piggyback)", "insulated 6.3 mm piggyback FASTON", "18 AWG green/yellow", 100, "Ring terminal M4"),
-        ("D3 AC out", "NTS-400P CN500: pos 6 L, pos 4 N, pos 1 FG", "JST VHR-6N + SVH-21T-P1.1", "3 x 18 AWG UL1015 black/white/green", 200, "3 x insulated 6.3 mm FASTON receptacles to NEMA 5-15R outlet (outlet TBD)"),
-        ("D4 AC out ground bond", "D3 ground at outlet end", "insulated 6.3 mm piggyback FASTON", "18 AWG green/yellow", 100, "Ring terminal M4"),
+        ("D1 AC in L/N/PE", "Panel IEC C14 inlet (L, N, PE)", "3 x insulated 6.3 mm FASTON receptacles", "3 x 18 AWG UL1015 black/white/green", 360, "L-com ACPWRC-C13LR right-angle C13 connector (screw terminals) into the charger"),
+        ("D2 AC in PE bond", "D1 PE at inlet end (piggyback)", "insulated 6.3 mm piggyback FASTON", "18 AWG green/yellow", 300, "Ring terminal M4 (front-plate +y top screw)"),
+        ("D3 AC out", "NTS-400P CN500: pos 6 L, pos 4 N, pos 1 FG", "JST VHR-6N + SVH-21T-P1.1", "3 x 18 AWG UL1015 black/white/green", 250, "3 x insulated 6.3 mm FASTON receptacles to NEMA 5-15R outlet (outlet TBD)"),
+        ("D4 AC out ground bond", "D3 ground at outlet end", "insulated 6.3 mm piggyback FASTON", "18 AWG green/yellow", 250, "Ring terminal M4 (front-plate +y top screw)"),
     ]),
     ("E  Inverter fan pigtail", [
-        ("E1 Fan lead", "Sunon MF40201VX-1000U-G99 40x40x20 fan (vendor-procured)", "fan's own leads", "fan leads", 130, "JST XHP-3 + SXH-001T: pos 1 red (+12 V), pos 2 black (GND), pos 3 empty"),
+        ("E1 Fan lead", "Sunon MF40201VX-1000U-G99 40x40x20 fan (vendor-procured)", "fan's own leads", "fan's own leads", 60, "JST XHP-3 + SXH-001T: pos 1 red (+12 V), pos 2 black (GND), pos 3 empty"),
     ]),
 ]
 
 
 BOM = {
-    "A": [("43645-0300", "Molex Micro-Fit 3.0 receptacle housing 1x3", 3), ("43645-0200", "Molex Micro-Fit 3.0 receptacle housing 1x2", 4),
-          ("43030-0007", "Molex Micro-Fit 3.0 female crimp terminal 20-24 AWG", 12), ("43030-0038", "Molex Micro-Fit 3.0 female crimp terminal 18 AWG (insulation OD <= 1.85 mm)", 3),
+    "A": [("43645-0400", "Molex Micro-Fit 3.0 receptacle housing 1x4", 1), ("43645-0300", "Molex Micro-Fit 3.0 receptacle housing 1x3", 2), ("43645-0200", "Molex Micro-Fit 3.0 receptacle housing 1x2", 4),
+          ("43030-0007", "Molex Micro-Fit 3.0 female crimp terminal 20-24 AWG", 13), ("43030-0038", "Molex Micro-Fit 3.0 female crimp terminal 18 AWG (insulation OD <= 1.85 mm)", 3),
           ("ATM-FHID", "Eaton Bussmann inline ATM fuse holder 16 AWG", 2), ("ATM-5", "ATM fuse 5 A", 1), ("ATM-2", "ATM fuse 2 A", 1),
           ("Ring 1/4in 18AWG", "Insulated ring terminal 1/4in stud, 22-18 AWG", 1), ("Ring 3/8in 18AWG", "Insulated ring terminal 3/8in stud, 22-18 AWG", 1),
-          ("Ring 5/16in 18AWG", "Insulated ring terminal 5/16in stud, 22-18 AWG", 1), ("FASTON 6.3 insulated", "TE FASTON .250 insulated receptacle 22-18 AWG", 4),
+          ("Ring 5/16in 18AWG", "Insulated ring terminal 5/16in stud, 22-18 AWG", 1), ("Ring M4 22AWG", "Insulated ring terminal M4, 26-22 AWG", 1), ("FASTON 6.3 insulated", "TE FASTON .250 insulated receptacle 22-18 AWG", 4),
           ("FASTON 6.3 piggyback", "TE FASTON .250 insulated piggyback receptacle 22-18 AWG", 1), ("XHP-2", "JST XH housing 2-pin", 1),
           ("SXH-001T-P0.6", "JST XH crimp terminal", 2), ("NTCLE413E2103F102L", "Vishay 10 kOhm NTC, AWG30 leads: splice to 24 AWG with heat shrink", 1),
           ("GV141BAX", "Gigavac GV14 contactor, consigned by customer (terminate its leads only)", 1),
@@ -87,7 +88,7 @@ def bom_page(pdf, key, title):
 def page(pdf, title, rows):
     fig = plt.figure(figsize=(16.5, 11.7), dpi=100)   # A3 landscape
     fig.text(0.03, 0.95, "Claude battery pack - wire harness  " + title, fontsize=18, weight="bold")
-    fig.text(0.03, 0.92, "Rev A (pre-CAD lengths), 2026-11-27. " + COMMON, fontsize=9.5, wrap=True)
+    fig.text(0.03, 0.92, "Rev B (lengths from the v17 CAD routes + 30 mm per end + 150 mm lid loops), 2026-11-27. " + COMMON, fontsize=9.5, wrap=True)
     ax = fig.add_axes([0.02, 0.05, 0.96, 0.84]); ax.axis("off")
     cols = ["Branch", "End 1 (pin)", "End 1 connector / terminal", "Wire", "Length mm", "End 2 connector / terminal"]
     W = [18, 26, 34, 18, 8, 60]
