@@ -51,6 +51,8 @@
 |---|---|---|
 | **Burst rating is a firmware rating.** 500 A for ≤ 30 s is allowed only where EVE's 30 s pulse MAP allows ≥ 2.38C per cell: ≥ 30 % SOC and ≥ 10 ℃. Elsewhere the firmware caps discharge at 2 × 105 A × C_MAP(T, SOC), and continuous at 2 × 105 A × C_cont(T, SOC) (EVE rev E Tables 12–13). The hardware (fuse, copper, contactor) is sized for 500 A; the firmware is what keeps the cells inside their rating. **Every future rating is stated this way: hardware capability plus the firmware limit that enforces the cell spec.** | 2026-11-27 | cells.md T4, D37 |
 | **Charger internal, ≥ 17 A** (≈ 12 h); **inverter ≥ 300 W** continuous, priority: **combined inverter-charger ("extremely ideal")** > separate internal inverter > last resort only if an internal inverter is really impossible: no internal inverter, USB-C PD out, maybe an external inverter | 2026-11-27 | handoff-converters.md §2d |
+| **Converters: separate units, option D** (NPB-360-12TB 20 A + NTS-400P-112 + its 40 mm fan), chosen over the upright MultiPlus combined unit. **No USB-C PD port for now.** Charger stop: a DC relay on the charger lead is acceptable ("just another switch"); PB-230-12 (16 A, remote input) raised by Chris, being clarified | 2026-11-27 | converters.md, D39 |
+| **BMS board: define its responsibilities before sizing or placing it** ("what is the PCB doing now? … we can iterate on where we put it after we define its responsibilities") | 2026-11-27 | converters.md §6 Q3 |
 | Wake is button-only: a charger plugged into a sleeping pack does nothing until the button is pressed | 2026-11-27 | D33 |
 | Cell-sense board is a flex PCB, screwed (M3) into tapped busbars | v14 | design notes §1 |
 | ~~Control board is controls-only, on the back of the front LED board; no separate slot-in BMS board~~ **Reversed 2026-11-27: Chris prefers a separate BMS board. The front zone is preferably for the LED board only.** | v14–v15 → 2026-11-27 | power-train.md, handoff-converters.md |
@@ -64,7 +66,7 @@
 
 ## 7. Open items Chris has asked for (carry until done)
 - Rework the layout so the rear void disappears (2026-11-27: "take two steps back… I want to solve this problem", not a 10 mm trim): study in architecture.md, **Chris picked B (side power spine) on 2026-11-27.** **Keep the GV14 contactor** (Chris, 2026-11-27), so W 190 → 204 mm: the 55.7 mm contactor body passes beside the 135 mm charger, and a 190 box leaves a 48.8 mm strip (13.3 mm short). See option_b_width.png. Packing check then showed W 204 is too narrow for an all-busbar spine; awaiting choice B1/B2 (architecture.md §4a). **Superseded the same day:** Chris traced the root cause to the charger and inverter and reopened their selection under the cell-footprint rule (§3). Option B is paused; see `docs/handoff-converters.md`.
-- **Find a new charger + inverter (or a combined unit) that fits within the cells' top-face footprint** (2026-11-27; `docs/handoff-converters.md`). Work moves to Chris's own server.
+- ~~Find a new charger + inverter (or a combined unit) that fits within the cells' top-face footprint~~ → option D picked 2026-11-27 (`docs/converters.md`, D39). Next: BMS board responsibilities, then CAD.
 - Inverter 400 W continuous: bench test, then decide the cooling fix (cooling.md).
 - Control board schematic: a separate agent, later.
 - Send the Zep reply (draft in Gmail).

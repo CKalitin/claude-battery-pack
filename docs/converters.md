@@ -2,7 +2,7 @@
 
 **Trigger:** Chris, 2026-11-27. The rule now is that cells are the dominant constraint: everything above the cells (converters, power bay, fan, a separate BMS board) fits inside the module footprint, **312 × 158 mm including the end plates**. The charger and inverter are what broke this rule, so the search is reopened rather than tweaked (`handoff-converters.md`, `owner-requirements.md` §3, §5).
 
-**Status:** proposal; awaiting Chris's pick. No CAD until then.
+**Status (2026-11-27):** **Chris picked option D** (D39) and no USB-C for now. Open: charger-stop method (relay vs PB-230-12, §6 Q2) and the BMS board's responsibilities before sizing it (Q3). No CAD until those are settled.
 
 Packing model: `cad/analysis/converter_packing.py` (3D boxes plus a checker for clashes, footprint, lid height, + to − gaps and fuse lift-out). Figures are in `versions/v16-c1-power-module/renders/conv_*.png`.
 
@@ -166,15 +166,15 @@ So the strip is **≥ 59 mm**, which leaves **≤ 96 mm of width for the convert
 6. **The NPB-360 is 96 wide and 20 A,** from the same family as today's charger. Packed: 0 issues.
 7. **The three-deck stack (S)** was packed as the "keep NPB-450" alternative: +99 mm and a void beside the inverter.
 
-## 6. Decisions for Chris
-- **Q1 Combined unit.** The MultiPlus fits only standing upright: the lid goes to ≈ z 590 (≈ 590 mm inside height vs 318), +2.3 kg, plus Victron's 10 cm-clearance and not-over-batteries notes. Separate units (D): z 333.
-- **Q2 Charger control for the NPB-360** (it has no remote and no CAN):
+## 6. Decisions for Chris (answers 2026-11-27 in brackets)
+- **Q1 Combined unit.** [**Separate units, D.**] The MultiPlus fits only standing upright: the lid goes to ≈ z 590 (≈ 590 mm inside height vs 318), +2.3 kg, plus Victron's 10 cm-clearance and not-over-batteries notes. Separate units (D): z 333.
+- **Q2 Charger control for the NPB-360** (it has no remote and no CAN). [Chris likes the relay; asked whether the PB-230-12 has CAN. **It doesn't:** it has only a remote-stop input (CN105), a fixed 3-stage curve (14.4 / 13.6 V, no voltage adjustment found), 16 A and 81.5 % efficiency (≈ 52 W loss at 16 A, vs 37 W for the NPB-360 at 20 A). Its case is 190 × 96 × 49, 7.3 mm longer than the NPB-360, which still fits deck 1 (260 of 312). Pending.]
   - (a) a normally-open DC relay in the charger + lead, closed by the BMS (+1 part, fail-safe);
   - (b) stop charging by opening the GV14 (no part, but it drops the outlets too);
   - (c) PB-230-12: 16 A, has a remote, 81.5 % efficient;
   - (d) keep the NPB-450 and go to three decks (S, +99 mm).
-- **Q3** BMS board space claim 175 × 90 mm over the inverter, or a different size (pcb lane).
-- **Q4** Optional USB-C PD output alongside the inverter (not needed to meet R3).
+- **Q3** [Chris: define the board's responsibilities first, then size and place it.] BMS board space claim 175 × 90 mm over the inverter, or a different size (pcb lane).
+- **Q4** [**No USB-C for now.**] Optional USB-C PD output alongside the inverter (not needed to meet R3).
 
 ## 7. Sources
 | Value | Source | Conf. |
