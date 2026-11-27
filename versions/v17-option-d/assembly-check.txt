@@ -1,0 +1,45 @@
+v17 top-down assembly check (cad/assembly_v17.py). Rigid parts swept out along their insertion path through
+everything installed before; screws/nuts get a driver or socket path (tool OD in mm).
+
+[0 shell: body halves, feet, rear plate] 6 parts (reference: open body)
+[1 pack module (bench) lowered into the body] 31 parts; sweep 360 mm: CLEAR  (carriage bolts into the two flange square holes before the straps go on (M8 node A, M10 5191))
+    driver on screws_term (16 screws): clear
+[2 deck 1 (bench: charger, relay, bay standoffs, deck-2 posts screwed from below; charger leads P1a/P2 in the TB, P1a on relay 30, C13 plugged in) lowered; 4 screws into the end-plate standoffs] 20 parts; sweep 360 mm: CLEAR  (flex tail fed up through the deck slot; loose lead ends parked to the sides)
+    driver on screws_deck1 (4 screws): clear
+[3 LED board + diffuser lowered in front of the module; M3 from the front] 5 parts; sweep 360 mm: CLEAR  (front plate still off)
+[4 front plate + light pipe (slides in along -x)] 3 parts; sweep 40 mm: CLEAR
+[5 power bay (bench, built upside down, flipped) lowered onto the standoffs; node-A hole over its bolt; 5 screws from above] 30 parts; sweep 360 mm: CLEAR  (on the bench: contactor and SB175 nuts under the plate; 2151 M10 thin nut before the SB175 + cheeks)
+    driver on screws_bay_top (5 screws): clear
+    socket 23.5 mm on nut_2151_m10: clear
+[5b 2151 MRBF fuses (30 A, 50 A) onto their studs] 6 parts; sweep 150 mm: CLEAR
+[6 node-A nut + GND ring] 3 parts; sweep 120 mm: CLEAR
+    socket 18.0 mm on nut_nodeA: clear
+[7 Blue Sea 5191 + MRBF 250 A on the + flange bolt, M10 nut] 7 parts; sweep 200 mm: CLEAR
+    socket 23.5 mm on nut_5191_m10: clear
+[8 deck 2 (bench: inverter + bridge posts screwed from below; PP45, CN100, CN301, CN500 plugged in) lowered onto its 4 posts; 4 nylon M4 from above] 11 parts; sweep 360 mm: CLEAR  (loose lead ends parked to the sides)
+    driver on screws_d2_top (4 screws): clear
+[9 fan spacer + 40 mm fan lowered to the rear wall; M3 from outside, nyloc nuts inside] 4 parts; sweep 120 mm: CLEAR
+    nut driver 9 mm x 40 mm along +x on nuts_fan: clear
+[10 BMS bridge (bench: standoffs, board, 4 x M3) lowered onto the posts; 4 M3 from above] 19 parts; sweep 120 mm: CLEAR
+    driver on screws_bridge (4 screws): clear
+    driver on screws_bms (4 screws): clear
+[11 charger leads: P1b on relay 87 + lug on the 2151 charger stud, P2 lug on node B] 6 parts; sweep 120 mm: CLEAR
+    socket 18.0 mm on nut_2151_chg: clear
+[12 inverter leads: P3 lug + LOAD+ ring on the 2151 inverter stud, P4 lug on node B, nuts] 8 parts; sweep 120 mm: CLEAR
+    socket 18.0 mm on nut_nodeB: clear
+    socket 18.0 mm on nut_2151_inv: clear
+[13 signal harness: BMS J2-J9, shunt, coil, relay coil, LOAD+ run, NTC, LED, antenna] 28 parts; sweep 80 mm: CLEAR
+[14 Z-strap (service disconnect) on, B+ ring + lead, two nuts] 8 parts; sweep 150 mm: CLEAR
+    socket 15.0 mm on nut_foot: clear
+    socket 18.0 mm on nut_strap_top: clear
+[15 PE lug on the front +y screw (star washer, ring, nut)] 5 parts; sweep 80 mm: CLEAR
+    nut driver 10 mm x 60 mm along -x on pe_nut: clear
+[16 lid: wire inlet, outlet, PE and button beside the pack (150 mm loops), then close] 13 parts; sweep 120 mm: CLEAR  (unplug J8 first if the lid has to leave the bench)
+[service] lid off (lid, its connectors and leads beside the pack): each MRBF fuse lifts 150 mm after only its own nut, lug and leads move
+    bs5191_fuse_0 (moved: strap_main, nut_strap_top, nut_foot, ring_pos_bplus, w_ring_bplus, w_h2_bplus, fuseholder_bplus): CLEAR
+    bs2151_fuse_0 (moved: nut_2151_chg, lug_pos_chg, w_p1b): CLEAR
+    bs2151_fuse_1 (moved: nut_2151_inv, lug_pos_inv, w_p3, ring_pos_load, w_ring_load, w_h2_load, fuseholder_load): CLEAR
+    strap_main (service disconnect), every other lead in place: CLEAR
+parts not in any step: []
+OVERALL: PASS
+(42 s)

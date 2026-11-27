@@ -1,0 +1,43 @@
+v17 clearance check (cad/clearance_v17.py)
+
+--- + to -: minimum 12.5 mm  (rule >= 10: PASS)
+      bus_mod_pos            bus_mod_neg                12.5 mm
+      bus_mod_pos            sb175_contact_neg          12.5 mm
+      bus_mod_pos            hw_sb_nut_neg              12.9 mm
+      hw_sb_nut_pos          hw_sb_nut_neg              14.0 mm
+      sb175_contact_pos      bus_mod_neg                14.0 mm
+      sb175_contact_pos      sb175_contact_neg          14.1 mm
+      hw_sb_nut_pos          bus_mod_neg                14.4 mm
+      hw_sb_nut_pos          sb175_contact_neg          15.4 mm
+--- pack copper to chassis: minimum 7.3 mm  (rule >= 7: PASS)
+      relay_tab_85           charger_npb360              7.3 mm
+      bus_pack_neg           so_upper                    7.6 mm
+      bus_pack_pos           so_upper                    7.6 mm
+      bus_pack_neg           so_lower                    8.4 mm
+      bus_pack_pos           so_lower                    8.4 mm
+      shunt_bar              body_half_A                 8.9 mm
+      shunt_pcb              body_half_A                 8.9 mm
+      bus_pack_neg           screws_deck1                9.7 mm
+--- pack copper to series bars: minimum 12.0 mm  (info)
+      bus_pack_pos           bus_B                      12.0 mm
+      bus_pack_neg           bus_B                      12.0 mm
+      bus_pack_pos           bus_C                      13.0 mm
+      hw_sb_stud_neg         bus_B                      29.6 mm
+      hw_sb_stud_pos         bus_B                      29.6 mm
+--- mains to LV wiring / pack copper: minimum 7.0 mm  (rule >= 6: PASS)
+      w_a1_ac_in             bs5191_strap                7.0 mm
+      w_a1_ac_in             strap_main                  8.1 mm
+      w_a3_pe_in             w_h2_bplus_a                8.4 mm
+      w_a1_ac_in             bs5191_fuse_0_bot          10.8 mm
+      w_a3_pe_in             w_h7_coax                  12.9 mm
+      w_a2_ac_out            nut_strap_top              13.5 mm
+      w_a2_ac_out            strap_main                 14.2 mm
+      w_a1_ac_in             w_h2_bplus_a               14.3 mm
+--- footprint above the cells (x ±156, y ±79): PASS
+      exempt (front zone): diffuser_f (+11.49 mm: x 164.5..167.5, y -80.0..80.0); ledboard_f (+8.49 mm: x 162.9..164.5, y -80.0..80.0); ledboard_hdr (+6.89 mm: x 156.9..162.9, y -66.0..-54.0); pipe_f (+16.97 mm: x 164.2..173.0, y -77.3..77.3); antenna (+8.09 mm: x 163.5..164.1, y -40.0..0.0); plug_led (+6.89 mm: x 156.9..162.9, y -66.0..-54.0)
+      exempt (rear wall): fan_spacer (+7.95 mm: x -164.0..-156.0, y -10.0..30.0); screws_fan (+12.78 mm: x -168.8..-132.5, y -8.8..28.9)
+      exempt (lid): panel_inlet_iec_c14 (+8.50 mm: x 123.5..164.5, y -16.5..16.5); panel_outlet_nema515 (+7.50 mm: x 112.5..163.5, y 22.0..66.0); screws_panel (+7.70 mm: x 113.3..163.7, y -2.2..46.2)
+      exempt (wire to front zone): w_h4_led (+5.85 mm: x 1.6..161.9, y -62.0..11.9); w_h7_coax (+7.81 mm: x -23.4..163.8, y -20.7..36.7); w_pe_barrel (+12.89 mm: x 164.1..168.9, y 62.0..68.0); w_a3_pe_trunk (+10.71 mm: x 154.8..166.7, y 59.0..64.0); w_a3_pe_out (+1.44 mm: x 145.6..157.4, y 57.6..67.5); w_a3_pe_in (+2.45 mm: x 148.6..158.4, y -6.5..62.3)
+--- under the lid (inside z 333): PASS; highest internal part w_h4_led z 331.5 (1.5 mm below)
+--- fuse lift-out prisms clear of wiring and structure: PASS
+OVERALL: PASS
