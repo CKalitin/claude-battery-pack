@@ -20,13 +20,13 @@ This is the single source of truth for the shunt in the pack. Reverse-engineerin
 | Component height | **5 mm** above the copper |
 | Connector | **On the side that overhangs the copper** (owner, 2026-11-24 ✓): **on top of the 8 mm overhang strip** (the part of the PCB that hangs past the bar's long edge), at one end of the module. Top is **5 mm above the PCB (7 mm above the copper)**. Wires exit **straight up**, normal to the bar. |
 | Keepout | Connector footprint × **≥ 35 mm** above the connector top, for the mated plug and the wire bend (estimate) |
-| Still unknown | Bolt thread, board-connector part number (§3a), which way the connector faces, which end of the strip it sits at (v16 models the end away from node B ⚠️) |
+| Still unknown | Bolt thread, a mate for the pigtail receptacle (§3a), which way the connector faces, which end of the strip it sits at (v16 models the end away from node B ⚠️) |
 
 ## 3. Interface
 
 | Item | Value | Source |
 |---|---|---|
-| Connector | **Two connectors in series (2026-11-27, §3a):** the module PCB carries an **8-way board connector** (two 1×4 housings, ≈ 2.5 mm pitch ⚠️, part unidentified), and a ≈ 300 mm Tesla pigtail ends in a **10-position (2×5) Mini-Fit-Jr-style receptacle** with **8 cavities loaded**. That receptacle is **not a catalog Molex 5557**: it has non-standard polarization and a bridge between circuits 6 and 7 (the "key slot between pins 1 and 2"). The repo's "J1 pin n" numbers the 8 wires; they are **not** Molex circuit numbers (map in §3a). | Photos in the shunt repo; Molex SD-46992-0000 rev A10, SD-5557-003 rev K1 |
+| Connector | **Soldered pigtail (2026-11-27, §3a):** the harness is **soldered directly to the module PCB** (Chris, 2026-11-27 ✓). The two black 1×4 blocks on the overhang are **not a separable connector**. A ≈ 300 mm pigtail ends in a **10-position (2×5) Mini-Fit-Jr-style receptacle** with **8 cavities loaded**. That receptacle is **not a catalog Molex 5557**: it has non-standard polarization and a bridge between circuits 6 and 7 (the "key slot between pins 1 and 2"). The repo's "J1 pin n" numbers the 8 wires; they are **not** Molex circuit numbers (map in §3a). | Photos in the shunt repo; Molex SD-46992-0000 rev A10, SD-5557-003 rev K1 |
 | J1 pin 1 | VDD +5 V | shunt repo `firmware/README.md` |
 | J1 pin 2 | GND (the bar) | same |
 | J1 pins 3–6 | NSS, SCK, MISO, MOSI | same |
@@ -39,11 +39,11 @@ This is the single source of truth for the shunt in the pack. Reverse-engineerin
 
 ## 3a. Connector J1: identification (2026-11-27)
 
-**Conclusion.** There are **two connectors**, not one:
-1. **Board end (on the module PCB):** an 8-way wire-to-board connector made of **two 1×4 black housings** side by side on the overhang strip, wires entering from the top. Pitch ≈ 2.5–2.67 mm from the photo ⚠️. **Part unidentified** ⚠️. The shunt repo calls this **J1** (`schematic/parts.csv`: "8-way harness connector, pins numbered left to right in photo").
-2. **Pigtail end:** a ≈ 300 mm black jacketed Tesla pigtail (Kapton-taped at both jacket ends, so possibly repaired ⚠️). It ends in a **10-position, 2×5 receptacle** with **female, gold-coloured terminals** and **8 cavities loaded**. The housing is **Mini-Fit-Jr-style** (4.20 mm pitch per the owner ⚠️, not measured from the photos). It is **not a catalog Molex Mini-Fit Jr. 5557 / 46992 housing** ⚠️: its polarization differs from Molex's drawing and it has three features the catalog part lacks (table below). **No catalog Molex plug or header is known to mate with it.** A standard 5559 plug or 5566 header is expected to clash at circuits 6–7 and 9–10 ⚠️ (inferred from the drawings, not test-fitted).
+**Conclusion.** The module has **one connector**, at the end of a pigtail soldered to its PCB:
+1. **Board end (on the shunt module PCB itself, `photos/Shunt-1.jpeg`):** the 8 wires are **soldered directly to the module PCB** (Chris, 2026-11-27 ✓). The two black 1×4 blocks on the overhang strip (≈ 2.5–2.67 mm per position, ≈ 5 mm tall) are where the wires enter. Chris says they are soldered, so the blocks are **not a separable connector** to design around. The shunt repo calls this end **J1** (`schematic/parts.csv`: "8-way harness connector, pins numbered left to right in photo").
+2. **Pigtail end (the module's only connector):** a ≈ 300 mm black jacketed pigtail (Kapton-taped at both jacket ends, so possibly repaired ⚠️). It ends in a **10-position, 2×5 receptacle** with **female, gold-coloured terminals** and **8 cavities loaded**. The housing is **Mini-Fit-Jr-style** (4.20 mm pitch per the owner ⚠️, not measured from the photos). It is **not a catalog Molex Mini-Fit Jr. 5557 / 46992 housing** ⚠️: its polarization differs from Molex's drawing and it has three features the catalog part lacks (table below). **No catalog Molex plug or header is known to mate with it.** A standard 5559 plug or 5566 header is expected to clash at circuits 6–7 and 9–10 ⚠️ (inferred from the drawings, not test-fitted).
 
-Confidence: two-connector layout ✓ (photos); receptacle 2×5, female, 8 loaded, latch row, bridge ✓ (photos); "not catalog 5557" ⚠️ (photo against drawing, no physical comparison); pitch 4.20 mm ⚠️ (owner's statement; the photos have no scale, so Micro-Fit 3.0 is not excluded by the photos alone).
+Confidence: soldered board end ✓ (Chris, 2026-11-27; photos); receptacle 2×5, female, 8 loaded, latch row, bridge ✓ (photos); "not catalog 5557" ⚠️ (photo against drawing, no physical comparison); pitch 4.20 mm ⚠️ (owner's statement; the photos have no scale, so Micro-Fit 3.0 is not excluded by the photos alone).
 
 ### Requirements
 | # | Requirement | Source |
@@ -99,12 +99,13 @@ Source: cavity labels in `annotations/connector/connector.xopp` (owner's continu
 
 ### What mates, and the recommended harness
 - **The pigtail receptacle has no known catalog mate** (R1 fails). A standard Mini-Fit Jr. plug **39-01-3103** (5559, 10 ckt, no ears; SD 55590001 A4 ✓ exists) or vertical header **39-28-1103** (5566) has a wall between circuits 6 and 7 and chamfered cavities where this housing has square towers. Inferred: it won't mate ⚠️ (test fit open). Cutting the bridge or the plug's wall modifies a part (R2) and voids the keying.
-- **Recommended:** have the vendor build H1 as a **replacement pigtail**: board end = the module's 8-way board connector (once identified ⚠️), BMS end = Micro-Fit 3.0 2×4 (J2) per harnesses.md. The Tesla pigtail unplugs at the board, so nothing on the module is modified.
-- **Fallback, if the board-end part can't be identified:** the vendor builds a short adapter, a catalog Mini-Fit Jr. plug 39-01-3103 + male 5558 terminals, test-fitted first. Don't use it unless it mates without modification.
+- **The pigtail is part of the module** (soldered at the PCB, Chris 2026-11-27), so replacing it at the board would mean desoldering a purchased part (R2). H1 therefore has to **mate with the Tesla 10-way receptacle**.
+- **Recommended next step:** test-fit a catalog Mini-Fit Jr. plug **39-01-3103** (+ male 5558 terminals) and a vertical header **39-28-1103** against the receptacle. If one mates without modification, H1 = that plug (or the BMS board carries that header, a pcb-lane decision) → J2.
+- **If neither mates:** no catalog route exists (R1 vs R2 conflict). The options are for Chris to decide: (a) desolder the pigtail and solder a new one (breaks R2), (b) cut the pigtail behind the receptacle and splice a catalog connector (breaks R2), or (c) find Tesla's mating harness (the BMS-side connector of the Model S pack, from salvage) ⚠️.
 - Catalog Mini-Fit Jr. parts (molex.com part pages ✓, fetched 2026-11-27): female crimp 5556 **39-00-0039** (24–18 AWG, tin) / **39-00-0047** (28–22 AWG, tin); male crimp 5558 **39-00-0041** (24–18 AWG, tin) / **39-00-0049** (28–22 AWG, tin). The Tesla terminals look **gold** ⚠️: don't mate tin against gold, so pick the gold 5558 variant if the adapter is used (MPN not selected ⚠️). Prices not collected (DigiKey and Mouser block scripted access).
 
 ### Traps found
-- **"The connector" was two parts.** The 5 mm board-housing height and the 10-position Mini-Fit at the pigtail end were merged into one line in the 2026-11-24 measurements. Rule: name a connector by where it sits (board end / pigtail end) and give its own photo.
+- **"The connector" described two ends of one harness.** The 2026-11-24 measurements merged the 5 mm soldered board end and the 10-position receptacle at the pigtail end into one line. Rule: name each end by where it sits (soldered board end / pigtail connector) and give each its own photo.
 - **Repo J1 pin numbers aren't cavity numbers.** J1-2 (GND) is receptacle circuit 6, J1-3 (NSS) is circuit 7, and so on. Rule: a harness drawing uses the cavity map above, never "pin n".
 - **Mini-Fit look-alike ≠ Mini-Fit catalog.** Tower shapes and bridges are customer-specific. Rule: compare the polarization against the Molex drawing before naming an MPN.
 - Molex, DigiKey and Mouser block curl. Molex part pages load in a headful Playwright browser under `xvfb-run` (drawings saved from there).
@@ -120,8 +121,7 @@ Source: cavity labels in `annotations/connector/connector.xopp` (owner's continu
 
 ### Open items
 - [ ] ⚠️ **Measure the receptacle pitch** with calipers: centre to centre across 5 cavities = 16.8 mm (Mini-Fit, 4.20) or 12.0 mm (Micro-Fit, 3.0). Also the overall width (22.2 mm Mini-Fit catalog).
-- [ ] ⚠️ **Identify the board-end 8-way connector:** pull one 1×4 housing off the module and photograph the board header and the housing's mating face beside a ruler. Note the pitch, the height (≈ 5 mm), and any moulded text. This is what H1 should plug into.
-- [ ] ⚠️ Test-fit a catalog Mini-Fit Jr. plug 39-01-3103 against the Tesla receptacle, only if the board-end route fails.
+- [ ] ⚠️ **Test-fit a catalog Mini-Fit Jr. plug 39-01-3103 and header 39-28-1103** against the Tesla receptacle: does either mate fully and latch, with no force at circuits 6–7 and 9–10? This decides H1.
 - [ ] ⚠️ Fetch the Molex Mini-Fit TPA 30067 receptacle and 30072 key drawings to rule them in or out.
 - [ ] ⚠️ Whether the Kapton-taped pigtail is original Tesla or repaired.
 
@@ -183,7 +183,7 @@ An earlier attempt measured against the NUCLEO GND through a jumper and read abo
 - **Action:** physically mark bolt "A".
 
 ## 6a. Harness (v16.1, modelled)
-- J1 board connector (modelled as a Mini-Fit Jr 2×5 envelope 9.6 × 21 × 13 mm ⚠️; the real board end is two 1×4 ≈ 2.5 mm housings ≈ 21 × 5 mm, §3a) on the **+x overhang**, the side facing the front board. Wires go straight up 30 mm, then +y to y 7 to stay out of the Z-strap's lift-out prism, over the contactor, and down into j_shunt (Micro-Fit 3.0 2×4) on the board's top edge. 7 × 22 AWG (J1 pins 1–7), 188 mm. Details: [signal-wiring.md](signal-wiring.md).
+- J1 (modelled as a Mini-Fit Jr 2×5 envelope 9.6 × 21 × 13 mm ⚠️; in reality the harness is soldered to the PCB through two 1×4 blocks ≈ 21 × 5 mm, and the Mini-Fit-style receptacle is ≈ 300 mm away on the pigtail, §3a) on the **+x overhang**, the side facing the front board. Wires go straight up 30 mm, then +y to y 7 to stay out of the Z-strap's lift-out prism, over the contactor, and down into j_shunt (Micro-Fit 3.0 2×4) on the board's top edge. 7 × 22 AWG (J1 pins 1–7), 188 mm. Details: [signal-wiring.md](signal-wiring.md).
 - Board ground is a separate 18 AWG wire from a ring under the **node-A nut** (the cell side), per §5. J1 pin 2 still connects to the same ground through the bar, as analysed in §5.
 
 ## 7. Open items (deferred: characterise the shunt properly)
