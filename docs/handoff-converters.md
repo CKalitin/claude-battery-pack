@@ -38,6 +38,87 @@ Use 295 × 130 as the hard target and say where the 312 × 158 reading would cha
 - **NTS-400P-112 inverter** (186 × 100.5 × 34) needs connector ends that point along x.
 - **Fan and power bay:** the two converters stacked use up the plan length, so the fan and power bay are pushed off the ends. That is the 91 mm rear void and the whole A–H architecture study (`docs/architecture.md`).
 
+## 2a. Why the converters are the root cause (the numbers)
+
+Full study: `docs/architecture.md` §2–4. Figures in `versions/v16-c1-power-module/renders/`: `rear_end_void.png` (the problem), `architecture_options.png`, `architecture_3d_A.png` / `_B.png`, `front_view_A_B.png`, `spine_packing.png`, `v16_04_lid_off.jpg` and `v16_07_section.jpg` (the v16.3 layout as built).
+
+**v16.3 as built:**
+- Inside the box is 424 × 186.8 × 318 mm (x × y × z).
+- The cell module is 312 mm long, so the shell overhangs it by ≈ 91 mm at the rear and 21 mm at the front.
+- The rear 91 mm is a void of 91 × 164 × 187 mm (2.8 L) at cell level.
+- The front 21 mm holds the front board: the front plate inside face is at x +177.05, the board back at +169.95, and its parts stand ≈ 15 mm proud, to ≈ x 155.
+- Both decks above the cells are 312 mm long. The charger sits on tray 1 (top z 221.6), the inverter on tray 2 (top z 282.3), and the lid inside is at z 318.1.
+
+**Row-length budget in x for each deck:**
+
+| Deck | Fan | AC plug | Converter | DC plug | Power bay | Sum | vs 312 |
+|---|---|---|---|---|---|---|---|
+| Charger | 25 | 36 + 4 | 205 | 27 | 113 | 410 | **+98** |
+| Inverter | 25 | 20 | 186 | 42 | 113 | 386 | +74 |
+
+The power bay sat end to end with the converters, and the 140 mm NF-A14 fan is taller than the ≈ 103 mm free above the cells. So everything spilled off the rear end.
+
+**Width is no better:**
+- Charger 135 + inverter 100.5 = 235.5 > 186.8 inside.
+- The 135 mm charger is wider than the 130.3 mm cans.
+- The charger (205) can't turn crosswise.
+
+That is why every layout tried (A–H, B1, B2) either overhangs the cells or grows the box.
+
+## 2b. What else must fit in the same footprint (space claims the converters compete with)
+
+Every converter candidate must be checked with all of these in the same plan area. A converter that fits alone proves nothing.
+
+| Item | Size [mm] | Notes / source |
+|---|---|---|
+| Shunt (Tesla 1016792-00-C) | 83.5 × 35 | ⚠️ dims unconfirmed, tesla-shunt.md |
+| Contactor GV141BAX (kept, owner) | Ø55.7 body, 72.5 with studs | contactor-mounting.md |
+| Main fuse block Blue Sea 5191 (MRBF) | 62 × 23 incl. fuse | power-train.md |
+| Branch fuse block Blue Sea 2151 | 88.5 × 20 (23 with fuses) | power-train.md |
+| SB175 output (lid-mounted) | 55.6 × 25.4 | power-train.md |
+| Fan(s) | NF-A14 140 × 140 × 25, or 2 × NF-A9 92 × 92 × 25 | cooling.md, architecture.md B |
+| Front/control board | ≈ 21 mm of x behind the front plate (parts dict `CTRL` in tower15.py, z 228–285) | design-notes |
+| Lid connectors | NEMA 5-15 outlet, IEC C14 inlet, SB175, push-button; each needs its depth under the lid and a 150 mm service loop | baseline M8, tower15 `CONNS` |
+| Plug room at each converter connector | e.g. charger DC 30, right-angle C13 36, PP45 42, CN500 20 | architecture.md A4 |
+| Compression rods | M6 at y ±72, outside the cans (±65.15), inside the end plates (±79) | structure.md |
+| Pack busbars | on top of the terminals at z 206.85; the flex sense board sits on them | baseline |
+| Clearances | + to − ≥ 10 mm; pack copper to chassis ≥ 7 mm; fuses lift out with the lid off; everything installed top-down, bolts tightened from above | CLAUDE.md |
+
+The power bay alone needs ≈ 270–390 mm of strip depending on how it is packed (`spine_packing.png`). The best packing found so far uses two lanes of ≈ 30 mm. Any layout must say where the bay goes.
+
+## 2c. Electrical and thermal interface the replacement must meet
+- **Inverter DC input range covers 11.0–14.6 V.**
+  - 11.0 V is the inverter's own cutoff in the UV ladder (2.75 V/cell). The ladder is 2.90 firmware → 2.80 BQ UV → 2.75 inverter → 2.60 BQ SHUTDOWN.
+  - Check the inverter's low-voltage cutoff against this ladder.
+- **Today's parts, as the baseline to beat:**
+
+| Part | Rating | Efficiency | Other | Source |
+|---|---|---|---|---|
+| NPB-450-12 charger | 25 A, 420 W | 92 % typ (≈ 37 W loss) | CAN on DF11 | NPB-450-SPEC 2026-07-06 |
+| NTS-400P-112 inverter | 400 W continuous | — | no-load draw 10 W, 1.3 W in power-saving mode (SW4); remote on/off on CN301 | NTS-400P-SPEC 2026-03-26 |
+
+- **Standby budget.** Today: ON-idle 7.7 W → 13.8 days. A higher-idle inverter shortens this; report the days.
+- **Cooling.**
+  - The NTS-400P needs a 10 CFM (17 m³/h) fan 5 cm from its DC end for 100 % load at 40 ℃. The pack fan gives it only 3.7 m³/h (0.22×), so **400 W continuous is unproven today** (cooling.md).
+  - A replacement with its own fan, or one rated for convection at 400 W, removes this open item. Say which.
+- **Branch fuses** (MRBF, today inverter 50 A, charger 30 A): re-size for the new input currents.
+
+## 2d. Questions to put to Chris before committing (one message, with a figure)
+1. **Footprint:** does it mean the cans only (295 × 130), or the module with end plates (312 × 158)? Does the 21 mm front board zone count?
+2. **Height:** is there any cap above the cells? Today it is ≈ 113 mm above the can tops; a taller stack inside the footprint (architecture.md option C) was rejected only for leaving a void on the top deck.
+3. **Performance trades,** if needed:
+   - charge current below 25 A (give hours);
+   - inverter below 400 W;
+   - an external charger.
+
+## 2e. How to evaluate a candidate (method that would have caught the v15 mistake)
+For each candidate, before claiming a fit:
+- write the row budget (as in §2a) for every deck;
+- write the width budget;
+- draw the plan view with the cell footprint outlined and every §2b item placed.
+
+The fit claim for option B ("≈ 0 void at W 204") was made without packing the strip and turned out wrong (architecture.md §4a). Don't repeat that: pack first, claim second.
+
 ## 3. The task
 
 Find a charger and an inverter, or one combined unit, plus a layout, so that:
