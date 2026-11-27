@@ -38,6 +38,7 @@ Each audit has:
 | **NextPCB** | MPN, matched against DigiKey, Mouser, HQ Online | Manufacturer Part Number, Designator, Quantity (+ Customer Supply Y/DNP) | No minimum for assembly; 01005; 0.38 mm fine pitch; SMT + THT, double-sided, flex |
 | **JLCPCB** | LCSC part number from its own library | LCSC C-number | Basic vs extended parts (loading fee per extended); stock per warehouse region |
 
+- **DigiKey API** (kicad-happy `digikey` skill): load the key with `set -a; . ~/.config/pcb-secrets/digikey.env; set +a` before its scripts. Private file, mode 600, never in the repo. DigiKey's API User Agreement (accepted by Chris, 2026-11-27): no bulk download, no local database of DigiKey data, and no disclosure of API data to third parties. **Keep API stock and price numbers out of the public repo**: write "in stock at DigiKey, checked <date>" or quote the public web page instead. Don't name DigiKey in marketing or blog material without DigiKey's consent (clause 11).
 - For MPN-sourced fabs (PCBWay, NextPCB), check stock and lifecycle at DigiKey and Mouser (APIs if keys exist, otherwise their pages through a browser) for the **exact orderable MPN**, quantity = boards × qty per board + attrition. Record the stock line with its date.
 - A part with no second source (modules, specific relays, the AFE) needs a plan before the order: buy extra, consign, or name an alternate.
 - Re-check stock at each hand-off (schematic done, layout done, order); it moves daily.
