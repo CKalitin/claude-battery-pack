@@ -37,6 +37,7 @@ cat = [  # item, qty, each, source (dated), conf
     ("MRBF fuses 250 A (5189), 30 A (5175), 50 A (5177)", 3, 22.08, "Fisheries Supply, 2026-11-25", "✓"),
     ("Noctua NF-A14 5V", 1, 30.95, "Newegg.ca, 2026-11-25 (CAD listing, treated as USD: conservative)", "⚠️"),
     ("Tesla shunt 1016792-00-C", 1, 0.00, "already owned", "✓"),
+    ("Threaded rod M6 x 1 m, 316 (700 N/mm²), cut to 4 x 324 mm (D36)", 2, 10.15, "Zoro G9463097, 2026-11-27", "✓"),
     ("L-com ACPWRC-C13LR right-angle C13", 1, 28.09, "l-com.com, 2026-11-25", "✓"),
     ("Lid NEMA 5-15 outlet + IEC C14 inlet + push-button", 1, 30.00, "not priced", "⚠️"),
     ("Anderson PP45 1327 + 1327G6 + 2 contacts (inverter mate)", 1, 6.00, "not priced", "⚠️"),

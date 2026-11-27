@@ -97,7 +97,7 @@ p(f"  plate -> wall tabs: 7 x M4 per end in single shear, {F_tab:.0f} N each; be
 
 # ---------------- what is in compression ----------------
 p("\n[Compression members]")
-p("  Tie rods (4 x M5 A2-70): tension only. The cells push the end plates apart; a tension member cannot buckle.")
+p("  Tie rods (4 x M6 A4-70): tension only. The cells push the end plates apart; a tension member cannot buckle.")
 p("  Cells + 9 Mylar insulators: the only parts in compression, 130.3 x 195.5 mm faces bearing on each other -> no slenderness, no buckling.")
 p("  Upper standoffs (M4, 15 mm, hex 7): carry tray 1 + converters + power bay down into the end plates.")
 P_so = (2.13 + 2.5) * g * 5 / 4
@@ -109,10 +109,10 @@ p(f"    5 g: {P_so:.0f} N each; Euler (K = 2, Al) {Pcr/1e3:.0f} kN -> {Pcr/P_so:
 # ---------------- EVE compression / swelling ----------------
 p("\n[EVE LF105 rev E (PBRI-LF105-D06-01 E, 2023-05-31), Tables 16-17]")
 p("  Recommended compression 3000-7000 N, instantaneous max 10000 N; swelling force BOL ≤ 3000 N, EOL (80 % SOH) ≤ 30000 N (rigid fixture)")
-As = 14.2; proof = 450.0
+As = 20.1; proof = 450.0   # v16.3: 4 x M6 316 A4-70 (was M5, A_s 14.2)
 for F in (2943, 7000, 10000, 30000):
     s = F / 4 / As
-    p(f"  F {F/1e3:5.1f} kN: rod σ {s:5.0f} MPa ({'OK' if s < proof else 'YIELDS'} vs 450 proof, {proof/s:.2f}x); "
+    p(f"  [M6] F {F/1e3:5.1f} kN: rod σ {s:5.0f} MPa ({'OK' if s < proof else 'YIELDS'} vs 450 proof, {proof/s:.2f}x); "
       f"end-plate deflection ≈ {0.078*F/2943:.2f} mm (v13 FE, linear)")
 # system stiffness: rods + plates; how far must the stack grow before the rods reach proof?
 E_ss = 193000.0; Lrod = t.STACK_L + 12.0

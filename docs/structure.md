@@ -18,6 +18,12 @@ Model: `cad/analysis/structure_v16.py` (numbers in [`v16-structure.txt`](v16-str
 4. **Body → front/rear plates.** The two L-shaped 5052 .063 body halves form a U section (walls 287 mm tall). They carry the load as a beam to the wall tabs, with 7 × M4 per end into the plates.
 5. **Plates → ground or hands.** The 6061 .125 front/rear plates carry the feet (standing) and the handle slots (carrying).
 
+**How the two body halves are joined.** There is no fastener on the seam itself. The halves butt at y +24 (0.5 mm gap), under the G10 floor, which covers the seam. They are tied together by three parts:
+- the front and rear plates (each half's wall tabs, plus half A's floor tab, all M4);
+- the two module end plates (one M4 per half at each end, through the floor into the end-plate T-nuts);
+- the lid (3 × M3 clinch nuts per wall).
+For vertical loads each L half is its own beam, so the seam carries no shear. (The U-section numbers above count both halves together; each carries about half.) Why two halves: a one-piece U fails SendCutSend's U-channel rule, base 149 mm vs 2 × wall 597 mm (DFM_report.txt).
+
 ## 3. Results (1 g / 5 g drop)
 | Check | Load | Capacity | Margin |
 |---|---|---|---|
@@ -37,10 +43,12 @@ Model: `cad/analysis/structure_v16.py` (numbers in [`v16-structure.txt`](v16-str
 | 7 kN (top of EVE's range) | 123 MPa | 3.7× | 0.19 mm |
 | 10 kN (EVE instantaneous max) | 176 MPa | 2.6× | 0.27 mm |
 | **30 kN (EVE EOL swelling, rigid fixture)** | **528 MPa** | **0.85× — rods yield** | 0.80 mm |
+| 30 kN with **M6 A4-70** (A_s 20.1 mm², v16.3) | 373 MPa | 1.21× | 0.80 mm |
 
 - Frame stiffness: rods 33.9 kN/mm in series with the two plates 18.9 kN/mm = 12.1 kN/mm. The rods reach proof at 25.6 kN, after **1.9 mm** of stack growth past preload (0.64 % of the cell stack).
 - **This is a real gap.** v13 sized the module for an assumed 10 kN. EVE's own document now gives ≤ 30 kN at 80 % SOH in a rigid fixture. In a compliant frame like ours the force will be lower, but how much lower depends on the cell's swelling stiffness, which EVE doesn't give.
-- **Options (owner review):**
+- **Done (D36, owner approved 2026-11-27): M6 316 A4-70 rods.** Proof 36.2 kN ≥ 30 kN (1.21×); the rods reach proof after 2.46 mm of stack growth. Losing options kept below.
+- **Options considered:**
   - **(a)** M6 A4-80 rods (A_s 20.1 mm², proof 600 MPa → 48 kN, ≈ +$5).
   - **(b)** Keep M5, log the stack length at each service and re-shim. Rods that yield only stretch: they relax the clamp, they don't break.
   - **(c)** Add disc springs under the rod nuts to cap the force (one more part per rod).
@@ -52,5 +60,6 @@ Model: `cad/analysis/structure_v16.py` (numbers in [`v16-structure.txt`](v16-str
 - Masses: the v16 roll-up (CAD volume × density, catalog weights) ⚠️ ±0.3 kg.
 
 ## 6. Open items
-- ⚠️ EOL swelling vs M5 rods (§4): decide (a)/(b)/(c).
+- ✓ EOL swelling vs rods: M6 (D36).
+- ⚠️ End-plate local stress at the rod nuts at 30 kN: re-run the v13 plate FE with washer-sized supports.
 - ⚠️ The handle-slot edge in .125 plate: comfort only, not strength.

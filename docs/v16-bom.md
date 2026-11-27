@@ -44,6 +44,7 @@ SendCutSend: live guest prices 2026-11-25 (flat parts) and 2026-11-27 (bent shel
 | MRBF fuses 250 A (5189), 30 A (5175), 50 A (5177) | 3 | 22.08 | 66.24 | Fisheries Supply, 2026-11-25 | ✓ |
 | Noctua NF-A14 5V | 1 | 30.95 | 30.95 | Newegg.ca, 2026-11-25 (CAD listing, treated as USD: conservative) | ⚠️ |
 | Tesla shunt 1016792-00-C | 1 | 0.00 | 0.00 | already owned | ✓ |
+| Threaded rod M6 x 1 m, 316 (700 N/mm²), cut to 4 x 324 mm (D36) | 2 | 10.15 | 20.30 | Zoro G9463097, 2026-11-27 | ✓ |
 | L-com ACPWRC-C13LR right-angle C13 | 1 | 28.09 | 28.09 | l-com.com, 2026-11-25 | ✓ |
 | Lid NEMA 5-15 outlet + IEC C14 inlet + push-button | 1 | 30.00 | 30.00 | not priced | ⚠️ |
 | Anderson PP45 1327 + 1327G6 + 2 contacts (inverter mate) | 1 | 6.00 | 6.00 | not priced | ⚠️ |
@@ -55,7 +56,7 @@ SendCutSend: live guest prices 2026-11-25 (flat parts) and 2026-11-27 (bent shel
 | Control PCB, assembled (BQ76952 + ESP32) | 1 | 150.00 | 150.00 | README estimate (board not designed) | ⚠️ |
 | Sense flex PCB | 1 | 40.00 | 40.00 | README estimate | ⚠️ |
 | LED front board | 1 | 40.00 | 40.00 | estimate | ⚠️ |
-| **Catalog subtotal** | | | **1348** | | |
+| **Catalog subtotal** | | | **1368** | | |
 
 ## Other
 | Item | Total | Source | |
@@ -63,11 +64,11 @@ SendCutSend: live guest prices 2026-11-25 (flat parts) and 2026-11-27 (bent shel
 | Duty + GST on cells (import to Canada) | 40.00 | README estimate | ⚠️ |
 | SCS shipping to Canada | 0.00 | not computed | ⚠️ |
 
-## Total ≈ **$3,212** (SCS 1,825 = 57 %, catalog 1,348, other 40)
+## Total ≈ **$3,232** (SCS 1,825 = 56 %, catalog 1,368, other 40)
 
 ## Findings from the live SCS pass
 - ⚠️ **SCS has G10 .063 and .125 out of stock** (only .187 / .250 / .375 / .500). tray1, tray2, g10_plate, cheeks, g10_top and the 9 spacers were quoted at .187. That changes the stack heights (+1.6 mm per .125 part, +3.1 mm per .063 part; +28 mm over the 9 spacers) and must be resolved before ordering.
 - **v16.3 budget: SCS must stay under the $2,000 sponsorship.** Levers taken: Mylar top + spacers ($470 → $60), identical end plates ($163 → $107), .125 front/rear plates ($566 → ≈ $438). Still unpriced: taps/PEM on the shell (estimated in), bends on the two pack busbars and the Z-strap ⚠️.
-- **End plates:** $532 for the two hole-grid plates (17 % of the pack). v5 found 5052 .125 about 33 % cheaper than 6061 .187.
+- **End plates:** $532 for the two hole-grid plates (16 % of the pack). v5 found 5052 .125 about 33 % cheaper than 6061 .187.
 - **bus_pack_pos / bus_pack_neg are bend-legal 1/8 in Zs since v16.2** (v16-decisions D28). The prices are still the v16.1 .187 flat quotes ⚠️: re-quote as bent COP-125.
 - Bending, tapping and powder coat on the flat parts were not added; the bent-part prices include them from v5.

@@ -72,7 +72,7 @@ cell_x = [(k - (N - 1) / 2) * PITCH_C for k in range(N)]
 ep_x = [-(STACK_L / 2 - EP_T / 2), STACK_L / 2 - EP_T / 2]
 spacer_x = [cell_x[0] - PITCH_C / 2 + k * PITCH_C for k in range(N + 1)]
 EP_W = 158.0
-ROD_Y, ROD_D = 72.0, 5.0
+ROD_Y, ROD_D = 72.0, 6.0      # v16.3: M6 316 (A4-70) rods, was M5: EVE rev E T17 EOL swelling <= 30 kN, 4 x M6 proof 36.2 kN (docs/structure.md D36)
 
 # ======================= vertical stack =======================
 Z_FLOOR = T
@@ -426,7 +426,7 @@ def rods():
             r.append(cyl_x(-L / 2, L / 2, y, z, ROD_D / 2))
             for s in (-1, 1):
                 x0 = s * STACK_L / 2
-                n.append(cyl_x(x0, x0 + s * 4.0, y, z, 4.6) - cyl_x(x0 - 1, x0 + s * 5, y, z, ROD_D / 2))
+                n.append(cyl_x(x0, x0 + s * 5.0, y, z, 5.8) - cyl_x(x0 - 1, x0 + s * 6, y, z, ROD_D / 2))   # M6 nut, 10 AF x 5
     return Compound(r), Compound(n)
 
 def cell_pos_y(k):

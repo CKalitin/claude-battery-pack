@@ -20,16 +20,16 @@ Body U section (lid not counted): A 1257 mm², neutral axis z 121.5, I 12.83e6 m
   plate -> wall tabs: 7 x M4 per end in single shear, 78 N each; bearing in 1.6 mm 5052 ≈ 4 x 1.6 x 2 x 193 = 2470 N -> 31.8x
 
 [Compression members]
-  Tie rods (4 x M5 A2-70): tension only. The cells push the end plates apart; a tension member cannot buckle.
+  Tie rods (4 x M6 A4-70): tension only. The cells push the end plates apart; a tension member cannot buckle.
   Cells + 9 Mylar insulators: the only parts in compression, 130.3 x 195.5 mm faces bearing on each other -> no slenderness, no buckling.
   Upper standoffs (M4, 15 mm, hex 7): carry tray 1 + converters + power bay down into the end plates.
     5 g: 57 N each; Euler (K = 2, Al) 104 kN -> 1833x; σ 1.7 MPa
 
 [EVE LF105 rev E (PBRI-LF105-D06-01 E, 2023-05-31), Tables 16-17]
   Recommended compression 3000-7000 N, instantaneous max 10000 N; swelling force BOL ≤ 3000 N, EOL (80 % SOH) ≤ 30000 N (rigid fixture)
-  F   2.9 kN: rod σ    52 MPa (OK vs 450 proof, 8.69x); end-plate deflection ≈ 0.08 mm (v13 FE, linear)
-  F   7.0 kN: rod σ   123 MPa (OK vs 450 proof, 3.65x); end-plate deflection ≈ 0.19 mm (v13 FE, linear)
-  F  10.0 kN: rod σ   176 MPa (OK vs 450 proof, 2.56x); end-plate deflection ≈ 0.27 mm (v13 FE, linear)
-  F  30.0 kN: rod σ   528 MPa (YIELDS vs 450 proof, 0.85x); end-plate deflection ≈ 0.80 mm (v13 FE, linear)
-  frame stiffness: rods 33.9 kN/mm, two end plates 18.9 kN/mm, series 12.1 kN/mm
-  rods reach proof at 25.6 kN = 1.87 mm of stack growth past the 2.94 kN preload (0.64 % of 8 x 36.7 mm)
+  [M6] F   2.9 kN: rod σ    37 MPa (OK vs 450 proof, 12.29x); end-plate deflection ≈ 0.08 mm (v13 FE, linear)
+  [M6] F   7.0 kN: rod σ    87 MPa (OK vs 450 proof, 5.17x); end-plate deflection ≈ 0.19 mm (v13 FE, linear)
+  [M6] F  10.0 kN: rod σ   124 MPa (OK vs 450 proof, 3.62x); end-plate deflection ≈ 0.27 mm (v13 FE, linear)
+  [M6] F  30.0 kN: rod σ   373 MPa (OK vs 450 proof, 1.21x); end-plate deflection ≈ 0.80 mm (v13 FE, linear)
+  frame stiffness: rods 47.9 kN/mm, two end plates 18.9 kN/mm, series 13.5 kN/mm
+  rods reach proof at 36.2 kN = 2.46 mm of stack growth past the 2.94 kN preload (0.84 % of 8 x 36.7 mm)
