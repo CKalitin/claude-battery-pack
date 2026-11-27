@@ -9,6 +9,8 @@ One rule per correction: `- [area] what went wrong → what to do instead (date,
 - [power] A coil with a 3.9 A / 75 ms pick-up was fed through a 2 A ATM fuse (195 % of rating) → rate every series element (fuse, connector pin, trace) for the peak and its duration from the load's datasheet, not the hold current. (2026-11-27, BMS harness)
 - [tools] The first `add-apt-repository` failed on DNS (the host had lost IPv4) → one retry, then report; don't loop on network failures. (2026-11-27)
 
+- [privacy] The reference schematic (UBC Solar HVC) belongs to the team, not this public repo → record style only; never save its images, circuits or values here. (2026-11-27)
+
 ## Carried over (boardroom, generalised)
 - [schematic] Symbols on a grid joined by global labels → group by function in signal-flow order; wires inside a block; labels only between blocks or sheets.
 - [schematic] Inputs and outputs scattered round a symbol → inputs left, outputs right, power up, ground down; make a project symbol if the library one fights this.

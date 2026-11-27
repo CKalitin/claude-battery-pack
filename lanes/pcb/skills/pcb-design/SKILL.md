@@ -37,7 +37,7 @@ Read **LESSONS.md** first. It lists the corrections owners have already had to g
 | 0 | Intent | `design/intent.md`: every interface, rail, limit, environment, fab, quantity, each as a number or "don't care" | workflow.md |
 | 1 | Architecture and parts | block diagram; `design/parts/*.md` audit per part; sourcing checked at the chosen fab | parts.md |
 | 2 | Area budget and brief | sizing BOM → courtyards → placement proof; outline, holes, connector edges, layers, sides, keep-outs | area-budget.md, workflow.md |
-| 3 | Schematic | wired, block-structured sheets; ERC clean; netlist = spec; visual review | schematic.md |
+| 3 | Schematic | wired, block-structured sheets; ERC clean; netlist = spec; visual review | schematic.md, owner-style-chris.md |
 | 4 | Nets, stack-up, rules | `design/nets.csv` (class, V, I, impedance, reason); fab stack-up; net classes and DRC rules, each with a source | layout.md |
 | 5 | Placement | blocks in flow order, satellites at their pins, critical loops first; render reviewed | layout.md |
 | 6 | Routing | planes, then power copper, critical nets, the rest; DRC 0 / unrouted 0 | layout.md |
@@ -47,6 +47,8 @@ Read **LESSONS.md** first. It lists the corrections owners have already had to g
 Sign-offs that belong to the owner: intent (0), brief (2), release (8). Show them rendered pages (PNG/PDF or a published page), never raw file paths.
 
 ## Owner standards this skill was built for
+**Reference schematic style:** `references/owner-style-chris.md`, from Chris's UBC Solar HVC rev 1.0. Read it before any schematic for Chris.
+
 Chris Kalitin, ex-UBC Solar electrical lead:
 - full PCBA at a catalog fab (PCBWay / NextPCB), nothing hand-soldered unless agreed;
 - readable schematics;
