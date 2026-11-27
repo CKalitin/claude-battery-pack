@@ -10,7 +10,7 @@
 | W1 | Chris builds no harness: no crimping, no soldering, no cutting | Chris 2026-11-27 |
 | W2 | Ordered online from a vendor with a configurator or instant quote; no emailing to get a part | owner-req §2 |
 | W3 | Every wire tapped off pack copper is fused at the source end, within 178 mm (7 in) | signal-wiring R6 (ABYC E-11 ⚠️ from memory) |
-| W4 | Connectors mate from above; no new holes in purchased parts | CLAUDE.md, signal-wiring R2, R7 |
+| W4 | Connectors mate from above; no new holes in purchased parts. **Exception (recorded 2026-11-27):** the BMS board's right-angle Micro-Fit headers mate horizontally. The plugs drop in from above with the lid off and slide sideways; vertical headers plus a mated plug and wire bend won't fit under the lid (pcb) | CLAUDE.md, signal-wiring R2, R7 |
 | W5 | Mains leads never bundled with low-voltage leads | signal-wiring R9 |
 | W6 | Lid-mounted parts get a 150 mm service loop so the lid can stand beside the pack | baseline M8 |
 | W7 | Wire gauge sized for current and fuse; 105 ℃ insulation | — |
