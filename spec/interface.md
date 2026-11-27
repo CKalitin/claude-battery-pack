@@ -33,8 +33,8 @@ Single source of truth for numbers that more than one lane uses. Only `main-batt
 
 ## 4. BMS board (pcb lane)
 **Scope (Chris, 2026-11-27):**
-- BQ76952: 5 flex taps, 6 NTCs, balancing, protection;
-- ESP32-S3-WROOM-1U (18 × 19.2 mm ⚠️) with Wi-Fi;
+- AFE **BQ7695204PFBR** (BQ76952 silicon, SPI + CRC, REG1 3.3 V at boot): 5 flex taps, balancing, protection; 4 NTCs on the BQ, flex NTC 5 + board NTC + box NTC on ESP32 ADCs;
+- **ESP32-S3-WROOM-1U-N8** (18 × 19.2 mm ⚠️; N8R2 out of stock, no PSRAM needed) with Wi-Fi;
 - Tesla shunt SPI (**TXU0304**: 3 out + 1 in, TI SCES935A; was TXU0104, corrected by pcb 2026-11-27; 5 V supply);
 - GV14 coil driver, enabled by ESP32 **AND** BQ in hardware;
 - precharge switch = **2 P-MOSFETs in series, same orientation** (either one alone blocks B+ → LOAD+; the body diodes can pass LOAD+ → B+ through the 10 Ω, < ≈ 1 A, only with a welded charger relay and the GV14 open: accepted), replacing the G6S relay (Chris to pcb, 2026-11-27) + **Vishay AC05 10 Ω 5 W cemented wirewound (AC05000001009JAC00), axial, through-hole on the BMS board, no heatsink** between the B+ and LOAD+ taps (power-train.md §9);

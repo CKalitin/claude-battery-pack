@@ -1,5 +1,13 @@
 # Cell monitor (AFE) selection: why BQ76952 (written 2026-11-27)
 
+**Orderable part (pcb, 2026-11-27): BQ7695204PFBR**, the same BQ76952 silicon factory-set for SPI + CRC with REG1 on at 3.3 V.
+- BQ76952PFBR and BQ7695202 are out of stock with a 26-week lead (DigiKey API, 2026-11-27).
+- The plain part also wakes from SHUTDOWN with REG1 off, so the board buck could never start without an OTP step (SLUSE13B §12.3.2).
+- SPI uses HDQ and CFETOFF, so 4 NTCs sit on the BQ; flex NTC 5, the board NTC and the box NTC go on ESP32 ADCs.
+- The BQ76942 is the same 48-pin 7 × 7 TQFP, so no area gain (answered by pcb).
+
+Details: lanes/pcb/bms/design/parts/bq76952.md, decisions B4–B6.
+
 **Status:** the BQ76952 was chosen in early versions with no recorded comparison (CLAUDE.md documentation gap). Chris has since fixed it for the BMS board (pcb lane, `lanes/pcb/toolchain.md` R1). This page records the reasons after the fact, the alternatives, and one equivalent that was never tried.
 
 ## 1. Requirements
@@ -37,4 +45,4 @@
 - LTC6813, MAX17841, ISL94202: from general knowledge, **not re-read this session** ⚠️
 
 ## 5. Open items
-- pcb lane: confirm the BQ76942's multifunction-pin count if a smaller AFE is ever wanted.
+- ✓ BQ76942: same package as the BQ76952, no area gain (pcb, 2026-11-27).
