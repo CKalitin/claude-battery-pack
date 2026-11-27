@@ -2,8 +2,8 @@
 
 Current task: BMS board phase 1, part selection and datasheet audits (BQ76952 + ESP32 by me; support parts by teammate `pcb-bms-part-audits`)
 Blockers: none hard. Chris: sign off `lanes/pcb/bms/design/intent.md` (phase 0) before the schematic starts. main-battery: shunt pigtail test-fit (J2 Micro-Fit 2×4 vs Mini-Fit Jr 2×5)
-Next step: finish the BQ76952 and ESP32 audits; review the teammate's audits; then the phase 1 gate with an independent reviewer
-Last result: intent.md updated with Chris's answers (USB-C for flashing, latching relay for the inverter remote, J3 1×4 with a chassis lug, addressable LED link with a 10 W cap, qty 5); BQ76942 rejected: same 48-pin TQFP, no area gain
+Next step: review the teammate's support-part audits, then the phase 1 gate with a pcb-review-parts reviewer
+Last result: BQ76952 and ESP32 audits done. Orderable is BQ7695204PFBR (in stock; REG1 on by default, so no OTP; plain BQ76952 out of stock, 26 wk). MCU ESP32-S3-WROOM-1U-N8. Teammate pcb-bms-part-audits still running
 
 ## Notes
 - Project: `lanes/pcb/bms/` (design/intent.md, parts/, datasheets/, decisions.md). Size proof: `lanes/pcb/bms-area.md`. Skills: `lanes/pcb/skills/` (pcb-design, pcb-review), linked into `~/.claude/skills/`. kicad-happy v3.0.2 is the second reviewer.
