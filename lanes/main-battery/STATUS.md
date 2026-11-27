@@ -8,8 +8,11 @@
   - BMS 95 × 55 accepted (spec §4).
   - Budget: `docs/budget.md`, ≈ $2,930, SCS ≈ $1,580.
   - New docs: `docs/afe.md`, `docs/enclosure.md`.
-- **Blockers / waiting on:** Chris: go for CAD (cooling and fan-hole spacing deferred to after the CAD, his call). pcb: proving sizes. Zep's (NextPCB) reply.
-- **Next step:** Chris to pick a harness vendor (docs/harnesses.md); then CAD `tower17.py` once he says go (routes every harness, fixes lengths).
+- **Blockers / waiting on:**
+  - Chris: harness vendor; the existing shunt harness's far end and length.
+  - Zep's (NextPCB) reply.
+- **In progress:** subagent `cad-tower17` (background) is building the option D CAD (tower17.py, run/clearance/assembly checks, harness routing + measured lengths, fast renders, cooling re-run, BOM) and commits as "main-battery (cad agent):". Don't edit cad/ while it runs.
+- **Next step:** review the CAD agent's result and relay it to Chris.
 - **Key decisions so far (with reasons):**
   - Cells are the dominant constraint: nothing goes outside the module footprint (Chris).
   - Separate BMS board; the front zone is for the LED board only (Chris).
