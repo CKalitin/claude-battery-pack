@@ -34,7 +34,7 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | J9 | +y | Box-air NTC (1×2) | NTC, GND | 10 k NTC ⚠️ |
 | — | — | U.FL on the WROOM-1U | 50 Ω coax ≈ 150–200 mm to the front-plate flex antenna | signal-wiring.md |
 | — | — | Chassis reference for the IMD | J3 pin 4 → ring lug (Q2 answered) | — |
-| — | — | Programming / debug | ESP32-S3 USB (native USB-JTAG) + UART + EN + IO0 | **Q3:** Tag-Connect pads vs a 0.1″ header vs USB-C |
+| J10 | +y | Programming / debug: **USB-C** (Chris) | VBUS, D+, D−, CC1/CC2, GND | USB 2.0 FS (ESP32-S3 USB-Serial-JTAG); VBUS 5 V → diode → 5 V rail |
 
 ## 4. Functions and their numbers
 | Function | Requirement | Source |
@@ -83,7 +83,7 @@ Coil currents (GV14, charger relay) come straight from B+ through their drivers,
 ## 9. Answers (Chris, 2026-11-27) and what's left
 - Q1 LED board: pcb chooses, with main-battery (visibility, "extremely cool"), and it must show SOC % → addressable. **Open** until main-battery answers the panel facts.
 - Q2: ring lug, J3 → 1×4. ✓
-- Q3: Tag-Connect pads were shown to Chris (render `tagconnect_pads.png`). **Open:** his choice.
-- Q4 inverter remote: explained (form A vs B). **Open:** his choice; pcb recommends form A.
+- Q3: Chris wants to plug in a USB-C cable to flash → **USB-C receptacle on the +y edge** (ESP32-S3 native USB-Serial-JTAG: flash, console, debug); VBUS feeds the 5 V rail through a diode, so a board with no pack can be flashed; IO0/EN pads as a fallback. Tag-Connect dropped. ⚠️ A laptop on an earthed charger joins pack− to earth through USB GND: the IMD will read it as an insulation fault while plugged in (expected; note it in firmware).
+- Q4 inverter remote: Chris wants **zero holding current to keep it off** → a **latching (bistable) signal relay** on CN301, set and reset by pulses (no current while holding either state; keeps its state through an ESP32 restart). A second pole reads the state back for self-test. PhotoMOS form A is the runner-up (3 mA while holding off). NTS-400P-SPEC 2026-03-26 says only "dry contact (by RELAY)" for CN301, with no pin reference, so a bare MOSFET isn't safe to assume ⚠️.
 - Q5: pcb's choice of ESP32 module. ✓
 - Q6: 5 boards. ✓
