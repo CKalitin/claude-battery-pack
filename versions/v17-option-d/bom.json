@@ -81,10 +81,10 @@
    "qty": 2,
    "p16": 53.43,
    "f": 1.0,
-   "each": 53.43,
-   "total": 106.86,
+   "each": 53.21,
+   "total": 106.43,
    "note": "v16.3 live quote; SO_Y moved, same part otherwise",
-   "ok": "\u2713",
+   "ok": "\u26a0\ufe0f",
    "w": 158.0,
    "h": 187.1,
    "cut": 938.0,
@@ -290,14 +290,14 @@
    "label": "bus_mod_pos (Cu .125, + rail)",
    "qty": 1,
    "p16": 34.29,
-   "f": 1.2,
-   "each": 41.14,
-   "total": 41.14,
+   "f": 1.23,
+   "each": 42.06,
+   "total": 42.06,
    "note": "scaled from the C1 load bar",
    "ok": "\u26a0\ufe0f",
    "w": 158.5,
    "h": 28.0,
-   "cut": 452.0,
+   "cut": 468.0,
    "bends": 0
   },
   {
@@ -376,7 +376,7 @@
    "bends": 0
   }
  ],
- "total": 1822.488408203198,
- "total_area": 1717.051159135519,
- "total_cut": 1930.0338202170462
+ "total": 1822.9712098159084,
+ "total_area": 1717.0510449079552,
+ "total_cut": 1930.9995376700303
 }

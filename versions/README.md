@@ -2,7 +2,7 @@
 
 Fourteen iterations, from a shoebox concept to a SendCutSend-manufacturable 2.69 kWh tower. Each folder has a `README.md` covering what changed from the previous version, why, the calculations behind it, and renders.
 
-**[v14](v14-4s2p-power-train/README.md) is the current design**; its spec is [`docs/v14-baseline.md`](../docs/v14-baseline.md). v13's README carries the full justification of the mechanical base.
+**[v17](v17-option-d/README.md) is the current design** (v15–v16 are in their folders; the electrical baseline is still [`docs/v14-baseline.md`](../docs/v14-baseline.md)). v13's README carries the full justification of the mechanical base.
 
 Sources: `cad/packmodel.py` (v1), `cad/tower.py` / `tower2.py` (v2–v4), `cad/towerN.py` (v5 onward).
 
@@ -21,6 +21,7 @@ Sources: `cad/packmodel.py` (v1), `cad/tower.py` / `tower2.py` (v2–v4), `cad/t
 | <img src="v12-8s-stacked-board-on-deck/renders_studio/v12_01_hero.jpg" width="160"> | [**v12** Stacked + board on deck](v12-8s-stacked-board-on-deck/README.md) | LF105 8S1P | 2.69 kWh | Final architecture, 379 mm long, 26.2 kg | Review: strap U-rule, rod heights, lid lead-in |
 | <img src="v13-lip-rods-zstraps/renders/v13_01_hero.jpg" width="160"> | [**v13** Lip, rods, Z-straps](v13-lip-rods-zstraps/README.md) | LF105 8S1P | 2.69 kWh | Lead-in lip, rods at 0.207 / 0.793 h, Z-straps | Whole-pack review: power through PCB, no fuse, no air inlet, no Wi-Fi path |
 | <img src="v14-4s2p-power-train/renders/v14_01_hero.jpg" width="160"> | [**v14** Current](v14-4s2p-power-train/README.md) | LF105 **4S2P** | 2.69 kWh | 500 A power train in bolted copper (JJN-500, EV200, Tesla shunt), M10 terminals, controls-only board, checkerboard airflow | — |
+| <img src="v17-option-d/renders/v17p_01_hero.jpg" width="160"> | [**v17** Option D](v17-option-d/README.md) | LF105 4S2P | 2.69 kWh | Everything above the cells inside the module footprint: NPB-360 + NTS-400P stacked, power strip on −y, BMS under the lid; 19.2 L inside | — |
 
 ## How the design converged
 

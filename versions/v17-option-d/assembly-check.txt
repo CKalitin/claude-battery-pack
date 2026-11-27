@@ -43,4 +43,4 @@ everything installed before; screws/nuts get a driver or socket path (tool OD in
     strap_main (service disconnect), every other lead in place: CLEAR
 parts not in any step: []
 OVERALL: PASS
-(43 s)
+(39 s)

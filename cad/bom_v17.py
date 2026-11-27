@@ -85,7 +85,7 @@ PARTS = [
     ("pipe_f", "pipe_f (clear acrylic .118)", 1, "pipe_f", 2.00, "v16.3 quote"),
 ]
 FLOOR = 5.0
-UNCHANGED = ("g10_floor", "module_endplate", "mylar_spacer", "bus_A", "pipe_f")   # same outline as v16.3: quote stands
+UNCHANGED = ("g10_floor", "mylar_spacer", "bus_A", "pipe_f")   # identical to the v16.3 parts: quote stands
 
 def main():
     st = json.load(open(os.path.join(VER, "scs_dxf", "parts.json")))

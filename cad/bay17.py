@@ -64,6 +64,7 @@ def bay_copper():
         nr -= cyl_z(x, y, Z_P0 - 1, Z_P1 + 1, r)
     p["bus_mod_neg"] = nr
     pr = box(-26.5, 112.0, -55.0, -35.0, Z_P0, Z_P1) + box(104.0, 132.0, -45.0, -27.0, Z_P0, Z_P1)
+    pr += box(-4.0, 26.0, -55.0, -27.0, Z_P0, Z_P1)                 # widened at the 2151 M10 hole: 28 - 9.8 = 18.2 mm net
     for (x, y), r in ((SBP, 3.3), ((X2151, Y2151), 4.9), (T2, 4.3)):
         pr -= cyl_z(x, y, Z_P0 - 1, Z_P1 + 1, r)
     p["bus_mod_pos"] = pr

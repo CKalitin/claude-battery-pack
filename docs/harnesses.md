@@ -2,7 +2,7 @@
 
 **Owner rule (Chris, 2026-11-27): "I want to make none myself."** Every harness arrives built and tested. The vendor also terminates any purchased part that comes with flying leads (GV14 coil, fan), so nothing gets crimped at home.
 
-**Status:** pre-CAD. Lengths come from the option D packing coordinates (`cad/analysis/converter_packing.py`): Manhattan route + 30 mm per end + service loops. **Every length is ⚠️ until the tower17 CAD routes them.** BMS-side connectors follow the pcb lane's placement (`lanes/pcb/bms-area.md` §4); their pin numbers are proposals that pcb fixes in the schematic. This replaces `signal-wiring.md` (v16) for option D. Its rules (R1–R10) still apply.
+**Status:** routed in CAD (`cad/harness17.py`, 2026-11-27). Lengths below are measured from the model (method in §3a); **device-end connector positions are still ⚠️**, so confirm them on the parts before ordering. BMS-side connectors follow the pcb lane's placement (`lanes/pcb/bms-area.md` §4); their pin numbers are proposals that pcb fixes in the schematic. This replaces `signal-wiring.md` (v16) for option D. Its rules (R1–R10) still apply.
 
 ## 1. Requirements
 | # | Requirement | Source |
@@ -82,36 +82,46 @@ Coordinates are option D (x front +, y, z up; mm). BMS connectors (pcb lane):
 - **GV14 coil:** Sensata forbids an external diode (internal TVS; X2 can reach B+ + 55 V at turn-off). The board uses 100 V FETs; the harness wire must be ≥ 100 V rated (any normal hook-up wire is).
 
 ### Signal (BMS side Molex Micro-Fit 3.0 43025 housings, 43030 crimps; 22–24 AWG unless noted)
-| ID | From → to | Wires | Device-side connector | Pinout (device → BMS) | Length ⚠️ |
+| ID | From → to | Wires | Device-side connector | Pinout (device → BMS) | Length (CAD route → order) |
 |---|---|---|---|---|---|
-| **H1 Shunt** | Shunt pigtail receptacle → J2 | The existing harness is the module's pigtail, **soldered directly to the shunt module PCB** (Chris, 2026-11-27 ✓). Its free end is a **10-position 2×5 Mini-Fit-Jr-style receptacle, 8 loaded, non-catalog Tesla coding** (bridge between ckts 6–7, non-standard polarization). **No catalog mate known** ⚠️. H1 = a plug that mates with it → J2 ([tesla-shunt.md §3a](tesla-shunt.md)) | Candidate: Mini-Fit Jr. plug 39-01-3103 + 5558 terminals, **test fit first** ⚠️ | Receptacle ckt → signal: 1 VDD, 2 PC4, 3 MISO, 4 SCK, 5 OC_FLAG, 6 GND, 7 NSS, 8 MOSI, 9–10 empty. To J2 (proposal): VDD, GND, NSS, SCK, MISO, MOSI, OC_FLAG → J2-1…7; PC4 unused | ⚠️ length to confirm (v16.1 route 188 mm) |
+| **H1 Shunt** | Shunt pigtail receptacle → J2 | The existing harness is the module's pigtail, **soldered directly to the shunt module PCB** (Chris, 2026-11-27 ✓). Its free end is a **10-position 2×5 Mini-Fit-Jr-style receptacle, 8 loaded, non-catalog Tesla coding** (bridge between ckts 6–7, non-standard polarization). **No catalog mate known** ⚠️. H1 = a plug that mates with it → J2 ([tesla-shunt.md §3a](tesla-shunt.md)) | Candidate: Mini-Fit Jr. plug 39-01-3103 + 5558 terminals, **test fit first** ⚠️ | Receptacle ckt → signal: 1 VDD, 2 PC4, 3 MISO, 4 SCK, 5 OC_FLAG, 6 GND, 7 NSS, 8 MOSI, 9–10 empty. To J2 (proposal): VDD, GND, NSS, SCK, MISO, MOSI, OC_FLAG → J2-1…7; PC4 unused | route 121 → **190** (plug to J2); the pigtail itself routes 279 of its ≈ 300 ⚠️ and parks the mated 2×5 pair at (−90, −65, 293), over the shunt |
 | H1 options | If Chris's test-fit passes: J2 = Molex 39-30-1102 right-angle Mini-Fit Jr 2×5 and the Tesla pigtail plugs straight in (no harness). Needs 13.8 mm mated height (vs 12 limit) and 2.76 mm tails, so the lid goes up 2 mm (z 333 → 335) and the bridge standoffs to 4 mm. Otherwise: J2 Micro-Fit 2×4 plus a short Mini-Fit Jr ↔ Micro-Fit adapter harness (pcb audit, 2026-11-27) | — | — | — | — |
-| **H2 Power taps** | B+ (in-bar, (135, −15, 256)); LOAD+ (2151 inverter stud (64, −37, 285)); GND (node A (−143, −55, 253)) → J3 | 3 × 18 AWG | B+: M6 ring + **Eaton ATM-FHID inline holder, 5 A ATM**; LOAD+: M10 (3/8″) ring + ATM-FHID, 2 A; GND: M8 ring ⚠️ (node-A bolt size unknown) | B+ → J3-1; LOAD+ → J3-2; GND → J3-3 | B+ ≈ 360, LOAD+ ≈ 280, GND ≈ 220 mm (holders within 178 mm of the ring, W3) |
-| **H2b IMD chassis reference** | J3-4 → ring lug under a rear-plate screw: top-row +y corner screw, ≈ (−158, +y wall, z ≈ 281) ⚠️ exact screw set by tower17 | 1 × 22 AWG green/yellow | M4 ring (rear-plate screws are M4 button heads) | CHASSIS → J3-4 | ≈ 100 mm |
-| **H3 Outputs** | J4 → GV14 coil; J6 → charger relay coil (+ AC sense); J7 → inverter CN301 | 6 × 20 AWG | GV14: its own **38 cm flying leads**, red X1+ / black X2−, terminated by the vendor at full length (no cut; W1, R7). Relay: 2 × 6.3 mm FASTON receptacles + boots on pins 85/86 ⚠️ (coil tab size to check). CN301: **JST XHP-2 + SXH-001T** | J4: X1, X2. J6: 86, 85, AC_SENSE. J7: CN301-1, CN301-2 (*proposals*) | GV14 ≈ 270 (lead 380 ✓), relay ≈ 310, CN301 ≈ 210 mm |
-| **H4 Lid + front** | J8 → lid button; J5 → LED board; J9 → box-air NTC | 2 + 3 + 2 | Button: its own terminals (part TBD ⚠️); LED link: Micro-Fit 1×3 (5 V, GND, DATA); NTC: 10 k NTC on a 2-wire lead, sealed tip, near the inverter AC end | J5: 5V, DATA, GND. J8: BTN, GND. J9: NTC, GND (*proposals*) | button ≈ 250 + 150 loop, LED ≈ 310, NTC ≈ 200 mm |
-| **H5 AC-present sense** | Charger side of the relay (−141, 66, 250) → BMS | 1 × 22 AWG + ring/FASTON piggyback | piggyback FASTON on relay pin 30 ⚠️ | → J6-3 AC_SENSE (*proposal*); no return wire (ground via J3) | ≈ 260 mm |
-| **H6 Inverter fan** | Sunon MF40201VX-1000U-G99 leads → inverter CN100 | 2 or 3 × 26 AWG | **JST XHP-3 + SXH-001T** (1 +V, 2 −V, 3 PWM if the fan has a tach/PWM lead; the -G99 is 2-wire ⚠️) | fan red → CN100-1, black → CN100-2 | ≈ 130 mm (fan's own lead length ⚠️) |
-| H7 Antenna | ESP32-S3-WROOM-1U U.FL → flex antenna behind the front plate's light-pipe slot | coax 1.13 mm | **catalog flex antenna with a U.FL pigtail** (e.g. Molex 146153 series, ⚠️ length to confirm) | — | ≈ 250 mm |
+| **H2 Power taps** | B+ (ring under the Z-strap foot nut, (143, −10, 256)); LOAD+ (2151 inverter stud, (71, −45, 282)); GND (node-A nut, (−134, −59, 256)) → J3 (x −88.5, −y edge) | 3 × 18 AWG | B+: M6 ring + **Eaton ATM-FHID inline holder, 5 A ATM**; LOAD+: M10 (3/8″) ring + ATM-FHID, 2 A; GND: M8 ring ⚠️ (node-A bolt size unknown) | B+ → J3-1; LOAD+ → J3-2; GND → J3-3 | B+ 311 → **380** (holder starts 81 mm from the ring ✓ W3); LOAD+ 222 → **290** (holder at 144 mm ✓); GND 133 → **200** mm |
+| **H2b IMD chassis reference** | J3-4 → ring under the **rear-plate −y top screw** (y −77.8, z 312.35, inside the wall tab; tower17, D44): star washer, ring, M4 nut | 1 × 22 AWG green/yellow | M4 ring (rear-plate screws are M4 button heads) | CHASSIS → J3-4 | 100 → **160** mm |
+| **H3 Outputs** | J4 → GV14 coil; J6 → charger relay coil (+ AC sense); J7 → inverter CN301 | 6 × 20 AWG | GV14: its own **38 cm flying leads**, red X1+ / black X2−, terminated by the vendor at full length (no cut; W1, R7). Relay: 2 × 6.3 mm FASTON receptacles + boots on pins 85/86 ⚠️ (coil tab size to check). CN301: **JST XHP-2 + SXH-001T** | J4: X1, X2. J6: 86, 85, AC_SENSE. J7: CN301-1, CN301-2 (*proposals*) | GV14 route 194 of its own 380 ✓ (≈ 190 mm slack to tie off ⚠️); J6 → relay 86 89 → **150**, 85 81 → **150**; CN301 59 → **120** mm |
+| **H4 Lid + front** | J8 → lid button; J5 → LED board; J9 → box-air NTC | 2 + 3 + 2 | Button: its own terminals (part TBD ⚠️); LED link: Micro-Fit 1×3 (5 V, GND, DATA); NTC: 10 k NTC on a 2-wire lead, sealed tip, near the inverter AC end | J5: 5V, DATA, GND. J8: BTN, GND. J9: NTC, GND (*proposals*) | button 202 + 150 → **420**; LED 195 → **260** (header on the LED board back, top, y −60); NTC 144 → **210** (tip at (96, 60, 316)) |
+| **H5 AC-present sense** | Charger side of the relay (−141, 66, 250) → BMS | 1 × 22 AWG + ring/FASTON piggyback | piggyback FASTON on relay pin 30 ⚠️ | → J6-3 AC_SENSE (*proposal*); no return wire (ground via J3) | 91 → **160** mm |
+| **H6 Inverter fan** | Sunon MF40201VX-1000U-G99 leads → inverter CN100 | 2 or 3 × 26 AWG | **JST XHP-3 + SXH-001T** (1 +V, 2 −V, 3 PWM if the fan has a tach/PWM lead; the -G99 is 2-wire ⚠️) | fan red → CN100-1, black → CN100-2 | route 47 on the fan's own leads (length unread ⚠️) |
+| H7 Antenna | ESP32-S3-WROOM-1U U.FL → flex antenna behind the front plate's light-pipe slot | coax 1.13 mm | **catalog flex antenna with a U.FL pigtail** (e.g. Molex 146153 series, ⚠️ length to confirm); antenna at (163.5, y −40…0, z 309) | — | route 206 → pick a **≥ 250** mm pigtail |
 | — Sense flex | Flex PCB tail → J1 FPC | — | made with the flex (pcb lane) | — | — |
 
 ### DC power (105 ℃ fine-strand, tinned lugs, adhesive heat shrink)
-| ID | From → to | Wire | Ends | Current / fuse | Length ⚠️ |
+| ID | From → to | Wire | Ends | Current / fuse | Length (route → order) |
 |---|---|---|---|---|---|
-| **P1a Charger + to relay** | NPB-360 TB V+ (−126, 40, 240) → relay pin 30 (−141, 66, 245) | 10 AWG red | TB: bootlace ferrule ⚠️ (DT-66 screw terminal) → 6.3 mm FASTON receptacle for 10–12 AWG ⚠️ | 20 A | ≈ 90 mm |
-| **P1b Relay to fuse** | relay pin 87 → 2151 charger stud (34, −37, 285) | 10 AWG red | FASTON → 3/8″ ring | 20 A; MRBF 30 A | ≈ 360 mm |
-| **P2 Charger −** | NPB-360 TB V− → shunt node B (−81, −55, 260) | 10 AWG black | ferrule → M8 ring ⚠️ | 20 A | ≈ 180 mm |
-| **P3 Inverter +** | NTS-400P TB1 (red 1327) (−86, 10, 290) → 2151 inverter stud (64, −37, 285) | 10 AWG red (max for 261G2) | **Anderson 1327 + 261G2-LPBK** → 3/8″ ring | 41 A at 400 W, 11 V; MRBF 50 A | ≈ 240 mm |
-| **P4 Inverter −** | TB1 (black 1327G6) → node B | 10 AWG black | 1327G6 + 261G2-LPBK → M8 ring ⚠️ | 41 A | ≈ 130 mm |
+| **P1a Charger + to relay** | NPB-360 TB V+ (−124, 38, 240) → relay pin 30 (−141, 59, 286) | 10 AWG red | TB: bootlace ferrule ⚠️ (DT-66 screw terminal) → 6.3 mm FASTON receptacle for 10–12 AWG ⚠️ | 20 A | 83 → **150** mm |
+| **P1b Relay to fuse** | relay pin 87 (−141, 73, 286) → 2151 charger stud (45, −45, 282), 90° lug barrel up | 10 AWG red | FASTON → 3/8″ ring | 20 A; MRBF 30 A | 326 → **390** mm |
+| **P2 Charger −** | NPB-360 TB V− (−124, 18, 240) → shunt node B (−80.5, −59, 256), 90° lug | 10 AWG black | ferrule → M8 ring ⚠️ | 20 A | 129 → **190** mm |
+| **P3 Inverter +** | NTS-400P TB1 (red 1327) (−111, −9, 290) → 2151 inverter stud (71, −45, 282), 90° lug | 10 AWG red (max for 261G2) | **Anderson 1327 + 261G2-LPBK** → 3/8″ ring | 41 A at 400 W, 11 V; MRBF 50 A | 279 → **340** mm |
+| **P4 Inverter −** | TB1 (black 1327G6) → node B | 10 AWG black | 1327G6 + 261G2-LPBK → M8 ring ⚠️ | 41 A | 90 → **150** mm |
 
 ### Mains (UL 1015 / 105 ℃, 18 AWG, kept apart from LV, W5)
-| ID | From → to | Ends | Pinout | Length ⚠️ |
+| ID | From → to | Ends | Pinout | Length (route + loop → order) |
 |---|---|---|---|---|
-| **A1 AC in** | Lid IEC C14 inlet (138, 20, 308) → NPB-360 C14 inlet (front) | Inlet side: 3 × 6.3 mm FASTON + boots ⚠️ (inlet part TBD); charger side: **L-com ACPWRC-C13LR** right-angle C13 (field-term, screw terminals: the vendor terminates it) | L → L, N → N, PE → PE + PE jumper to chassis | ≈ 180 + 150 loop |
-| **A2 AC out** | NTS-400P CN500 (front, +y) → lid NEMA 5-15R | CN500: **JST VHR-6N + SVH-21T-P1.1**; outlet: FASTON or screw ⚠️ (outlet part TBD) | CN500-6 L → outlet brass (hot); CN500-4 N → outlet silver (neutral); CN500-1 FG → outlet ground → chassis; CN500-2, 3, 5 empty | ≈ 50 + 150 loop |
-| **A3 PE bonds** | Inlet PE, outlet ground, inverter FG → chassis lug (front-plate screw, star washer, enclosure.md) | M4 ring | — | ≈ 100 mm each |
+| **A1 AC in** | Lid IEC C14 inlet (144, 0, 308) → NPB-360 C14 inlet (front, y 50) | Inlet side: 3 × 6.3 mm FASTON + boots ⚠️ (inlet part TBD); charger side: **L-com ACPWRC-C13LR** right-angle C13 (field-term, screw terminals: the vendor terminates it) | L → L, N → N, PE → PE + PE jumper to chassis | 144 + 150 → **360** mm |
+| **A2 AC out** | NTS-400P CN500 (front, +y, (110, 62, 293)) → lid NEMA 5-15R (141, 49, 303) | CN500: **JST VHR-6N + SVH-21T-P1.1**; outlet: FASTON or screw ⚠️ (outlet part TBD) | CN500-6 L → outlet brass (hot); CN500-4 N → outlet silver (neutral); CN500-1 FG → outlet ground → chassis; CN500-2, 3, 5 empty | 40 + 150 → **250** mm |
+| **A3 PE bonds** | Inlet PE, outlet ground (carries inverter FG via A2) → chassis lug on the **front +y top screw** (y 77.8, z 312.35; D44), star washer | M4 ring, one barrel, two tails | — | inlet 89 + 150 → **300**; outlet 38 + 150 → **250** mm |
 
 **Not harnesses (no cable):** SB175 (busbar contacts bolted to the bay copper), all bay copper, the sense flex.
+
+## 3a. How the lengths were measured (tower17, 2026-11-27)
+- **Route:** centre line of the modelled tube, connector exit to connector exit (ring ends: from the ring barrel; B+ and LOAD+ include the 39.6 mm holder). Routed top-down, clear of every fuse lift-out prism, mains ≥ 7 mm from LV wiring and pack copper (`cad/clearance_v17.py`).
+- **Order length** = route + 30 mm per end (termination + tolerance) + 150 mm service loop for lid parts, rounded up to 10 mm. ⚠️ Vendors differ on where length is measured (housing face vs crimp): state "end of connector to end of connector" on the drawing.
+- Re-run: `~/.venvs/cad/bin/python cad/harness17.py` prints every route. The pre-CAD drawing set (`docs/harness-drawings/`) and its quotes used the old lengths ⚠️: regenerate before ordering.
+
+**CAD findings for the harness vendor and the pcb lane:**
+- J2, J4–J9 mate **horizontally** (right-angle Micro-Fit into the plug room), not from above (W4); every one is reachable with the lid off ✓ (assembly check).
+- J3 (1×4, 15.9 mm wide) sits at x −88.5: it ends 3 mm outside the claimed −y plug room (x −105…−84) to clear the BMS M3 screw at (−100, −10) ⚠️ pcb.
+- GV14 coil lead has ≈ 190 mm of slack and the shunt pigtail ≈ 20 mm; tie points are not modelled ⚠️.
 
 ## 4. Findings for the pcb lane (sent 2026-11-27)
 - ✓ **Resolved:** one connector per destination, J1–J9 (Chris approved, 2026-11-27); every branch has its own GND.
@@ -135,7 +145,8 @@ Coordinates are option D (x front +, y, z up; mm). BMS connectors (pcb lane):
 - Tesla J1 pinout: tesla-shunt.md §3 (Mini-Fit type unconfirmed) ⚠️
 
 ## 7. Open items
-- tower17 CAD: route every harness and replace the ⚠️ lengths (W6 loops included); then quotes: NextPCB (live tool) and Loombotic (needs an account).
+- ✓ tower17 routed every harness (2026-11-27). Next: regenerate the vendor drawings with the CAD lengths, then re-quote.
+- ⚠️ No cable ties or P-clips modelled yet: tie points on the deck edges still to be chosen.
 - Chris: the existing shunt harness, its far-end connector and length (H1).
 - Chris: vendor. Loombotic ≈ $2,245 vs NextPCB ≈ $495 (estimate, or $0 if Zep sponsors) vs PCBWay (unquoted).
 - ⚠️ Parts still to pick: lid C14 inlet, NEMA 5-15R outlet, push-button, NTC lead, U.FL antenna (with their terminals).
