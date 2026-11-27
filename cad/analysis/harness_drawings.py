@@ -15,9 +15,9 @@ COMMON = ("All wire: UL1007/UL1015 or 105 C rated, stranded tinned copper. Lengt
 
 ASSY = [
     ("A  BMS low-voltage harness (multi-branch, one assembly)", [
-        ("A1 B+ tap", "J3 pos 1", MF.format(n=3), "18 AWG red", 360, "Inline fuse holder Eaton ATM-FHID with 5 A ATM fuse, holder within 150 mm of the ring; ring terminal 1/4in (M6) for 18 AWG"),
-        ("A2 LOAD+ tap", "J3 pos 2", "(same J3 housing)", "18 AWG orange", 280, "Inline ATM-FHID with 2 A ATM fuse within 150 mm of the ring; ring terminal 3/8in (M10)"),
-        ("A3 GND (shunt node A)", "J3 pos 3", "(same J3 housing)", "18 AWG black", 220, "Ring terminal 5/16in (M8)"),
+        ("A1 B+ tap", "J3 pos 1", MF.format(n=3), "18 AWG thin-wall red", 360, "Inline fuse holder Eaton ATM-FHID with 5 A ATM fuse, holder within 150 mm of the ring; ring terminal 1/4in (M6) for 18 AWG"),
+        ("A2 LOAD+ tap", "J3 pos 2", "(same J3 housing)", "18 AWG thin-wall orange", 280, "Inline ATM-FHID with 2 A ATM fuse within 150 mm of the ring; ring terminal 3/8in (M10)"),
+        ("A3 GND (shunt node A)", "J3 pos 3", "(same J3 housing)", "18 AWG thin-wall black", 220, "Ring terminal 5/16in (M8)"),
         ("A4 Contactor coil", "J4 pos 1 X1 red, pos 2 X2 black", MF.format(n=2), "contactor's own leads", 380, "Gigavac GV141BAX contactor (vendor-procured or consigned) - terminate its 38 cm flying leads at full length, do not cut"),
         ("A5 Charger relay coil", "J6 pos 1 = relay 86, pos 2 = relay 85", MF.format(n=3), "20 AWG", 310, "2 x insulated 6.3 mm FASTON receptacles for TE V23134-B1052-C642 relay pins 86/85"),
         ("A6 AC sense", "J6 pos 3", "(same J6 housing)", "22 AWG", 260, "Insulated 6.3 mm piggyback FASTON on relay pin 30"),
@@ -49,14 +49,14 @@ ASSY = [
 
 BOM = {
     "A": [("43645-0300", "Molex Micro-Fit 3.0 receptacle housing 1x3", 3), ("43645-0200", "Molex Micro-Fit 3.0 receptacle housing 1x2", 4),
-          ("43030-0007", "Molex Micro-Fit 3.0 female crimp terminal 20-24 AWG", 12), ("43030-0001", "Molex Micro-Fit 3.0 female crimp terminal 18 AWG", 3),
+          ("43030-0007", "Molex Micro-Fit 3.0 female crimp terminal 20-24 AWG", 12), ("43030-0038", "Molex Micro-Fit 3.0 female crimp terminal 18 AWG (insulation OD <= 1.85 mm)", 3),
           ("ATM-FHID", "Eaton Bussmann inline ATM fuse holder 16 AWG", 2), ("ATM-5", "ATM fuse 5 A", 1), ("ATM-2", "ATM fuse 2 A", 1),
           ("Ring 1/4in 18AWG", "Insulated ring terminal 1/4in stud, 22-18 AWG", 1), ("Ring 3/8in 18AWG", "Insulated ring terminal 3/8in stud, 22-18 AWG", 1),
           ("Ring 5/16in 18AWG", "Insulated ring terminal 5/16in stud, 22-18 AWG", 1), ("FASTON 6.3 insulated", "TE FASTON .250 insulated receptacle 22-18 AWG", 4),
           ("FASTON 6.3 piggyback", "TE FASTON .250 insulated piggyback receptacle 22-18 AWG", 1), ("XHP-2", "JST XH housing 2-pin", 1),
-          ("SXH-001T-P0.6", "JST XH crimp terminal", 2), ("NTC 10k bead", "10 kOhm epoxy bead NTC thermistor with leads", 1),
+          ("SXH-001T-P0.6", "JST XH crimp terminal", 2), ("NTCLE413E2103F102L", "Vishay 10 kOhm NTC, AWG30 leads: splice to 24 AWG with heat shrink", 1),
           ("GV141BAX", "Gigavac GV14 contactor, consigned by customer (terminate its leads only)", 1),
-          ("Wire 18 AWG", "UL1007 18 AWG red/orange/black, total length per drawing", 1), ("Wire 20-26 AWG", "UL1007 20/22/26 AWG, total length per drawing", 1)],
+          ("Wire 18 AWG thin-wall", "18 AWG thin-wall (UL1061 or XLPE UL3266), insulation OD <= 1.85 mm, red/orange/black", 1), ("Wire 20-26 AWG", "UL1007 20/22/26 AWG, total length per drawing", 1)],
     "B": [("Ferrule 10 AWG", "Insulated bootlace ferrule 6 mm2 / 10 AWG", 2), ("FASTON 6.3 10AWG", "TE FASTON .250 insulated receptacle 12-10 AWG", 2),
           ("Ring 3/8in 10AWG", "Tinned copper ring lug 3/8in stud 10 AWG + adhesive heat shrink", 1), ("Ring 5/16in 10AWG", "Tinned copper ring lug 5/16in stud 10 AWG + adhesive heat shrink", 1),
           ("Wire 10 AWG", "10 AWG fine-strand 105 C red 450 mm, black 180 mm", 1)],

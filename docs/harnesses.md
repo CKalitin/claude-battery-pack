@@ -75,6 +75,12 @@ Coordinates are option D (x front +, y, z up; mm). BMS connectors (pcb lane):
 
 **Pin numbers are proposals until pcb's schematic.**
 
+**BMS-connector facts (pcb audit, 2026-11-27):**
+- **Micro-Fit 3.0 crimps take insulation ≤ 1.85 mm OD.** Thick-wall 18 AWG (UL1015, ≈ 2.5 mm) won't fit. Use thin-wall 18 AWG on the J3 branches, e.g. UL1061 or XLPE UL3266 ⚠️ (verify OD). The 18 AWG terminal is **43030-0038**.
+- **J3 is 43650-0400 (1×4)** on the board.
+- **Box-air NTC = Vishay NTCLE413E2103F102L** (10 k, B 3435 K) with AWG30 leads, too thin for a Micro-Fit crimp. The vendor splices it to 22–24 AWG with heat shrink, or we pick a probe with thicker leads ⚠️.
+- **GV14 coil:** Sensata forbids an external diode (internal TVS; X2 can reach B+ + 55 V at turn-off). The board uses 100 V FETs; the harness wire must be ≥ 100 V rated (any normal hook-up wire is).
+
 ### Signal (BMS side Molex Micro-Fit 3.0 43025 housings, 43030 crimps; 22–24 AWG unless noted)
 | ID | From → to | Wires | Device-side connector | Pinout (device → BMS) | Length ⚠️ |
 |---|---|---|---|---|---|
