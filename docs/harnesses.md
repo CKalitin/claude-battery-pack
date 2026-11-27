@@ -19,12 +19,23 @@
 ## 2. Who builds them
 | Vendor | How you order | Range | Notes | Verdict |
 |---|---|---|---|---|
-| **Loombotic** (loombotic.com, YC-backed, US) | **Online harness editor + instant quote**, no account needed to quote, add to cart; or upload a drawing PDF and AI reads it | 32 AWG–4/0, qty 1–10,000+, ~7 days; IPC/WHMA-A-620; **100 % electrically tested**; every order reviewed by an engineer | Verified catalog in the editor (read 2026-11-27): **Molex Mini-Fit Jr (62), Micro-Fit 3.0 (46), Mega-Fit, Amphenol AT/ATM/ATP, Panduit, Phoenix, Alpha Wire**. JST XH/VH, Anderson PP45 and FASTONs are **not** in the verified catalog: they'd be "new custom part" lines (engineering review) ⚠️. Shipping to Canada not stated ⚠️ | **Recommended:** one vendor for signal and power cables (4/0 covers our 10 AWG), true online ordering |
-| **NextPCB cable assembly** (nextpcb.com/cable-assembly-quote) | Online quote tool (estimated price) → sales review within 1 working day | JST, Molex, Hirose, IDC; MOQ 1 | China. Already our PCB sponsor; could ship with the front board, and may fold into the sponsorship (ask Zep) | **Alternative**, or first choice if Zep includes harnesses |
+| **Loombotic** (loombotic.com, YC-backed, US) | **Online harness editor + instant quote**; in practice the guest editor is view-only (2026-11-27: "Couldn't load this harness"), so a price needs a free account, which Chris would create ⚠️; add to cart; or upload a drawing PDF and AI reads it | 32 AWG–4/0, qty 1–10,000+, ~7 days; IPC/WHMA-A-620; **100 % electrically tested**; every order reviewed by an engineer | Verified catalog in the editor (read 2026-11-27): **Molex Mini-Fit Jr (62), Micro-Fit 3.0 (46), Mega-Fit, Amphenol AT/ATM/ATP, Panduit, Phoenix, Alpha Wire**. JST XH/VH, Anderson PP45 and FASTONs are **not** in the verified catalog: they'd be "new custom part" lines (engineering review) ⚠️. Shipping to Canada not stated ⚠️ | **Recommended:** one vendor for signal and power cables (4/0 covers our 10 AWG), true online ordering |
+| **NextPCB cable assembly** (nextpcb.com/cable-assembly-quote) | Online quote tool (estimated price) → sales review within 1 working day. **Live estimate 2026-11-27: $99 for a 300 mm Micro-Fit 2×4 ↔ 2×4, 22 AWG UL1007, the same at qty 1 and qty 5:** a per-design minimum. Service launched 2026-08-14; "Free assembly for 5 pcs" banner ⚠️ terms unread | JST, Molex, Hirose, IDC; MOQ 1 | China. Already our PCB sponsor; could ship with the front board, and may fold into the sponsorship (ask Zep) | **Alternative**, or first choice if Zep includes harnesses |
 | PCBWay | "Cable Wire Harness Assembly" as an add-on to a PCB/PCBA order; price after file review | — | Natural bundle with the BMS PCBA if it stays at PCBWay | Alternative |
 | CurrentConnected (custom battery cables) | Online builder | **6 AWG–4/0 only** | Our DC leads are 10 AWG | ✗ gauge |
 | Molex off-the-shelf Micro-Fit cable assemblies (Digi-Key) | Catalog | Fixed lengths, straight-through | Only fits harnesses with Micro-Fit at both ends; we have none | ✗ not useful here |
 | WellPCB, OurPCB/cableharnessassembly.com, RushPCB, Miniproto | Quote by email or review | — | Fails W2, or no configurator found | ✗ |
+
+**Price and quality (searched 2026-11-27):**
+- **No independent reviews exist** for any of the three harness services (Loombotic: directory listing only; NextPCB: own pages only; PCBWay: no harness-specific reviews). All three claim IPC/WHMA-A-620, which is the quality bar to hold them to. Loombotic and NextPCB claim 100 % electrical test.
+- **Price is per design, not per wire.** NextPCB's $99 minimum per harness design means **15 separate harnesses ≈ $1,400** vs ≈ $105 in docs/budget.md.
+- **So consolidate into 4 multi-branch assemblies:**
+  1. BMS low-voltage harness: J3/J4/J5 branches to the taps, GV14, relay coil, CN301, AC sense, button, LED, NTC;
+  2. charger DC set: P1a, P1b, P2 with the relay;
+  3. inverter DC set: P3, P4 with PP45;
+  4. mains set: A1, A2, A3.
+
+  Add the fan pigtail as a 5th small line, or buy a fan that already has an XH plug. That's **≈ 5 × $99 ≈ $500 at NextPCB** list (or $0 if Zep sponsors). Loombotic is unpriced until there's an account.
 
 **Plan:**
 - Order every harness below as one Loombotic order, or one NextPCB order if Zep covers it, after tower17 fixes the lengths.
@@ -44,7 +55,7 @@ Every branch has its own GND pin: no shared crimps, no splices (pcb, `bms-area.m
 ### Signal (BMS side Molex Micro-Fit 3.0 43025 housings, 43030 crimps; 22–24 AWG unless noted)
 | ID | From → to | Wires | Device-side connector | Pinout (device → BMS) | Length ⚠️ |
 |---|---|---|---|---|---|
-| **H1 Shunt** | Tesla J1 (−140, −38, 263) → J2 | 7 × 22 AWG twisted (SPI) | Molex **Mini-Fit Jr 10-pin receptacle 39-01-2100** + 39-00-0039 crimps ⚠️ (J1 type unconfirmed, "U") | 1 VDD 5V → J2-1; 2 GND → J2-2; 3 NSS → J2-3; 4 SCK → J2-4; 5 MISO → J2-5; 6 MOSI → J2-6; 7 OC → J2-7; 8–10 NC; J2-8 spare | ≈ 200 mm |
+| **H1 Shunt** | Tesla J1 → J2 | **Already exists: Chris's shunt harness** (Chris, 2026-11-27). The shunt repo labels its wires VDD, VSS, NSS, SCK, MISO, MOSI, PIN7, PIN8. **J1 is 8-way** (`schematic/connections.csv`: 1 +5V, 2 GND, 3 NSS, 4 SCK, 5 MISO, 6 MOSI, 7 OC_FLAG, 8 PC4), not the 10-pin in tesla-shunt.md ⚠️ | — | J1-1…7 → J2-1…7 (proposal); pin 8 unused | ⚠️ far end and length to confirm with Chris (does J2 match it, or does pcb fit its connector?) |
 | **H2 Power taps** | B+ (in-bar, (135, −15, 256)); LOAD+ (2151 inverter stud (64, −37, 285)); GND (node A (−143, −55, 253)) → J3 | 3 × 18 AWG | B+: M6 ring + **Eaton ATM-FHID inline holder, 5 A ATM**; LOAD+: M10 (3/8″) ring + ATM-FHID, 2 A; GND: M8 ring ⚠️ (node-A bolt size unknown) | B+ → J3-1; LOAD+ → J3-2; GND → J3-3 | B+ ≈ 360, LOAD+ ≈ 280, GND ≈ 220 mm (holders within 178 mm of the ring, W3) |
 | **H3 Outputs** | J4 → GV14 coil, charger relay coil, inverter CN301 | 6 × 20 AWG | GV14: its own **38 cm flying leads**, red X1+ / black X2−, terminated by the vendor at full length (no cut; W1, R7). Relay: 2 × 6.3 mm FASTON receptacles + boots on pins 85/86 ⚠️ (coil tab size to check). CN301: **JST XHP-2 + SXH-001T** *Proposal:* GV14 X1, X2; relay 86, 85; CN301-1, CN301-2; AC_SENSE (H5); spare | GV14 ≈ 270 (lead 380 ✓), relay ≈ 310, CN301 ≈ 210 mm |
 | **H4 Lid + front** | J5 → lid button, LED board, box-air NTC | 2 + 3 + 2 | Button: its own terminals (part TBD ⚠️); LED link: Micro-Fit 1×3 (5 V, GND, DATA); NTC: 10 k NTC on a 2-wire lead, sealed tip, near the inverter AC end *Proposal:* J5 = LED 5V, DATA, GND; BTN, GND; BOX_NTC, GND; spare (2×4, resolved) | button ≈ 250 + 150 loop, LED ≈ 310, NTC ≈ 200 mm |
@@ -93,7 +104,8 @@ Every branch has its own GND pin: no shared crimps, no splices (pcb, `bms-area.m
 - Tesla J1 pinout: tesla-shunt.md §3 (Mini-Fit type unconfirmed) ⚠️
 
 ## 7. Open items
-- tower17 CAD: route every harness and replace the ⚠️ lengths (W6 loops included); then a Loombotic quote.
+- tower17 CAD: route every harness and replace the ⚠️ lengths (W6 loops included); then quotes: NextPCB (live tool) and Loombotic (needs an account).
+- Chris: the existing shunt harness, its far-end connector and length (H1).
 - Chris: Loombotic vs NextPCB (sponsored?) vs PCBWay.
 - ⚠️ Parts still to pick: lid C14 inlet, NEMA 5-15R outlet, push-button, NTC lead, U.FL antenna (with their terminals).
 - ⚠️ Confirm: Tesla J1 housing, shunt node-A/B bolt size, relay coil tab size, fan lead wires and length, NPB-360 TB wire range for 10 AWG.
