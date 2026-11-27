@@ -165,9 +165,18 @@ def opt_D(chg=("chg_npb360", 182.7, 96.0, 49.0, "NPB-360-12TB\n182.7 × 96 × 49
     p.append(B("fan_inv_4020", -156, -136, 9, 49, z2, z2 + 40, "fan", "40×40\nfan"))
     p.append(B("keep_inv_cn500", 100, 120, 15, 55, z2, z2 + 34, "keep", "CN500\n20"))
     # separate BMS board, flat over the inverter on 6 mm standoffs, parts <= 10 mm
-    zb = z2 + 34 + 6
-    p.append(B("bms_board", -80, 95, -15, 75, zb, zb + 1.6, "bms", "BMS board 175 × 90 (UNCONF size)"))
-    p.append(B("keep_bms_parts", -80, 95, -15, 75, zb + 1.6, zb + 11.6, "keep", None))
+    # pcb lane space claim 2026-11-27 (spec/requests/pcb-bms-space-claim.md): 150 x 90, top <= 12 mm incl. mated plugs,
+    # 25 mm right-angle plug room beyond -x, and beyond -y for x -105..-62. Carried by a G10 .125 bridge over the inverter
+    # (no holes in the NTS-400P), the bridge on 4 posts standing on deck 2 beyond the inverter's ends.
+    zr = z2 + 34 + 1.0
+    p.append(B("g10_bms_bridge", -112, 108, -15, 75, zr, zr + G10, "g10", None))
+    for i, (x, y) in enumerate(((-109, -12), (-109, 72), (105, -12), (105, 72))):   # M3 standoffs at the bridge corners
+        p.append(B(f"bms_post_{i}", x - 3, x + 3, y - 3, y + 3, z2, zr, "g10", None))
+    zb = zr + G10 + 3.0
+    p.append(B("bms_board", -105, 45, -15, 75, zb, zb + 1.6, "bms", "BMS board 150 × 90 (pcb lane claim)"))
+    p.append(B("keep_bms_parts", -105, 45, -15, 75, zb + 1.6, zb + 13.6, "keep", None))
+    p.append(B("keep_bms_plugs_x", -130, -105, -15, 75, zb + 1.6, zb + 13.6, "keep", "plugs"))
+    p.append(B("keep_bms_plugs_y", -105, -62, -40, -15, zb + 1.6, zb + 13.6, "keep", "plugs"))
     # power bay strip (y -79 .. -20)
     p += bay_strip(-20.0, zp1, 156, lid)
     # GV14 (body 59.9 x 55.7, flange 72.5) and the 5191 on the + riser in the front corner
@@ -185,7 +194,7 @@ def opt_D(chg=("chg_npb360", 182.7, 96.0, 49.0, "NPB-360-12TB\n182.7 × 96 × 49
                        ("rail_pos", "sb175"), ("rail_pos", "bs2151"), ("g10_deck1", "pos_riser"), ("g10_bayplate", "pos_riser"),
                        ("keep_chg", "chg_"), ("keep_inv", "inv_"), ("bms_board", "keep_bms"), ("bs2151_fuse", "bs2151"), ("bs5191_fuse", "bs5191"),
                        ("keep_inv_pp45", "fan_"), ("rail_pos", "ct_"), ("g10_bayplate", "ct_"), ("pos_riser", "bs5191"), ("ct_", "bs5191"),
-                       ("sb175", "lid_"), ("g10_deck1", "keep_"), ("g10_deck2", "keep_inv"), ("pos_inbar", "pos_riser"), ("pos_inbar", "bs5191"),
+                       ("sb175", "lid_"), ("g10_deck1", "keep_"), ("g10_deck2", "keep_inv"), ("bms_post", "g10_deck2"), ("bms_post", "g10_bms"), ("g10_bms_bridge", "keep_"), ("pos_inbar", "pos_riser"), ("pos_inbar", "bs5191"),
                        ("pos_inbar", "ct_"), ("pos_riser", "ct_"), ("rail_pos", "pos_inbar"), ("g10_bayplate", "pos_inbar"), ("g10_bayplate", "bs5191")])
 
 def opt_B():

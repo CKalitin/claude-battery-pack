@@ -110,7 +110,7 @@ So the strip is **≥ 59 mm**, which leaves **≤ 96 mm of width for the convert
   - MEAN WELL's 40 × 40 × 20 fan at the rear wall, 50 mm from the DC face (its rated condition), drawing air in through the rear grid;
   - CN500 at the front.
 - **Under the lid:**
-  - BMS board 175 × 90 ⚠️ (size to be confirmed by the pcb lane) on 6 mm standoffs over the inverter;
+  - BMS board 150 × 90 (pcb lane claim, 2026-11-27) on a G10 .125 bridge over the inverter (4 corner posts on deck 2, nothing touches the NTS-400P); parts top z 331.1;
   - C14 inlet and NEMA outlet above the front corner, next to the charger's C14 and the inverter's CN500 (short AC runs);
   - button at the rear;
   - SB175 through the lid over the strip (mating face 8.4 mm above the lid top, as in C1).
