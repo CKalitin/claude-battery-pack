@@ -63,6 +63,7 @@
 - **Flex PCB: shop around** (Chris, 2026-11-27). Don't commit the flex to NextPCB; quote it at several fabs and pick the cheapest that meets the spec.
 - PCBWay (Liam) declined politely on 2026-11-26; Chris would work with them on a later project.
 - **Fab split (Chris, 2026-11-27): BMS board → PCBWay (full PCBA); front/LED board → NextPCB** (sponsored, as above). Flex: shop around. "Put more effort into sourcing the PCBs." ⚠️ PCBWay declined *sponsorship* on 2026-11-26, so the BMS board is a paid order unless PCBWay is re-approached (Chris to decide). Supersedes the relayed "BMS by NextPCB, PCBWay second".
+- **Re-offer to NextPCB (Chris, 2026-11-27): ask for one sponsored round of both rigid boards (front + BMS), fab + PCBA, instead of 3 rounds of the front board only.** Gmail draft r2333255080158129248 (reply to Zep's 2026-11-26 offer), not sent. If NextPCB says no, the BMS board goes to PCBWay as a paid order (split above).
 - **BMS schematic must be human-readable:** parts drawn wired together, not only connected by net labels (Chris to the pcb lane, 2026-11-27; relayed by pcb).
 - Assembly (PCBA) wanted on both boards, the flex included.
 
@@ -71,4 +72,4 @@
 - ~~Find a new charger + inverter (or a combined unit) that fits within the cells' top-face footprint~~ → option D picked 2026-11-27 (`docs/converters.md`, D39). Next: BMS board responsibilities, then CAD.
 - Inverter 400 W continuous: bench test, then decide the cooling fix (cooling.md).
 - Control board schematic: a separate agent, later.
-- Send the Zep reply (draft in Gmail).
+- Send the Zep reply: the new draft (one round, both boards) replaces the 3 older drafts, which Chris should delete.
