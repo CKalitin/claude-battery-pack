@@ -30,7 +30,7 @@
 - **No independent reviews exist** for any of the three harness services (Loombotic: directory listing only; NextPCB: own pages only; PCBWay: no harness-specific reviews). All three claim IPC/WHMA-A-620, which is the quality bar to hold them to. Loombotic and NextPCB claim 100 % electrical test.
 - **Price is per design, not per wire.** NextPCB's $99 minimum per harness design means **15 separate harnesses ≈ $1,400** vs ≈ $105 in docs/budget.md.
 - **So consolidate into 4 multi-branch assemblies:**
-  1. BMS low-voltage harness: J3/J4/J5 branches to the taps, GV14, relay coil, CN301, AC sense, button, LED, NTC;
+  1. BMS low-voltage harness: J3–J9 branches to the taps, GV14, relay coil + AC sense, CN301, button, LED, NTC;
   2. charger DC set: P1a, P1b, P2 with the relay;
   3. inverter DC set: P3, P4 with PP45;
   4. mains set: A1, A2, A3.
@@ -44,22 +44,30 @@
 
 ## 3. Harness list
 Coordinates are option D (x front +, y, z up; mm). BMS connectors (pcb lane):
-- **J1:** sense-flex FPC, −x edge.
-- **J2:** shunt, Micro-Fit 2×4, −x edge.
-- **J3:** power, Micro-Fit 1×3, −y edge at x −105…−84.
-- **J4:** outputs, Micro-Fit **2×4 (43045-0800)**, +x edge.
-- **J5:** lid button + LED link + box NTC, Micro-Fit **2×4 (43045-0800)**, +x edge.
+**One connector per destination** (Chris, 2026-11-27; pcb `bms-area.md` §13). All Micro-Fit 3.0: right-angle **43650-0200 / -0300** on the board, **43645** housings on the cables.
 
-Every branch has its own GND pin: no shared crimps, no splices (pcb, `bms-area.md` §12). **J4/J5 pin numbers below are proposals; pcb fixes them at the schematic.**
+| Edge | Connector | Pins (proposal) |
+|---|---|---|
+| −x | J1 sense-flex FPC (the flex's own tail) | — |
+| −x | J2 shunt, Micro-Fit 2×4 | per H1 |
+| −y (x −105…−84) | J3 power, 1×3 | B+, LOAD+, GND |
+| +x | J4 GV14 coil, 1×2 | X1, X2 |
+| +x | J5 LED board, 1×3 | 5V, DATA, GND |
+| +y (new edge, plug room y 40…65 confirmed free) | J6 charger relay, 1×3 | 86, 85, AC_SENSE |
+| +y | J7 inverter CN301, 1×2 | CN301-1, CN301-2 |
+| +y | J8 lid button, 1×2 | BTN, GND |
+| +y | J9 box-air NTC, 1×2 | NTC, GND |
+
+**Pin numbers are proposals until pcb's schematic.**
 
 ### Signal (BMS side Molex Micro-Fit 3.0 43025 housings, 43030 crimps; 22–24 AWG unless noted)
 | ID | From → to | Wires | Device-side connector | Pinout (device → BMS) | Length ⚠️ |
 |---|---|---|---|---|---|
 | **H1 Shunt** | Tesla J1 → J2 | **Already exists: Chris's shunt harness** (Chris, 2026-11-27). The shunt repo labels its wires VDD, VSS, NSS, SCK, MISO, MOSI, PIN7, PIN8. **J1 is 8-way** (`schematic/connections.csv`: 1 +5V, 2 GND, 3 NSS, 4 SCK, 5 MISO, 6 MOSI, 7 OC_FLAG, 8 PC4), not the 10-pin in tesla-shunt.md ⚠️ | — | J1-1…7 → J2-1…7 (proposal); pin 8 unused | ⚠️ far end and length to confirm with Chris (does J2 match it, or does pcb fit its connector?) |
 | **H2 Power taps** | B+ (in-bar, (135, −15, 256)); LOAD+ (2151 inverter stud (64, −37, 285)); GND (node A (−143, −55, 253)) → J3 | 3 × 18 AWG | B+: M6 ring + **Eaton ATM-FHID inline holder, 5 A ATM**; LOAD+: M10 (3/8″) ring + ATM-FHID, 2 A; GND: M8 ring ⚠️ (node-A bolt size unknown) | B+ → J3-1; LOAD+ → J3-2; GND → J3-3 | B+ ≈ 360, LOAD+ ≈ 280, GND ≈ 220 mm (holders within 178 mm of the ring, W3) |
-| **H3 Outputs** | J4 → GV14 coil, charger relay coil, inverter CN301 | 6 × 20 AWG | GV14: its own **38 cm flying leads**, red X1+ / black X2−, terminated by the vendor at full length (no cut; W1, R7). Relay: 2 × 6.3 mm FASTON receptacles + boots on pins 85/86 ⚠️ (coil tab size to check). CN301: **JST XHP-2 + SXH-001T** *Proposal:* GV14 X1, X2; relay 86, 85; CN301-1, CN301-2; AC_SENSE (H5); spare | GV14 ≈ 270 (lead 380 ✓), relay ≈ 310, CN301 ≈ 210 mm |
-| **H4 Lid + front** | J5 → lid button, LED board, box-air NTC | 2 + 3 + 2 | Button: its own terminals (part TBD ⚠️); LED link: Micro-Fit 1×3 (5 V, GND, DATA); NTC: 10 k NTC on a 2-wire lead, sealed tip, near the inverter AC end *Proposal:* J5 = LED 5V, DATA, GND; BTN, GND; BOX_NTC, GND; spare (2×4, resolved) | button ≈ 250 + 150 loop, LED ≈ 310, NTC ≈ 200 mm |
-| **H5 AC-present sense** | Charger side of the relay (−141, 66, 250) → BMS | 1 × 22 AWG + ring/FASTON piggyback | piggyback FASTON on relay pin 30 ⚠️ | → J4 AC_SENSE (*proposal*); no return wire (ground via J3) | ≈ 260 mm |
+| **H3 Outputs** | J4 → GV14 coil; J6 → charger relay coil (+ AC sense); J7 → inverter CN301 | 6 × 20 AWG | GV14: its own **38 cm flying leads**, red X1+ / black X2−, terminated by the vendor at full length (no cut; W1, R7). Relay: 2 × 6.3 mm FASTON receptacles + boots on pins 85/86 ⚠️ (coil tab size to check). CN301: **JST XHP-2 + SXH-001T** | J4: X1, X2. J6: 86, 85, AC_SENSE. J7: CN301-1, CN301-2 (*proposals*) | GV14 ≈ 270 (lead 380 ✓), relay ≈ 310, CN301 ≈ 210 mm |
+| **H4 Lid + front** | J8 → lid button; J5 → LED board; J9 → box-air NTC | 2 + 3 + 2 | Button: its own terminals (part TBD ⚠️); LED link: Micro-Fit 1×3 (5 V, GND, DATA); NTC: 10 k NTC on a 2-wire lead, sealed tip, near the inverter AC end | J5: 5V, DATA, GND. J8: BTN, GND. J9: NTC, GND (*proposals*) | button ≈ 250 + 150 loop, LED ≈ 310, NTC ≈ 200 mm |
+| **H5 AC-present sense** | Charger side of the relay (−141, 66, 250) → BMS | 1 × 22 AWG + ring/FASTON piggyback | piggyback FASTON on relay pin 30 ⚠️ | → J6-3 AC_SENSE (*proposal*); no return wire (ground via J3) | ≈ 260 mm |
 | **H6 Inverter fan** | Sunon MF40201VX-1000U-G99 leads → inverter CN100 | 2 or 3 × 26 AWG | **JST XHP-3 + SXH-001T** (1 +V, 2 −V, 3 PWM if the fan has a tach/PWM lead; the -G99 is 2-wire ⚠️) | fan red → CN100-1, black → CN100-2 | ≈ 130 mm (fan's own lead length ⚠️) |
 | H7 Antenna | ESP32-S3-WROOM-1U U.FL → flex antenna behind the front plate's light-pipe slot | coax 1.13 mm | **catalog flex antenna with a U.FL pigtail** (e.g. Molex 146153 series, ⚠️ length to confirm) | — | ≈ 250 mm |
 | — Sense flex | Flex PCB tail → J1 FPC | — | made with the flex (pcb lane) | — | — |
@@ -83,7 +91,7 @@ Every branch has its own GND pin: no shared crimps, no splices (pcb, `bms-area.m
 **Not harnesses (no cable):** SB175 (busbar contacts bolted to the bay copper), all bay copper, the sense flex.
 
 ## 4. Findings for the pcb lane (sent 2026-11-27)
-- ✓ **Resolved:** J4 and J5 are now Micro-Fit 2×4; AC_SENSE is on J4; every branch has its own GND (pcb, 2026-11-27).
+- ✓ **Resolved:** one connector per destination, J1–J9 (Chris approved, 2026-11-27); every branch has its own GND.
 - The G6S precharge relay is gone (two P-FETs), so the board no longer has a relay coil for precharge. **H3 still carries the charger-relay coil.**
 - **NTS-400P CN50** is a UART (GND/RX/TX, CHYAO SHIUNN JS-2001). The inverter could report its status to the ESP32 over it. Not in scope; noted as an option ⚠️ (protocol not published in the datasheet).
 

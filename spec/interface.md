@@ -50,10 +50,11 @@ No power current on the board. The CAN transceiver and the pack-fan header are d
 
 | Item | Value | Ref |
 |---|---|---|
-| Size | **95 × 55 × 1.6 mm, 4 layers, FINAL** (layout aims for credit-card size inside it), proven by pcb with real footprints (109 parts, 0 overlaps, 49 % occupancy). Chris rejected 150 × 90 | spec/requests/pcb-bms-space-claim.md rev 2026-11-27 (accepted) |
+| Size | **95 × 55 × 1.6 mm, 4 layers, FINAL** (credit-card target dropped by Chris 2026-11-27), proven by pcb with real footprints (109 parts, 0 overlaps, 49 % occupancy). Chris rejected 150 × 90 | spec/requests/pcb-bms-space-claim.md rev 2026-11-27 (accepted) |
 | Position | x −105…−10, y −15…40, flat over the inverter | same |
 | Height | Top parts ≤ 12 mm incl. mated plugs; no bottom parts; THT tails ≤ 2.5 mm | same |
 | Mounting | 4 × M3, 5 mm in from the edges, on **3 mm standoffs** on a **G10 .125 bridge** (SCS) spanning the inverter. The bridge stands on 4 M3 posts on deck 2 beyond the inverter's ends (x −109 / +105; y −14 / −12 / +40); the bridge is 220 × 58 mm. The −x post screw heads stay below the board top (z 319.1): they sit inside the board's −x plug room (pcb, 2026-11-27). Board underside z 317.5, parts top z 331.1, 1.9 mm under the lid. Nothing touches the NTS-400P | converter_packing.py (0 issues) |
-| Plug room | 25 mm beyond the −x edge, the +x edge (x −10…15, z 318–333: confirmed free), and the −y edge for x −105…−84 | pcb claim; converter_packing.py 0 issues |
+| Plug room | 25 mm beyond the −x edge, the +x edge (x −10…15, z 318–333: confirmed free), the −y edge for x −105…−84, and the **+y edge (y 40…65, x −105…−10, z 318–333: confirmed free)** | pcb claim; converter_packing.py 0 issues |
+| Connectors | **One per destination** (Chris, 2026-11-27): −x J1 flex FPC, J2 shunt 2×4; −y J3 power 1×3; +x J4 GV14 coil 1×2, J5 LED 1×3; +y J6 charger relay 1×3 (86, 85, AC_SENSE), J7 CN301 1×2, J8 button 1×2, J9 box NTC 1×2. Micro-Fit 3.0, 43650 right-angle on the board, 43645 on the cables. Pins are proposals until the schematic | pcb bms-area.md §13; docs/harnesses.md |
 | Antenna | U.FL coax from the WROOM-1U to a flex antenna behind the clear acrylic light-pipe slot in the front plate, as in v16; ≈ 150–200 mm coax ⚠️. The lid and shell are aluminium, so a PCB antenna under the lid won't radiate | signal-wiring.md |
 | Taps | B+ = in-bar after the main fuse, before the GV14; LOAD+ = 2151 inverter-fuse stud. 18 AWG. **B+ fuse 5 A ATM** (was 2 A: the GV14's 3.9 A, 75 ms pick-up is 195 % of a 2 A fuse; 5 A still protects 18 AWG). LOAD+ fuse 2 A ATM (precharge peak 1.46 A) | signal-wiring.md §3b–3d; pcb 2026-11-27 |
