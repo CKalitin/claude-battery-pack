@@ -39,7 +39,7 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 ## 4. Functions and their numbers
 | Function | Requirement | Source |
 |---|---|---|
-| Cell monitor | BQ76952 (TQFP-48); 4 cells on VC1–VC4 with VC16 tied per Table 16-3; 6 NTCs (5 flex + 1 board) on TS1, TS3, CFETOFF, DFETOFF, HDQ, DCHG; balancing internal | owner-req §5; afe.md |
+| Cell monitor | **BQ7695204PFBR** (BQ76952 family; SPI + CRC; REG1 on at 3.3 V by default, so no OTP is needed to boot) in TQFP-48. Cells on VC0–VC3 + VC16 (VC4–VC15 tied to VC3, Table 16-3). **4 NTCs on the BQ** (TS1, TS3, DFETOFF, DCHG: SPI mode uses HDQ and CFETOFF); flex NTC 5, the board NTC and the box NTC on ESP32 ADC1. Balancing internal, ≈ 50 mA | parts/bq76952.md |
 | Current | Tesla shunt over SPI, through **TXU0304** (3 out, 1 in); OC (5 V) → divider → ESP32 | tesla-shunt.md §3 |
 | Contactor | Low-side driver for 3.9 A / 75 ms pick-up; enable = **ESP32 GPIO AND BQ76952 DDSG**, in hardware; coil kick clamped; LED + TP on the output | interface §4; Chris's HVC style |
 | Precharge | **2 P-MOSFETs in series, same orientation**, B+ → AC05 10 Ω → LOAD+; each FET with its own driver and its own control line; ≤ 0.5 s timeout; LOAD+ measured (BQ PACK pin and/or ESP32 ADC) for "precharge done" | Chris 2026-11-27 |
@@ -53,7 +53,7 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | Wake / off | Button → TS2 wakes from SHUTDOWN; same button to an ESP32 GPIO; long press = SHUTDOWN. **No charger wake** (D33). LD held low | v14-design-notes §9a; D33 |
 | UV latch | Every UV trip latches (BQ SHUTDOWN is the hardware latch); re-enable by button with min cell ≥ 3.00 V | v14-design-notes §9a |
 | Safe states | With no firmware: GV14 off, precharge off, charger relay open, inverter remote per Q4 | design |
-| Telemetry | ESP32-S3 Wi-Fi, U.FL external antenna; module variant **Q5** (flash / PSRAM) | owner-req §1 |
+| Telemetry | **ESP32-S3-WROOM-1U-N8** (8 MB flash, no PSRAM), Wi-Fi, U.FL external antenna | parts/esp32-s3.md |
 
 ## 5. Power budget (awake, worst case) ⚠️ estimates until part audits
 | Load | 5 V rail | 3.3 V rail |
