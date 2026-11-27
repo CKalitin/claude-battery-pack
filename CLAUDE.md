@@ -97,10 +97,11 @@ Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders i
 
 ## Server swarm conventions (added by server setup)
 
-- Three independent Claude Code sessions run in the `claude` VM on Chris's home server, one tmux window each in session `swarm`: `systems`, `pcb` and `mech`. Each has its own clone at `~/agents/<name>`. They all run bypass mode with passwordless sudo, so install any tools you need.
+- Two independent Claude Code sessions run in the `claude` VM on Chris's home server, one tmux window each in session `swarm`: `main-battery` and `pcb`. Each has its own clone at `~/agents/<name>`. They run bypass mode with passwordless sudo, so install any tools you need. The earlier `systems`, `pcb` and `mech` sessions were retired on 2026-11-27 (archived in `~/archive/swarm-2026-11-27/`).
+- `main-battery` does everything except PCB work, including the former systems and mech duties: `spec/interface.md`, top-level files, docs, CAD, and `lanes/main-battery/`. `pcb` does PCB work and owns `lanes/pcb/`.
 - Chris talks to each session directly from his phone. Sessions message each other with SendMessage by name (`/list-agents` shows who's reachable). Message another session whenever your change affects its work.
-- `spec/interface.md` is the single source of truth for shared numbers: cell, S/P count, voltage/current limits, connectors, envelope, mounting points. Only `systems` edits it. Others write `spec/requests/<name>-<short-name>.md` and message `systems`.
-- Each session owns its folder, `lanes/<name>/`, and edits only that. Top-level files and the spec belong to `systems`. Two sessions must never edit the same file.
+- `spec/interface.md` is the single source of truth for shared numbers: cell, S/P count, voltage/current limits, connectors, envelope, mounting points. Only `main-battery` edits it (not written yet, 2026-11-27). `pcb` writes `spec/requests/pcb-<short-name>.md` and messages `main-battery`.
+- Each session edits only its own files: `pcb` its PCB work and `lanes/pcb/`; `main-battery` everything else. Two sessions must never edit the same file.
 - Every session keeps `lanes/<name>/STATUS.md` current. Update it after every meaningful step, and always before ending a turn:
   - Current task:
   - Last result (with file paths):
