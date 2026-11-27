@@ -1,9 +1,11 @@
 # pcb status
 
-- Current task: none. Onboarding done (2026-11-27); waiting for Chris's instructions. No design work started.
-- Last result: pulled `master` to `cfc2f4e` (includes v16.2) and read `CLAUDE.md` (two-agent swarm conventions). This file: `lanes/pcb/STATUS.md`.
-- Blockers / waiting on: Chris.
-  - `spec/interface.md` is not written yet (owned by `main-battery`).
+- Current task: none. BMS area estimate for `main-battery` delivered (2026-11-27). No schematic or layout started.
+- Last result: `lanes/pcb/bms-area.md`, `spec/requests/pcb-bms-space-claim.md`: 150 × 90 mm, top parts ≤ 12 mm ⚠️.
+- Blockers / waiting on: Chris for design work; `main-battery` to freeze the claim and provide the standoff support. `spec/interface.md` not written yet.
 - Next step: wait for instructions.
 - Key decisions so far (with reasons):
-  - None. `pcb` does PCB work only and edits `lanes/pcb/`; shared-number changes go to `spec/requests/pcb-<short-name>.md` plus a message to `main-battery` (CLAUDE.md swarm conventions).
+  - 150 × 90 mm: ≈ 7110 mm² of courtyards is 53 % fill; 120 × 90 is tight with no schematic.
+  - ≤ 12 mm tall: a mated right-angle Micro-Fit is ≈ 10 mm; 15 mm is available under the lid.
+  - Plugs on the −x edge and rear of the −y edge: clear of MRBF lift-out columns, SB175 and mains.
+  - `pcb` edits only its PCB work; shared numbers go through `spec/requests/`.
