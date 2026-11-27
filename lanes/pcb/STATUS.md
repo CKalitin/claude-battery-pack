@@ -1,9 +1,11 @@
 # pcb status
 
-- Current task: (1) prove the BMS board size (Chris rejected 150 × 90); (2) build general PCB skills from existing ones.
+- Current task: none; waiting for Chris (BMS design to start). Done today: BMS size proof; general PCB skills.
 - Last result: BMS area proven at **95 × 55 mm** (109 real KiCad footprints, 0 overlaps, 49 % occupancy): `lanes/pcb/bms-area.md`, `lanes/pcb/bms-size/` (courtyards.py, place.py, render). Revised claim: `spec/requests/pcb-bms-space-claim.md`. KiCad 10.0.8 installed (PPA). Default model set to Opus 5.5 high in `~/.claude/settings.json` (Chris).
-- Blockers / waiting on: main-battery to accept 95 × 55 and confirm +x plug room. Chris: toolchain go-ahead items in `toolchain.md`.
-- Next step: general skills in `lanes/pcb/skills/` (pcb-design, pcb-review), linked into `~/.claude/skills/`.
+- Skills: `lanes/pcb/skills/` (pcb-design, pcb-review; README lists sources and licences), symlinked into `~/.claude/skills/`. Vendored Diode663 `schlib.py` (MIT), smoke-tested on KiCad 10.0.8.
+- main-battery accepted 95 × 55 (spec/interface.md §4), added the AC-present sense and box-air NTC (ESP32 ADC), moved the B+ tap to a 5 A ATM, and corrected TXU0304.
+- Blockers / waiting on: Chris: reference schematic/layout, DigiKey/Mouser API keys, OK for review subagents, kicad-happy install (`toolchain.md`).
+- Next step: on go — BMS phase 0 intent + phase 1 part audits (evaluate BQ76942 vs BQ76952 per main-battery's docs/afe.md note; P-FET precharge as an option).
 - Key decisions so far (with reasons):
   - 95 × 55 mm: courtyards 2,421 mm² from real footprints; 49 % occupancy sits in the 40–60 % "4-layer comfortable" band.
   - 150 × 90 withdrawn: built on guessed allowances 3× too high (trap T1 in bms-area.md).

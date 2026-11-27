@@ -1,6 +1,6 @@
 # BMS board toolchain: proposal (2026-11-27, awaiting Chris)
 
-Nothing installed or tested yet. Facts come from web search / page summaries ⚠️ unless marked.
+**Update 2026-11-27 (later):** KiCad 10.0.8 installed and verified headless; the general skills are in `lanes/pcb/skills/` (see its README). Still open: kicad-happy (not installed), Freerouting + Java (not installed), ngspice (not installed). Facts come from web search / page summaries ⚠️ unless marked.
 
 ## Requirements
 | # | Requirement | From |
