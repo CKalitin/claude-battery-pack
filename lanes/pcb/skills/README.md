@@ -17,7 +17,7 @@ Twelve public Claude/agent PCB skill repos were cloned and read on 2026-11-27. T
 | studio-edul/pcb-layout-skill (2026-10-17, MIT) | Occupancy bands, placement numbers B1–B24, edge and spacing targets | EasyEDA API notes |
 | jvanderberg/kicad-skills (7837f97, MIT) | Review checklist structure, layout rules, part-selection discipline (exact suffix, dated stock, re-derive on swap) | JLCImport tooling (JLC-specific) |
 | pierrejay/pcb-review-skills (2026-11-25, MIT) | Review failure modes, judging rules that come without numbers | EasyEDA import clean-up; per-check scripts |
-| aklofas/kicad-happy (6b9767e, MIT) | PCBWay BOM/assembly notes (cross-checked against pcbway.com) | Not installed: large and still to be read and pinned. Candidate second reviewer |
+| aklofas/kicad-happy (v3.0.2 = 6b9767e, MIT) | PCBWay BOM/assembly notes; **installed whole as the second reviewer** at `~/tools/kicad-happy` (pinned tag v3.0.2), its 11 skills symlinked into `~/.claude/skills/` | Code scanned 2026-11-27: no telemetry, no eval/exec/shell=True; contacts only api.digikey.com, api.mouser.com, api.element14.com, LCSC/jlcsearch and doc links. Smoke test: `analyze_schematic.py` on the schlib test sheet gave 22 sensible findings |
 | joseluu/kicad-skills (no licence) | Ideas only (label justification), restated in our own words | No text copied |
 | Others read: Novin3dp, forstnernoqq, mash, bluzername, 1999AZZAR, SPREsxm, cjf00787, daishuge, alexchunlin | Nothing unique beyond the above | — |
 
@@ -25,4 +25,4 @@ Fab facts: pcbway.com assembly-capabilities, assembly-file-requirements, capabil
 
 ## Open
 - Write `scripts/` for: sync check (schematic ↔ PCB ↔ BOM/CPL), PCBWay BOM/CPL formatter, nets.csv → net classes and DRU, a CPL rotation overlay. Build them on the BMS board as it's designed.
-- Decide on kicad-happy as a second reviewer after reading its code.
+- ~~Decide on kicad-happy~~ → **installed as the second reviewer** (Chris, 2026-11-27).

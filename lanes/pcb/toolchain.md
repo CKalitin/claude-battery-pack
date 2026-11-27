@@ -35,3 +35,5 @@
 ## Open
 - Chris: one reference schematic and layout that meets the bar; DigiKey/Mouser API keys; permission for review subagents.
 - BMS is a paid PCBWay order unless a sponsorship is agreed (main-battery has asked Chris).
+
+**Update 2026-11-27 (later):** kicad-happy v3.0.2 installed as second reviewer (code scanned, smoke-tested); ngspice 45.2 installed; independent review subagents approved by Chris. DigiKey API key pending Chris accepting DigiKey's API User Agreement. Freerouting + Java still not installed.

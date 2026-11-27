@@ -30,6 +30,10 @@ The agent that did the work is never the one that says it is good enough. A revi
 7. **The designer decides.** The author fixes or disputes each finding in `decisions.md`. Only the owner accepts a deviation. Re-review after any BLOCKER or MAJOR fix.
 8. **Write nothing** to the design files during a review. Output goes to `design/gates/phaseN.md` (or a review file).
 
+## Tools for the reviewer
+- **kicad-happy** (second reviewer, installed at `~/tools/kicad-happy`, skills `kicad`, `emc`, `spice`, `datasheets`, `bom`, `digikey`, `mouser`, `pcbway`). Run `python3 -I ~/.claude/skills/kicad/scripts/analyze_schematic.py X.kicad_sch --output a.json` and `analyze_pcb.py`. Its findings are input to the review, not the verdict: every finding is judged, and its "info" detections (decoupling, regulator Vout, buses) are cross-checked.
+- **Reviewer subagents** (approved by Chris, 2026-11-27): name each `pcb-review-<gate>` (e.g. `pcb-review-schematic`) in plain words; Opus at high effort (never Sonnet or Haiku); give it only the artifacts and the brief; shut it down when its report is in.
+
 ## What to check
 `references/checklist.md`, by area:
 - power entry and protection;
