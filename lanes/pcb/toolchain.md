@@ -7,7 +7,7 @@ Nothing installed or tested yet. Facts come from web search / page summaries ⚠
 |---|---|---|
 | R1 | pcb designs the board autonomously: minor part selection (ESP32 and BQ76952 fixed), schematic, routing | Chris 2026-11-27 |
 | R2 | Human-readable schematic: parts actually wired, not net labels only | Chris 2026-11-27 |
-| R3 | Entirely PCBA by NextPCB, secondarily PCBWay | Chris 2026-11-27 |
+| R3 | BMS board entirely PCBA by **PCBWay** (replaces "NextPCB, PCBWay second"); front/LED board by NextPCB | Chris 2026-11-27, relayed by main-battery; owner-requirements §6 |
 | R4 | Meets the standard of an experienced PCB designer (UBC Solar) | Chris 2026-11-27 |
 
 ## Candidates
@@ -19,12 +19,12 @@ Nothing installed or tested yet. Facts come from web search / page summaries ⚠
 | Review | kicad-happy (MIT, 1774 stars, pushed 2026-11-24 ✓ GitHub API), pinned and read before running | — |
 | Reference only | Diode663/kicad-claude-skills (MIT, 2 stars ✓; Windows-only tested, one fabricated board) | Not a dependency |
 | Sim | ngspice 45.2 (apt) | LTspice: Windows GUI |
-| Parts | DigiKey + Mouser APIs (NextPCB matches BOMs against DigiKey, Mouser, HQ Online) | LCSC not named in NextPCB sources |
+| Parts | DigiKey + Mouser APIs; BMS parts checked against PCBWay's sourcing ⚠️ (NextPCB matches BOMs against DigiKey, Mouser, HQ Online) | LCSC not named in NextPCB sources |
 
-## NextPCB inputs
+## NextPCB inputs (front/LED board)
 - Gerber + drill zip; BOM with Manufacturer Part Number, Designator, Quantity (optional Customer Supply); CPL with designator, X, Y, rotation, side.
 - Assembles SMT, through-hole and flex; passives 01005, fine pitch 0.38 mm (vendor page).
-- PCBWay: not researched.
+- ⚠️ PCBWay (now the BMS fab): capabilities, parts library, BOM/CPL format not researched. Do this before part selection.
 
 ## Sources
 - kicad.org/blog/2026/10/KiCad-10.0.8-Release/ ; launchpad.net/~kicad/+archive/ubuntu/kicad-10.0-releases
@@ -34,4 +34,4 @@ Nothing installed or tested yet. Facts come from web search / page summaries ⚠
 
 ## Open
 - Chris: one reference schematic and layout that meets the bar; DigiKey/Mouser API keys; permission for review subagents.
-- Sponsorship covers the front board only as preferred (owner-requirements §6), so the BMS board may be paid.
+- BMS is a paid PCBWay order unless a sponsorship is agreed (main-battery has asked Chris).
