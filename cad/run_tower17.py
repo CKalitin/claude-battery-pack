@@ -19,7 +19,7 @@ ALLOW = [
     ("w_p2", "term_chg_tb", "ferrule in the charger TB"),
     ("w_p1b", "plug_relay_87", "into receptacle 87"),
     ("w_p4", "plug_pp45_neg", "in PP45"),
-    ("w_h2_", "plug_j3", "into J3"),
+    ("w_shunt_pigtail", "shunt_pcb", "pigtail soldered to the module PCB"),
     ("w_h2_gnd", "w_ring_gnd", "crimp"),
     ("w_h2_load_a", "w_ring_load", "crimp"),
     ("w_h2_bplus_a", "w_ring_bplus", "crimp"),

@@ -88,7 +88,7 @@ STEPS = [
         "lowered; 4 screws into the end-plate standoffs",
         ("deck1", "charger_npb360", "term_chg", "screws_chg", "relay_", "screws_relay", "bay_standoffs", "screws_bay_bot", "posts_d2", "screws_d2_bot",
          "screws_deck1", "plug_c13", "plug_relay_30", "w_p1a"), UP, 360.0, "flex tail fed up through the deck slot; loose lead ends parked to the sides"),
-    ("3 LED board + diffuser lowered in front of the module; M3 from the front", ("ledboard", "diffuser", "antenna", "screws_panelmount"), UP, 360.0,
+    ("3 LED board, 4 x 3 mm spacers + diffuser lowered in front of the module; M3 from the front", ("ledboard", "panel_spacers", "diffuser", "antenna", "screws_panelmount"), UP, 360.0,
         "front plate still off"),
     ("4 front plate + light pipe (slides in along -x)", ("plate_front", "screws_front", "pipe_f"), Vector(1, 0, 0), 40.0, ""),
     ("5 power bay (bench, built upside down, flipped) lowered onto the standoffs; node-A hole over its bolt; 5 screws from above",
@@ -107,7 +107,7 @@ STEPS = [
         "plug_relay_87", "nut_2151_chg"), UP, 120.0, ""),
     ("12 inverter leads: P3 lug + LOAD+ ring on the 2151 inverter stud, P4 lug on node B, nuts", ("w_p3", "w_p4", "lug_pos_inv",
         "lug_neg_inv", "ring_pos_load", "w_ring_load", "nut_2151_inv", "nut_nodeB"), UP, 120.0, ""),
-    ("13 signal harness: BMS J2-J9, shunt, coil, relay coil, LOAD+ run, NTC, LED, antenna", ("plug_j", "plug_shunt_j1",
+    ("13 signal harness: BMS J2-J9, shunt pigtail pair, coil, relay coil, LOAD+ run, chassis ref, NTC, LED, antenna", ("plug_j", "plug_shunt_pair", "w_shunt", "screws_imd", "imd_", "ring_chassis", "w_ring_chassis", "w_h2b",
         "plug_relay_85", "plug_relay_86", "plug_led", "w_h1", "w_h2_load", "w_h2_gnd", "fuseholder_load", "w_h3", "w_h5", "w_h4_led",
         "w_h4_ntc", "ntc_probe", "w_h6", "w_h7"), UP, 80.0, ""),
     ("14 Z-strap (service disconnect) on, B+ ring + lead, two nuts", ("strap_main", "nut_strap_top", "nut_foot", "ring_pos_bplus", "w_ring_bplus",
@@ -120,7 +120,7 @@ STEPS = [
 TOOL_Z = {"screws_deck1": None, "screws_bay_top": None, "screws_d2_top": None, "screws_bridge": None, "screws_bms": None, "screws_term": None}
 SOCKETS = {"nut_nodeA": 18.0, "nut_5191_m10": 23.5, "nut_2151_chg": 18.0, "nut_2151_inv": 18.0, "nut_nodeB": 18.0, "nut_strap_top": 18.0, "nut_foot": 15.0,
            "nut_2151_m10": 23.5}
-HORIZ = {"nuts_fan": (Vector(1, 0, 0), 9.0, 40.0), "pe_nut": (Vector(-1, 0, 0), 10.0, 60.0)}
+HORIZ = {"nuts_fan": (Vector(1, 0, 0), 9.0, 40.0), "pe_nut": (Vector(-1, 0, 0), 10.0, 60.0), "imd_nut": (Vector(1, 0, 0), 10.0, 60.0)}
 LID_OFF = ("lid", "panel_", "pem_lid_panel", "screws_panel", "screws_lid", "w_a1", "w_a2", "w_a3", "w_h4_btn")
 SERVICE = (("bs5191_fuse_0", ("strap_main", "nut_strap_top", "nut_foot", "ring_pos_bplus", "w_ring_bplus", "w_h2_bplus", "fuseholder_bplus")),
            ("bs2151_fuse_0", ("nut_2151_chg", "lug_pos_chg", "w_p1b")),
@@ -203,7 +203,7 @@ def main(parts=None):
                     cy, cz = (bb.min.Y + bb.max.Y) / 2, (bb.min.Z + bb.max.Z) / 2
                     x0 = bb.max.X + 0.05 if dv.X > 0 else bb.min.X - 0.05
                     cyl = Pos(x0 + dv.X * L / 2, cy, cz) * (Rot(0, 90, 0) * Cylinder(od / 2, L))
-                    res += tool_check(cyl, placed, (k, "screws_fan", "screws_pe"))
+                    res += tool_check(cyl, placed, (k, "screws_fan", "screws_pe", "screws_imd"))
                 ok &= not res
                 lines.append(f"    nut driver {od:.0f} mm x {L:.0f} mm along {'+x' if dv.X > 0 else '-x'} on {k}: " + ("clear" if not res else "BLOCKED by " + ", ".join(f"{a} ({v} mm3)" for a, v in res)))
     lines.append("[service] lid off (lid, its connectors and leads beside the pack): each MRBF fuse lifts 150 mm after only its own nut, lug and leads move")

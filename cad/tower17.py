@@ -104,9 +104,10 @@ XR = -(FX + FAN_SP)                                              # rear plate in
 LED_SO = 7.0                                                     # LED board standoffs on the front end plate
 XL0 = STACK_L / 2 + LED_SO                                       # LED board back face 162.9
 PANEL_GAP = 2.5
-XD0 = XL0 + 1.6
+LED_GAP = 3.0                                                    # LED board front -> diffuser (spec/interface.md §5, tentative)
+XD0 = XL0 + 1.6 + LED_GAP
 XD1 = XD0 + ACR_DIFF
-XF = XD1 + PANEL_GAP                                             # front plate inner face 170.0
+XF = XD1 + PANEL_GAP                                             # front plate inner face 173.0
 L_IN = XF - XR
 XM = (XF + XR) / 2
 F = 8.0                                                          # facet length (v16: 15; D40: floor facets must clear the 158 end plates)
@@ -397,7 +398,7 @@ def button_screw(y, z, front, shank):
 def plate_screws(front):
     out = []
     for (y, z) in SCREW_YZ:
-        if front and (y, z) == PE_YZ:
+        if (front and (y, z) == PE_YZ) or (not front and (y, z) == IMD_YZ):
             continue
         out.append(button_screw(y, z, front, PT + T + 0.5))
     return Compound(out)
@@ -409,6 +410,16 @@ def pe_stack():
     screw = button_screw(y, z, True, PT + T + 7.0)
     star = cyl_x(xi - 1.0, xi, y, z, 4.5) - cyl_x(xi - 2, xi + 1, y, z, 1.7)
     nut = cyl_x(xi - 5.0, xi - 1.8, y, z, 4.0) - cyl_x(xi - 6, xi, y, z, 1.65)
+    return screw, star, nut
+
+IMD_YZ = node(TOP_SCREW_K, 0)                                    # rear plate, -y top screw: BMS chassis reference (J3-4)
+
+def imd_stack():
+    y, z = IMD_YZ
+    xi = XR + T
+    screw = button_screw(y, z, False, PT + T + 7.0)
+    star = cyl_x(xi, xi + 1.0, y, z, 4.5) - cyl_x(xi - 1, xi + 2, y, z, 1.7)
+    nut = cyl_x(xi + 1.8, xi + 5.0, y, z, 4.0) - cyl_x(xi, xi + 6, y, z, 1.65)
     return screw, star, nut
 
 def feet():
@@ -437,7 +448,11 @@ def diffuser():
     return _front_panel(XD0, XD1)
 
 def led_board():
-    return _front_panel(XL0, XD0)
+    return _front_panel(XL0, XL0 + 1.6)
+
+def led_spacers():
+    """4 x 3 mm spacers on the panel screws, LED board -> diffuser (spec/interface.md §5)."""
+    return Compound([cyl_x(XL0 + 1.6, XD0, y, z, 2.75) - cyl_x(XL0, XD0 + 1, y, z, 1.5) for (y, z) in panel_screw_yz()])
 
 def led_header():
     """LED link header on the board's back, top edge, mating from above (Micro-Fit 1x3 envelope)."""
@@ -449,7 +464,7 @@ def panel_mount():
     for (y, z) in panel_screw_yz():
         s = Pos(0, y, z) * Pos((xe + XL0) / 2, 0, 0) * Rot(0, 90, 0) * extrude(RegularPolygon(5.5 / math.sqrt(3), 6), (XL0 - xe) / 2, both=True)
         so.append(s - cyl_x(xe - 1, XL0 + 1, y, z, 1.45))
-        sc.append(cyl_x(XD1, XD1 + 1.65, y, z, 2.85) + cyl_x(XD1 - 8.0, XD1, y, z, 1.45))
+        sc.append(cyl_x(XD1, XD1 + 1.65, y, z, 2.85) + cyl_x(XD1 - 11.0, XD1, y, z, 1.45))
     return Compound(so), Compound(sc)
 
 def antenna():
@@ -759,7 +774,7 @@ def relay():
 
 # ---- BMS bridge + board envelope (pcb lane; connectors J1-J9, spec/interface.md §4) ----
 BMS_J = {   # name: (edge, position along the edge, pins, rows)
-    "j2": ("-x", 9.0, 4, 2), "j3": ("-y", -89.5, 3, 1), "j4": ("+x", 25.0, 2, 1), "j5": ("+x", 10.0, 3, 1),
+    "j2": ("-x", 9.0, 4, 2), "j3": ("-y", -88.5, 4, 1), "j4": ("+x", 25.0, 2, 1), "j5": ("+x", 10.0, 3, 1),
     "j6": ("+y", -87.0, 3, 1), "j7": ("+y", -72.0, 2, 1), "j8": ("+y", -59.0, 2, 1), "j9": ("+y", -46.0, 2, 1),
 }
 def jwidth(pins):
@@ -819,11 +834,13 @@ def build(harness=True):
     p["screws_front"] = plate_screws(True)
     p["screws_rear"] = plate_screws(False)
     p["screws_pe"], p["pe_star"], p["pe_nut"] = pe_stack()
+    p["screws_imd"], p["imd_star"], p["imd_nut"] = imd_stack()
     p["screws_lid"] = lid_screws()
     p["pem_body_lid"] = pem_body_lid()
     p["feet"] = feet()
     p["diffuser_f"] = diffuser()
     p["ledboard_f"] = led_board()
+    p["panel_spacers"] = led_spacers()
     p["ledboard_hdr"] = led_header()
     p["pipe_f"] = light_pipe()
     p["panel_standoffs"], p["screws_panelmount"] = panel_mount()

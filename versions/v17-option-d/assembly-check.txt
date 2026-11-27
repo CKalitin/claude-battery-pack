@@ -6,7 +6,7 @@ everything installed before; screws/nuts get a driver or socket path (tool OD in
     driver on screws_term (16 screws): clear
 [2 deck 1 (bench: charger, relay, bay standoffs, deck-2 posts screwed from below; charger leads P1a/P2 in the TB, P1a on relay 30, C13 plugged in) lowered; 4 screws into the end-plate standoffs] 20 parts; sweep 360 mm: CLEAR  (flex tail fed up through the deck slot; loose lead ends parked to the sides)
     driver on screws_deck1 (4 screws): clear
-[3 LED board + diffuser lowered in front of the module; M3 from the front] 5 parts; sweep 360 mm: CLEAR  (front plate still off)
+[3 LED board, 4 x 3 mm spacers + diffuser lowered in front of the module; M3 from the front] 6 parts; sweep 360 mm: CLEAR  (front plate still off)
 [4 front plate + light pipe (slides in along -x)] 3 parts; sweep 40 mm: CLEAR
 [5 power bay (bench, built upside down, flipped) lowered onto the standoffs; node-A hole over its bolt; 5 screws from above] 30 parts; sweep 360 mm: CLEAR  (on the bench: contactor and SB175 nuts under the plate; 2151 M10 thin nut before the SB175 + cheeks)
     driver on screws_bay_top (5 screws): clear
@@ -28,7 +28,8 @@ everything installed before; screws/nuts get a driver or socket path (tool OD in
 [12 inverter leads: P3 lug + LOAD+ ring on the 2151 inverter stud, P4 lug on node B, nuts] 8 parts; sweep 120 mm: CLEAR
     socket 18.0 mm on nut_nodeB: clear
     socket 18.0 mm on nut_2151_inv: clear
-[13 signal harness: BMS J2-J9, shunt, coil, relay coil, LOAD+ run, NTC, LED, antenna] 28 parts; sweep 80 mm: CLEAR
+[13 signal harness: BMS J2-J9, shunt pigtail pair, coil, relay coil, LOAD+ run, chassis ref, NTC, LED, antenna] 35 parts; sweep 80 mm: CLEAR
+    nut driver 10 mm x 60 mm along +x on imd_nut: clear
 [14 Z-strap (service disconnect) on, B+ ring + lead, two nuts] 8 parts; sweep 150 mm: CLEAR
     socket 15.0 mm on nut_foot: clear
     socket 18.0 mm on nut_strap_top: clear
@@ -42,4 +43,4 @@ everything installed before; screws/nuts get a driver or socket path (tool OD in
     strap_main (service disconnect), every other lead in place: CLEAR
 parts not in any step: []
 OVERALL: PASS
-(42 s)
+(39 s)

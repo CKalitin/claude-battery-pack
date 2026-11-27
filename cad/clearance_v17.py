@@ -21,19 +21,19 @@ NEG = ("bus_pack_neg", "shunt_bar", "shunt_pcb", "bus_mod_neg", "sb175_contact_n
        "bolt_nodeB", "nut_nodeB", "lug_neg", "ring_neg")
 COIL = ("relay_tab_85", "relay_tab_86")                       # battery-referenced coil terminals: chassis rule applies
 MID = ("bus_A", "bus_B", "bus_C")
-CHASSIS = ("body_half", "lid", "plate_front", "plate_rear", "screws_front", "screws_rear", "screws_pe", "pe_", "screws_lid", "pem_", "module_endplates",
+CHASSIS = ("body_half", "lid", "plate_front", "plate_rear", "screws_front", "screws_rear", "screws_pe", "pe_", "screws_imd", "imd_", "ring_chassis", "screws_lid", "pem_", "module_endplates",
            "rods", "rodnuts", "tnuts", "so_upper", "so_lower", "so_studs", "screws_hold", "screws_deck1", "charger_npb360", "screws_chg",
            "inverter_nts400p", "screws_inv", "screws_fan", "nuts_fan", "fan_spacer", "panel_standoffs", "screws_panelmount", "screws_panel",
            "panel_pushbutton")
 # footprint exemptions (outside x ±156, y ±79 above the cells), each with its reason
-SHELL = ("body_half", "lid", "plate_", "screws_front", "screws_rear", "screws_pe", "pe_", "screws_lid", "pem_", "feet", "screws_hold")
-FRONT_ZONE = ("ledboard", "diffuser", "pipe_f", "antenna", "panel_standoffs", "screws_panelmount", "plug_led")
+SHELL = ("body_half", "lid", "plate_", "screws_front", "screws_rear", "screws_pe", "pe_", "screws_imd", "imd_", "screws_lid", "pem_", "feet", "screws_hold")
+FRONT_ZONE = ("ledboard", "diffuser", "pipe_f", "antenna", "panel_standoffs", "panel_spacers", "screws_panelmount", "plug_led")
 FRONT_WIRES = ("w_h4_led", "w_h7_coax", "w_a3_pe", "w_pe_barrel")                     # end on front-zone parts / the front-plate PE screw
-REAR_WALL = ("fan_spacer", "screws_fan")                                              # rear-wall hardware behind x -156
+REAR_WALL = ("fan_spacer", "screws_fan", "ring_chassis", "w_ring_chassis", "w_h2b")                                              # rear-wall hardware behind x -156
 LID_TOP = ("panel_", "screws_panel", "sb175_housing", "pem_lid_panel")                # through / above the lid
 MODULE = ("cell_", "g10_spacers", "module_endplates", "rods", "rodnuts", "tnuts", "g10_floor", "g10_frame", "so_lower", "so_studs")
 MAINS = ("w_a1", "w_a2", "w_a3", "plug_c13", "plug_cn500")
-LV = ("w_h", "w_ring", "plug_j", "plug_shunt", "plug_cn100", "plug_cn301", "plug_led", "plug_relay", "fuseholder", "ntc", "bms_")
+LV = ("w_h", "w_ring", "w_shunt", "plug_j", "plug_shunt", "plug_cn100", "plug_cn301", "plug_led", "plug_relay", "fuseholder", "ntc", "bms_")
 
 def sel(p, pre):
     return [k for k in p if k.startswith(pre)]
