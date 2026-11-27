@@ -78,8 +78,12 @@ BOM = [
  ("CONN", "J1 sense flex FPC 12-pin ZIF (5 VC + 5 NTC + 2 GND)", ("Connector_FFC-FPC", "Hirose_FH12-12S-0.5SH_1x12-1MP_P0.50mm_Horizontal"), 1),
  ("CONN", "J2 Tesla shunt Micro-Fit 2×4", MF("Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal"), 1),
  ("CONN", "J3 power B+/LOAD+/GND Micro-Fit 1×3", MF("Molex_Micro-Fit_3.0_43650-0300_1x03_P3.00mm_Horizontal"), 1),
- ("CONN", "J4 outputs: GV14 coil ×2, charger relay ×2, inverter remote ×2, AC-present sense, spare: Micro-Fit 2×4", MF("Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal"), 1),
- ("CONN", "J5 LED link (5V, DATA, GND), button (BTN, GND), box-air NTC (NTC, GND), spare: Micro-Fit 2×4", MF("Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal"), 1),
+ ("CONN", "J4 GV14 coil X1/X2: Micro-Fit 1×2 (+x edge)", MF("Molex_Micro-Fit_3.0_43650-0200_1x02_P3.00mm_Horizontal"), 1),
+ ("CONN", "J5 LED board 5V/DATA/GND: Micro-Fit 1×3 (+x edge)", MF("Molex_Micro-Fit_3.0_43650-0300_1x03_P3.00mm_Horizontal"), 1),
+ ("CONN", "J6 charger relay 86/85 + AC_SENSE: Micro-Fit 1×3 (+y edge)", MF("Molex_Micro-Fit_3.0_43650-0300_1x03_P3.00mm_Horizontal"), 1),
+ ("CONN", "J7 inverter CN301 remote: Micro-Fit 1×2 (+y edge)", MF("Molex_Micro-Fit_3.0_43650-0200_1x02_P3.00mm_Horizontal"), 1),
+ ("CONN", "J8 lid button BTN/GND: Micro-Fit 1×2 (+y edge)", MF("Molex_Micro-Fit_3.0_43650-0200_1x02_P3.00mm_Horizontal"), 1),
+ ("CONN", "J9 box-air NTC: Micro-Fit 1×2 (+y edge)", MF("Molex_Micro-Fit_3.0_43650-0200_1x02_P3.00mm_Horizontal"), 1),
  ("MECH", "M3 mounting holes (Ø7 washer keep-out); one plated = IMD chassis ref", ("MountingHole", "MountingHole_3.2mm_M3_Pad"), 4),
 ]
 

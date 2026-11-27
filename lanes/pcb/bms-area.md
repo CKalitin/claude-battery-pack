@@ -126,3 +126,25 @@ Chris asked for credit-card size if it costs little effort and doesn't force a l
 
 - AC_SENSE goes in J4 because it starts at the charger relay, the same rear +y corner as the relay coil wires. No return wire: the charger's − is at shunt node B, millivolts from board ground at node A.
 - Mini-Fit Jr on the BMS side was rejected: a 2×3 right-angle is 552 mm² against 194 mm² for Micro-Fit, which would break the credit card. The worst pin is the GV14 pick-up (3.9 A, 75 ms) against Micro-Fit's ≈ 5 A ⚠️ (check Molex derating for 20 AWG).
+
+## 13. One connector per destination (Chris's question, 2026-11-27)
+J4 and J5 each served three destinations, and J4's run to opposite ends of the pack: the charger relay is ≈ 310 mm the wrong way from the +x edge. main-battery confirmed 25 mm of plug room beyond the **+y edge** (free, 0 overlaps), CN301 on the inverter's DC (rear) end, and the flex tail arriving at the −x edge.
+
+**Split layout:**
+- **−x:** J1 flex, J2 shunt.
+- **−y:** J3 power.
+- **+x:** J4 GV14 coil (1×2), J5 LED board (1×3).
+- **+y:** J6 charger relay + AC_SENSE (1×3), J7 CN301 (1×2), J8 lid button (1×2), J9 box NTC (1×2).
+
+Every harness is a point-to-point cable; unplugging one device leaves the others connected.
+
+| Board | Connectors | Occupancy | Placement proof |
+|---|---|---|---|
+| 85.6 × 53.98 (credit card) | two 2×4 (J4, J5) | 54 % | ✓ clean |
+| 85.6 × 53.98 (credit card) | **one per destination** | **61 % (dense)** | ✗ **24 parts needed the free-spot fallback**, including ESP32 decoupling and buck parts that must sit at their pins. Judged not workable (Chris: don't force it) |
+| **95 × 55 (reserved)** | **one per destination** | **54 %** | ✓ 0 overlaps; 3 small passives used the fallback |
+| 95 × 55 | two 2×4 | 50 % | ✓ clean |
+
+Render of the credit card failure: `bms_cc_split.png` (parts crowded into the corners are fallback-placed).
+
+Not tried: smaller connector families for the 2-wire signals (Loombotic's verified catalog has Molex Micro-Fit / Mini-Fit / Mega-Fit and Amphenol; anything smaller is a custom line, which Chris doesn't want).
