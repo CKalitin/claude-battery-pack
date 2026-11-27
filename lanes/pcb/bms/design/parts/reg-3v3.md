@@ -7,7 +7,7 @@
 |---|---|---|
 | R1 | ≥ 500 mA supply (ESP32 I_VDD min 0.5 A; TX peak 355 mA) | ESP32-S3-WROOM-1/1U datasheet v1.8, §6 |
 | R2 | 3.0–3.6 V (ESP32 abs max 3.6 V) | same |
-| R3 | Input 4.90–5.08 V from [buck-5v.md](buck-5v.md) | |
+| R3 | Input 4.88–5.08 V from the buck through the TPS2116 mux, or ≈ 4.7–5.25 V from USB ([usb-c.md](usb-c.md)) | |
 | R4 | T_J ≤ 125 °C at 60 °C board air | intent §2 |
 Load: ESP32 ≈ 100 mA average, 355 mA peak; others ≈ 15 mA.
 

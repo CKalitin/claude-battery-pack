@@ -56,8 +56,8 @@
 |---|---|---|
 | R_pd | 100 kΩ gate → GND | off while GPIO floats (R2) |
 | R_g | 100 Ω–1 kΩ optional | not required |
-| LED | B+ → 10 kΩ → LED → BAS116LT1G → drain | blocking diode: drain reaches ≈ 60 V at release (reverse ≈ 46 V < 75 V ✓) |
-| TP | gate, drain | force by hand at the gate TP |
+| Self-test | `SNS_RLY` BSS138 gate sense on the drain ([self-test.md](self-test.md)) | no indicator LED (Chris, 2026-11-27) |
+| TP | gate, drain | |
 
 ## 8. Sleep leakage
 I_DSS ≤ 0.5 µA at 12 V, ≤ 50 µA at 60 V (25 °C). At 14.6 V ≈ 0.5–1 µA ⚠️.
@@ -65,3 +65,4 @@ I_DSS ≤ 0.5 µA at 12 V, ≤ 50 µA at 60 V (25 °C). At 14.6 V ≈ 0.5–1 µ
 ## 9. Open
 - ⚠️ Bench: drain waveform at release; relay coil inductance.
 - Relay coil tab size and harness: docs/harnesses.md (main-battery).
+- The same MPN drives the latching inverter relay (2 more).

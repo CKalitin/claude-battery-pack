@@ -40,8 +40,12 @@
 | MMBT3904 V_CE | 40 V | ✓ |
 | BSZ146N10LS5 (via GV14 coil + 55 V kick) | 100 V (≈ 80 V) | ✓ |
 | DMN61D8L | 60 V | ✓ |
-| BAS116 (LED blockers) | 75 V | ✓ |
+| BAS116 (self-test clamps to B+, reverse) | 75 V | ✓ |
+| BSS138 self-test gates | ±20 V (24.4 V for µs through 100 kΩ) | ⚠️ self-test.md |
 | B+/LOAD+ dividers (pcb) | check resistor voltage ratings | ⚠️ |
+
+## 4a. J3 pin 4 (CHASSIS)
+The IMD wire (ring lug on a chassis screw) reaches only the IMD resistors (4.4 MΩ side), pcb's circuit. No TVS here: any clamp would leak and bias the insulation reading. Keep ≥ 1 mm to B+/LOAD+ copper ⚠️ (layout).
 
 ## 5. Reverse polarity: no series part
 - J3 is a keyed Micro-Fit with a vendor-built, tested harness; at the copper end B+ is an M6 ring under the Z-strap foot and GND an M8 ring at node A: different ring sizes (signal-wiring.md).

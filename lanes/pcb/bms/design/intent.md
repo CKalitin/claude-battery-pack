@@ -27,24 +27,24 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | J2 | −x | Tesla shunt 1016792-00-C (Micro-Fit 2×4, **or Mini-Fit Jr 2×5 taking the shunt's own pigtail directly if Chris's test-fit passes**: +281 mm², occupancy ≈ 59 %) | 5V, GND, NSS, SCK, MISO, MOSI, OC, spare | 5 V logic (VIH 3.5 V); SPI mode 0, 500 kHz; 5 V supply ≈ 30–50 mA ⚠️ |
 | J3 | −y | Power taps + chassis (**1×4**, Chris 2026-11-27) | B+, LOAD+, GND, CHASSIS (ring lug on a chassis screw, for the IMD) | B+ ≤ 5 A peak (coil pick-up 3.9 A, 75 ms); LOAD+ ≤ 1.46 A (precharge) |
 | J4 | +x | GV14 coil (1×2) | X1 (+ = B+ switched), X2 | 12 V coil; 3.9 A pick-up for 75 ms, 0.23 A hold (built-in economizer) |
-| J5 | +x | LED board (1×3) | 5V (switched), DATA (5 V level), GND | ≈ 287 lit pixels on a 15.6 mm checkerboard lattice (main-battery, v16 grid ⚠️ option D may change it). 5 V WS2812-protocol RGB 2020 LEDs (Würth 1312020030000 proposed, Inolux IN-PI20TAT5R5G5B alternate ⚠️ audit in the LED-board phase). **Power cap ≤ 5 W typical / ≤ 10 W peak (2 A) in firmware** (main-battery: box cooling is marginal). High-side load switch so the LED rail is fully off when the display is off. Shows SOC as digits + a fill bar |
+| J5 | +x | LED board (1×3) | 5V (switched by a TPS259530 eFuse, 2.58 A limit, off by default), DATA (SN74LV1T34 on the switched rail, 100 Ω series, TPD1E10B09 ESD), GND | ≈ 287 lit pixels on a 15.6 mm checkerboard lattice (main-battery, v16 grid ⚠️ option D may change it). 5 V WS2812-protocol RGB 2020 LEDs (Würth 1312020030000 proposed, Inolux IN-PI20TAT5R5G5B alternate ⚠️ audit in the LED-board phase). **Power cap ≤ 5 W typical / ≤ 10 W peak (2 A) in firmware** (main-battery: box cooling is marginal). High-side load switch so the LED rail is fully off when the display is off. Shows SOC as digits + a fill bar |
 | J6 | +y | Charger relay (1×3) | coil 86, coil 85, AC_SENSE | coil 12 V 90 Ω: 162 mA at 14.6 V; AC_SENSE 0–14.6 V, µA |
 | J7 | +y | Inverter CN301 (1×2) | dry contact | short = inverter remote OFF (NTS-400P-SPEC) |
 | J8 | +y | Lid button (1×2) | BTN, GND | momentary; wakes the BQ76952 via TS2; long press = off |
 | J9 | +y | Box-air NTC (1×2) | NTC, GND | 10 k NTC ⚠️ |
 | — | — | U.FL on the WROOM-1U | 50 Ω coax ≈ 150–200 mm to the front-plate flex antenna | signal-wiring.md |
 | — | — | Chassis reference for the IMD | J3 pin 4 → ring lug (Q2 answered) | — |
-| J10 | +y | Programming / debug: **USB-C** (Chris) | VBUS, D+, D−, CC1/CC2, GND | USB 2.0 FS (ESP32-S3 USB-Serial-JTAG); VBUS 5 V → diode → 5 V rail |
+| J10 | +y | Programming / debug: **USB-C** (Chris) | VBUS, D+, D−, CC1/CC2, GND | USB 2.0 FS (ESP32-S3 USB-Serial-JTAG; GCT USB4105-GF-A, USBLC6-2SC6). **VBUS → TPS2116 power mux → 3.3 V LDO only** (not the 5 V rail: that would back-feed the buck and feed the LEDs). A pack-less board can be flashed; the BQ, shunt and LEDs stay unpowered (firmware keeps their I/O low or high-Z when the BQ is absent ⚠️) |
 
 ## 4. Functions and their numbers
 | Function | Requirement | Source |
 |---|---|---|
 | Cell monitor | **BQ7695204PFBR** (BQ76952 family; SPI + CRC; REG1 on at 3.3 V by default, so no OTP is needed to boot) in TQFP-48. Cells on VC0–VC3 + VC16 (VC4–VC15 tied to VC3, Table 16-3). **4 NTCs on the BQ** (TS1, TS3, DFETOFF, DCHG: SPI mode uses HDQ and CFETOFF); flex NTC 5, the board NTC and the box NTC on ESP32 ADC1. Balancing internal, ≈ 50 mA | parts/bq76952.md |
 | Current | Tesla shunt over SPI, through **TXU0304** (3 out, 1 in); OC (5 V) → divider → ESP32 | tesla-shunt.md §3 |
-| Contactor | Low-side driver for 3.9 A / 75 ms pick-up; enable = **ESP32 GPIO AND BQ76952 DDSG**, in hardware; coil kick clamped; LED + TP on the output | interface §4; Chris's HVC style |
+| Contactor | Low-side driver for 3.9 A / 75 ms pick-up: **2 × 100 V N-FETs in series** (BSZ146N10LS5), each gated by its own 5 V buffer: one from the ESP32, one from **BQ76952 DDSG** = hardware AND. **No external coil clamp: Sensata forbids it** (internal TVS; X2 reaches B+ + 55 V). Self-test sense on X2 | parts/gv14-driver.md |
 | Precharge | **2 P-MOSFETs in series, same orientation**, B+ → AC05 10 Ω → LOAD+; each FET with its own driver and its own control line; ≤ 0.5 s timeout; LOAD+ measured (BQ PACK pin and/or ESP32 ADC) for "precharge done" | Chris 2026-11-27 |
-| Charger relay | Low-side driver + flyback, 162 mA; LED + TP | interface §2 |
-| Inverter remote | Dry contact (PhotoMOS); **Q4:** default with the BMS off (form A: inverter runs when the contactor is closed unless commanded off; form B: inverter off unless commanded on) | NTS-400P-SPEC |
+| Charger relay | Low-side DMN61D8L (internal 60 V clamp; **no flyback diode**, which TE says slows release and risks contact welding), 0.16–0.20 A; self-test sense on the drain | parts/charger-relay-driver.md |
+| Inverter remote | **Latching relay, zero holding current in either state** (Chris): KEMET EE2-5TNUH-L double-coil, set/reset by 2 × DMN61D8L pulses from ESP32 GPIOs; pole B reads the state back. PhotoMOS AQY212S is the runner-up | parts/inverter-remote.md |
 | AC present | Divider from J6 AC_SENSE → ESP32 ADC | interface §4 |
 | Box-air temperature | NTC bias + filter → ESP32 ADC | interface §4 |
 | IMD | **R₊ 4.4 MΩ (2 × 2.2 M), R₋ 1.8 + 0.2 MΩ** (doubled from v14's 2.2 / 0.9 + 0.1 M to halve sleep draw: 14.6 V / 6.4 MΩ = 2.3 µA); ESP32 reads across 200 k with 100 nF (τ 20 ms); r₀ = 0.3125 unchanged; alarm at |r − 0.312| > 0.02. ⚠️ Fault sensitivity per v14 table scales with R: a fault is now visible up to ≈ 2× higher resistance; recheck the table at schematic | v14-design-notes §4; pcb 2026-11-27 |
@@ -52,7 +52,7 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | Sleep | **≤ 10 µA typical in SHUTDOWN** (≈ 4.5 µA typ, ≈ 10.7 µA summing 25 °C datasheet maxima: parts/README.md budget, IMD halved); nothing else may draw from B+ when off; bench-measure | v14-design-notes §9 |
 | Wake / off | Button → TS2 wakes from SHUTDOWN; same button to an ESP32 GPIO; long press = SHUTDOWN. **No charger wake** (D33). LD held low | v14-design-notes §9a; D33 |
 | UV latch | Every UV trip latches (BQ SHUTDOWN is the hardware latch); re-enable by button with min cell ≥ 3.00 V | v14-design-notes §9a |
-| Safe states | With no firmware: GV14 off, precharge off, charger relay open, inverter remote per Q4 | design |
+| Safe states | With no firmware: GV14 off (both FETs off), precharge off, charger relay open; inverter remote **keeps its last latched state** (harmless: with the GV14 open the inverter has no power) | design |
 | Telemetry | **ESP32-S3-WROOM-1U-N8** (8 MB flash, no PSRAM), Wi-Fi, U.FL external antenna | parts/esp32-s3.md |
 
 ## 5. Power budget (awake, worst case) ⚠️ estimates until part audits

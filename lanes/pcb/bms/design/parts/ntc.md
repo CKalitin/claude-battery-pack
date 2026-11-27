@@ -32,19 +32,21 @@ Where they're read: per [bq76952.md](bq76952.md), the BQ takes flex NTCs 1–4; 
 Dissipation factor of the bead ≈ 3 mW/K (still air).
 
 ## 4. Ranges (resistances: Vishay table 3 for the 3435 K curve; Murata is within its tolerance ⚠️ not re-tabulated)
-| T [°C] | R [kΩ] | BQ TS pin, 18 k to 1.8 V [V] | ESP32, 10 k to 3.3 V [V] |
+ESP32 channels (board NTC, flex NTC 5, box NTC): **15 kΩ from 3V3**, NTC to GND, so −10…+60 °C sits inside the 0–2.5 V useful range.
+| T [°C] | R [kΩ] | BQ TS pin, 18 k to 1.8 V [V] | ESP32, 15 k to 3.3 V [V] |
 |---|---|---|---|
-| −40 | 191 | 1.65 | 3.14 |
-| −10 | 42.6 | 1.27 | 2.67 |
-| 25 | 10.0 | 0.64 | 1.65 |
-| 60 | 3.02 | 0.26 | 0.77 |
-| 85 | 1.45 | 0.13 | 0.42 |
+| −40 | 191 | 1.65 | 3.06 (out of range) |
+| −10 | 42.6 | 1.27 | **2.44** |
+| 25 | 10.0 | 0.64 | 1.32 |
+| 60 | 3.02 | 0.26 | **0.55** |
+| 85 | 1.45 | 0.13 | 0.29 |
 - BQ: 0.13–1.65 V inside −0.2 … 1.8 V ✓ R2 (internal pull-up 14.4–21.6 kΩ, factory-measured and used in the calculation).
-- ESP32 (ATTEN 12 dB ⚠️ usable to ≈ 3.1 V): −10…+85 °C in range ✓; −40 °C reads at the limit.
-- Self-heating on ESP32 bias: ≤ 3.3²/(4 × 10 k) = 0.27 mW → ≈ 0.1 K on the bead ✓.
+- ESP32: ≤ 2.44 V over the operating range ✓. Open wire reads 3.3 V, short reads 0 V → both detectable.
+- Bias alternatives: 10 k gives 2.67 V at −10 °C (✗); 22 k also fits but loses resolution when hot.
+- Sensitivity at 60 °C ≈ 14 mV/K ✓. Self-heating ≤ 3.3²/(4 × 15 k) = 0.18 mW (< 0.1 K on the bead) ✓.
 
 ## 5. Externals (each ESP32 channel)
-10 kΩ 1 % (0402) from 3V3, 100 nF at the ADC pin. J9: add 1 kΩ series to the ADC pin (cable-borne ESD) ⚠️ optional.
+**15 kΩ 1 %** (0402) from 3V3, 100 nF at the ADC pin. J9: add 1 kΩ series to the ADC pin (cable-borne ESD) ⚠️ optional.
 
 ## 6. Open
 - ⚠️ Harness: AWG30 PVC lead in a Micro-Fit needs 43030-0010 (26–30 AWG); ask the vendor, or use a splice to 24 AWG.

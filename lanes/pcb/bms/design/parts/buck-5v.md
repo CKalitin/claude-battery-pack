@@ -8,7 +8,7 @@
 | R1 | VIN 10.0–14.6 V; survives 20 V design max and the TVS clamp (24.4 V) | intent §2, [input-protection.md](input-protection.md) |
 | R2 | ≤ 2 µA from B+ with EN low | team lead; intent §4 (≤ 10 µA board) |
 | R3 | EN driven by BQ76952 REG1 (3.3 V, [bq76952.md](bq76952.md)) | v14-design-notes §9 |
-| R4 | ≥ 1.5 A, room for 2–3 A (LED board unknown, Q1) | team lead |
+| R4 | **Up to 3 A continuous**; real load ≤ 2.45 A peak (LEDs 2 A at the 10 W cap + ESP32, shunt, logic ≈ 0.45 A) | Chris 2026-11-27; intent J5 |
 | R5 | 5 V within 4.7–5.3 V (Tesla shunt) | tesla-shunt.md §3 |
 
 ## 2. Candidates (datasheets in `datasheets/`, DigiKey API checked 2026-11-27)
@@ -82,9 +82,21 @@
 
 **Output accuracy:** 4.90–5.075 V (fixed 5 V, FPWM) ✓ R5. LDO abs max 6 V: 5.075 V + transient ✓.
 
-**Input current:** 2 A out → 5×2/(0.9×10) = 1.1 A from B+; 3 A → 1.7 A. With the GV14 pick-up (3.9 A, 75 ms) the B+ 5 A ATM sees ≤ 5.8 A for 75 ms (116 %) ✓.
+**Load budget and margin:**
+| Load on 5 V | Typical [A] | Peak [A] |
+|---|---|---|
+| LED board (J5, firmware cap 5 W / 10 W) | 1.0 | 2.0 |
+| 3.3 V via the LDO (ESP32 + logic) | 0.13 | 0.37 |
+| Shunt, translator, buffers, relay pulses | 0.06 | 0.08 |
+| **Total** | **≈ 1.2** | **≈ 2.45** |
+Rated 3 A: **margin 0.55 A (18 % of rating) at the peak**, 60 % typical. The LED eFuse limits at ≤ 2.78 A, so even a shorted LED cable keeps the total under the 3.4 A minimum valley limit ([led-link.md](led-link.md)).
 
-**Thermal** ⚠️ (efficiency ≈ 88–90 %, estimated): loss ≈ 1.1 W at 2 A, ≈ 1.9 W at 3 A. θJA 84.5 °C/W (JEDEC), 32.5 °C/W (TI EVM). At 60 °C board air and 55 °C/W: 2 A → 120 °C ✓; **3 A continuous needs EVM-class copper** (32.5 °C/W → 122 °C).
+**Input current:** 3 A out → 15/(0.93 × 10 V) = 1.6 A from B+. With the GV14 pick-up (3.9 A, 75 ms) the 5 A ATM sees ≤ 5.7 A for 75 ms (114 %) ✓.
+
+**Thermal at 3 A continuous** (typical efficiency curves §8.2.3, 12 V in, 5 V out, TI circuit): ≈ 94.5 % at 400 kHz (Fig. 8-9), ≈ 92 % at 2 MHz (Fig. 8-7); ≈ 93 % assumed at 1 MHz ⚠️.
+- Total loss 15 W × (1/0.93 − 1) = 1.1 W; inductor copper 9 × 0.038 = 0.34 W; **IC ≈ 0.75 W**.
+- At 60 °C board air: θJA 55 °C/W (assumed 4-layer board) → **≈ 101 °C** ✓; JEDEC 84.5 °C/W → 123 °C ✓ (limit 150 °C). TI shows the 4 A sister part at 3 A to 125 °C ambient on its EVM (Fig. 8-13).
+- Option not taken: 400 kHz (RT 86.6 k, L 8.2 µH, COUT 54 µF) saves ≈ 0.25 W but needs a bigger inductor. Switch if the bench runs hot.
 
 ## 6. Fallback: TPS62933DRLR (SOT-583, `Package_TO_SOT_SMD:SOT-583-8`)
 | Item | Value |
@@ -114,7 +126,7 @@
 
 ## 9. Open
 - ⚠️ Draw and check the RAK0009A footprint (gate item).
-- ⚠️ LED board current (Q1) sets whether 3 A copper is needed.
+- ⚠️ Bench: case temperature at 3 A continuous in the closed box; copper per §8 (thermal vias, 1 oz outer minimum).
 - ⚠️ Shutdown max is specified at 25 °C only.
 - Price: not recorded (public repo).
 Buy: ti.com / DigiKey by MPN.

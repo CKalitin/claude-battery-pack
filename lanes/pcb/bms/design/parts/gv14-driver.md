@@ -82,14 +82,14 @@ Q_BQ (upper) source = lower drain, ≈ 0.1 V at pick-up → V_GS ≈ 4.9 V ✓.
 
 **Pick-up voltage at the coil, pack 10.0 V** (⚠️ estimated path resistances): ATM 5 A fuse ≈ 18 mΩ, 4 Micro-Fit contacts ≤ 40 mΩ, coil leads 2 × 0.38 m 20 AWG ≈ 26 mΩ, harness 18 AWG ≈ 8 mΩ, board ≈ 20 mΩ, FETs ≤ 62 mΩ → ≈ 0.17 Ω → 0.68 V → **9.3 V ≥ 8 V** ✓. With a hot coil (+14 % at 60 °C, pick-up ≈ 9.1 V ⚠️) the margin is only 0.2 V at 10 V: firmware shouldn't close below ≈ 10.5 V.
 
-## 9. Indicator and test points
-- LED: B+ → 10 kΩ → LED → **BAS116LT1G** → X2 (≈ 1.2 mA when on). The diode blocks the LED during the kick (reverse ≤ 55 V < 75 V). It only conducts in the same direction as the coil, so it is not a suppression path.
-- TP on X2, both gates, both buffer inputs. Each channel can be forced by hand at its input TP.
+## 9. Self-test and test points
+- No indicator LED (Chris, 2026-11-27). `SNS_GV14` senses X2 (BSS138 gate sense): both-FET short, single-FET short (each tested alone), open coil and shorted coil. Procedure in [self-test.md](self-test.md).
+- TP on X2, both gates, both buffer inputs.
 
 ## 10. Layout
 Power loop J3 → J4 → Q_BQ → Q_ESP → GND: ≥ 2 mm traces (3.9 A pulse). Creepage on X2 ≥ 80 V: ≥ 0.6 mm to logic.
 
 ## 11. Open
 - ⚠️ Draw the TSDSON-8 footprint.
-- ⚠️ Bench: X2 waveform at turn-off (confirm ≤ B+ + 55 V), DDSG behaviour, pick-up at 10 V hot.
+- ⚠️ Bench: X2 waveform at turn-off (confirm ≤ B+ + 55 V), DDSG behaviour, pick-up at 10 V hot, 50 µs test pulses.
 - ⚠️ Intent §4 says "coil kick clamped": met by the GV14's internal TVS; update wording.

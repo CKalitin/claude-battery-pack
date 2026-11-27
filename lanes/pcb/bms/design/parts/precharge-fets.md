@@ -73,12 +73,13 @@ Q I_DSS ≤ 1 µA at 25 °C (≤ 15 µA at 70 °C, spec at −40 V) in series; t
 | R_g | 22 kΩ 1 % (10 mW) | 0402 |
 | R_b | 10 kΩ | 0402 |
 | R_be | 100 kΩ | 0402 |
-| LED + R | from each drain node to GND, 10 k (≈ 1.2 mA), intent §8 | 0603 |
+| R_M | **22 kΩ mid node → GND** (self-test bleed; 0.66 mA when Q1 is on) | 0603 |
+| Sense | `SNS_PRE` BSS138 gate sense on the mid node ([self-test.md](self-test.md)); LOAD+ via BQ PACK | no indicator LEDs (Chris, 2026-11-27) |
 | TP | each gate, mid node, Q2 drain | |
 
 ## 8. Rules / traps
 - Q2's source is the mid node: its R_gs and C_gs go to the **mid node**, not B+.
-- Q2 alone commanded on: the mid node is pulled low through 122 k; nothing flows. Q1 alone: mid node = B+. Both fine; firmware can test each FET by reading LOAD+ and the LEDs.
+- Q2 alone commanded on: the mid node is pulled low (22 k bleed and 122 k gate divider); nothing flows from B+. Q1 alone: mid node = B+. Firmware tests each FET with `SNS_PRE` and PACK (self-test.md).
 - The two control lines must be separate GPIOs without power-up high glitches ⚠️ (ESP32-S3 datasheet; pcb pin plan).
 - AC05 resistor sees the same current; its audit is power-train.md §9.
 

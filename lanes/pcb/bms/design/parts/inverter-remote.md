@@ -1,61 +1,76 @@
-# Inverter remote (NTS-400P CN301): Panasonic AQY412S (form B) or AQY212S (form A), same footprint
+# Inverter remote (NTS-400P CN301): KEMET EE2-5TNUH-L latching relay, 2 × DMN61D8L-7
 
-**Pick:** PhotoMOS, SOP4. The board takes either; the MPN decides the default. **Recommendation for Q4: form B (AQY412S)**: the inverter stays off unless the BMS says on.
+**Pick:** a double-coil latching DPDT signal relay. Pole A is the dry contact on CN301, pole B reports the state to the ESP32. **No current in either state** (Chris, 2026-11-27). PhotoMOS form A (AQY212S) is the runner-up.
 
 ## 1. CN301 facts (MEAN WELL)
 | Item | Value | Source |
 |---|---|---|
 | Connector | JST S2B-XH-A (mate XHP-2 + SXH-001T) | NTS-400P-SPEC 2026-03-26 |
 | Logic | pins 1–2 **open = inverter on**, **short = remote off** | same |
-| Drive | "dry contact … by relay" | SPEC; NTS/NTU manual Ver 12 (2026.03) |
-| Open-circuit voltage / short current | **not published** ⚠️ (spec and manual searched) | — |
-The PhotoMOS isolates it, so it doesn't matter which side of the shunt the inverter's DC− sits on.
+| Drive | "dry contact (by RELAY)"; no pin reference to DC−, no voltage or current ⚠️ | SPEC; NTS/NTU manual Ver 12 |
+So a bare MOSFET isn't assumed to be safe; an isolated contact is.
 
 ## 2. Requirements
 | # | Requirement | From |
 |---|---|---|
-| R1 | Dry contact, either polarity, isolated | MEAN WELL; intent §4 |
-| R2 | Rating well above the unknown CN301 signal (assume ≤ 12 V, ≤ 10 mA ⚠️) → 60 V / 0.5 A | |
-| R3 | Driven by ESP32 3.3 V | |
-| R4 | Defined state with no firmware | intent §4 |
+| R1 | Isolated dry contact | MEAN WELL |
+| R2 | Zero holding current to keep the inverter off | Chris 2026-11-27 |
+| R3 | State readable by firmware | self-test |
+| R4 | Low-level contacts (signal of unknown, probably mA) | |
+| R5 | Height ≤ 12 mm | intent §6 |
 
 ## 3. Candidates (DigiKey API 2026-11-27)
-| Part | Form | V / I | R_on max | LED | Stock | Verdict |
-|---|---|---|---|---|---|---|
-| **AQY412S** | **B** | 60 V / 0.5 A | 2.5 Ω | 3 mA max to switch | in stock | **✓ recommended** |
-| **AQY212S** | **A** | 60 V / 0.5 A | 2.5 Ω | 3 mA max | in stock | ✓ if Q4 = form A |
-| TLP172AM (Toshiba) | A | 60 V / 0.5 A | 2 Ω | — | in stock | A alternate ⚠️ not audited (land pattern differs) |
-| AQY412EHA(X) | B | 60 V / 0.55 A | 2.5 Ω | — | tape in stock | DIP4-SMD, larger |
-| CPC1017N / CPC1117N | A / B | 60 V | 16 Ω | — | **obsolete** | ✗ |
-| Signal relay | A or B | — | — | coil ≥ 100 mW | — | ✗ size, power |
+| Part | Coil | Latch | Size [mm] | KiCad footprint | Min contact load | Stock | Verdict |
+|---|---|---|---|---|---|---|---|
+| **KEMET EE2-5TNUH-L** | 5 V, 178 Ω × 2 (28 mA) | **double coil** | 15 × 7.5 × 10.0 | `Relay_SMD:Relay_DPDT_Kemet_EE2_NUH_DoubleCoil` ✓ | 10 µA / 10 mV | in stock | **✓** |
+| KEMET EC2-5TNU | same | double | 15 × 7.5 × 9.4 THT | `Relay_THT:..._EC2_NU_DoubleCoil` | same | in stock | THT alternate |
+| Panasonic TQ2SA-L2-5V | 5 V, 178 Ω × 2 | double | ≈ 14 × 9 × 5.6 | none ⚠️ | 10 µA class | in stock | lower; needs a footprint |
+| Omron G6KU-2F-Y DC5 | 5 V, 237 Ω × 1 | **single** coil | 10 × 6.5 × 5.2 | `Relay_SMD:..._G6K-2F-Y` | 10 µA class | in stock | ✗ needs coil polarity reversal (H-bridge) |
+| Omron G6KK (double coil) | — | — | — | — | — | not in the G6K datasheet; not stocked | ✗ |
+| Panasonic AQY212S PhotoMOS (form A) | LED ≈ 6 mA | none | SOP4 | custom | — | in stock | runner-up: ✗ R2 (current to hold "off"); state lost on reset |
 
-## 4. Form A vs B (Q4)
-| State | Form B (AQY412S) | Form A (AQY212S) |
-|---|---|---|
-| BMS asleep / unpowered / in reset | contact **closed** → inverter off | open → inverter "on" (it has no DC while the GV14 is open) |
-| Welded contactor + dead BMS | inverter held off ✓ | inverter runs ✗ |
-| Current while inverter on | ≈ 7 mA from 3V3 | 0 |
-| Fails open (part fault) | inverter on | inverter on |
-| Sleep current | 0 | 0 |
-
-## 5. Identity
+## 4. Identity
 | Item | Value |
 |---|---|
-| Datasheets | AQY212S: Panasonic ASCTB464E 202601; AQY412S: ASCTB140E 202601 |
-| Lifecycle | Active (DigiKey API) ⚠️ Panasonic status page not checked |
-| Abs max | I_F 50 mA, V_R 5 V, load 60 V, 0.5 A, T_op −40…+85 °C |
-| Recommended | **I_F 5–30 mA**, load ≤ 48 V |
-| Footprint | ⚠️ custom: Panasonic pad 0.8 × 1.2 mm, pitch 2.54, row spacing 6.0 mm (package 4.3 × 4.4 × 2.1, lead span 6.8). KiCad `Package_SO:SOP-4_3.8x4.1mm_P2.54mm` is narrower (row 5.5) |
-| Pins | 1 LED anode, 2 cathode, 3–4 contact |
+| Datasheet | KEMET R7002_EC2_EE2 (2026-07-15), `EE2-5TNUH-L.pdf` |
+| Contacts | AgPd/Au-clad silver; 2 A max; 1000 VAC coil–contact and pole–pole (double coil) |
+| Timing | operate ≈ 2 ms; **drive pulse > 10 ms**, amplitude within ± 5 % of 5 V |
+| Latch life | 1 × 10⁷ mechanical (latching) |
+| Shock | 75 G misoperation |
+| Lifecycle | Active (DigiKey API) ⚠️ maker page not checked |
 
-## 6. Calculation
-R = **270 Ω**, GPIO 3.3 V: I_F typ (3.25 − 1.2)/270 = 7.6 mA; min (3.1 − 1.5)/270 = **5.9 mA ≥ 5 mA** ✓; max (3.35 − 1.0)/270 = 8.7 mA ✓. Resistor 20 mW ✓. Off leakage ≤ 1 µA ✓.
+## 5. Circuit
+| Relay pin | Net |
+|---|---|
+| 1 (+) / 12 (−) **set** coil | 5 V / drain of Q_SET (DMN61D8L), gate ← GPIO `INV_SET`, 100 k to GND |
+| 6 (+) / 7 (−) **reset** coil | 5 V / drain of Q_RST (DMN61D8L), gate ← GPIO `INV_RST`, 100 k to GND |
+| 4 (COM A), 5 (NO A) | J7 pins 1, 2 (CN301) |
+| 3 (NC A) | open |
+| 9 (COM B) | GND |
+| 8 (NO B) | GPIO `INV_STATE`, 10 k to 3V3 (low = set) |
+| 10 (NC B) | open |
+⚠️ Check the contact pin names (4/9 common, 5/8 normally open, in the reset state) against the datasheet bottom view and the KiCad symbol (EC2-5TNU) at schematic: the datasheet drawing is a bottom view.
 
-## 7. Externals
-- 270 Ω (0402) from the GPIO; 100 kΩ GPIO → GND (LED off in reset).
-- Indicator LED + R in parallel from the same GPIO (not in series: no headroom on 3.3 V).
-- TP across the contact (J7 side) and on the GPIO.
+**Coil clamp:** the DMN61D8L's built-in drain clamp is the coil diode; **no external flyback diodes**. A diode across each winding of a two-coil relay lets the idle winding conduct and slow the switching.
+
+## 6. States
+| State | Contact A | Inverter |
+|---|---|---|
+| Reset (shipping state; may flip from transport shock) | open | on (when it has DC) |
+| Set | closed | **off, 0 mA** |
+- Firmware **initialises the relay at every boot** (KEMET and Panasonic both require it), then verifies pole B.
+- The state holds through ESP32 restarts and SHUTDOWN. A BQ-forced shutdown leaves the last state; the GV14 is open then anyway.
+- With no firmware the relay stays where it was (change to intent §4 "safe states": define it as "unchanged").
+
+## 7. Checks
+- Coil at 4.90 V rail: 4.90 − 0.028 × 3.1 Ω = 4.81 V (−3.8 %, inside ± 5 %) ✓; set voltage ≤ 3.75 V, ≈ 4.35 V at 60 °C ✓.
+- Driver: 28 mA ≪ 0.47 A ✓; gate 3.3 V (R_DS(on) specified at 3 V) ✓.
+- Pulse 20–50 ms. Never drive both coils together (firmware rule).
+- A stuck-on GPIO: 140 mW continuous, +18 K coil rise: harmless.
+- Induced voltage on the idle winding (≤ supply, 1:1) stays below the clamp and doesn't turn on the body diode ✓.
+- Pole B wetting: 0.33 mA ≥ 10 µA ✓. Sleep: 3V3 and 5 V off → 0 µA ✓.
+- Only needs the 5 V buck (not available on USB power alone).
 
 ## 8. Open
-- ⚠️ Q4 (Chris).
-- ⚠️ Bench: measure CN301 open voltage and short current before first connection.
+- ⚠️ Bench: CN301 open voltage and short current.
+- ⚠️ Pin names at schematic (§5).

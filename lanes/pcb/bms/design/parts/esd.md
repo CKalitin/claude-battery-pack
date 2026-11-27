@@ -1,5 +1,7 @@
 # ESD on J8 (button) and J5 (LED data): TI TPD1E10B09DPYR, plus a BAS116 for the button-to-ESP32 path
 
+The USB port has its own array: ST USBLC6-2SC6 ([usb-c.md](usb-c.md)).
+
 ## 1. Requirements
 | # | Requirement | From |
 |---|---|---|
@@ -27,7 +29,7 @@ Worst case 100 nA × 4.6 MΩ = 0.46 V drop → TS2 ≈ 4.5 V, above the 1.1 V wa
 
 ## 4. Circuits
 - **J8:** pin → TPD1E10B09 to GND → 1 kΩ → TS2. The resistor limits strike current into TS2 (abs max 6 V). No capacitor on TS2.
-- **J5 DATA:** ESP32 → 330 Ω → TPD1E10B09 → pin.
+- **J5 DATA:** buffer Y → 100 Ω → pin, TPD1E10B09 at the pin ([led-link.md](led-link.md)).
 - J9, J6 AC_SENSE: through their series resistors (pcb); add the same TVS only if the bench shows a need.
 
 ## 5. Trap: the button also goes to an ESP32 GPIO
