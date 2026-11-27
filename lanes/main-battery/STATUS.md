@@ -1,13 +1,15 @@
 # main-battery status
 
 - **Current task (Chris, 2026-11-27):** reopen the charger/inverter search so that everything above the cells fits in the module footprint (≈ 312 × 158 mm incl. end plates). Brief: `docs/handoff-converters.md`. Deliver `docs/converters.md`, a top-view packing figure per serious candidate, and a recommendation. No CAD until Chris picks.
-- **Last result:** `docs/converters.md` written; packing checker `cad/analysis/converter_packing.py`; figures `versions/v16-c1-power-module/renders/conv_{A_multiplus,B_npb450_nts400p,S_stack_top_bay,D_npb360_nts400p}.png`.
-  - Recommendation **D: NPB-360-12TB (20 A) + NTS-400P-112 + its 40 mm fan**, bay strip on −y, BMS over the inverter. 0 issues, lid z 333 (+15 mm vs v16.3), ≈ 17.6 L vs 25.2 L.
-  - Combined unit: none fits (MultiPlus 12/500/20 only upright, lid ≈ 590). RPB-1600 rejected: 338 mm with its DC tabs.
-  - Root cause: the NPB-450's 135 mm width (bay strip needs ≥ 59 mm → converters ≤ 96 wide).
-- **Blockers / waiting on:** none.
-- **Next step:** CAD `tower17.py` for option D (fix CTRL WROOM-1U to 18 × 19.2 per pcb), then the interference, clearance and assembly checks, fast renders, cooling re-run and BOM/SCS total.
-- **spec/interface.md** created 2026-11-27; pcb BMS space claim accepted (150 × 90, G10 bridge over the inverter).
+- **Last result (2026-11-27):** option D follow-ups done and pushed.
+  - Cooling: `cad/analysis/cooling_D.py`, converters.md §4. The 40 mm fan gets only 5.4 CFM through the Ø4.8 grid; with Ø6.5 holes 7.7 CFM. The UPS case is ≈ 15 K mixed; single loads 7–9 K.
+  - Charger relay: TE V23134-B1052-C642 (§4a).
+  - GV14 and NTS connector dims confirmed (§4b).
+  - BMS 95 × 55 accepted (spec §4).
+  - Budget: `docs/budget.md`, ≈ $2,930, SCS ≈ $1,580.
+  - New docs: `docs/afe.md`, `docs/enclosure.md`.
+- **Blockers / waiting on:** Chris: cooling (a) thermostat + Ø6.5 fan holes / (b) blanking sheet / (c) 2nd fan; go for CAD. pcb: proving sizes. Zep's (NextPCB) reply.
+- **Next step:** CAD `tower17.py` once Chris says go.
 - **Key decisions so far (with reasons):**
   - Cells are the dominant constraint: nothing goes outside the module footprint (Chris).
   - Separate BMS board; the front zone is for the LED board only (Chris).

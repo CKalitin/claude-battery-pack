@@ -67,9 +67,9 @@ Where it goes: a subsystem gets its own `docs/<topic>.md` (as `cells.md` and `te
 
 ## Known documentation gaps (fix these)
 - ~~**MEAN WELL NPB-450 / NTS-400P selection:** never compared~~ → closed by `docs/converters.md` (2026-11-27: ≈ 40 units compared, combined units included).
-- **NF-A14 fan:** choice of model and size not justified; only the 5 V vs 12 V point is recorded.
-- **BQ76952:** chosen in early versions with no recorded comparison.
-- **Enclosure material and Roadster-red powder coat:** no rationale or SendCutSend finish options recorded.
+- ~~**NF-A14 fan**~~ → dropped in option D; the inverter's 40 mm fan is justified in `docs/converters.md` §4.
+- ~~**BQ76952:** no recorded comparison~~ → `docs/afe.md` (2026-11-27).
+- ~~**Enclosure material and powder coat**~~ → `docs/enclosure.md` (2026-11-27; SCS calls it Gloss Red).
 - **Service bays (`v14-design-notes.md` §12):** only option 2, the chosen one, is written up. Options 1 and 3, and the diagrams of them, aren't in the repo.
 - ~~**Budget (README):** undated~~ → `docs/budget.md` (option D, dated, 2026-11-27).
 - **Full Battery:** named as the vendor in v07–v13 with no reason given.
