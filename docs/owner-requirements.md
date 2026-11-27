@@ -25,6 +25,7 @@
 | **SendCutSend order < $2,000 USD** (SendCutSend sponsorship) | 2026-11-27 |
 | No parts that need emailing a vendor; no sketchy datasheets; cite the manufacturer's own document | early |
 | Every part installable top-down in the README order | v16 |
+| **Chris makes no wiring harness himself** ("who makes these for me?"): every harness is vendor-built and tested, ordered online; purchased parts with flying leads are terminated by the vendor (docs/harnesses.md) | 2026-11-27 |
 | Bent SCS parts quoted from DXF flats with bend lines (`cad/flats15.py`) | 2026-11-27 |
 
 ## 3. Layout and look
