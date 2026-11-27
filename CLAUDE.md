@@ -111,5 +111,5 @@ Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders i
 - You may spawn subagents, or an agent team, for your own sub-work. They follow the same file-ownership rules.
 - After a restart, each session resumes its own conversation automatically. Re-read STATUS.md and `git pull` before continuing.
 - If a tool call is refused with "USAGE GUARD", stop immediately and end your turn with a one-line status. Don't retry or work around it.
-- Chris's Obsidian vault is mounted read-only at `~/Fondak`. His design-principles notes are there; read them before major design decisions.
+- Chris's Obsidian vault is at `~/Fondak`: a read-only copy refreshed every minute from the host (edits there are discarded). His design-principles notes are there; read them before major design decisions.
 - Run long jobs (sims, renders, builds) in the background and keep working; don't block on polling loops.
