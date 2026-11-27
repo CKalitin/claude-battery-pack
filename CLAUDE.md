@@ -94,3 +94,22 @@ Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders i
 - Control board area is tight (4-layer). Schematic not started.
 - Charger-wake behaviour deferred (button-only wake for now).
 - Later: ESP32-hosted telemetry dashboard (`docs/telemetry-ideas.md`); re-estimate the budget; blog notes (`docs/blog-notes.md`).
+
+## Server swarm conventions (added by server setup)
+
+- Three independent Claude Code sessions run in the `claude` VM on Chris's home server, one tmux window each in session `swarm`: `systems`, `pcb` and `mech`. Each has its own clone at `~/agents/<name>`. They all run bypass mode with passwordless sudo, so install any tools you need.
+- Chris talks to each session directly from his phone. Sessions message each other with SendMessage by name (`/list-agents` shows who's reachable). Message another session whenever your change affects its work.
+- `spec/interface.md` is the single source of truth for shared numbers: cell, S/P count, voltage/current limits, connectors, envelope, mounting points. Only `systems` edits it. Others write `spec/requests/<name>-<short-name>.md` and message `systems`.
+- Each session owns its folder, `lanes/<name>/`, and edits only that. Top-level files and the spec belong to `systems`. Two sessions must never edit the same file.
+- Every session keeps `lanes/<name>/STATUS.md` current. Update it after every meaningful step, and always before ending a turn:
+  - Current task:
+  - Last result (with file paths):
+  - Blockers / waiting on:
+  - Next step:
+  - Key decisions so far (with reasons):
+- Commit and push small and often: `git pull --rebase` before each push, and pull at the start of every turn. Commit messages start with your name.
+- You may spawn subagents, or an agent team, for your own sub-work. They follow the same file-ownership rules.
+- After a restart, each session resumes its own conversation automatically. Re-read STATUS.md and `git pull` before continuing.
+- If a tool call is refused with "USAGE GUARD", stop immediately and end your turn with a one-line status. Don't retry or work around it.
+- Chris's Obsidian vault is mounted read-only at `~/Fondak`. His design-principles notes are there; read them before major design decisions.
+- Run long jobs (sims, renders, builds) in the background and keep working; don't block on polling loops.
