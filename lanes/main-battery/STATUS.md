@@ -1,12 +1,12 @@
 # main-battery status
 
-Current task: option D follow-ups. The CAD subagent (cad-tower17) is building tower17; harness vendor and shunt connector are being settled.
+Current task: option D CAD delivered (v17, all checks pass); verifying it and relaying it to Chris.
 Blockers: Chris: pick the harness vendor (NextPCB ≈ $495 vs Loombotic ≈ $2,245) and OK ordering Molex 39-01-3103/39-28-1103 for the shunt test-fit. Zep (NextPCB): sponsorship reply.
-Next step: review the CAD subagent report (due ~10 min), relay to Chris, shut it down; tell pcb the shunt test-fit result when Chris has it.
-Last result: CAD subagent interim: option D model passes (0 interferences, + to − 12.5 mm, pack copper to chassis 7.3 mm, assembly check PASS); harness docs updated with pcb connector audit.
+Next step: re-run checks to verify, regenerate harness drawings with CAD lengths, then wait for Chris on vendor, test-fit, fan spacer and look change (F 8 mm).
+Last result: v17 CAD pushed: 0 interferences, + to − 12.5 mm, pack-to-chassis 7.3 mm, assembly PASS, box 19.2 L (−24 %), SCS ≈ $1,823; cooling UPS case 15–21 K still open.
 
 ## Teammates
-- cad-tower17 (CAD, started on Sonnet before Chris's Opus rule): all v17 checks pass; final export, renders, docs and commit in progress, report in ~10 min.
+- cad-tower17: finished (v17 pushed), shutdown requested.
 - main-battery-shunt-connector: finished and shut down.
 
 - **Key decisions so far (with reasons):**
