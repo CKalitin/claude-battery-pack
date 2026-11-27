@@ -1,11 +1,12 @@
 # main-battery status
 
 - Current task: none. Onboarding done (2026-11-27); waiting for Chris's instructions. No design work started.
-- Last result: `CLAUDE.md` "Server swarm conventions" rewritten for two agents (`main-battery`, `pcb`); this file created.
+- Last result: merged `origin/power-train-rethink` (v15–v16.2, head `acc7941`) into `master` on Chris's instruction, no conflicts. `CLAUDE.md` swarm conventions cover the two agents.
 - Blockers / waiting on: Chris.
-  - ⚠️ `master` is at v14. v15–v16.2 are only on `origin/power-train-rethink` (head `acc7941`), not merged. Its `CLAUDE.md` and `versions/v16-c1-power-module/README.md` are the newest handoff.
-  - `spec/interface.md` does not exist on either branch yet.
-- Next step: wait for instructions. Before design work, confirm the base branch (`master` vs `power-train-rethink`).
+  - Newest handoff: `CLAUDE.md` (v16.2) and `versions/v16-c1-power-module/README.md`.
+  - `spec/interface.md` is not written yet.
+  - pcb session not yet running; one-line CLAUDE.md notice not sent.
+- Next step: wait for instructions; notify pcb once it is up.
 - Key decisions so far (with reasons):
-  - Did not merge `power-train-rethink`: not asked.
-  - Did not create `spec/interface.md`: it depends on which version is the baseline.
+  - Base is `master` (v16.2) since the merge.
+  - `spec/interface.md` not created: no design or spec work requested yet.
