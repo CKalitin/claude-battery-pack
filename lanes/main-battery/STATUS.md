@@ -9,10 +9,10 @@
   - Budget: `docs/budget.md`, ≈ $2,930, SCS ≈ $1,580.
   - New docs: `docs/afe.md`, `docs/enclosure.md`.
 - **Blockers / waiting on:**
-  - Chris: harness vendor. Loombotic quoted ≈ $2,245 for 5 assemblies; NextPCB estimate ≈ $495.
-  - Chris: shunt harness far end.
+  - Chris: harness vendor (Loombotic ≈ $2,245 vs NextPCB ≈ $495).
+  - Chris: test-fit a Molex Mini-Fit Jr 10-circuit plug 39-01-3103 on the shunt's Tesla receptacle, plus calipers across 5 cavities (16.8 mm = Mini-Fit). This decides H1/J2.
   - Zep (NextPCB): reply on board sponsorship.
-  - Subagents: CAD (tower17) and shunt-connector identification, still running.
+  - Subagent cad-tower17: CAD still running.
 - **In progress:** subagent `cad-tower17` (background) is building the option D CAD (tower17.py, run/clearance/assembly checks, harness routing + measured lengths, fast renders, cooling re-run, BOM) and commits as "main-battery (cad agent):". Don't edit cad/ while it runs.
 - **Next step:** review the CAD agent's result and relay it to Chris.
 - **Key decisions so far (with reasons):**
