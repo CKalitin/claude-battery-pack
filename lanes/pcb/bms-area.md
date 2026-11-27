@@ -114,7 +114,7 @@ Chris asked for credit-card size if it costs little effort and doesn't force a l
 - Antenna: U.FL coax ≈ 150–200 mm to the front-plate flex antenna (spec/interface.md §4).
 
 ## 12. Connectors and pins (2026-11-27, answering main-battery `docs/harnesses.md`)
-**J4 and J5 grow from 2×3 to 2×4 Micro-Fit 3.0.** Each harness branch gets its own ground pin: no two wires in one crimp, and no splices to build. Re-checked: credit card 85.6 × 53.98 still fits (**54 %**, 0 overlaps, 115 parts incl. the new sense passives); 95 × 55 is 50 %.
+**J4 and J5 grow from 2×3 to 2×4 Micro-Fit 3.0.** Each harness branch gets its own ground pin: no two wires in one crimp, and no splices to build. Re-checked: credit card 85.6 × 53.98 still fits (**54 %**, 0 overlaps, 114 parts incl. the new sense passives); 95 × 55 is 50 %.
 
 | Conn | Part (BMS side) | Pins (proposal; numbers final at schematic) |
 |---|---|---|
