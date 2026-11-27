@@ -40,8 +40,8 @@
 | MMBT3904 V_CE | 40 V | ✓ |
 | BSZ146N10LS5 (via GV14 coil + 55 V kick) | 100 V (≈ 80 V) | ✓ |
 | DMN61D8L | 60 V | ✓ |
-| BAS116 (self-test clamps to B+, reverse) | 75 V | ✓ |
-| BSS138 self-test gates | ±20 V (24.4 V for µs through 100 kΩ) | ⚠️ self-test.md |
+| BAS116 (BQ BAT and collector diodes, button) | 75 V | ✓ |
+| BSS138 self-test gates | ±20 V; 18 V zener clamp ≤ 19.5 V ([self-test.md](self-test.md) §3a) | ✓ |
 | B+/LOAD+ dividers (pcb) | check resistor voltage ratings | ⚠️ |
 
 ## 4a. J3 pin 4 (CHASSIS)

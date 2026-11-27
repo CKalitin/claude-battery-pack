@@ -1,12 +1,13 @@
 # GV14 coil driver: 2 × Infineon BSZ146N10LS5 in series, each gate from its own TI SN74LV1T34
 
-**Pick:** two 100 V N-FETs in series from J4-X2 to GND. FET A's gate comes from the ESP32 and FET B's from the BQ76952 DDSG, each through its own 3.3 V → 5 V buffer. This is the hardware AND. **No external clamp of any kind on the coil.**
+**Pick:** two 100 V N-FETs in series from J4-X2 to GND. FET A's gate comes from the ESP32 and FET B's from the BQ76952 DDSG, each through its own 3.3 V → 5 V buffer. This is the hardware AND. A BAS116 across the upper FET's gate-source protects V_GS (review m7). **No external clamp of any kind on the coil.**
 
 ## 1. Coil facts (Sensata GV14, Rev 28-Apr-2022, `GV141BAX.pdf`)
 | Item | Value |
 |---|---|
 | Coil B | 12 V, max 16 V; pick-up max 8 V; drop-out max 0.5 V (table values) |
-| Pick-up current | **3.9 A max for 75 ms**, then one coil is switched out internally: **0.23 A hold** |
+| Pick-up current | **3.9 A max for 75 ms** (nominal 12 V, 25 °C), then one coil is switched out internally: **0.23 A hold** |
+| Pick-up, our worst case | **5.2 A** at 14.6 V, coil −10 °C (R −14 %), 0.17 Ω path: 14.6/(12/3.9 × 0.862 + 0.17) (review m14). J3 B+ ≈ 6.5 A for 75 ms with the buck and relay; **size J3 and J4 traces for 5.5 A** |
 | Suppression | **"Internal transient voltage suppressor… No external diodes should be added across the coil."** Coil back-EMF **55 V** ⚠️ (listed value, treated as the clamp) |
 | Timing | operate ≤ 20 ms, release ≤ 12 ms |
 | Note 7 | Voltage must be applied as a step (no slow ramp) → hard switching, no PWM |
@@ -47,15 +48,17 @@
 X1 (B+ from J3) ── coil ── X2 ── D[Q_BQ]S ── D[Q_ESP]S ── GND
 ESP32 GPIO ─┬─ A [LV1T34 #1] Y ─100Ω─ G(Q_ESP), 100k G→GND
             └─100k→GND
-BQ DDSG  ───┬─ A [LV1T34 #2] Y ─100Ω─ G(Q_BQ),  100k G→GND (to GND, not source)
-            └─100k→GND
+BQ DDSG  ───┬─ A [LV1T34 #2] Y ─100Ω─┬─ G(Q_BQ),  100k G→GND (to GND, not source)
+            └─100k→GND               └──|◄── S(Q_BQ)   (BAS116: anode source, cathode gate)
 VCC = 5 V, 100 nF each
 ```
 Q_BQ (upper) source = lower drain, ≈ 0.1 V at pick-up → V_GS ≈ 4.9 V ✓.
 
-## 6. BQ76952 DDSG setup (SLUUBY2B §6.7, §13.3.2.17) ⚠️ pcb to confirm
+**Upper gate (review m7):** during the 70–80 V kick the mid node rises capacitively while the gate is ground-referenced: estimated V_GS −17…−19 V against ±20 V. The BAS116 holds V_GS ≥ −0.9 V and passes only capacitive charge (≈ 10 nC ⚠️ estimate) into the buffer through 100 Ω; the upper FET then blocks the whole X2 voltage (≤ 80 V on a 100 V part ✓). The review suggested a 15 V zener in the same position: its forward diode clamps identically, and the positive side can't exceed the 5 V buffer, so the BAS116 (already on the BOM, ≤ 5 nA) does the job. A shorted clamp diode holds V_GS = 0 (coil can't close: safe). ⚠️ Scope V_GS and the mid node at 14.6 V and 20 V.
+
+## 6. BQ76952 DDSG setup (SLUUBY2B §6.7, §13.3.2.17); stored in OTP ([bq76952.md](bq76952.md) §7)
 `Settings:Configuration:DDSG Pin Config` = **0xAA**: PIN_FXN = 10 (alternate = DDSG), OPT5 = 1 (**active-low: DDSG low when DSG is disabled**), OPT3 = 1 (drive from REG1), OPT1 = 1 (drive high).
-- Before configuration, and in SHUTDOWN, the pin is high-impedance → buffer input pulled low → coil off ✓.
+- On a blank part, and in SHUTDOWN, the pin is high-impedance → buffer input pulled low → coil off ✓ (TRM p. 61).
 - ⚠️ DDSG follows **protection faults** that would disable DSG. Whether a host FET-off command also drives it isn't stated: bench-test.
 
 ## 7. Levels, power-up and failure states
@@ -73,9 +76,9 @@ Q_BQ (upper) source = lower drain, ≈ 0.1 V at pick-up → V_GS ≈ 4.9 V ✓.
 | Item | Value | |
 |---|---|---|
 | V_DS 100 V vs 80 V worst | 80 % | ✓ (69.6 V = 70 % at 14.6 V) |
-| V_GS ±20 V | 5.1 V max | ✓ |
-| I pulse 3.9 A vs I_D 44 A | | ✓ |
-| Loss at pick-up (hot R ≈ 1.5 × 20.8 mΩ) | 3.9² × 0.031 = 0.48 W per FET for 75 ms | ✓ |
+| V_GS ±20 V | 5.1 V max; upper ≥ −0.9 V (BAS116) | ✓ |
+| I pulse 5.2 A vs I_D 44 A | | ✓ |
+| Loss at pick-up (hot R ≈ 1.5 × 20.8 mΩ) | 5.2² × 0.031 = 0.84 W per FET for 75 ms | ✓ |
 | Hold loss | 0.23² × 0.031 = 1.6 mW | ✓ |
 | Gate charge 9.5 nC through 100 Ω | ≈ 0.2 µs turn-on | ✓ step, no ramp |
 | I_DSS ≤ 1 µA @ 100 V, 25 °C | sleep budget | ✓ |
@@ -83,13 +86,15 @@ Q_BQ (upper) source = lower drain, ≈ 0.1 V at pick-up → V_GS ≈ 4.9 V ✓.
 **Pick-up voltage at the coil, pack 10.0 V** (⚠️ estimated path resistances): ATM 5 A fuse ≈ 18 mΩ, 4 Micro-Fit contacts ≤ 40 mΩ, coil leads 2 × 0.38 m 20 AWG ≈ 26 mΩ, harness 18 AWG ≈ 8 mΩ, board ≈ 20 mΩ, FETs ≤ 62 mΩ → ≈ 0.17 Ω → 0.68 V → **9.3 V ≥ 8 V** ✓. With a hot coil (+14 % at 60 °C, pick-up ≈ 9.1 V ⚠️) the margin is only 0.2 V at 10 V: firmware shouldn't close below ≈ 10.5 V.
 
 ## 9. Self-test
-- No indicator LED (Chris, 2026-11-27). `SNS_GV14` senses X2 (BSS138 gate sense): both-FET short, single-FET short (each tested alone), open coil and shorted coil. Procedure in [self-test.md](self-test.md).
+- No indicator LED (Chris, 2026-11-27). `SNS_GV14` senses X2 (BSS138 gate sense): both-FET short, single-FET short (each tested alone), open coil and shorted coil. Procedure in [self-test.md](self-test.md); DDSG is driven as a GPO during the test.
+- 5 A ATM: 6.5 A (130 %) for 75 ms at the worst pick-up, far below its opening time ✓.
 - No output test points or force hooks (Chris); firmware reads the node.
 
 ## 10. Layout
-Power loop J3 → J4 → Q_BQ → Q_ESP → GND: ≥ 2 mm traces (3.9 A pulse). Creepage on X2 ≥ 80 V: ≥ 0.6 mm to logic.
+Power loop J3 → J4 → Q_BQ → Q_ESP → GND: size for 5.5 A (≥ 2 mm traces). Creepage on X2 ≥ 80 V: ≥ 0.6 mm to logic.
 
 ## 11. Open
 - ⚠️ Draw the TSDSON-8 footprint.
 - ⚠️ Bench: X2 waveform at turn-off (confirm ≤ B+ + 55 V), DDSG behaviour, pick-up at 10 V hot, 50 µs test pulses.
+- ⚠️ Bench: upper-FET V_GS during the kick (§5).
 - ⚠️ Intent §4 says "coil kick clamped": met by the GV14's internal TVS; update wording.

@@ -30,18 +30,18 @@ Worst case 100 nA × 4.6 MΩ = 0.46 V drop → TS2 ≈ 4.5 V, above the 1.1 V wa
 ## 4. Circuits
 - **J8:** pin → TPD1E10B09 to GND → 1 kΩ → TS2. The resistor limits strike current into TS2 (abs max 6 V). No capacitor on TS2.
 - **J5 DATA:** buffer Y → 100 Ω → pin, TPD1E10B09 at the pin ([led-link.md](led-link.md)).
-- J9, J6 AC_SENSE: through their series resistors (pcb); add the same TVS only if the bench shows a need.
+- J9 and J1 NTC lines, J6 AC_SENSE: series resistors ([ntc.md](ntc.md), [ad-dividers.md](ad-dividers.md)); J2 shunt SPI: 100 Ω ([shunt-spi-translator.md](shunt-spi-translator.md)). Add the same TVS only if the bench shows a need.
 
 ## 5. Trap: the button also goes to an ESP32 GPIO
 In SHUTDOWN the ESP32 is unpowered; a pin wired straight to the button node is clamped by its internal diode to the dead 3V3 rail. That holds TS2 low: **no wake, soft-SHUTDOWN stuck**.
 
-Fix: GPIO (internal pull-up) → anode of **BAS116LT1G**, cathode → button node.
+Fix: GPIO10 with an **external 100 kΩ pull-up to 3V3** (RC0402FR-07100KL; internal pull-up disabled; review n3) → anode of **BAS116LT1G**, cathode → button node.
 | State | Result |
 |---|---|
-| Button pressed | node 0 V; diode conducts ≈ 60 µA; GPIO ≈ V_F ≈ 0.6 V ⚠️ (V_F ≤ 0.9 V at 1 mA) < V_IL 0.825 V ✓ |
-| Released, awake | diode reverse; GPIO high through its pull-up ✓ |
+| Button pressed | node 0 V; diode conducts ≈ 27 µA (was ≈ 60 µA on the internal pull-up); GPIO ≈ V_F ≈ 0.6 V at −10 °C ⚠️ (V_F ≤ 0.9 V at 1 mA; typical curve) < V_IL 0.825 V ✓ |
+| Released, awake | diode reverse; GPIO high through the 100 kΩ (5 nA × 100 k = 0.5 mV) ✓ |
 | SHUTDOWN, 3V3 = 0 | diode reverse, ≤ 5 nA at 25 °C ✓ R3 |
 ⚠️ Bench-check the low level at −10 °C. A Schottky is the wrong choice here (µA leakage). BAS116LT1G: `Package_TO_SOT_SMD:SOT-23`, **pin 1 anode, pin 3 cathode**, pin 2 NC (style 8), V_R 75 V, Active (onsemi.com), in stock, onsemi BAS116LT1/D Rev. 14.
 
 ## 6. Open
-- ⚠️ pcb: BQ TS2 external network per TI app notes.
+- ⚠️ pcb: BQ TS2 external network: 1 kΩ, no capacitor (above); check against TI app notes at schematic.

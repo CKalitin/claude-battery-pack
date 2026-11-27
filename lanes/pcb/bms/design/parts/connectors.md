@@ -4,7 +4,7 @@
 | # | Requirement | From |
 |---|---|---|
 | R1 | One connector per destination, right-angle, mated height ≤ 12 mm | spec §4; Chris |
-| R2 | B+ pin: 3.9 A pick-up (75 ms) + ≤ 1.8 A board (buck at 3 A, relay), 18–22 AWG | gv14-driver.md, buck-5v.md |
+| R2 | B+ pin: 5.2 A pick-up (75 ms, cold coil at 14.6 V) + ≈ 1.3 A board (buck at peak, relay) ≈ **6.5 A for 75 ms**, ≤ 1.8 A continuous, 18–22 AWG; **traces on J3 B+ and J4 sized for 5.5 A** | gv14-driver.md, buck-5v.md, review m14 |
 | R6 | J3 is **1×4**: B+, LOAD+, GND, CHASSIS (IMD ring lug) | Chris 2026-11-27 |
 | R3 | THT tails and pegs ≤ 2.5 mm below the board | intent §6 |
 | R4 | J1: 12-pin, 0.5 mm FPC (0.3 mm thick) | intent §3 |
@@ -52,7 +52,7 @@ Cable-side terminals (harness, main-battery's lane): 43030-0007 (20–24 AWG, ti
 | 18 AWG | 8.5 A | 7 A (1-row) / 6.5 A (2-row) |
 | 20 AWG | 7 A | ≈ 5.5 A |
 | 22 AWG | 6 A (interpolated) | ≈ 4.5 A |
-- J3 B+ (4-circuit, between the 2- and 6-circuit values: ≈ 7.5 A on 18 AWG): ≤ 5.7 A for 75 ms, ≤ 1.8 A continuous ✓. J4: 3.9 A pulse ✓. J5 5 V: 2 A on 20–22 AWG ✓. J2: 50 mA ✓.
+- J3 B+ (4-circuit, between the 2- and 6-circuit values: ≈ 7.5 A on 18 AWG): ≈ 6.5 A for 75 ms, ≤ 1.8 A continuous ✓. J4: 5.2 A pulse ✓. J5 5 V: 2 A on 20–22 AWG ✓. J2: 50 mA ✓.
 - 600 V rating ✓. Rated field temperature 65 °C / 10 yr (PS) vs 60 °C board air ✓; tin header 105 °C.
 
 ## 5. FPC (J1)

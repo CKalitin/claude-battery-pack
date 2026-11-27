@@ -91,7 +91,7 @@
 | **Total** | **≈ 1.2** | **≈ 2.45** |
 Rated 3 A: **margin 0.55 A (18 % of rating) at the peak**, 60 % typical. The LED eFuse limits at ≤ 2.78 A, so even a shorted LED cable keeps the total under the 3.4 A minimum valley limit ([led-link.md](led-link.md)).
 
-**Input current:** 3 A out → 15/(0.93 × 10 V) = 1.6 A from B+. With the GV14 pick-up (3.9 A, 75 ms) the 5 A ATM sees ≤ 5.7 A for 75 ms (114 %) ✓.
+**Input current:** 3 A out → 15/(0.93 × 10 V) = 1.6 A from B+. With the worst GV14 pick-up (5.2 A cold at 14.6 V, 75 ms; review m14) the 5 A ATM sees ≈ 6.5 A for 75 ms (130 %) ✓.
 
 **Thermal at 3 A continuous** (typical efficiency curves §8.2.3, 12 V in, 5 V out, TI circuit): ≈ 94.5 % at 400 kHz (Fig. 8-9), ≈ 92 % at 2 MHz (Fig. 8-7); ≈ 93 % assumed at 1 MHz ⚠️.
 - Total loss 15 W × (1/0.93 − 1) = 1.1 W; inductor copper 9 × 0.038 = 0.34 W; **IC ≈ 0.75 W**.

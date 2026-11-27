@@ -1,11 +1,11 @@
 # Firmware self-test of the switched outputs (no per-output LEDs)
 
-**Pick:** one identical "is this node high?" sense per switched output: **BSS138 + 100 kΩ + BAS116 clamp to B+**, read by an ESP32 GPIO with its internal pull-up. Digital only, **no ADC channel**, **no current from B+ in sleep** (the node only drives a gate).
+**Pick:** one identical "is this node high?" sense per switched output: **BSS138 + 100 kΩ + 18 V zener gate clamp to GND**, read by an ESP32 GPIO with its internal pull-up. Digital only, **no ADC channel**, **no current from B+ in sleep** (the node only drives a gate).
 
 ```
-NODE ──100k (0603)──┬── G  BSS138  D ── GPIO (internal pull-up)
+NODE ──100k (0805)──┬── G  BSS138  D ── GPIO (internal pull-up)
                     │             S ── GND
-        B+ ──K[BAS116]A──┘
+                    └──K[18 V zener]A── GND
 GPIO LOW  = node high (> 1.5 V)      GPIO HIGH = node low (< 0.75 V)
 ```
 
@@ -32,10 +32,21 @@ No per-output LEDs, no force hooks and no test points on switched outputs (Chris
 | Part | MPN | Footprint | Why |
 |---|---|---|---|
 | Q | onsemi **BSS138LT1G** | `SOT-23` (1 G, 2 S, 3 D) | V_th **0.85–1.5 V**, V_GS ±20 V, I_GSS ≤ 0.1 µA; datasheet Rev. 15 (Sep 2026), in stock |
-| D clamp | **BAS116LT1G** (anode gate, cathode B+) | `SOT-23` (pin 1 anode, pin 3 cathode) | holds gate ≤ B+ + 0.9 V; 5 nA leakage |
-| R_s | 100 kΩ **0603** | `R_0603_1608Metric` | sees up to ≈ 65 V at the GV14 kick (0402 is rated 50 V) |
+| D clamp | Diodes **MMSZ5248B-7-F**, 18 V ±5 % (cathode gate, anode GND) | `Diode_SMD:D_SOD-123` | DS18010 Rev. 28-2: 17.1–18.9 V at 7 mA; I_R ≤ **0.1 µA at 14 V**; in stock |
+| R_s | 100 kΩ **0805** (RC0805FR-07100KL, 150 V) | `R_0805_2012Metric` | sees ≤ ≈ 62 V at the GV14 kick, ≈ 132 V when both relay clamps act ([charger-relay-driver.md](charger-relay-driver.md) §5c) |
 | Pull-up | ESP32 internal (≈ 45 kΩ) | — | |
 Drain voltage is only 3.3 V (BSS138 is 50 V).
+
+### 3a. Gate clamp (review m5)
+The old BAS116 clamp followed B+: at the TVS clamp (24.4 V) the gate saw 25.3 V on a ±20 V part.
+| Clamp | Gate max | Sleep current from B+ | Detection threshold | Verdict |
+|---|---|---|---|---|
+| BAS116 to B+ (old) | B+ + 0.9 = 25.3 V ✗ | ≤ 5 nA | 0.85–1.5 V | ✗ |
+| ±30 V sense FET, Microchip 2N7002-G (DS20005797A) | 25.3 V on ±30 ✓ | ≤ 5 nA | V_th 1.0–2.5 V | ✗ the shorted GV14 coil reads as low as ≈ 1.8 V: not guaranteed above V_th |
+| **18 V zener, gate to GND** | **≤ 19.5 V** hot (18.9 V + tempco) ✓ ±20 | ≤ 0.1 µA per high node at 14 V; ⚠️ unspecified at 14.6 V and hot | BSS138 unchanged ✓ | **✓** |
+| Zener or diode to 3V3 / 5 V | low | ✗ rails are 0 V in sleep: ≈ 150 µA | | ✗ |
+| Resistor gate-to-source (divider) | set by ratio | ✗ draws from B+ in sleep | | ✗ |
+Two nodes sit at B+ in sleep (X2 and the relay drain) → ≤ 0.2 µA.
 
 ## 4. Sensed nodes and GPIOs
 | Signal | Node | ESP32 GPIO | Extra parts |
@@ -52,31 +63,36 @@ Drain voltage is only 3.3 V (BSS138 is 50 V).
 **Why the 22 kΩ bleed on M:** with both FETs off, Q1 leakage (≤ 15 µA at 70 °C) would float M high. 15 µA × 22 k = 0.33 V < 0.85 V ✓. When Q1 is on it draws 0.66 mA (10 mW). In sleep it carries only the leakage already in the budget.
 
 ## 5. Test procedures (run at boot, contactor open)
-Pulse = **50 µs** (≪ operate time: GV14 ≤ 20 ms, relay ≈ 7 ms), read at ≈ 30 µs (sense delay 100 k × 50 pF ≈ 5 µs). "H" = node high = GPIO low.
+Pulse = **50 µs** (≪ operate time: GV14 ≤ 20 ms, relay ≈ 7 ms), read at ≈ 30 µs (sense delay 100 k × ≈ 100 pF (gate + zener) ≈ 10 µs). "H" = node high = GPIO low. **Generate every pulse with the RMT peripheral, never a software delay** (a shorted coil draws ≈ 80 A; review n8).
+
+**Driving the BQ side** (OTP configures DDSG and DCHG from boot): in CONFIG_UPDATE write the pin config to GPO, `0x29` (RAM only), exit, use `DDSG_LO/HI`, `DCHG_LO/HI` (TRM p. 58); afterwards write `0xAA` back and read it. A reset restores OTP. ⚠️ Bench-check that CONFIG_UPDATE and the GPO writes behave as described.
 
 ### GV14 (Q_ESP from the ESP32, Q_BQ from DDSG)
 | Step | Command | Expect | Fault if not |
 |---|---|---|---|
-| G0 | both off, **before** the DDSG pin is configured (Q_BQ off by default) | H | node low: coil open, or both FETs shorted (then LOAD+ = B+ with precharge off) |
+| G0 | both off (DDSG as GPO, low) | H | node low: coil open, or both FETs shorted (then LOAD+ = B+ with precharge off) |
 | G1 | Q_ESP on only | stays H | **Q_BQ shorted** |
-| G2 | configure DDSG (goes high); Q_BQ on only | stays H | **Q_ESP shorted** |
+| G2 | `DDSG_HI`; Q_BQ on only | stays H | **Q_ESP shorted** |
 | G3 | pulse both | **L during the pulse** | H during pulse: **shorted coil** (X2 ≈ 0.3 × B+ ≈ 3–4 V) or a FET stuck open → don't close |
 | G4 | 1 ms after the pulse | H | L: **open coil** (nothing recharges X2) |
 
-### Charger relay (one FET)
+### Charger relay (Q_ESP from the ESP32, Q_BQ from DCHG)
 | Step | Command | Expect | Fault if not |
 |---|---|---|---|
-| C0 | off | H | node low: FET shorted **or** coil open (same reading; both are latched faults. A shorted FET shows as charge current with the command off) |
-| C1 | pulse | L during | H: shorted coil (FET saturates ≈ 0.8 A, ≈ 11 W for 50 µs ✓) or FET open |
-| C2 | 1 ms after | H | L: open coil |
+| C0 | both off (DCHG as GPO, low) | H | node low: coil open, or both FETs shorted (shows as charge current with the command off) |
+| C1 | Q_ESP on only | stays H | **Q_BQ shorted** |
+| C2 | `DCHG_HI`; Q_BQ on only | stays H | **Q_ESP shorted** |
+| C3 | DCHG high, pulse CHG_RLY_EN | L during | H: shorted coil (FETs saturate ≈ 0.8 A for 50 µs ✓) or a FET open |
+| C4 | 1 ms after | H | L: open coil |
 
 ### Precharge (contactor open, LOAD+ discharged first: check PACK)
 | Step | Command | M (`SNS_PRE`) | LOAD+ (BQ PACK) | Fault if not |
 |---|---|---|---|---|
 | P0 | both off | L | stays low | M high: **Q1 shorted**; LOAD+ rising: both shorted (or GV14 welded) |
 | P1 | Q1 only | H | stays low | M low: **Q1 open**; LOAD+ rising: **Q2 shorted** |
-| P2 | Q2 only | L | stays low | LOAD+ rising: Q1 shorted |
-| P3 | both | H | rises to ≈ B+ in ≈ 0.15 s | no rise: Q2 or AC05 open, or LOAD+ shorted (0.5 s timeout) |
+| P2 | Q2 only (`PRE_PUMP` toggling; read after ≥ 10 ms) | L | stays low | LOAD+ rising: Q1 shorted |
+| P4 | Q1 on, `PRE_PUMP` held **static high** 50 ms, then static low (run **before** P3) | H | stays low | LOAD+ rising: the AC coupling is broken (10 nF or pump shorted) or Q2 shorted → abort |
+| P3 | Q1 on and `PRE_PUMP` toggling | H | rises to ≈ B+ in ≈ 0.15 s | no rise: Q2, pump or AC05 open, or LOAD+ shorted (0.5 s timeout) |
 
 ### Others
 - Inverter relay: after each 20–50 ms pulse, `INV_STATE` must match; else relay or driver fault.
@@ -85,21 +101,20 @@ Pulse = **50 µs** (≪ operate time: GV14 ≤ 20 ms, relay ≈ 7 ms), read at �
 ## 6. Checks
 | Case | Node | vs V_th 0.85–1.5 V | |
 |---|---|---|---|
-| GV14 on (3.9 A × ≈ 55 mΩ) | ≈ 0.2 V | reads low ✓ | |
-| Relay on, hot (≤ 0.16 A × 3.1 Ω) | ≤ 0.5 V | below V_th min (≈ 0.75 V at 60 °C ⚠️) | ⚠️ bench |
+| GV14 on (5.2 A × ≈ 62 mΩ) | ≈ 0.32 V | reads low ✓ | |
+| Relay on, two FETs (0.16 A × 2 × 2.4 Ω max × 1.3 hot) | ≤ 1.0 V (typ ≈ 0.4 V) | ⚠️ **above V_th min** at the worst corner | pulse tests read ≈ 0 V (coil current hasn't built up in 50 µs) ✓; firmware doesn't use `SNS_RLY` as a continuous "on" confirmation |
 | Shorted GV14 coil in pulse | ≈ 3–4 V (≥ 1.8 V with a long-wire short) | reads high ✓ | |
 | Node high, 10 V pack | 10 V on the gate | on ✓ | |
-| Gate abs ±20 V | B+ + 0.9 V: 15.5 V normal; 25 V for the µs of a 24.4 V B+ surge, through 100 kΩ ⚠️ | | |
-| GV14 kick | clamp current (80 − 15)/100 k = 0.65 mA into B+ | BAS116 ✓, R 0603 ✓ | |
-| Sleep | no DC path from B+; I_GSS ≤ 0.1 µA per high node | | ✓ R3 |
+| Gate abs ±20 V | B+ normally (≤ 14.6 V); zener limits to ≤ 19.5 V at any surge | ✓ intent §2 | |
+| GV14 kick | zener current (80 − 18)/100 k = 0.62 mA ✓; relay both-clamp case (150 − 18)/100 k = 1.3 mA, 24 mW | R 0805 ✓ | |
+| Sleep | zener leakage ≤ 0.1 µA per high node (14 V, 25 °C) + I_GSS | ⚠️ bench at 14.6 V, 60 °C | ✓ R3 |
 | Shorted-coil pulse energy | ≈ 80 A for ≤ 50 µs through the BSZ146 (176 A pulse rating); 5 A ATM I²t ≈ 0.3 A²s ⚠️ well below melting | | |
 
 ## 7. Rules
-- Run G0 before configuring DDSG, or force the pin unused again (CONFIG_UPDATE) ⚠️ (bq76952.md).
+- Restore both BQ pin configs to `0xAA` before anything may close; a failed restore is a latched fault.
 - Pulses only with the contactor open and no precharge in progress.
-- Precharge steps P0–P2 are valid only with LOAD+ low. A charged load bus back-feeds M through Q2's body diode, and the 22 k bleed empties it slowly (22 k × 4.7 mF ⚠️ ≈ 100 s): if PACK reads high, skip them and report "not tested".
+- Precharge steps P0–P2 and P4 are valid only with LOAD+ low. A charged load bus back-feeds M through Q2's body diode, and the 22 k bleed empties it slowly (22 k × 4.7 mF ⚠️ ≈ 100 s): if PACK reads high, skip them and report "not tested".
 - A failed step latches the fault and is reported over Wi-Fi; nothing closes.
 
 ## 8. Open
-- ⚠️ Bench: pulse test on a real GV14 (economizer behaviour with 50 µs pulses; datasheet note 7), relay on-state margin when hot, X2 recharge time.
-- ⚠️ ADC alternative not needed.
+- ⚠️ Bench: pulse test on a real GV14 (economizer behaviour with 50 µs pulses; datasheet note 7), shorted-coil node voltage at 10 V pack (≈ 1.8 V vs V_th ≤ 1.5 V), X2 recharge time, zener leakage.

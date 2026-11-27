@@ -63,3 +63,12 @@ ESP32-S3_hw_design_guidelines.pdf,https://docs.espressif.com/projects/esp-hardwa
 0436500400_sd.pdf,https://www.molex.com/pdm_docs/sd/436500400_sd.pdf,Molex SD-43650-001 Rev. D8,2026-11-27
 039300020_sd.pdf,https://www.molex.com/pdm_docs/sd/039300020_sd.pdf,Molex 55690002-SD Rev. A2 (2026-06-29),2026-11-27
 TPS2121.pdf,https://www.ti.com/lit/ds/symlink/tps2121.pdf,"TI SLVSEA3F (Aug 2018, rev. Aug 2020)",2026-11-27
+FCX491ATA.pdf,https://www.diodes.com/assets/Datasheets/FCX491A.pdf,"Diodes DS33055 Rev. 6-2 (Jan 2024)",2026-11-27
+AC05.pdf,https://www.vishay.com/doc?28730,"Vishay 28730 AC series, Rev. 05-Dec-2024",2026-11-27
+esp32-s3_datasheet_en.pdf,https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf,"Espressif ESP32-S3 Series Datasheet v2.2",2026-11-27
+BAT54SLT1G.pdf,https://www.onsemi.com/pdf/datasheet/bat54slt1-d.pdf,"onsemi BAT54SLT1/D Rev. 18 (May 2021)",2026-11-27
+MMSZ5248B-7-F.pdf,https://www.diodes.com/assets/Datasheets/ds18010.pdf,"Diodes DS18010 Rev. 28-2",2026-11-27
+PJA3441.pdf,https://www.panjit.com.tw/upload/datasheet/PJA3441.pdf,"Panjit PJA3441-REV.00S (12-Feb-2015)",2026-11-27
+2N7002-G_Microchip.pdf,https://ww1.microchip.com/downloads/en/DeviceDoc/2N7002-N-Channel-Enhancement-Mode-Vertical-DMOS-FET-Data-Sheet-20005797A.pdf,"Microchip DS20005797A (2018); rejected candidate",2026-11-27
+esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf,https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf,"Espressif ESP32-S3-WROOM-1/1U Datasheet v1.8",2026-11-27
+sluaaq5_bq769x2_faq.pdf,https://www.ti.com/lit/an/sluaaq5/sluaaq5.pdf,"TI SLUAAQ5 BQ769x2 FAQ (May 2024)",2026-11-27

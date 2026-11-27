@@ -54,7 +54,9 @@ With no pack (V_IN = 0), a diode from VBUS into the 5 V rail drives SW through L
             301k      TPS2116 ── VOUT ── "5V_LDO" ── TLV1117LV IN
             PR1       │
             100k     │
-VBUS ───────── VIN2 ┘        MODE = VIN1, ST → GPIO (pull-up)
+VBUS ──┬────── VIN2 ┘        MODE = VIN1, ST → GPIO (pull-up)
+       ├─ 100 nF ─ GND
+       └─ 1.8 Ω ─ 4.7 µF ─ GND     (hot-plug damping)
 ```
 Everything else on 5 V (shunt, translator, buffers, relay coils, LED switch) stays on the **buck rail**, so USB can never run them.
 
@@ -66,7 +68,16 @@ Everything else on 5 V (shunt, translator, buffers, relay coils, LED switch) sta
 | Limits | 1.6–5.5 V (abs 6 V), 2.5 A; I_Q 1.3 µA typ |
 | Switch threshold | V_REF 1 V (0.92–1.08) × (301 + 100)/100 = **4.0 V** (3.7–4.3 V): buck present → VIN1 |
 | ST | open drain, low = powered from VIN2 (USB) → firmware knows it has no pack power |
-| Caps | VIN2 (VBUS) 1 µF (≤ 10 µF per USB inrush rule); VIN1: buck caps; VOUT: the LDO's 22 µF (soft start ≈ 1–2 ms → ≈ 0.1 A inrush ✓) |
+| Caps | VIN2 (VBUS): **100 nF** (CC0402KRX7R9BB104) + **1.8 Ω** (CRCW08051R80FKEA) in series with **4.7 µF** 16 V X7R (CL21B475KOFNNNE); total 4.8 µF ≤ 10 µF USB inrush rule. VIN1: buck caps; VOUT: the LDO's 22 µF (soft start ≈ 1–2 ms → ≈ 0.1 A inrush ✓) |
+
+**VBUS hot-plug (review m9; TPS2116 abs max 6 V).** ngspice: 5.25 V step, cable R 0.1–0.2 Ω, 4.7 µF taken as 3.5–4.7 µF effective.
+| VIN2 network | Peak, L = 0.5–3 µH |
+|---|---|
+| 1 µF only (old) | **7.2–10 V** ✗ |
+| 100 nF + 1 Ω + 1 µF | up to ≈ 7.5 V ✗ (damping cap too small) |
+| **100 nF + 1.8 Ω + 4.7 µF** | **≤ 5.85 V** ✓ (thin margin) |
+| 5 V TVS instead | ✗ clamps near 9 V at amperes, above 6 V |
+⚠️ Source softness, ESR and the USBLC6 are not modelled: scope VBUS on a hot plug.
 
 **USB-only power budget:** ESP32 ≤ 355 mA peak + ≈ 15 mA ✓ under a 500 mA default port. LDO input 4.75 V − 0.02 V; headroom ≥ 1.3 V ✓.
 

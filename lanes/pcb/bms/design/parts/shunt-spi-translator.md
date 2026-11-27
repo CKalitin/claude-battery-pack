@@ -51,6 +51,8 @@ TXU0104 / TXB0104: ✗ wrong directions / auto-direction.
 | Supply current | ≤ 2.5 µA at 25 °C | rails off in sleep | ✓ |
 Layout (§12.1): 100 nF at pins 1 and 14; short, matched-enough routes (500 kHz).
 
+**Cable series resistors (review m8):** **100 Ω** (RC0402FR-07100RL) in each of NSS, SCK, MOSI between B1Y–B3Y and J2 (at the driver), and 100 Ω in MISO between J2 and B4 (board entry). τ ≈ 100 Ω × 200 pF ⚠️ cable = 20 ns ≪ 1 µs bit time at 500 kHz ✓; static drop ≈ 0 into CMOS inputs; limits ESD and short-circuit current. OC already has the 10 kΩ divider top. No ESD arrays (J2 is inside the closed box) ⚠️.
+
 ## 6. OC line (shunt J1 pin 7)
 **What it is** (shunt repo `schematic/connections.csv`, commit 84f7515): LM2903B-Q1 open-collector outputs wired together, with **R5 2.7 kΩ pull-up to +5 V on the module** (measured). Polarity ⚠️ unknown (the repo's netlist reconstruction doesn't explain an idle-high line): bench-check before firmware uses it.
 

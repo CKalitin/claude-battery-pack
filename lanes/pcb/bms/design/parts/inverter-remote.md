@@ -49,9 +49,9 @@ So a bare MOSFET isn't assumed to be safe; an isolated contact is.
 | 9 (COM B) | GND |
 | 8 (NO B) | GPIO `INV_STATE`, 10 k to 3V3 (low = set) |
 | 10 (NC B) | open |
-⚠️ Check the contact pin names (4/9 common, 5/8 normally open, in the reset state) against the datasheet bottom view and the KiCad symbol (EC2-5TNU) at schematic: the datasheet drawing is a bottom view.
+Pin names **confirmed** (R7002_EC2_EE2, 2026-07-15: p. 3 pin diagram, p. 9 footnote 4): set coil 1(+)/12(−), reset coil 6(+)/7(−), COM 4 and 9, NO 5 and 8 (NC 3 and 10) in the reset state. The p. 3 drawing is a **bottom view**: check the KiCad symbol (EC2-5TNU) and footprint numbering against it at schematic.
 
-**Coil clamp:** the DMN61D8L's built-in drain clamp is the coil diode; **no external flyback diodes**. A diode across each winding of a two-coil relay lets the idle winding conduct and slow the switching.
+**Coil clamp:** **no external flyback diodes.** The windings are coupled, so at turn-off of one coil the **idle winding sees the induced voltage in reverse and its FET's body diode conducts** (review n1): about the same ampere-turns (≈ 28 mA) flows from GND through the idle winding back into 5 V, producing flux in the same direction. That holds the switched drain at only ≈ 11 V, below the DMN61D8L's built-in clamp. Harmless: ≤ 28 mA vs 0.5 A body-diode rating, and release speed doesn't matter on a latched contact.
 
 ## 6. States
 | State | Contact A | Inverter |
@@ -67,10 +67,10 @@ So a bare MOSFET isn't assumed to be safe; an isolated contact is.
 - Driver: 28 mA ≪ 0.47 A ✓; gate 3.3 V (R_DS(on) specified at 3 V) ✓.
 - Pulse 20–50 ms. Never drive both coils together (firmware rule).
 - A stuck-on GPIO: 140 mW continuous, +18 K coil rise: harmless.
-- Induced voltage on the idle winding (≤ supply, 1:1) stays below the clamp and doesn't turn on the body diode ✓.
+- Idle-winding body-diode current at turn-off ≈ 28 mA, decaying (§5) ✓.
 - Pole B wetting: 0.33 mA ≥ 10 µA ✓. Sleep: 3V3 and 5 V off → 0 µA ✓.
 - Only needs the 5 V buck (not available on USB power alone).
 
 ## 8. Open
 - ⚠️ Bench: CN301 open voltage and short current.
-- ⚠️ Pin names at schematic (§5).
+- ⚠️ Symbol and footprint numbering vs the bottom view at schematic (§5).

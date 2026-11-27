@@ -39,7 +39,7 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 ## 4. Functions and their numbers
 | Function | Requirement | Source |
 |---|---|---|
-| Cell monitor | **BQ7695204PFBR** (BQ76952 family; SPI + CRC; REG1 on at 3.3 V by default, so no OTP is needed to boot) in TQFP-48. Cells on VC0–VC3 + VC16 (VC4–VC15 tied to VC3, Table 16-3). **4 NTCs on the BQ** (TS1, TS3, DFETOFF, DCHG: SPI mode uses HDQ and CFETOFF); flex NTC 5, the board NTC and the box NTC on ESP32 ADC1. Balancing internal, ≈ 50 mA | parts/bq76952.md |
+| Cell monitor | **BQ7695204PFBR** (BQ76952 family; SPI + CRC; REG1 on at 3.3 V by default, so no OTP is needed to boot) in TQFP-48. Cells on VC0–VC3 + VC16 (VC4–VC15 tied to VC3, Table 16-3). **3 NTCs on the BQ** (TS1, TS3, DFETOFF: SPI uses HDQ and CFETOFF, DCHG gates the charger relay, B8); flex NTC 4 and 5, the board NTC and the box NTC on ESP32 ADC1. Balancing internal, ≈ 50 mA | parts/bq76952.md |
 | Current | Tesla shunt over SPI, through **TXU0304** (3 out, 1 in); OC (5 V) → divider → ESP32 | tesla-shunt.md §3 |
 | Contactor | Low-side driver for 3.9 A / 75 ms pick-up: **2 × 100 V N-FETs in series** (BSZ146N10LS5), each gated by its own 5 V buffer: one from the ESP32, one from **BQ76952 DDSG** = hardware AND. **No external coil clamp: Sensata forbids it** (internal TVS; X2 reaches B+ + 55 V). Self-test sense on X2 | parts/gv14-driver.md |
 | Precharge | **2 P-MOSFETs in series, same orientation**, B+ → AC05 10 Ω → LOAD+; each with its own driver and control line; **one channel AC-coupled = hardware time limit ≤ 1 s** (B10); LOAD+ measured by the BQ PACK pin (1 V threshold) for "precharge done" | Chris 2026-11-27; decisions B10 |
@@ -49,7 +49,7 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | Box-air temperature | NTC bias + filter → ESP32 ADC | interface §4 |
 | IMD | **R₊ 4.4 MΩ (2 × 2.2 M), R₋ 1.8 + 0.2 MΩ** (doubled from v14's 2.2 / 0.9 + 0.1 M to halve sleep draw: 14.6 V / 6.4 MΩ = 2.3 µA); ESP32 reads across 200 k with 100 nF (τ 20 ms); r₀ = 0.3125 unchanged; alarm at |r − 0.312| > 0.02. ⚠️ Fault sensitivity per v14 table scales with R: a fault is now visible up to ≈ 2× higher resistance; recheck the table at schematic | v14-design-notes §4; pcb 2026-11-27 |
 | Board supply | B+ (J3) → TVS → **5 V buck, EN ← BQ76952 REG1** → 3.3 V (LDO) → ESP32, TXU0304 A-side | v14-design-notes §9 |
-| Sleep | **≤ 10 µA typical in SHUTDOWN** (≈ 4.5 µA typ, ≈ 10.7 µA summing 25 °C datasheet maxima: parts/README.md budget, IMD halved); nothing else may draw from B+ when off; bench-measure | v14-design-notes §9 |
+| Sleep | **≤ 10 µA typical in SHUTDOWN** (≈ 4.6 µA typ, ≈ 10.6 µA summing 25 °C datasheet maxima: parts/README.md budget, IMD halved); nothing else may draw from B+ when off; bench-measure | v14-design-notes §9 |
 | Wake / off | Button → TS2 wakes from SHUTDOWN; same button to an ESP32 GPIO; long press = SHUTDOWN. **No charger wake** (D33). LD held low | v14-design-notes §9a; D33 |
 | UV latch | Every UV trip latches (BQ SHUTDOWN at 2.60 V is the hardware latch); re-enable by button with min cell ≥ 3.00 V. **Works with a dead ESP32 only because the thresholds are in OTP** (B9). Firmware rule: any ALERT/XDSG drops GV14_EN and requires a full precharge before re-closing (review m1) | v14-design-notes §9a; decisions B9 |
 | Charge stop in hardware | Charger relay = ESP32 CHG_RLY_EN **AND** BQ DCHG (COV, OTC, UTC) | decisions B8 |
@@ -79,7 +79,7 @@ Coil currents (GV14, charger relay) come straight from B+ through their drivers,
 
 ## 8. Test and debug (Chris, 2026-11-27: "consider what is likely to break or you'd want me to test… you should do better" than student-board habits)
 - **Firmware self-test instead of LEDs:** every switched output (GV14 low side, the precharge FETs, the charger-relay low side, the inverter remote) gets an ESP32-readable sense, so firmware detects a stuck-on FET, an open coil or a shorted coil and reports it over Wi-Fi. No per-output LEDs, no manual force-on hooks.
-- **Test points only where a probe is needed at bring-up:** B+, LOAD+, 5V, 3V3, REG1 (BQ76952 LDO), GND, plus the Tag-Connect. Everything else is read by firmware.
+- **Test points only where a probe is needed at bring-up:** B+, LOAD+, 5V, 3V3, REG1 (also the B12 overdrive fallback), **BAT and VC16 (OTP programming, B9)**, GND. Everything else is read by firmware.
 - **One status LED** (heartbeat/fault), visible with the lid off ⚠️ optional: the LED board shows state in normal use.
 - Bring-up isolation: one 0 Ω link between the buck and its loads, so the 5 V rail can be checked before the ESP32 sees it ⚠️.
 

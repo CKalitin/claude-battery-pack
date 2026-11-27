@@ -16,12 +16,12 @@ Available: GPIO1–18, 21, 35–48 = 33 (GPIO19/20 = USB D−/D+; GPIO0 = BOOT p
 | 3 | SNS_PRE | in | **strap pin, no internal pulls, must not float**: the sense output has a pull-up, so it's defined at reset ✓ (JTAG strap ignored with default eFuses) |
 | 8 | SNS_GV14 | in | self-test |
 | 9 | SNS_RLY | in | self-test |
-| 10 | BUTTON | in | via BAS116 from TS2; 100 k external pull-up (review n3) |
+| 10 | BUTTON | in | via BAS116 from TS2; 100 k external pull-up (review n3); **internal pull-up off** |
 | 11 | BQ_SCLK | out | SPI (BQ7695204), own bus |
 | 12 | BQ_MOSI | out | |
 | 13 | BQ_MISO | in | through an SN74LV1T34 at 3.3 V: the BQ may drive MISO at REG18 = 1.8 V until configured (review m3) |
 | 14 | BQ_CS | out | idle high (pull-up) |
-| 15 | BQ_ALERT | in | interrupt |
+| 15 | BQ_ALERT | in | interrupt; active-low open drain, external pull-up to 3V3 |
 | 16 | BQ_RST_SHUT | out | 100 k pull-down; hold high ≥ 1 s = SHUTDOWN ("pack off") |
 | 17 | SH_SCK | out | → TXU0304 A1 |
 | 18 | SH_MOSI | out | → A2 |
@@ -30,11 +30,11 @@ Available: GPIO1–18, 21, 35–48 = 33 (GPIO19/20 = USB D−/D+; GPIO0 = BOOT p
 | 36 | SH_OC | in | 10 k / 18 k divider |
 | 37 | GV14_EN | out | → LV1T34 → upper GV14 FET; 100 k pull-down |
 | 46 | PRE_EN1 | out | **strap**: weak pull-down at reset = off ✓; download mode needs it low ✓; plus 100 k external pull-down |
-| 38 | PRE_PUMP | out (LEDC PWM) | AC-coupled second precharge channel: holds T2 on only while toggling (review M3) |
-| 39 | CHG_RLY_EN | out | → LV1T34 → upper relay FET; lower FET gated by BQ DCHG (review B1) |
+| 38 | PRE_PUMP | out (**RMT finite burst or software toggle, never free-running LEDC**: a free-running timer would keep toggling through a hang) | AC-coupled second precharge channel (B10): on ≤ 1.5 ms after toggling starts, off ≤ 6.5 ms after it stops |
+| 39 | INV_STATE | in | latch pole B readback. **GPIO39 = MTCK has a 45 k pull-up after reset** (chip DS v2.2 Table 2-1 note 7): fine for an input, not for an actuator |
 | 40 | INV_SET | out | latch coil pulse (hardware timer) |
 | 41 | INV_RESET | out | latch coil pulse |
-| 42 | INV_STATE | in | latch pole B readback |
+| 42 | CHG_RLY_EN | out | → LV1T34 → upper relay FET; lower FET gated by BQ DCHG (B8). Moved from GPIO39 (reset pull-up would turn the ESP32 FET on at every reset; review-fixes 2026-11-27) |
 | 45 | LED_EN | out | **strap**: weak pull-down at reset = LEDs off ✓ and VDD_SPI = 3.3 V ✓; drives the eFuse EN (high-Z input) |
 | 47 | LED_DATA | out (RMT) | → LV1T34 on the switched 5 V |
 | 48 | LED_FLT | in | eFuse FLT (open drain), pull-up |
@@ -45,4 +45,4 @@ Available: GPIO1–18, 21, 35–48 = 33 (GPIO19/20 = USB D−/D+; GPIO0 = BOOT p
 
 **Dropped to fit:** the LOAD+ ADC divider (review n4). "Precharge done" uses the BQ PACK reading with a 1 V threshold (PACK and stack are each ±0.5 V, DS p. 10).
 
-**Power-up glitches** ⚠️: check the ESP32-S3 chip datasheet's power-up glitch table at schematic. Every actuator needs two independent signals (GV14: GV14_EN + DDSG; precharge: PRE_EN1 + PRE_PUMP; relay: CHG_RLY_EN + DCHG), so one glitch can't fire it. **Exception: the latching relay** (INV_SET/RESET): a glitch long enough to move the armature (ms) is unlikely; confirm pins 40/41 are glitch-free.
+**Power-up glitches** ✓ (chip DS v2.2 Table 2-2): glitches only on GPIO1–14, 17 (low), 18 (low/high), 19, 20; none on GPIO35–48, where every actuator sits. Every actuator needs two independent signals (GV14: GV14_EN + DDSG; precharge: PRE_EN1 + PRE_PUMP; relay: CHG_RLY_EN + DCHG), so one glitch can't fire it. The latching relay's INV_SET/RESET (GPIO40/41) are glitch-free and have no reset pull-up ✓.
