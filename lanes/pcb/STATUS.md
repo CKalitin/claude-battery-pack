@@ -5,7 +5,8 @@
 - Skills: `lanes/pcb/skills/` (pcb-design, pcb-review; README lists sources and licences), symlinked into `~/.claude/skills/`. Vendored Diode663 `schlib.py` (MIT), smoke-tested on KiCad 10.0.8.
 - main-battery accepted 95 × 55 (spec/interface.md §4), added the AC-present sense and box-air NTC (ESP32 ADC), moved the B+ tap to a 5 A ATM, and corrected TXU0304.
 - DigiKey API works (key in `~/.config/pcb-secrets/digikey.env`, mode 600, outside the repo; tested 2026-11-27: BQ76952PFBR → TI, Active, datasheet URL present). Mouser key optional.
-- Blockers / waiting on: Chris's go to start the BMS design (phase 0 intent → phase 1 part audits).
+- **BMS design started (2026-11-27):** project `lanes/pcb/bms/`. Phase 0 intent drafted (`bms/design/intent.md`), awaiting Chris's sign-off and answers Q1–Q6. Phase 1 part audits in progress.
+- Blockers / waiting on: Chris: Q1 LED board load, Q2 IMD chassis wire, Q3 programming connector, Q4 inverter-remote default, Q5 ESP32 variant, Q6 quantity.
 - Approved 2026-11-27: kicad-happy as second reviewer (installed v3.0.2), independent review subagents (`pcb-review-<gate>`, Opus high).
 - Next step: on go — BMS phase 0 intent + phase 1 part audits (evaluate BQ76942 vs BQ76952 per main-battery's docs/afe.md note; P-FET precharge as an option).
 - Key decisions so far (with reasons):
