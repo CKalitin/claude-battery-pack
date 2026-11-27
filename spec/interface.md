@@ -37,7 +37,7 @@ Single source of truth for numbers that more than one lane uses. Only `main-batt
 - ESP32-S3-WROOM-1U (18 × 19.2 mm ⚠️) with Wi-Fi;
 - Tesla shunt SPI (TXU0104, 5 V supply);
 - GV14 coil driver, enabled by ESP32 **AND** BQ in hardware;
-- precharge relay + 10 Ω / 10 W between the B+ and LOAD+ taps;
+- precharge relay + **Vishay AC05 10 Ω 5 W cemented wirewound (AC05000001009JAC00), axial, through-hole on the BMS board, no heatsink** between the B+ and LOAD+ taps (power-train.md §9);
 - inverter remote off;
 - charger-relay coil driver;
 - 2 A fused pack tap → 5 V buck → 3.3 V, SHUTDOWN ≈ 7 µA, UV latch;
@@ -51,7 +51,7 @@ No power current on the board. The CAN transceiver and the pack-fan header are d
 | Size | **150 × 90 × 1.6 mm** ⚠️ estimate (no schematic yet) | spec/requests/pcb-bms-space-claim.md (accepted 2026-11-27) |
 | Position | x −105…45, y −15…75, flat over the inverter | same |
 | Height | Top parts ≤ 12 mm incl. mated plugs; no bottom parts; THT tails ≤ 2.5 mm | same |
-| Mounting | 4 × M3, 5 mm in from the edges, on **3 mm standoffs** on a **G10 .125 bridge** (SCS) spanning the inverter. The bridge stands on 4 M3 posts on deck 2 beyond the inverter's ends (x −109, +105; y −12, +72). Board underside z 317.5, parts top z 331.1, 1.9 mm under the lid. Nothing touches the NTS-400P | converter_packing.py (0 issues) |
+| Mounting | 4 × M3, 5 mm in from the edges, on **3 mm standoffs** on a **G10 .125 bridge** (SCS) spanning the inverter. The bridge stands on 4 M3 posts on deck 2 beyond the inverter's ends (x −109, +105; y −12, +72). The −x post screw heads stay below the board top (z 319.1): they sit inside the board's −x plug room (pcb, 2026-11-27). Board underside z 317.5, parts top z 331.1, 1.9 mm under the lid. Nothing touches the NTS-400P | converter_packing.py (0 issues) |
 | Plug room | 25 mm beyond the −x edge, and beyond the −y edge for x −105…−62 | pcb claim |
 | Antenna | U.FL coax from the WROOM-1U to a flex antenna behind the clear acrylic light-pipe slot in the front plate, as in v16; ≈ 150–200 mm coax ⚠️. The lid and shell are aluminium, so a PCB antenna under the lid won't radiate | signal-wiring.md |
 | Taps | B+ = in-bar after the main fuse, before the GV14; LOAD+ = 2151 inverter-fuse stud. 18 AWG, 2 A ATM inline fuse at each copper end | signal-wiring.md §3b–3d |

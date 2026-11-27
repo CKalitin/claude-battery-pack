@@ -274,3 +274,28 @@ The rear had 18 mm to the fan, which is too little for a right-angle C13 (~30 mm
 - **Inverter 10 AWG lead: resolved.** 33 CFR 183.425 table 5 / ABYC E-11, 105 °C, single conductor: 60 A at 30 °C, 51 A at 50 °C, vs 40 A = 1.28×. Peaks: 46 A for 3 min, 60 A for 10 s, 80 A for 0.5 s, all inside the 50 A MRBF's curve (Bussmann: >100 h at 100 %, ≤900 s at 135 %, ≤60 s at 200 %).
 - **NPB-450-12:** 25 A max, 420 W max power, efficiency 92 % typ (MEAN WELL NPB-450-SPEC 2026-07-06) — the v14 assumption is confirmed.
 - **Right-angle C13** (L-com ACPWRC-C13LR): $28.09 at L-com, 2026-11-25 (37 in stock); depth still 35.6 or 37.9 mm ⚠️, the 40 mm gap fits either.
+
+## 9. Precharge resistor (2026-11-27)
+**Path.** B+ tap (in-bar, after the main fuse) → 18 AWG lead, 2 A ATM fuse at the copper end → BMS board connector → PCB trace → precharge relay contact → resistor → PCB trace → board connector → 18 AWG lead, 2 A ATM fuse → LOAD+ tap (2151 inverter-fuse stud). **The precharge current does cross the PCB.** It is the only pack-sourced current that does: ≤ 1.5 A for ≈ 0.14 s, which a 1 mm trace carries easily. It is a deliberate exception to "no power current on the PCB".
+
+**Sizing at 4S.** The v14-review numbers (2.9 A, 2.0 J) were for 8S.
+
+| Case | Value |
+|---|---|
+| Normal: C ≤ 4.7 mF ⚠️ (inverter input, unpublished), V 14.6 V | I_peak = 1.46 A; resistor energy ½CV² = **0.50 J**; 3RC = 0.14 s to 95 % |
+| Fault: load bus shorted, firmware 0.5 s timeout | 14.6² / 10 = 21.3 W for 0.5 s = **10.7 J** |
+
+**Candidates.**
+
+| Resistor | Size | Rating that matters | Verdict |
+|---|---|---|---|
+| **Vishay Draloric AC05, 10 Ω 5 %, cemented wirewound, axial (AC05000001009JAC00)** | Ø7.5 × 18 mm body, 1.9 g | 5 W at 40 ℃. Short-time overload **10 × P for 5 s** (50 W, 250 J ≫ 10.7 J); single-pulse capability at 10 Ω ≈ 3 J ⚠️ (read from the log chart; the axis label says Ws/Ω, the caption says Ws) ≥ 0.5 J | **✓ picked.** Through-hole on the BMS board, lying flat, ≈ 10 mm tall with lead lift, inside the 12 mm height claim. CAD 1.27 qty 1, 6,977 in stock (Newark via [Octopart](https://octopart.com/search?q=AC05000001009JAC00), 2026-11-27) |
+| Vishay AC10, 10 W | Ø8 × 44 mm | 10 W | ✗ 2.4× longer for energy that isn't needed |
+| Vishay AC03, 3 W | Ø4.8 × 13 mm | overload 30 W for 5 s | Would work on energy; the AC05 gives margin for repeated retries at the same price |
+| Chassis-mount aluminium-housed, 10 W (e.g. Vishay RH-10, TE HSA10) | ≈ 30 × 28 × 15 mm + a heatsink plate | 10 W **on a heatsink** | ✗ sized for continuous power; precharge is a pulse. Adds a mounting point and two wires |
+
+**Rules from this:**
+- Firmware may retry precharge at most once per button press; a second failure latches a fault. This bounds the resistor's energy to 2 × 10.7 J.
+- The charger relay closes only after the GV14 is closed (D39).
+
+Source: Vishay Draloric "AC.. Series, Cemented Wirewound Resistors", doc 28730 rev 13-Jan-14 (pp. 1, 2, 6) ✓. Figures: `docs/img/precharge/`.
