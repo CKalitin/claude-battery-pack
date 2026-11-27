@@ -61,7 +61,7 @@
 - Assembly (PCBA) wanted on both boards, the flex included.
 
 ## 7. Open items Chris has asked for (carry until done)
-- Rework the rear end layout (§3): options in v16-decisions.md D38.
+- Rework the layout so the rear void disappears (2026-11-27: "take two steps back… I want to solve this problem", not a 10 mm trim): study in architecture.md, recommendation B (side power spine + 2 × 92 mm fans), awaiting Chris's choice of W +14 (GV14) vs FET switch.
 - Inverter 400 W continuous: bench test, then decide the cooling fix (cooling.md).
 - Control board schematic: a separate agent, later.
 - Send the Zep reply (draft in Gmail).
