@@ -103,7 +103,19 @@ The power bay alone needs ≈ 270–390 mm of strip depending on how it is packe
   - A replacement with its own fan, or one rated for convection at 400 W, removes this open item. Say which.
 - **Branch fuses** (MRBF, today inverter 50 A, charger 30 A): re-size for the new input currents.
 
-## 2d. Questions to put to Chris before committing (one message, with a figure)
+## 2d. Chris's answers (2026-11-27)
+- **Footprint includes the end plates:** ≈ 312 × 158 mm is the hard limit (supersedes the 295 × 130 target in §2).
+- **The front board zone is preferably for the LED board only.** Chris prefers a **separate BMS board**, which reverses the v14–v15 "controls on the back of the LED board" decision. The BMS board needs its own place inside the footprint: add it to the §2b space claims and to the packing figures.
+- **No height cap above the cells,** "but be reasonable."
+- **Performance trades (Chris, 2026-11-27, chat):**
+  - **Charge current ≥ 17 A** (≈ 12 h for 210 Ah; was 25 A / 8.4 h).
+  - **Inverter ≥ 300 W continuous** (was 400 W), and "the inverter requirement may be relaxed" further if a USB-C output covers laptops.
+  - **Charger must be internal** (AC inlet on the pack). No external brick, no USB-C-only charging.
+  - **A USB-C PD output for laptops is welcome.** PD 3.0 is 100 W (20 V × 5 A); PD 3.1 EPR is up to 240 W (48 V × 5 A). ⚠️ Pick the module from a catalog. Evaluate an "inverter ≥ 300 W + USB-C" option against a "smaller inverter + USB-C" option, and show Chris the trade.
+  - **A combined inverter-charger is acceptable.**
+- If a new trade comes up, ask Chris directly with numbers and concrete options; don't leave it open-ended.
+
+### Original questions
 1. **Footprint:** does it mean the cans only (295 × 130), or the module with end plates (312 × 158)? Does the 21 mm front board zone count?
 2. **Height:** is there any cap above the cells? Today it is ≈ 113 mm above the can tops; a taller stack inside the footprint (architecture.md option C) was rejected only for leaving a void on the top deck.
 3. **Performance trades,** if needed:
@@ -132,8 +144,8 @@ Think as long as needed. Chris asked for the whole search to be reopened, not a 
 | # | Requirement | Source |
 |---|---|---|
 | R1 | Pack 4S2P LFP, 12.8 V nominal, 10.0–14.6 V; charge to 14.2 V, 2-stage, inhibit below 2 ℃ | v14-baseline.md |
-| R2 | Charge current ≈ 25 A (8.4 h for 210 Ah). Less is allowed only if Chris accepts the longer charge time; give the hours | baseline, R §0a |
-| R3 | Inverter 400 W continuous, pure sine, 120 V 60 Hz, NEMA 5-15 outlet, floating output (outlet ground to chassis), low idle draw / power-saving mode, remote off | baseline, N §3 |
+| R2 | Charge current **≥ 17 A** (≈ 12 h for 210 Ah); 25 A was the old baseline. The charger must be internal | Chris 2026-11-27 |
+| R3 | Inverter **≥ 300 W continuous** (Chris 2026-11-27; can relax further if a USB-C PD output covers laptops; a combined inverter-charger is OK), pure sine, 120 V 60 Hz, NEMA 5-15 outlet, floating output (outlet ground to chassis), low idle draw / power-saving mode, remote off | baseline, N §3 |
 | R4 | Universal AC input via IEC C14 on the lid | baseline |
 | R5 | Charger controllable from the ESP32: CAN preferred; at minimum remote on/off and a CV setpoint ≥ 14.2 V | baseline, R M3 |
 | R6 | Catalog parts with real manufacturer datasheets (MEAN WELL, Victron, TDK-Lambda, etc.), with buy links and dated prices. No parts that need emailing a vendor; no sketchy datasheets | CLAUDE.md |
@@ -148,7 +160,7 @@ Think as long as needed. Chris asked for the whole search to be reopened, not a 
 - **Victron:** Phoenix 12/250 and 12/375 inverters, Blue Smart IP22 / IP65 chargers, and a combined inverter-charger. Compare size, VE.Direct vs CAN, and idle draw.
 - **Combined inverter-charger in one box:** removes one housing and one set of AC terminals.
 - **Converters side by side in one flat layer** instead of stacked, with the power bay on top or between them.
-- **Drop the internal AC charger:** external brick, or USB-C PD / EPR at 240 W (≈ 17 A at 14.2 V, ≈ 12 h). This changes a baseline decision; present it to Chris, don't adopt it.
+- ~~Drop the internal AC charger~~: rejected by Chris 2026-11-27 (the charger must be internal). Add a **USB-C PD output** instead (his idea).
 - Record any idea not tried as "not tried" and say why.
 
 ## 4. How to deliver (CLAUDE.md rules apply)

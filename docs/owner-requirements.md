@@ -34,7 +34,7 @@
 | Tall, narrow tower proportions; cells upright (on-edge and squat layouts rejected) | early |
 | Charger and inverter stacked; control electronics on the front PCB's back, facing the bay | v12–v15 |
 | Don't grow the envelope without a reason; no dead space. **2026-11-27: Chris dislikes the empty rear end (fan + AC column + cell-level void, ≈ 91 mm behind the module) — layout to be reworked** | early / 2026-11-27 |
-| **Cells are the dominant constraint: everything above the cells (converters, power bay, control board) fits inside the plan footprint of the cells' top faces; nothing goes past it.** "We're setting the area as the top of the cells as the constraint, and you're not allowed to go above that." The charger and inverter caused the overrun, so replace them (handoff-converters.md) ⚠️ footprint = cans (295 × 130) or module (312 × 158) not yet confirmed | 2026-11-27 |
+| **Cells are the dominant constraint: everything above the cells (converters, power bay, control board) fits inside the plan footprint of the cells' top faces; nothing goes past it.** "We're setting the area as the top of the cells as the constraint, and you're not allowed to go above that." The charger and inverter caused the overrun, so replace them (handoff-converters.md) **Footprint = the module including the end plates (≈ 312 × 158 mm)** (Chris, 2026-11-27). No height cap above the cells, "but be reasonable" | 2026-11-27 |
 | Full rear hole grid (looks better) | v14 |
 | Roadster-red gloss powder coat on the shell | v12 |
 | The pack has no name. Never "Tower A" | 2026-11-24 |
@@ -50,9 +50,10 @@
 | Decision | Since | Ref |
 |---|---|---|
 | **Burst rating is a firmware rating.** 500 A for ≤ 30 s is allowed only where EVE's 30 s pulse MAP allows ≥ 2.38C per cell: ≥ 30 % SOC and ≥ 10 ℃. Elsewhere the firmware caps discharge at 2 × 105 A × C_MAP(T, SOC), and continuous at 2 × 105 A × C_cont(T, SOC) (EVE rev E Tables 12–13). The hardware (fuse, copper, contactor) is sized for 500 A; the firmware is what keeps the cells inside their rating. **Every future rating is stated this way: hardware capability plus the firmware limit that enforces the cell spec.** | 2026-11-27 | cells.md T4, D37 |
+| **Charger internal, ≥ 17 A** (≈ 12 h); **inverter ≥ 300 W** continuous, which can relax if a **USB-C PD output** covers laptops (welcome); a combined inverter-charger is OK | 2026-11-27 | handoff-converters.md §2d |
 | Wake is button-only: a charger plugged into a sleeping pack does nothing until the button is pressed | 2026-11-27 | D33 |
 | Cell-sense board is a flex PCB, screwed (M3) into tapped busbars | v14 | design notes §1 |
-| Control board is controls-only, on the back of the front LED board; no separate slot-in BMS board | v14–v15 | power-train.md |
+| ~~Control board is controls-only, on the back of the front LED board; no separate slot-in BMS board~~ **Reversed 2026-11-27: Chris prefers a separate BMS board. The front zone is preferably for the LED board only.** | v14–v15 → 2026-11-27 | power-train.md, handoff-converters.md |
 | Compression rods M6 316 (A4-70), sized for EVE's EOL swelling ≤ 30 kN | 2026-11-27 | structure.md, D36 |
 
 ## 6. PCB sponsorship and fabs
