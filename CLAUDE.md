@@ -66,7 +66,7 @@ Where it goes: a subsystem gets its own `docs/<topic>.md` (as `cells.md` and `te
 - Telemetry stack: ESP32 web page vs BLE app vs CAN-only.
 
 ## Known documentation gaps (fix these)
-- **MEAN WELL NPB-450 / NTS-400P selection:** never compared against alternatives. Only the 24 V → 12 V model switch is recorded (review §0a).
+- ~~**MEAN WELL NPB-450 / NTS-400P selection:** never compared~~ → closed by `docs/converters.md` (2026-11-27: ≈ 40 units compared, combined units included).
 - **NF-A14 fan:** choice of model and size not justified; only the 5 V vs 12 V point is recorded.
 - **BQ76952:** chosen in early versions with no recorded comparison.
 - **Enclosure material and Roadster-red powder coat:** no rationale or SendCutSend finish options recorded.
