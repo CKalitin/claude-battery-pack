@@ -50,7 +50,7 @@
 | Decision | Since | Ref |
 |---|---|---|
 | **Burst rating is a firmware rating.** 500 A for ≤ 30 s is allowed only where EVE's 30 s pulse MAP allows ≥ 2.38C per cell: ≥ 30 % SOC and ≥ 10 ℃. Elsewhere the firmware caps discharge at 2 × 105 A × C_MAP(T, SOC), and continuous at 2 × 105 A × C_cont(T, SOC) (EVE rev E Tables 12–13). The hardware (fuse, copper, contactor) is sized for 500 A; the firmware is what keeps the cells inside their rating. **Every future rating is stated this way: hardware capability plus the firmware limit that enforces the cell spec.** | 2026-11-27 | cells.md T4, D37 |
-| **Charger internal, ≥ 17 A** (≈ 12 h); **inverter ≥ 300 W** continuous, which can relax if a **USB-C PD output** covers laptops (welcome); a combined inverter-charger is OK | 2026-11-27 | handoff-converters.md §2d |
+| **Charger internal, ≥ 17 A** (≈ 12 h); **inverter ≥ 300 W** continuous, priority: **combined inverter-charger ("extremely ideal")** > separate internal inverter > last resort only if an internal inverter is really impossible: no internal inverter, USB-C PD out, maybe an external inverter | 2026-11-27 | handoff-converters.md §2d |
 | Wake is button-only: a charger plugged into a sleeping pack does nothing until the button is pressed | 2026-11-27 | D33 |
 | Cell-sense board is a flex PCB, screwed (M3) into tapped busbars | v14 | design notes §1 |
 | ~~Control board is controls-only, on the back of the front LED board; no separate slot-in BMS board~~ **Reversed 2026-11-27: Chris prefers a separate BMS board. The front zone is preferably for the LED board only.** | v14–v15 → 2026-11-27 | power-train.md, handoff-converters.md |

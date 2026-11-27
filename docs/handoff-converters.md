@@ -112,7 +112,10 @@ The power bay alone needs ≈ 270–390 mm of strip depending on how it is packe
   - **Inverter ≥ 300 W continuous** (was 400 W), and "the inverter requirement may be relaxed" further if a USB-C output covers laptops.
   - **Charger must be internal** (AC inlet on the pack). No external brick, no USB-C-only charging.
   - **A USB-C PD output for laptops is welcome.** PD 3.0 is 100 W (20 V × 5 A); PD 3.1 EPR is up to 240 W (48 V × 5 A). ⚠️ Pick the module from a catalog. Evaluate an "inverter ≥ 300 W + USB-C" option against a "smaller inverter + USB-C" option, and show Chris the trade.
-  - **A combined inverter-charger is acceptable.**
+  - **Inverter priority order (Chris, 2026-11-27, 12:33):**
+    1. **A combined inverter-charger is "extremely ideal."** Search this first and hardest.
+    2. Otherwise a separate internal inverter (≥ 300 W preferred).
+    3. **Only if an internal inverter is really impossible:** no internal inverter, a **USB-C PD output** (direct from the pack) for laptops, and maybe an external inverter. Chris "can tolerate no inverter internally" in that case. This is a last resort; document why the first two failed, with numbers, before proposing it.
 - If a new trade comes up, ask Chris directly with numbers and concrete options; don't leave it open-ended.
 
 ### Original questions
@@ -145,7 +148,7 @@ Think as long as needed. Chris asked for the whole search to be reopened, not a 
 |---|---|---|
 | R1 | Pack 4S2P LFP, 12.8 V nominal, 10.0–14.6 V; charge to 14.2 V, 2-stage, inhibit below 2 ℃ | v14-baseline.md |
 | R2 | Charge current **≥ 17 A** (≈ 12 h for 210 Ah); 25 A was the old baseline. The charger must be internal | Chris 2026-11-27 |
-| R3 | Inverter **≥ 300 W continuous** (Chris 2026-11-27; can relax further if a USB-C PD output covers laptops; a combined inverter-charger is OK), pure sine, 120 V 60 Hz, NEMA 5-15 outlet, floating output (outlet ground to chassis), low idle draw / power-saving mode, remote off | baseline, N §3 |
+| R3 | Inverter **≥ 300 W continuous** (Chris 2026-11-27). Priority: combined inverter-charger ("extremely ideal") > separate internal inverter > last resort, no internal inverter + USB-C PD out (+ maybe external inverter); see §2d. pure sine, 120 V 60 Hz, NEMA 5-15 outlet, floating output (outlet ground to chassis), low idle draw / power-saving mode, remote off | baseline, N §3 |
 | R4 | Universal AC input via IEC C14 on the lid | baseline |
 | R5 | Charger controllable from the ESP32: CAN preferred; at minimum remote on/off and a CV setpoint ≥ 14.2 V | baseline, R M3 |
 | R6 | Catalog parts with real manufacturer datasheets (MEAN WELL, Victron, TDK-Lambda, etc.), with buy links and dated prices. No parts that need emailing a vendor; no sketchy datasheets | CLAUDE.md |
@@ -158,7 +161,7 @@ Think as long as needed. Chris asked for the whole search to be reopened, not a 
 - **Smaller MEAN WELL parts in the same families:** NPB-360 / NPB-240 chargers; NTS-250 / TS-400 inverters. Compare footprint, current and CAN against R2 and R5.
 - **Low-profile or open-frame supplies used as a CV/CC charger:** e.g. MEAN WELL UHP, RSP, HRP, or other 1U units with remote on/off and PMBus/CAN. These can lie flat in a thin layer.
 - **Victron:** Phoenix 12/250 and 12/375 inverters, Blue Smart IP22 / IP65 chargers, and a combined inverter-charger. Compare size, VE.Direct vs CAN, and idle draw.
-- **Combined inverter-charger in one box:** removes one housing and one set of AC terminals.
+- **Combined inverter-charger in one box (top priority, Chris 2026-11-27):** removes one housing and one set of AC terminals.
 - **Converters side by side in one flat layer** instead of stacked, with the power bay on top or between them.
 - ~~Drop the internal AC charger~~: rejected by Chris 2026-11-27 (the charger must be internal). Add a **USB-C PD output** instead (his idea).
 - Record any idea not tried as "not tried" and say why.
