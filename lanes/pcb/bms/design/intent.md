@@ -25,15 +25,15 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 |---|---|---|---|---|
 | J1 | −x | Sense flex (FPC 12-pin 0.5 mm ZIF) | VC0–VC4, 5 × NTC, GND ×2 | cells 0–14.6 V common-mode, µA; NTC 10 k ⚠️ part |
 | J2 | −x | Tesla shunt 1016792-00-C (2×4) | 5V, GND, NSS, SCK, MISO, MOSI, OC, spare | 5 V logic (VIH 3.5 V); SPI mode 0, 500 kHz; 5 V supply ≈ 30–50 mA ⚠️ |
-| J3 | −y | Power taps (1×3) | B+, LOAD+, GND | B+ ≤ 5 A peak (coil pick-up 3.9 A, 75 ms); LOAD+ ≤ 1.46 A (precharge) |
+| J3 | −y | Power taps + chassis (**1×4**, Chris 2026-11-27) | B+, LOAD+, GND, CHASSIS (ring lug on a chassis screw, for the IMD) | B+ ≤ 5 A peak (coil pick-up 3.9 A, 75 ms); LOAD+ ≤ 1.46 A (precharge) |
 | J4 | +x | GV14 coil (1×2) | X1 (+ = B+ switched), X2 | 12 V coil; 3.9 A pick-up for 75 ms, 0.23 A hold (built-in economizer) |
-| J5 | +x | LED board (1×3) | 5V, DATA, GND | **Q1:** LED type and 5 V current budget |
+| J5 | +x | LED board (1×3) | 5V, DATA, GND | 5 V addressable LEDs that can show SOC % and look "extremely cool" (Chris); LED choice by pcb with main-battery (panel facts). 5 V rail sized for 3 A ⚠️ |
 | J6 | +y | Charger relay (1×3) | coil 86, coil 85, AC_SENSE | coil 12 V 90 Ω: 162 mA at 14.6 V; AC_SENSE 0–14.6 V, µA |
 | J7 | +y | Inverter CN301 (1×2) | dry contact | short = inverter remote OFF (NTS-400P-SPEC) |
 | J8 | +y | Lid button (1×2) | BTN, GND | momentary; wakes the BQ76952 via TS2; long press = off |
 | J9 | +y | Box-air NTC (1×2) | NTC, GND | 10 k NTC ⚠️ |
 | — | — | U.FL on the WROOM-1U | 50 Ω coax ≈ 150–200 mm to the front-plate flex antenna | signal-wiring.md |
-| — | — | **Chassis reference for the IMD** | 1 wire | **Q2:** the board now sits on a G10 bridge, so the plated mounting hole no longer reaches chassis metal |
+| — | — | Chassis reference for the IMD | J3 pin 4 → ring lug (Q2 answered) | — |
 | — | — | Programming / debug | ESP32-S3 USB (native USB-JTAG) + UART + EN + IO0 | **Q3:** Tag-Connect pads vs a 0.1″ header vs USB-C |
 
 ## 4. Functions and their numbers
@@ -74,15 +74,16 @@ Coil currents (GV14, charger relay) come straight from B+ through their drivers,
 - Single-sided assembly. THT parts: the AC05 resistor and the Micro-Fit headers (or SMT Micro-Fit if available: phase 1).
 - 4-layer standard 1.6 mm stack-up, ENIG ⚠️ (TQFP-48 0.5 mm pitch and the 0.5 mm FPC prefer ENIG).
 
-## 8. Test and debug (Chris's HVC style, default)
-- Test point on every rail (B+, LOAD+, 5V, 3V3, REG1, GND ×3) and every control signal; indicator LED on every rail and every switched output (GV14, precharge ×2, charger relay, inverter remote).
-- Bench hooks: test points that let each output be forced by hand; a note on the sheet for each.
-- Bring-up isolation: 0 Ω links between the buck output and its loads ⚠️ (phase 1 decides).
+## 8. Test and debug (Chris, 2026-11-27: "consider what is likely to break or you'd want me to test… you should do better" than student-board habits)
+- **Firmware self-test instead of LEDs:** every switched output (GV14 low side, the precharge FETs, the charger-relay low side, the inverter remote) gets an ESP32-readable sense, so firmware detects a stuck-on FET, an open coil or a shorted coil and reports it over Wi-Fi. No per-output LEDs, no manual force-on hooks.
+- **Test points only where a probe is needed at bring-up:** B+, LOAD+, 5V, 3V3, REG1 (BQ76952 LDO), GND, plus the Tag-Connect. Everything else is read by firmware.
+- **One status LED** (heartbeat/fault), visible with the lid off ⚠️ optional: the LED board shows state in normal use.
+- Bring-up isolation: one 0 Ω link between the buck and its loads, so the 5 V rail can be checked before the ESP32 sees it ⚠️.
 
-## 9. Questions for Chris (sign-off needs these)
-- **Q1 LED board:** what LEDs (WS2812-type 5 V data?) and how many lit at once? This sets the 5 V buck size and J5's current (Micro-Fit ≈ 5 A per pin).
-- **Q2 IMD chassis wire:** add a 4th pin to J3 (B+, LOAD+, GND, CHASSIS), with a ring lug on a chassis screw? Or a separate 1-pin lead?
-- **Q3 Programming:** Tag-Connect TC2030 pads (no part; needs a ≈ $40 cable), a 2×5 1.27 mm header, or a USB-C on an edge (needs edge room)? Wi-Fi OTA covers updates once the firmware runs.
-- **Q4 Inverter remote default:** off unless the BMS says on (form B, ≈ 3 mA while on), or on unless the BMS says off (form A, 0 mA)?
-- **Q5 ESP32 module:** WROOM-1U-N8R2 (8 MB flash, 2 MB PSRAM) proposed, for the web dashboard.
-- **Q6 Quantity:** 5 boards?
+## 9. Answers (Chris, 2026-11-27) and what's left
+- Q1 LED board: pcb chooses, with main-battery (visibility, "extremely cool"), and it must show SOC % → addressable. **Open** until main-battery answers the panel facts.
+- Q2: ring lug, J3 → 1×4. ✓
+- Q3: Tag-Connect pads were shown to Chris (render `tagconnect_pads.png`). **Open:** his choice.
+- Q4 inverter remote: explained (form A vs B). **Open:** his choice; pcb recommends form A.
+- Q5: pcb's choice of ESP32 module. ✓
+- Q6: 5 boards. ✓
