@@ -7,6 +7,8 @@
 - Blockers / waiting on: Chris: reference schematic/layout, DigiKey/Mouser API keys, OK for review subagents, kicad-happy install (`toolchain.md`).
 - Next step: on go — BMS phase 0 intent + phase 1 part audits (evaluate BQ76942 vs BQ76952 per main-battery's docs/afe.md note; P-FET precharge as an option).
 - Key decisions so far (with reasons):
+  - **Precharge = 2 series P-MOSFETs, same orientation** (Chris 2026-11-27): either one blocks B+ → LOAD+ (single-fault tolerant); the reverse body-diode path is accepted.
+  - **95 × 55 space claim final** (Chris 2026-11-27); layout targets credit card 85.6 × 53.98 inside it.
   - 95 × 55 mm: courtyards 2,421 mm² from real footprints; 49 % occupancy sits in the 40–60 % "4-layer comfortable" band.
   - 150 × 90 withdrawn: built on guessed allowances 3× too high (trap T1 in bms-area.md).
   - Plugs on the −x and +x edges and the rear of the −y edge.

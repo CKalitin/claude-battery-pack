@@ -1,6 +1,6 @@
 # BMS board: area and height (2026-11-27)
 
-**Proposed: 95 × 55 mm (5,225 mm²), top-side parts ≤ 12 mm, nothing on the bottom.** That's 39 % of the 150 × 90 claim. Every part was placed as a real KiCad 10.0.8 footprint: 109 parts, 0 courtyard overlaps, 49 % occupancy (`bms-size/place.py`). ⚠️ No schematic yet, so the part list is a sizing list, not a design.
+**Final claim: 95 × 55 mm (5,225 mm²); layout target 85.6 × 53.98 mm (credit card) inside it**. Was proposed as: 95 × 55 mm (5,225 mm²), top-side parts ≤ 12 mm, nothing on the bottom.** That's 39 % of the 150 × 90 claim. Every part was placed as a real KiCad 10.0.8 footprint: 109 parts, 0 courtyard overlaps, 49 % occupancy (`bms-size/place.py`). ⚠️ No schematic yet, so the part list is a sizing list, not a design.
 
 The 150 × 90 claim (accepted into `spec/interface.md` §4, `aa40b9f`) is withdrawn. A new request is in `spec/requests/pcb-bms-space-claim.md`. Chris rejected 150 × 90 on 2026-11-27 ("prove you need that space… 50–75 %"), and the proof says less than that.
 
@@ -91,7 +91,9 @@ Chris asked for credit-card size if it costs little effort and doesn't force a l
 
 ![credit card](bms_cc_fet_placement.png)
 
-**Plan:** the space claim stays 95 × 55 (accepted). The layout targets 85.6 × 53.98 and shrinks only if the real placement passes its gate. Area proofs show area and edges fit, not routability (§11).
+**Decided (Chris, 2026-11-27):** the **95 × 55 space claim is final** and stays reserved. The layout targets 85.6 × 53.98 inside it.
+
+**Precharge: 2 P-MOSFETs in series** (Chris, 2026-11-27), replacing the G6S relay. Same orientation (both sources toward B+), so either FET alone blocks B+ → LOAD+: a single shorted FET cannot energise the bus. Trade-off: the body diodes still conduct LOAD+ → B+ through the 10 Ω. That only happens if LOAD+ > B+, i.e. a welded charger relay with the contactor open. The current is self-limited (< ≈ 1 A, into the battery) and firmware sees it. Back-to-back would block reverse current but lose single-fault tolerance forward, and forward is the safety case (a live bus with the contactor open). Each FET gets its own gate driver from its own control signal ⚠️ (details at schematic). Area proofs show area and edges fit, not routability (§11).
 
 ## 11. What the area proof does and doesn't prove
 - **Placed at real positions:** what decides fit (connectors on their edges and mating direction, M3 holes, the ESP32 module, the AC05, the TQFP-48).
