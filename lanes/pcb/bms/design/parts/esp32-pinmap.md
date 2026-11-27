@@ -13,7 +13,7 @@ Available: GPIO1–18, 21, 35–48 = 33 (GPIO19/20 = USB D−/D+; GPIO0 = BOOT p
 | 5 | FLEX_NTC4_ADC | ADC1_CH4 | moved off the BQ (review B1: DCHG becomes the charge gate) |
 | 6 | FLEX_NTC5_ADC | ADC1_CH5 | |
 | 7 | BOARD_NTC_ADC | ADC1_CH6 | 33 k bias (ntc.md; review m8) |
-| 3 | SNS_PRE | in | **strap pin, no internal pulls, must not float**: the sense output has a pull-up, so it's defined at reset ✓ (JTAG strap ignored with default eFuses) |
+| 3 | SNS_PRE | in | **strap pin, no internal pulls**: add a **100 k external pull-up to 3V3** so it's defined at reset (the internal pull-up is off at reset; recheck R7). JTAG strap ignored with default eFuses anyway |
 | 8 | SNS_GV14 | in | self-test |
 | 9 | SNS_RLY | in | self-test |
 | 10 | BUTTON | in | via BAS116 from TS2; 100 k external pull-up (review n3); **internal pull-up off** |

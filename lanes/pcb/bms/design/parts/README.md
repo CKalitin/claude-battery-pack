@@ -6,7 +6,7 @@ U1 and U2 are audited by the pcb session; the rest by `pcb-bms-part-audits`. The
 |---|---|---|---|---|---|---|
 | Cell monitor | BQ7695204PFBR (1) + externals: BAS116LT1G ×2, 100 Ω (ERJ-PA3F1000V, ERJ-P06F1000V), 1 µF ×2, 10 M, 22 nF, 2.2 µF, 4.7 µF, 20 Ω ERJ-PA3F20R0V ×5, 220 nF ×5, TS 1 k ×3 + 1 nF ×3, PACK 10 k | TQFP-48 | `Package_QFP:TQFP-48_7x7mm_P0.5mm` | REG1 on at 3.3 V by default; **OTP mandatory** | ⚠️ REG0 default, DDSG/DCHG bench | [bq76952.md](bq76952.md) |
 | BQ pre-regulator NPN | FCX491ATA (1) | SOT-89 | `Package_TO_SOT_SMD:SOT-89-3` | 40 V, h_FE ≥ 300 | ⚠️ pin numbering | same |
-| MCU | ESP32-S3-WROOM-1U-N8 (1) | module | `RF_Module:ESP32-S3-WROOM-1U` | in stock, U.FL | ⚠️ GPIO39 reset pull-up | [esp32-s3.md](esp32-s3.md), [esp32-pinmap.md](esp32-pinmap.md) |
+| MCU | ESP32-S3-WROOM-1U-N8 (1) | module | `RF_Module:ESP32-S3-WROOM-1U` | in stock, U.FL | ✓ pin plan (GPIO39 resolved) | [esp32-s3.md](esp32-s3.md), [esp32-pinmap.md](esp32-pinmap.md) |
 | 5 V buck (3 A) | LMR604305SBRAKRQ1 (1) | WQFN-HR-9 | **custom** (TI RAK0009A) | ≤ 1 µA shutdown max, 3 A, in stock | ⚠️ footprint | [buck-5v.md](buck-5v.md) |
 | Buck L / Cin / Cout | SRP5030TA-3R3M (1) / C3216X7R1H475K160AE (2) / GRM31CZ71C226ME15L (6: buck 2, LDO 2, LED 2) / CC0402KRX7R9BB104 | 5030 / 1206 / 1206 / 0402 | `L_Bourns_SRP5030T`, `C_1206…`, `C_0402…` | bias-checked | ⚠️ L land | same |
 | 3.3 V LDO | TLV1117LV33DCYR (1) | SOT-223 | `SOT-223-3_TabPin2` (tab = OUT) | 113 °C at 500 mA | ✓ | [reg-3v3.md](reg-3v3.md) |

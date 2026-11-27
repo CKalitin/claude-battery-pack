@@ -1,0 +1,13 @@
+usb
+V1 in 0 PULSE(0 5.25 1u 10n 10n 1m 2m)
+R1 in a 0.2
+L1 a v 3e-06
+C0 v e 0.1u
+R0 e 0 0.01
+Rd v d 2.0
+Cd d 0 4.7e-06
+.control
+tran 5n 80u 0 5n
+meas tran vpk MAX v(v)
+.endc
+.end

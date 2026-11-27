@@ -54,7 +54,7 @@ VCC = 5 V, 100 nF each
 ```
 Q_BQ (upper) source = lower drain, ≈ 0.1 V at pick-up → V_GS ≈ 4.9 V ✓.
 
-**Upper gate (review m7):** during the 70–80 V kick the mid node rises capacitively while the gate is ground-referenced: estimated V_GS −17…−19 V against ±20 V. The BAS116 holds V_GS ≥ −0.9 V and passes only capacitive charge (≈ 10 nC ⚠️ estimate) into the buffer through 100 Ω; the upper FET then blocks the whole X2 voltage (≤ 80 V on a 100 V part ✓). The review suggested a 15 V zener in the same position: its forward diode clamps identically, and the positive side can't exceed the 5 V buffer, so the BAS116 (already on the BOM, ≤ 5 nA) does the job. A shorted clamp diode holds V_GS = 0 (coil can't close: safe). ⚠️ Scope V_GS and the mid node at 14.6 V and 20 V.
+**Upper gate (review m7):** during the 70–80 V kick the mid node rises capacitively while the gate is ground-referenced: estimated V_GS −17…−19 V against ±20 V. The BAS116 holds V_GS ≥ −0.9 V and passes the mid-node charging current into the buffer through **1 kΩ** (was 100 Ω: C_oss ≈ 400 pF at ≈ 0.7 V/ns gave ≈ 0.2–0.3 A peak against the LV1T34's ±20 mA; 1 kΩ keeps it ≤ 20 mA for a gate node up to ≈ 25 V; recheck R3); the upper FET then blocks the whole X2 voltage (≤ 80 V on a 100 V part ✓). The review suggested a 15 V zener in the same position: its forward diode clamps identically, and the positive side can't exceed the 5 V buffer, so the BAS116 (already on the BOM, ≤ 5 nA) does the job. A shorted clamp diode holds V_GS = 0 (coil can't close: safe). ⚠️ Scope V_GS and the mid node at 14.6 V and 20 V.
 
 ## 6. BQ76952 DDSG setup (SLUUBY2B §6.7, §13.3.2.17); stored in OTP ([bq76952.md](bq76952.md) §7)
 `Settings:Configuration:DDSG Pin Config` = **0xAA**: PIN_FXN = 10 (alternate = DDSG), OPT5 = 1 (**active-low: DDSG low when DSG is disabled**), OPT3 = 1 (drive from REG1), OPT1 = 1 (drive high).
@@ -80,7 +80,7 @@ Q_BQ (upper) source = lower drain, ≈ 0.1 V at pick-up → V_GS ≈ 4.9 V ✓.
 | I pulse 5.2 A vs I_D 44 A | | ✓ |
 | Loss at pick-up (hot R ≈ 1.5 × 20.8 mΩ) | 5.2² × 0.031 = 0.84 W per FET for 75 ms | ✓ |
 | Hold loss | 0.23² × 0.031 = 1.6 mW | ✓ |
-| Gate charge 9.5 nC through 100 Ω | ≈ 0.2 µs turn-on | ✓ step, no ramp |
+| Gate charge 9.5 nC through 1 kΩ (upper) / 100 Ω (lower) | ≈ 6 µs / 0.2 µs turn-on | ✓ still a step for a 20 ms coil |
 | I_DSS ≤ 1 µA @ 100 V, 25 °C | sleep budget | ✓ |
 
 **Pick-up voltage at the coil, pack 10.0 V** (⚠️ estimated path resistances): ATM 5 A fuse ≈ 18 mΩ, 4 Micro-Fit contacts ≤ 40 mΩ, coil leads 2 × 0.38 m 20 AWG ≈ 26 mΩ, harness 18 AWG ≈ 8 mΩ, board ≈ 20 mΩ, FETs ≤ 62 mΩ → ≈ 0.17 Ω → 0.68 V → **9.3 V ≥ 8 V** ✓. With a hot coil (+14 % at 60 °C, pick-up ≈ 9.1 V ⚠️) the margin is only 0.2 V at 10 V: firmware shouldn't close below ≈ 10.5 V.

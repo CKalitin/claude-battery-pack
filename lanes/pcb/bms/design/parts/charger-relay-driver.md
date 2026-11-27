@@ -50,7 +50,7 @@ LV1T34 VCC = 5 V, 100 nF each
 - **Order matters:** the ESP32 FET is on top, so a normal firmware stop turns the upper FET off first and only one clamp acts. The upper gate protection (§5a) is stressed only when DCHG trips while the ESP32 still commands on, or when the rails die.
 - BQ DCHG setup: `DCHG Pin Config` = 0xAA, in OTP ([bq76952.md](bq76952.md) §7). Active-low: low or hi-Z = blocked.
 - Levels: LV1T34 V_IH ≤ 2.03 V at 5 V; ESP32 ≥ 2.64 V ✓; DCHG ≈ 0.9 × REG1 ≥ 2.9 V ⚠️.
-- ⚠️ **Pin plan:** GPIO39 (MTCK) has a weak pull-up (45 kΩ) after reset with the JTAG eFuse at its default (ESP32-S3 datasheet v2.2 Table 2-1, note 7). Against the 100 kΩ pull-down that gives 2.3 V ≥ V_IH: the upper FET would be on at every reset. **CHG_RLY_EN must move off GPIO39** (swap with INV_STATE on GPIO42; pcb pin plan).
+- ⚠️ **Pin plan:** GPIO39 (MTCK) has a weak pull-up (45 kΩ) after reset with the JTAG eFuse at its default (ESP32-S3 datasheet v2.2 Table 2-1, note 7). Against the 100 kΩ pull-down that gives 2.3 V ≥ V_IH: the upper FET would be on at every reset. ✓ Done: CHG_RLY_EN is on GPIO42 (esp32-pinmap.md).
 
 ### 5a. Upper gate with its source in the air
 When Q_BQ is off and Q_ESP is commanded on, M rises with the coil current, far above the 5 V gate drive. DMN61D8L has 10 kΩ + zeners + 100 kΩ from the gate pin to source inside, rated V_GS ±12 V.

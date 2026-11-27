@@ -1,0 +1,30 @@
+precharge pump
+* GPIO: 10 kHz burst 0..3.3 V for 100 ms, then held (HI case) -- source 40 ohm
+.model DSCH D(IS=2e-7 N=1.1 RS=5 CJO=10p BV=30)
+.model QN NPN(IS=6.7e-15 BF=100 CJE=8p CJC=4p VAF=74 TF=300p TR=240n)
+V1 g 0 PWL FILE=drv_lo.txt
+Ro g p 40
+Rs p c1 1k
+C1 c1 a 10n
+D1 0 a DSCH
+D2 a b DSCH
+C2 b 0 100n
+R2 b 0 100k
+Rb b base 47k
+Rbe base 0 100k
+* collector: gate divider of Q2 from a 14.6 V source (Rgs 100k, Rg 27k)
+Vbp vbp 0 14.6
+Rgs vbp g2 100k
+Rg g2 col 27k
+Cgs vbp g2 1.65n
+Q1 col base 0 QN
+.control
+tran 1u 200m 0 1u
+meas tran vbmin MIN v(b) from=50m to=99m
+meas tran vbmax MAX v(b) from=50m to=99m
+meas tran vsgmin MIN par('v(vbp)-v(g2)') from=50m to=99m
+meas tran ton WHEN par('v(vbp)-v(g2)')=4 RISE=1
+meas tran toff WHEN par('v(vbp)-v(g2)')=1 FALL=LAST
+meas tran vsgend MAX par('v(vbp)-v(g2)') from=150m to=200m
+.endc
+.end

@@ -1,6 +1,6 @@
 # Firmware self-test of the switched outputs (no per-output LEDs)
 
-**Pick:** one identical "is this node high?" sense per switched output: **BSS138 + 100 kΩ + 18 V zener gate clamp to GND**, read by an ESP32 GPIO with its internal pull-up. Digital only, **no ADC channel**, **no current from B+ in sleep** (the node only drives a gate).
+**Pick:** one identical "is this node high?" sense per switched output: **BSS138 + 47 kΩ + 18 V zener gate clamp to GND** (47 k, was 100 k: recheck R4), read by an ESP32 GPIO with its internal pull-up. Digital only, **no ADC channel**, **no current from B+ in sleep** (the node only drives a gate).
 
 ```
 NODE ──100k (0805)──┬── G  BSS138  D ── GPIO (internal pull-up)
@@ -33,7 +33,7 @@ No per-output LEDs, no force hooks and no test points on switched outputs (Chris
 |---|---|---|---|
 | Q | onsemi **BSS138LT1G** | `SOT-23` (1 G, 2 S, 3 D) | V_th **0.85–1.5 V**, V_GS ±20 V, I_GSS ≤ 0.1 µA; datasheet Rev. 15 (Sep 2026), in stock |
 | D clamp | Diodes **MMSZ5248B-7-F**, 18 V ±5 % (cathode gate, anode GND) | `Diode_SMD:D_SOD-123` | DS18010 Rev. 28-2: 17.1–18.9 V at 7 mA; I_R ≤ **0.1 µA at 14 V**; in stock |
-| R_s | 100 kΩ **0805** (RC0805FR-07100KL, 150 V) | `R_0805_2012Metric` | sees ≤ ≈ 62 V at the GV14 kick, ≈ 132 V when both relay clamps act ([charger-relay-driver.md](charger-relay-driver.md) §5c) |
+| R_s | **47 kΩ 0805** (RC0805FR-0747KL, 150 V) | `R_0805_2012Metric` | sees ≤ ≈ 62 V at the GV14 kick, ≈ 132 V when both relay clamps act ([charger-relay-driver.md](charger-relay-driver.md) §5c) |
 | Pull-up | ESP32 internal (≈ 45 kΩ) | — | |
 Drain voltage is only 3.3 V (BSS138 is 50 V).
 
@@ -63,7 +63,7 @@ Two nodes sit at B+ in sleep (X2 and the relay drain) → ≤ 0.2 µA.
 **Why the 22 kΩ bleed on M:** with both FETs off, Q1 leakage (≤ 15 µA at 70 °C) would float M high. 15 µA × 22 k = 0.33 V < 0.85 V ✓. When Q1 is on it draws 0.66 mA (10 mW). In sleep it carries only the leakage already in the budget.
 
 ## 5. Test procedures (run at boot, contactor open)
-Pulse = **50 µs** (≪ operate time: GV14 ≤ 20 ms, relay ≈ 7 ms), read at ≈ 30 µs (sense delay 100 k × ≈ 100 pF (gate + zener) ≈ 10 µs). "H" = node high = GPIO low. **Generate every pulse with the RMT peripheral, never a software delay** (a shorted coil draws ≈ 80 A; review n8).
+Pulse = **50 µs** (≪ operate time: GV14 ≤ 20 ms, relay ≈ 7 ms), read at ≈ 30 µs (sense delay 47 k × ≈ 100–120 pF (gate + zener) ≈ 5 µs: gate ≈ 0.3 V at 30 µs, below V_th min 0.85 V ✓; recheck R4). Self-test P4 waits ≥ 10 ms after P2 so Q2 has released (R10). "H" = node high = GPIO low. **Generate every pulse with the RMT peripheral, never a software delay** (a shorted coil draws ≈ 80 A; review n8).
 
 **Driving the BQ side** (OTP configures DDSG and DCHG from boot): in CONFIG_UPDATE write the pin config to GPO, `0x29` (RAM only), exit, use `DDSG_LO/HI`, `DCHG_LO/HI` (TRM p. 58); afterwards write `0xAA` back and read it. A reset restores OTP. ⚠️ Bench-check that CONFIG_UPDATE and the GPO writes behave as described.
 
@@ -106,7 +106,7 @@ Pulse = **50 µs** (≪ operate time: GV14 ≤ 20 ms, relay ≈ 7 ms), read at �
 | Shorted GV14 coil in pulse | ≈ 3–4 V (≥ 1.8 V with a long-wire short) | reads high ✓ | |
 | Node high, 10 V pack | 10 V on the gate | on ✓ | |
 | Gate abs ±20 V | B+ normally (≤ 14.6 V); zener limits to ≤ 19.5 V at any surge | ✓ intent §2 | |
-| GV14 kick | zener current (80 − 18)/100 k = 0.62 mA ✓; relay both-clamp case (150 − 18)/100 k = 1.3 mA, 24 mW | R 0805 ✓ | |
+| GV14 kick | zener current (80 − 18)/47 k = 1.3 mA ✓; relay both-clamp case (150 − 18)/47 k = 2.8 mA for ms only, 0.37 W peak, ≪ 1 mJ | R 0805 ✓ | |
 | Sleep | zener leakage ≤ 0.1 µA per high node (14 V, 25 °C) + I_GSS | ⚠️ bench at 14.6 V, 60 °C | ✓ R3 |
 | Shorted-coil pulse energy | ≈ 80 A for ≤ 50 µs through the BSZ146 (176 A pulse rating); 5 A ATM I²t ≈ 0.3 A²s ⚠️ well below melting | | |
 

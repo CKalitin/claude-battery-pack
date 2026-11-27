@@ -25,8 +25,8 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 |---|---|---|---|---|
 | J1 | −x | Sense flex (FPC 12-pin 0.5 mm ZIF) | VC0–VC4, 5 × NTC, GND ×2 | cells 0–14.6 V common-mode, µA; NTC 10 k ⚠️ part |
 | J2 | −x | Tesla shunt 1016792-00-C (Micro-Fit 2×4, **or Mini-Fit Jr 2×5 taking the shunt's own pigtail directly if Chris's test-fit passes**: 13.8 mm mated, so it needs main-battery's lid raise to z 335 + 4 mm standoffs; layout reserves its 23.2 × 22.2 mm courtyard so the swap moves nothing) | 5V, GND, NSS, SCK, MISO, MOSI, OC, spare | 5 V logic (VIH 3.5 V); SPI mode 0, 500 kHz; 5 V supply ≈ 30–50 mA ⚠️ |
-| J3 | −y | Power taps + chassis (**1×4**, Chris 2026-11-27) | B+, LOAD+, GND, CHASSIS (ring lug on a chassis screw, for the IMD) | B+ ≤ 5 A peak (coil pick-up 3.9 A, 75 ms); LOAD+ ≤ 1.46 A (precharge) |
-| J4 | +x | GV14 coil (1×2) | X1 (+ = B+ switched), X2 | 12 V coil; 3.9 A pick-up for 75 ms, 0.23 A hold (built-in economizer) |
+| J3 | −y | Power taps + chassis (**1×4**, Chris 2026-11-27) | B+, LOAD+, GND, CHASSIS (ring lug on a chassis screw, for the IMD) | B+ ≤ 6.5 A peak for 75 ms (GV14 pick-up ≈ 5.2 A cold at 14.6 V + buck + relay; recheck m14); LOAD+ ≤ 1.46 A (precharge) |
+| J4 | +x | GV14 coil (1×2) | X1 (+ = B+ switched), X2 | 12 V coil; pick-up 3.9 A nominal, **≈ 5.2 A at 14.6 V / −10 °C**, 75 ms; 0.23 A hold (built-in economizer) |
 | J5 | +x | LED board (1×3) | 5V (switched by a TPS259530 eFuse, 2.58 A limit, off by default), DATA (SN74LV1T34 on the switched rail, 100 Ω series, TPD1E10B09 ESD), GND | ≈ 287 lit pixels on a 15.6 mm checkerboard lattice (main-battery, v16 grid ⚠️ option D may change it). 5 V WS2812-protocol RGB 2020 LEDs (Würth 1312020030000 proposed, Inolux IN-PI20TAT5R5G5B alternate ⚠️ audit in the LED-board phase). **Power cap ≤ 5 W typical / ≤ 10 W peak (2 A) in firmware** (main-battery: box cooling is marginal). High-side load switch so the LED rail is fully off when the display is off. Shows SOC as digits + a fill bar |
 | J6 | +y | Charger relay (1×3) | coil 86, coil 85, AC_SENSE | coil 12 V 90 Ω: 162 mA at 14.6 V; AC_SENSE 0–14.6 V, µA |
 | J7 | +y | Inverter CN301 (1×2) | dry contact | short = inverter remote OFF (NTS-400P-SPEC) |
@@ -41,9 +41,9 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 |---|---|---|
 | Cell monitor | **BQ7695204PFBR** (BQ76952 family; SPI + CRC; REG1 on at 3.3 V by default, so no OTP is needed to boot) in TQFP-48. Cells on VC0–VC3 + VC16 (VC4–VC15 tied to VC3, Table 16-3). **3 NTCs on the BQ** (TS1, TS3, DFETOFF: SPI uses HDQ and CFETOFF, DCHG gates the charger relay, B8); flex NTC 4 and 5, the board NTC and the box NTC on ESP32 ADC1. Balancing internal, ≈ 50 mA | parts/bq76952.md |
 | Current | Tesla shunt over SPI, through **TXU0304** (3 out, 1 in); OC (5 V) → divider → ESP32 | tesla-shunt.md §3 |
-| Contactor | Low-side driver for 3.9 A / 75 ms pick-up: **2 × 100 V N-FETs in series** (BSZ146N10LS5), each gated by its own 5 V buffer: one from the ESP32, one from **BQ76952 DDSG** = hardware AND. **No external coil clamp: Sensata forbids it** (internal TVS; X2 reaches B+ + 55 V). Self-test sense on X2 | parts/gv14-driver.md |
+| Contactor | Low-side driver for ≤ 5.2 A / 75 ms pick-up: **2 × 100 V N-FETs in series** (BSZ146N10LS5), each gated by its own 5 V buffer: one from the ESP32, one from **BQ76952 DDSG** = hardware AND. **No external coil clamp: Sensata forbids it** (internal TVS; X2 reaches B+ + 55 V). Self-test sense on X2 | parts/gv14-driver.md |
 | Precharge | **2 P-MOSFETs in series, same orientation**, B+ → AC05 10 Ω → LOAD+; each with its own driver and control line; **one channel AC-coupled = hardware time limit ≤ 1 s** (B10); LOAD+ measured by the BQ PACK pin (1 V threshold) for "precharge done" | Chris 2026-11-27; decisions B10 |
-| Charger relay | Low-side DMN61D8L (internal 60 V clamp; **no flyback diode**, which TE says slows release and risks contact welding), 0.16–0.20 A; self-test sense on the drain | parts/charger-relay-driver.md |
+| Charger relay | **2 × DMN61D8L in series**: upper from the ESP32 (CHG_RLY_EN, buffered), lower from **BQ DCHG** = hardware AND (B8). Internal 60 V clamps, **no flyback diode** (TE: a diode slows release, risks welding); 0.16–0.20 A. Firmware: any ALERT/XCHG drops CHG_RLY_EN and latches until re-qualified, so COV/OTC/UTC auto-recovery can't re-close the relay (recheck R6). Self-test sense on the drain | parts/charger-relay-driver.md |
 | Inverter remote | **Latching relay, zero holding current in either state** (Chris): KEMET EE2-5TNUH-L double-coil, set/reset by 2 × DMN61D8L pulses from ESP32 GPIOs; pole B reads the state back. PhotoMOS AQY212S is the runner-up | parts/inverter-remote.md |
 | AC present | Divider from J6 AC_SENSE → ESP32 ADC | interface §4 |
 | Box-air temperature | NTC bias + filter → ESP32 ADC | interface §4 |
@@ -63,7 +63,7 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 |---|---|---|
 | ESP32-S3 Wi-Fi TX peaks | — | 350 mA peak, ≈ 100 mA average |
 | Tesla shunt module | 50 mA ⚠️ | — |
-| TXU0304, BQ76952 I²C pull-ups, LEDs (≈ 8 × 1 mA) | 5 mA | 15 mA |
+| TXU0304, LV1T34 buffers, SPI/ALERT pull-ups | 5 mA | 5 mA |
 | LED board (J5) | ≤ 1 A typical, ≤ 2 A peak (firmware cap) | — |
 | **Total** | ≈ 2.5 A peak incl. the 3V3 rail's input → **5 V buck ≥ 3 A** | ≈ 365 mA peak |
 Coil currents (GV14, charger relay) come straight from B+ through their drivers, not from the 5 V rail.
@@ -86,7 +86,7 @@ Coil currents (GV14, charger relay) come straight from B+ through their drivers,
 ## 9. Answers (Chris, 2026-11-27) and what's left
 - Q1 LED board: decided with main-battery (panel facts in J5 row): addressable 5 V RGB 2020 behind each lit hole, 3 mm gap to the diffuser ⚠️, 10 W peak cap. ✓
 - Q2: ring lug, J3 → 1×4. ✓
-- Q3: Chris wants to plug in a USB-C cable to flash → **USB-C receptacle on the +y edge** (ESP32-S3 native USB-Serial-JTAG: flash, console, debug); VBUS feeds the 5 V rail through a diode, so a board with no pack can be flashed; IO0/EN pads as a fallback. Tag-Connect dropped. ⚠️ A laptop on an earthed charger joins pack− to earth through USB GND: the IMD will read it as an insulation fault while plugged in (expected; note it in firmware).
+- Q3: Chris wants to plug in a USB-C cable to flash → **USB-C receptacle on the +y edge** (ESP32-S3 native USB-Serial-JTAG: flash, console, debug); VBUS feeds only the 3.3 V LDO through a TPS2116 power mux (see J10), so a board with no pack can be flashed; IO0/EN pads as a fallback. Tag-Connect dropped. ⚠️ A laptop on an earthed charger joins pack− to earth through USB GND: the IMD will read it as an insulation fault while plugged in (expected; note it in firmware).
 - Q4 inverter remote: Chris wants **zero holding current to keep it off** → a **latching (bistable) signal relay** on CN301, set and reset by pulses (no current while holding either state; keeps its state through an ESP32 restart). A second pole reads the state back for self-test. PhotoMOS form A is the runner-up (3 mA while holding off). NTS-400P-SPEC 2026-03-26 says only "dry contact (by RELAY)" for CN301, with no pin reference, so a bare MOSFET isn't safe to assume ⚠️.
 - Q5: pcb's choice of ESP32 module. ✓
 - Q6: 5 boards. ✓
