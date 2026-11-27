@@ -63,6 +63,7 @@
 - **Flex PCB: shop around** (Chris, 2026-11-27). Don't commit the flex to NextPCB; quote it at several fabs and pick the cheapest that meets the spec.
 - PCBWay (Liam) declined politely on 2026-11-26; Chris would work with them on a later project.
 - **Fab split (Chris, 2026-11-27): BMS board → PCBWay (full PCBA); front/LED board → NextPCB** (sponsored, as above). Flex: shop around. "Put more effort into sourcing the PCBs." ⚠️ PCBWay declined *sponsorship* on 2026-11-26, so the BMS board is a paid order unless PCBWay is re-approached (Chris to decide). Supersedes the relayed "BMS by NextPCB, PCBWay second".
+- **Tentative (Chris to the pcb lane, 2026-11-27; relayed by pcb): "we may use NextPCB for this board" (the BMS).** Not final: the PCBWay split above stands until Chris decides, and BMS sponsorship at NextPCB is pending Zep's answer. pcb designs to rules both fabs meet, with an MPN-based BOM, so there is no design impact.
 - **Re-offer to NextPCB (Chris, 2026-11-27): ask for one sponsored round of both rigid boards (front + BMS), fab + PCBA, instead of 3 rounds of the front board only.** **Sent to Zep 2026-11-27** (reply to his 2026-11-26 offer); the 3 older drafts were deleted. Awaiting his answer. If NextPCB says no, the BMS board goes to PCBWay as a paid order (split above).
 - **BMS schematic must be human-readable:** parts drawn wired together, not only connected by net labels (Chris to the pcb lane, 2026-11-27; relayed by pcb).
 - Assembly (PCBA) wanted on both boards, the flex included.
