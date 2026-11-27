@@ -96,7 +96,7 @@ Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders i
 - ⚠️ **Inverter at 400 W continuous isn't proven**: the pack fan gives it 0.2–0.6× MEAN WELL's forced-air condition (docs/cooling.md). Bench test; then rear blanking sheet or the MEAN WELL 4020 fan.
 - ⚠️ Tesla J1 part number and strip end (docs/signal-wiring.md §7). NPB-450 DF11 pinout and GV141BAX coil exit closed 2026-11-27.
 - ✓ EOL swelling: M6 316 A4-70 rods (D36). ⚠️ end-plate local stress at the nuts at 30 kN not modelled.
-- ⚠️ **Architecture rework (D38, docs/architecture.md): side power spine + 2 × 92 mm fans recommended; awaiting owner choice (W +14 mm GV14 vs FET).**
+- ⚠️ **Architecture rework (D38, docs/architecture.md): side power spine + 2 × 92 mm fans recommended; owner chose B + GV14 (W 204), 2026-11-27; next: CAD sandbox.**
 - ⚠️ 4020 inverter fan doesn't fit (35.8 mm under the lid, docs/cooling.md option C). NTS-400P terminal side confirmed from MEAN WELL's photo (TB1 at +y).
 - Pack busbars are bend-legal Zs since v16.2 (D28) but still priced as v16.1 flat .187 blanks ⚠️ re-quote bent; ⚠️ 14 mm band neck under the − riser (4.9 A/mm²). G10 .063/.125 out of stock at SCS (docs/v16-bom.md).
 

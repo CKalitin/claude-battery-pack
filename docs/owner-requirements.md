@@ -61,7 +61,7 @@
 - Assembly (PCBA) wanted on both boards, the flex included.
 
 ## 7. Open items Chris has asked for (carry until done)
-- Rework the layout so the rear void disappears (2026-11-27: "take two steps back… I want to solve this problem", not a 10 mm trim): study in architecture.md, **Chris picked B (side power spine) on 2026-11-27.** Still open: W +14 (GV14 contactor) vs FET switch at W 190.
+- Rework the layout so the rear void disappears (2026-11-27: "take two steps back… I want to solve this problem", not a 10 mm trim): study in architecture.md, **Chris picked B (side power spine) on 2026-11-27.** **Keep the GV14 contactor** (Chris, 2026-11-27), so W 190 → 204 mm: the 55.7 mm contactor body passes beside the 135 mm charger, and a 190 box leaves a 48.8 mm strip (13.3 mm short). See option_b_width.png.
 - Inverter 400 W continuous: bench test, then decide the cooling fix (cooling.md).
 - Control board schematic: a separate agent, later.
 - Send the Zep reply (draft in Gmail).
