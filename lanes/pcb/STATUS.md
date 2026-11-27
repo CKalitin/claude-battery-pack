@@ -6,7 +6,7 @@
 - main-battery accepted 95 × 55 (spec/interface.md §4), added the AC-present sense and box-air NTC (ESP32 ADC), moved the B+ tap to a 5 A ATM, and corrected TXU0304.
 - DigiKey API works (key in `~/.config/pcb-secrets/digikey.env`, mode 600, outside the repo; tested 2026-11-27: BQ76952PFBR → TI, Active, datasheet URL present). Mouser key optional.
 - **BMS design started (2026-11-27):** project `lanes/pcb/bms/`. Phase 0 intent drafted (`bms/design/intent.md`), awaiting Chris's sign-off and answers Q1–Q6. Phase 1 part audits in progress.
-- Blockers / waiting on: Chris: Q1 LED board load, Q2 IMD chassis wire, Q3 programming connector, Q4 inverter-remote default, Q5 ESP32 variant, Q6 quantity.
+- Blockers / waiting on: none hard. Chris: sign off `bms/design/intent.md` (phase 0) before the schematic starts. Teammate `pcb-bms-part-audits` running (phase 1 support parts). main-battery: shunt pigtail test-fit (J2 Micro-Fit vs Mini-Fit Jr).
 - Approved 2026-11-27: kicad-happy as second reviewer (installed v3.0.2), independent review subagents (`pcb-review-<gate>`, Opus high).
 - Next step: on go — BMS phase 0 intent + phase 1 part audits (evaluate BQ76942 vs BQ76952 per main-battery's docs/afe.md note; P-FET precharge as an option).
 - Key decisions so far (with reasons):
