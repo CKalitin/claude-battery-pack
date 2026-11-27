@@ -59,7 +59,7 @@ def pack_straps():
 
 def bay_copper():
     p = {}
-    nr = box(-92.0, -70.0, -73.0, -45.0, Z_P0, Z_P1) + box(-92.0, -39.0, -55.0, -39.0, Z_P0, Z_P1)
+    nr = box(-92.0, -70.0, -73.0, -45.0, Z_P0, Z_P1) + box(-92.0, -39.0, -58.0, -39.0, Z_P0, Z_P1)       # 19 mm: 2.9 A/mm2 at 175 A
     for (x, y), r in ((NODE_B, 4.3), (SBN, 3.3)):
         nr -= cyl_z(x, y, Z_P0 - 1, Z_P1 + 1, r)
     p["bus_mod_neg"] = nr

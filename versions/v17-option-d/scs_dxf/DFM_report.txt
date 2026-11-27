@@ -1,0 +1,31 @@
+SCS 5052 .063: BA90 2.452  BD30 0.517 mm; copper .125 BA90 3.691 mm
+facet F 8.0, lip 7.7, body W 174.0, lid width 177.6, H 334.6
+  body_half_A segment 0: flat 99.15 mm (need >= 6.48) OK
+  body_half_A segment 1: flat 6.67 mm (need >= 6.59) OK
+  body_half_A segment 2: flat 6.67 mm (need >= 6.59) OK
+  body_half_A segment 3: flat 310.53 mm (need >= 6.59) OK
+  body_half_A segment 4: flat 7.03 mm (need >= 6.48) OK
+  body_half_A closest hole edge to a bend centre line: 12.7 mm (need >= 6.0) OK
+  body_half_A tab flanges (formed) [45.0, 14.2, 14.2, 14.2] mm (min formed flange 7.7) OK
+  body_half_B segment 0: flat 51.15 mm (need >= 6.48) OK
+  body_half_B segment 1: flat 6.67 mm (need >= 6.59) OK
+  body_half_B segment 2: flat 6.67 mm (need >= 6.59) OK
+  body_half_B segment 3: flat 310.53 mm (need >= 6.59) OK
+  body_half_B segment 4: flat 7.03 mm (need >= 6.48) OK
+  body_half_B closest hole edge to a bend centre line: 12.7 mm (need >= 6.0) OK
+  body_half_B tab flanges (formed) [14.2, 14.2, 14.2] mm (min formed flange 7.7) OK
+  lid segment 0: flat 30.40 mm (need >= 6.48) OK
+  lid segment 1: flat 6.67 mm (need >= 6.59) OK
+  lid segment 2: flat 6.67 mm (need >= 6.59) OK
+  lid segment 3: flat 154.41 mm (need >= 6.59) OK
+  lid segment 4: flat 6.67 mm (need >= 6.59) OK
+  lid segment 5: flat 6.67 mm (need >= 6.59) OK
+  lid segment 6: flat 30.40 mm (need >= 6.48) OK
+  lid closest hole edge to a bend centre line: 12.9 mm (need >= 6.0) OK
+  lid closest slot edge to a bend centre line: 14.1 mm OK
+  lid U-channel 2:1: base 154 vs 2 x leg 84 OK
+  copper pack+ 5191 hole: edge 9.4 mm from the bend centre (rule used >= 8) OK
+  copper pack- node-A hole: edge 9.0 mm from the bend centre (rule used >= 8) OK
+  copper strap: foot flange 19.4, top flange 33.9 mm (min .471in = 12.0) OK; joggle height 27.3 mm (SCS .506-3.75in = 12.9-95) OK
+  copper strap foot hole: edge 10.1 mm from the lower bend centre (rule used >= 8)
+  copper pack Z joggle height 46.1 mm OK; riser flange pos 27, neg 32 mm

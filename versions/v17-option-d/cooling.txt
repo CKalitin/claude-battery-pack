@@ -1,0 +1,26 @@
+v17 option D cooling, as built (cad/analysis/cooling_D.py, 2026-11-27). Fan curve UNCONFIRMED (distributor data).
+box: inside 336.9 x 170.8 x 333 mm; enclosure 0.471 m2, UA 1.90 W/K; fan at x -156..-136, 50 mm from the inverter DC face
+rear holes 743 (Ø4.8); 21 in the R20 fan circle, 21 behind the 40 x 40 spacer; open into the Ø37 bore at Ø4.8: 325 mm2; front air holes 277
+Heat, UPS case P = 100.1 W (sealed box 52.8 K); without the LED board 95.1 W
+   49.44 W  NTS-400P-112, 400 W out, eta 89 % (-112 column, NTS-400P-SPEC 2026-03-26; v16 used 91 %, the -212 value)
+   36.90 W  NPB-360-12TB, 20 A x 14.2 V, eta 88.5 % (TB, NPB-360-SPEC 2026-07-06)
+    2.80 W  GV141BAX coil hold 2.8 W
+    2.00 W  BMS board (estimate)
+    0.25 W  Tesla shunt module (estimate)
+    1.11 W  40 mm fan 1.11 W
+    1.94 W  Charger relay coil, TE F4 90 ohm at 13.2 V
+    5.00 W  Front LED board, firmware cap, typical (spec/interface.md §5; peak 10 W)
+    0.64 W  Power path at 40 A (cooling_v16 scaling)
+
+rear-plate case                                       fan CFM front m3/h  dT mixed dT front-only
+as drawn: Ø4.8 grid holes                                 4.8        0.6     21.5K         47.4K
+Ø6.5 holes at the same positions                          7.1        1.0     16.8K         45.2K
+Ø37 cutout + 40 mm wire guard (+1 part)                   8.8        1.2     14.4K         43.6K
+Ø37 cutout, rear grid blanked (+1 sheet)                  8.1       13.8     15.4K         15.4K
+Ø6.5 holes, rear grid blanked (+1 sheet)                  6.6       11.3     17.6K         17.6K
+
+Ø6.5, inverting 400 W only (charger off, relay open)   P  61.2 W: dT mixed 10.3 K | front-only 27.6 K
+Ø6.5, charging 20 A only (inverter off)                P  50.6 W: dT mixed  8.5 K | front-only 22.9 K
+Ø6.5, UPS with inverter at 300 W                       P  87.7 W: dT mixed 14.8 K | front-only 39.6 K
+Ø4.8, inverting 400 W only                             P  61.2 W: dT mixed 13.2 K | front-only 29.0 K
+Ø4.8, charging 20 A only                               P  50.6 W: dT mixed 10.9 K | front-only 24.0 K
