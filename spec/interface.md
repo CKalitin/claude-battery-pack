@@ -37,7 +37,7 @@ Single source of truth for numbers that more than one lane uses. Only `main-batt
 - ESP32-S3-WROOM-1U (18 × 19.2 mm ⚠️) with Wi-Fi;
 - Tesla shunt SPI (**TXU0304**: 3 out + 1 in, TI SCES935A; was TXU0104, corrected by pcb 2026-11-27; 5 V supply);
 - GV14 coil driver, enabled by ESP32 **AND** BQ in hardware;
-- precharge relay + **Vishay AC05 10 Ω 5 W cemented wirewound (AC05000001009JAC00), axial, through-hole on the BMS board, no heatsink** between the B+ and LOAD+ taps (power-train.md §9);
+- precharge switch = **2 P-MOSFETs in series, same orientation** (either one alone blocks B+ → LOAD+; the body diodes can pass LOAD+ → B+ through the 10 Ω, < ≈ 1 A, only with a welded charger relay and the GV14 open: accepted), replacing the G6S relay (Chris to pcb, 2026-11-27) + **Vishay AC05 10 Ω 5 W cemented wirewound (AC05000001009JAC00), axial, through-hole on the BMS board, no heatsink** between the B+ and LOAD+ taps (power-train.md §9);
 - inverter remote off;
 - charger-relay coil driver;
 - 2 A fused pack tap → 5 V buck → 3.3 V, SHUTDOWN ≈ 7 µA, UV latch;
@@ -50,7 +50,7 @@ No power current on the board. The CAN transceiver and the pack-fan header are d
 
 | Item | Value | Ref |
 |---|---|---|
-| Size | **95 × 55 × 1.6 mm, 4 layers**, proven by pcb with real footprints (109 parts, 0 overlaps, 49 % occupancy). Chris rejected 150 × 90 | spec/requests/pcb-bms-space-claim.md rev 2026-11-27 (accepted) |
+| Size | **95 × 55 × 1.6 mm, 4 layers, FINAL** (layout aims for credit-card size inside it), proven by pcb with real footprints (109 parts, 0 overlaps, 49 % occupancy). Chris rejected 150 × 90 | spec/requests/pcb-bms-space-claim.md rev 2026-11-27 (accepted) |
 | Position | x −105…−10, y −15…40, flat over the inverter | same |
 | Height | Top parts ≤ 12 mm incl. mated plugs; no bottom parts; THT tails ≤ 2.5 mm | same |
 | Mounting | 4 × M3, 5 mm in from the edges, on **3 mm standoffs** on a **G10 .125 bridge** (SCS) spanning the inverter. The bridge stands on 4 M3 posts on deck 2 beyond the inverter's ends (x −109 / +105; y −14 / −12 / +40); the bridge is 220 × 58 mm. The −x post screw heads stay below the board top (z 319.1): they sit inside the board's −x plug room (pcb, 2026-11-27). Board underside z 317.5, parts top z 331.1, 1.9 mm under the lid. Nothing touches the NTS-400P | converter_packing.py (0 issues) |
