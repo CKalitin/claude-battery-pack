@@ -47,9 +47,9 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | Inverter remote | Dry contact (PhotoMOS); **Q4:** default with the BMS off (form A: inverter runs when the contactor is closed unless commanded off; form B: inverter off unless commanded on) | NTS-400P-SPEC |
 | AC present | Divider from J6 AC_SENSE → ESP32 ADC | interface §4 |
 | Box-air temperature | NTC bias + filter → ESP32 ADC | interface §4 |
-| IMD | R₊ 2.2 MΩ (pack+ → chassis), R₋ 0.9 + 0.1 MΩ (chassis → pack−); ESP32 reads across 100 k; r₀ = 0.312; alarm at |r − 0.312| > 0.02 | v14-design-notes §4 |
+| IMD | **R₊ 4.4 MΩ (2 × 2.2 M), R₋ 1.8 + 0.2 MΩ** (doubled from v14's 2.2 / 0.9 + 0.1 M to halve sleep draw: 14.6 V / 6.4 MΩ = 2.3 µA); ESP32 reads across 200 k with 100 nF (τ 20 ms); r₀ = 0.3125 unchanged; alarm at |r − 0.312| > 0.02. ⚠️ Fault sensitivity per v14 table scales with R: a fault is now visible up to ≈ 2× higher resistance; recheck the table at schematic | v14-design-notes §4; pcb 2026-11-27 |
 | Board supply | B+ (J3) → TVS → **5 V buck, EN ← BQ76952 REG1** → 3.3 V (LDO) → ESP32, TXU0304 A-side | v14-design-notes §9 |
-| Sleep | **≤ 10 µA total in SHUTDOWN** (BQ 1 µA + buck off ≈ 2 µA + IMD 4.6 µA + leakage); nothing else may draw from B+ when off | v14-design-notes §9 |
+| Sleep | **≤ 10 µA typical in SHUTDOWN** (≈ 4.5 µA typ, ≈ 10.7 µA summing 25 °C datasheet maxima: parts/README.md budget, IMD halved); nothing else may draw from B+ when off; bench-measure | v14-design-notes §9 |
 | Wake / off | Button → TS2 wakes from SHUTDOWN; same button to an ESP32 GPIO; long press = SHUTDOWN. **No charger wake** (D33). LD held low | v14-design-notes §9a; D33 |
 | UV latch | Every UV trip latches (BQ SHUTDOWN is the hardware latch); re-enable by button with min cell ≥ 3.00 V | v14-design-notes §9a |
 | Safe states | With no firmware: GV14 off, precharge off, charger relay open, inverter remote per Q4 | design |
