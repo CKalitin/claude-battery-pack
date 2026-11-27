@@ -20,6 +20,10 @@
 | MCU | EN RC (10 k + 1 µF) | R_0402_1005Metric | 1.86 × 0.94 | 1 | 2 |
 | MCU | EN C | C_0402_1005Metric | 1.82 × 0.92 | 1 | 2 |
 | MCU | IO0 / strap resistors | R_0402_1005Metric | 1.86 × 0.94 | 2 | 3 |
+| MCU | AC-present sense divider (14.6 V → ADC) + filter C | R_0402_1005Metric | 1.86 × 0.94 | 2 | 3 |
+| MCU | AC-sense filter C | C_0402_1005Metric | 1.82 × 0.92 | 1 | 2 |
+| MCU | box-air NTC bias R + filter C (ESP32 ADC) | R_0402_1005Metric | 1.86 × 0.94 | 1 | 2 |
+| MCU | box-NTC filter C | C_0402_1005Metric | 1.82 × 0.92 | 1 | 2 |
 | MCU | Tag-Connect TC2030-NL programming pads (no part) | Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical | 7.00 × 4.00 | 1 | 28 |
 | SHUNT | TXU0304 3-out/1-in translator (TSSOP-14 for sizing) | TSSOP-14_4.4x5mm_P0.65mm | 7.70 × 5.63 | 1 | 43 |
 | SHUNT | translator decoupling | C_0402_1005Metric | 1.82 × 0.92 | 2 | 3 |
@@ -53,15 +57,15 @@
 | CONN | J1 sense flex FPC 12-pin ZIF (5 VC + 5 NTC + 2 GND) | Hirose_FH12-12S-0.5SH_1x12-1MP_P0.50mm_Horizontal | 12.12 × 7.90 | 1 | 96 |
 | CONN | J2 Tesla shunt Micro-Fit 2×4 | Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal | 17.16 × 13.67 | 1 | 235 |
 | CONN | J3 power B+/LOAD+/GND Micro-Fit 1×3 | Molex_Micro-Fit_3.0_43650-0300_1x03_P3.00mm_Horizontal | 13.66 × 10.91 | 1 | 149 |
-| CONN | J4 outputs: GV14 coil ×2, charger relay ×2, inverter remote ×2, Micro-Fit 2×3 | Molex_Micro-Fit_3.0_43045-0600_2x03_P3.00mm_Horizontal | 14.16 × 13.67 | 1 | 194 |
-| CONN | J5 lid button + LED-board link (5V, GND, DATA, BTN), Micro-Fit 2×2... 2×3 | Molex_Micro-Fit_3.0_43045-0600_2x03_P3.00mm_Horizontal | 14.16 × 13.67 | 1 | 194 |
+| CONN | J4 outputs: GV14 coil ×2, charger relay ×2, inverter remote ×2, AC-present sense, spare: Micro-Fit 2×4 | Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal | 17.16 × 13.67 | 1 | 235 |
+| CONN | J5 LED link (5V, DATA, GND), button (BTN, GND), box-air NTC (NTC, GND), spare: Micro-Fit 2×4 | Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal | 17.16 × 13.67 | 1 | 235 |
 | MECH | M3 mounting holes (Ø7 washer keep-out); one plated = IMD chassis ref | MountingHole_3.2mm_M3_Pad | 6.40 × 6.40 | 4 | 164 |
-| **Total** | | | | **109** | **2421** |
+| **Total** | | | | **114** | **2512** |
 
 | Block | Courtyard [mm²] |
 |---|---|
-| CONN | 866 |
-| MCU | 436 |
+| CONN | 949 |
+| MCU | 444 |
 | PRE | 353 |
 | AFE | 207 |
 | PWR | 174 |

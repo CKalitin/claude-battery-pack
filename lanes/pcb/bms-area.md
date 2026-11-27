@@ -112,3 +112,17 @@ Chris asked for credit-card size if it costs little effort and doesn't force a l
 - Schematic: the real part list will move the area. Re-run `place.py` after each part change.
 - ⚠️ Board temperature above the inverter: not analysed.
 - Antenna: U.FL coax ≈ 150–200 mm to the front-plate flex antenna (spec/interface.md §4).
+
+## 12. Connectors and pins (2026-11-27, answering main-battery `docs/harnesses.md`)
+**J4 and J5 grow from 2×3 to 2×4 Micro-Fit 3.0.** Each harness branch gets its own ground pin: no two wires in one crimp, and no splices to build. Re-checked: credit card 85.6 × 53.98 still fits (**54 %**, 0 overlaps, 115 parts incl. the new sense passives); 95 × 55 is 50 %.
+
+| Conn | Part (BMS side) | Pins (proposal; numbers final at schematic) |
+|---|---|---|
+| J1 | FPC 12-pin 0.5 mm ZIF | sense flex tail (made with the flex; not a harness) |
+| J2 | Micro-Fit 2×4 43045-0800 | 1 5V, 2 GND, 3 NSS, 4 SCK, 5 MISO, 6 MOSI, 7 OC, 8 spare |
+| J3 | Micro-Fit 1×3 43650-0300 | 1 B+ (5 A ATM), 2 LOAD+ (2 A ATM), 3 GND (node A) |
+| J4 | Micro-Fit 2×4 43045-0800 | GV14 X1/X2, charger-relay 86/85, CN301-1/2, **AC_SENSE** (charger side of the relay), spare |
+| J5 | Micro-Fit 2×4 43045-0800 | LED link 5V/DATA/GND, BTN/GND, **BOX_NTC**/GND, spare |
+
+- AC_SENSE goes in J4 because it starts at the charger relay, the same rear +y corner as the relay coil wires. No return wire: the charger's − is at shunt node B, millivolts from board ground at node A.
+- Mini-Fit Jr on the BMS side was rejected: a 2×3 right-angle is 552 mm² against 194 mm² for Micro-Fit, which would break the credit card. The worst pin is the GV14 pick-up (3.9 A, 75 ms) against Micro-Fit's ≈ 5 A ⚠️ (check Molex derating for 20 AWG).

@@ -49,6 +49,8 @@ BOM = [
  ("MCU", "3V3 decoupling 10 µF + 100 nF ×2", C06, 1), ("MCU", "3V3 100 nF", C04, 2),
  ("MCU", "EN RC (10 k + 1 µF)", R04, 1), ("MCU", "EN C", C04, 1),
  ("MCU", "IO0 / strap resistors", R04, 2),
+ ("MCU", "AC-present sense divider (14.6 V → ADC) + filter C", R04, 2), ("MCU", "AC-sense filter C", C04, 1),
+ ("MCU", "box-air NTC bias R + filter C (ESP32 ADC)", R04, 1), ("MCU", "box-NTC filter C", C04, 1),
  ("MCU", "Tag-Connect TC2030-NL programming pads (no part)", ("Connector", "Tag-Connect_TC2030-IDC-NL_2x03_P1.27mm_Vertical"), 1),
  ("SHUNT", "TXU0304 3-out/1-in translator (TSSOP-14 for sizing)", ("Package_SO", "TSSOP-14_4.4x5mm_P0.65mm"), 1),
  ("SHUNT", "translator decoupling", C04, 2), ("SHUNT", "OC input divider 5 V→3V3", R04, 2),
@@ -76,8 +78,8 @@ BOM = [
  ("CONN", "J1 sense flex FPC 12-pin ZIF (5 VC + 5 NTC + 2 GND)", ("Connector_FFC-FPC", "Hirose_FH12-12S-0.5SH_1x12-1MP_P0.50mm_Horizontal"), 1),
  ("CONN", "J2 Tesla shunt Micro-Fit 2×4", MF("Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal"), 1),
  ("CONN", "J3 power B+/LOAD+/GND Micro-Fit 1×3", MF("Molex_Micro-Fit_3.0_43650-0300_1x03_P3.00mm_Horizontal"), 1),
- ("CONN", "J4 outputs: GV14 coil ×2, charger relay ×2, inverter remote ×2, Micro-Fit 2×3", MF("Molex_Micro-Fit_3.0_43045-0600_2x03_P3.00mm_Horizontal"), 1),
- ("CONN", "J5 lid button + LED-board link (5V, GND, DATA, BTN), Micro-Fit 2×2... 2×3", MF("Molex_Micro-Fit_3.0_43045-0600_2x03_P3.00mm_Horizontal"), 1),
+ ("CONN", "J4 outputs: GV14 coil ×2, charger relay ×2, inverter remote ×2, AC-present sense, spare: Micro-Fit 2×4", MF("Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal"), 1),
+ ("CONN", "J5 LED link (5V, DATA, GND), button (BTN, GND), box-air NTC (NTC, GND), spare: Micro-Fit 2×4", MF("Molex_Micro-Fit_3.0_43045-0800_2x04_P3.00mm_Horizontal"), 1),
  ("MECH", "M3 mounting holes (Ø7 washer keep-out); one plated = IMD chassis ref", ("MountingHole", "MountingHole_3.2mm_M3_Pad"), 4),
 ]
 
