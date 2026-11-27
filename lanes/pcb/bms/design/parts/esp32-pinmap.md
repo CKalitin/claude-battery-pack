@@ -12,7 +12,7 @@ Available: GPIO1–18, 21, 35–48 = 33 (GPIO19/20 = USB D−/D+; GPIO0 = BOOT p
 | 4 | BOX_NTC_ADC | ADC1_CH3 | J9 |
 | 5 | FLEX_NTC4_ADC | ADC1_CH4 | moved off the BQ (review B1: DCHG becomes the charge gate) |
 | 6 | FLEX_NTC5_ADC | ADC1_CH5 | |
-| 7 | BOARD_NTC_ADC | ADC1_CH6 | 15 k bias |
+| 7 | BOARD_NTC_ADC | ADC1_CH6 | 33 k bias (ntc.md; review m8) |
 | 3 | SNS_PRE | in | **strap pin, no internal pulls, must not float**: the sense output has a pull-up, so it's defined at reset ✓ (JTAG strap ignored with default eFuses) |
 | 8 | SNS_GV14 | in | self-test |
 | 9 | SNS_RLY | in | self-test |
