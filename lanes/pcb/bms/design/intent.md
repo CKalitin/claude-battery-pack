@@ -24,10 +24,10 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | J | Edge | To | Pins | Signal levels and currents |
 |---|---|---|---|---|
 | J1 | −x | Sense flex (FPC 12-pin 0.5 mm ZIF) | VC0–VC4, 5 × NTC, GND ×2 | cells 0–14.6 V common-mode, µA; NTC 10 k ⚠️ part |
-| J2 | −x | Tesla shunt 1016792-00-C (2×4) | 5V, GND, NSS, SCK, MISO, MOSI, OC, spare | 5 V logic (VIH 3.5 V); SPI mode 0, 500 kHz; 5 V supply ≈ 30–50 mA ⚠️ |
+| J2 | −x | Tesla shunt 1016792-00-C (Micro-Fit 2×4, **or Mini-Fit Jr 2×5 taking the shunt's own pigtail directly if Chris's test-fit passes**: +281 mm², occupancy ≈ 59 %) | 5V, GND, NSS, SCK, MISO, MOSI, OC, spare | 5 V logic (VIH 3.5 V); SPI mode 0, 500 kHz; 5 V supply ≈ 30–50 mA ⚠️ |
 | J3 | −y | Power taps + chassis (**1×4**, Chris 2026-11-27) | B+, LOAD+, GND, CHASSIS (ring lug on a chassis screw, for the IMD) | B+ ≤ 5 A peak (coil pick-up 3.9 A, 75 ms); LOAD+ ≤ 1.46 A (precharge) |
 | J4 | +x | GV14 coil (1×2) | X1 (+ = B+ switched), X2 | 12 V coil; 3.9 A pick-up for 75 ms, 0.23 A hold (built-in economizer) |
-| J5 | +x | LED board (1×3) | 5V, DATA, GND | 5 V addressable LEDs that can show SOC % and look "extremely cool" (Chris); LED choice by pcb with main-battery (panel facts). 5 V rail sized for 3 A ⚠️ |
+| J5 | +x | LED board (1×3) | 5V (switched), DATA (5 V level), GND | ≈ 287 lit pixels on a 15.6 mm checkerboard lattice (main-battery, v16 grid ⚠️ option D may change it). 5 V WS2812-protocol RGB 2020 LEDs (Würth 1312020030000 proposed, Inolux IN-PI20TAT5R5G5B alternate ⚠️ audit in the LED-board phase). **Power cap ≤ 5 W typical / ≤ 10 W peak (2 A) in firmware** (main-battery: box cooling is marginal). High-side load switch so the LED rail is fully off when the display is off. Shows SOC as digits + a fill bar |
 | J6 | +y | Charger relay (1×3) | coil 86, coil 85, AC_SENSE | coil 12 V 90 Ω: 162 mA at 14.6 V; AC_SENSE 0–14.6 V, µA |
 | J7 | +y | Inverter CN301 (1×2) | dry contact | short = inverter remote OFF (NTS-400P-SPEC) |
 | J8 | +y | Lid button (1×2) | BTN, GND | momentary; wakes the BQ76952 via TS2; long press = off |
@@ -61,8 +61,8 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | ESP32-S3 Wi-Fi TX peaks | — | 350 mA peak, ≈ 100 mA average |
 | Tesla shunt module | 50 mA ⚠️ | — |
 | TXU0304, BQ76952 I²C pull-ups, LEDs (≈ 8 × 1 mA) | 5 mA | 15 mA |
-| LED board (J5) | **Q1** | — |
-| **Total without the LED board** | ≈ 55 mA + 3V3 rail | ≈ 365 mA peak |
+| LED board (J5) | ≤ 1 A typical, ≤ 2 A peak (firmware cap) | — |
+| **Total** | ≈ 2.5 A peak incl. the 3V3 rail's input → **5 V buck ≥ 3 A** | ≈ 365 mA peak |
 Coil currents (GV14, charger relay) come straight from B+ through their drivers, not from the 5 V rail.
 
 ## 6. Mechanical (from spec §4, final)
@@ -81,7 +81,7 @@ Coil currents (GV14, charger relay) come straight from B+ through their drivers,
 - Bring-up isolation: one 0 Ω link between the buck and its loads, so the 5 V rail can be checked before the ESP32 sees it ⚠️.
 
 ## 9. Answers (Chris, 2026-11-27) and what's left
-- Q1 LED board: pcb chooses, with main-battery (visibility, "extremely cool"), and it must show SOC % → addressable. **Open** until main-battery answers the panel facts.
+- Q1 LED board: decided with main-battery (panel facts in J5 row): addressable 5 V RGB 2020 behind each lit hole, 3 mm gap to the diffuser ⚠️, 10 W peak cap. ✓
 - Q2: ring lug, J3 → 1×4. ✓
 - Q3: Chris wants to plug in a USB-C cable to flash → **USB-C receptacle on the +y edge** (ESP32-S3 native USB-Serial-JTAG: flash, console, debug); VBUS feeds the 5 V rail through a diode, so a board with no pack can be flashed; IO0/EN pads as a fallback. Tag-Connect dropped. ⚠️ A laptop on an earthed charger joins pack− to earth through USB GND: the IMD will read it as an insulation fault while plugged in (expected; note it in firmware).
 - Q4 inverter remote: Chris wants **zero holding current to keep it off** → a **latching (bistable) signal relay** on CN301, set and reset by pulses (no current while holding either state; keeps its state through an ESP32 restart). A second pole reads the state back for self-test. PhotoMOS form A is the runner-up (3 mA while holding off). NTS-400P-SPEC 2026-03-26 says only "dry contact (by RELAY)" for CN301, with no pin reference, so a bare MOSFET isn't safe to assume ⚠️.
