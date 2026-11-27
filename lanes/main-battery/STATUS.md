@@ -9,8 +9,10 @@
   - Budget: `docs/budget.md`, ≈ $2,930, SCS ≈ $1,580.
   - New docs: `docs/afe.md`, `docs/enclosure.md`.
 - **Blockers / waiting on:**
-  - Chris: harness vendor; the existing shunt harness's far end and length.
-  - Zep's (NextPCB) reply.
+  - Chris: harness vendor. Loombotic quoted ≈ $2,245 for 5 assemblies; NextPCB estimate ≈ $495.
+  - Chris: shunt harness far end.
+  - Zep (NextPCB): reply on board sponsorship.
+  - Subagents: CAD (tower17) and shunt-connector identification, still running.
 - **In progress:** subagent `cad-tower17` (background) is building the option D CAD (tower17.py, run/clearance/assembly checks, harness routing + measured lengths, fast renders, cooling re-run, BOM) and commits as "main-battery (cad agent):". Don't edit cad/ while it runs.
 - **Next step:** review the CAD agent's result and relay it to Chris.
 - **Key decisions so far (with reasons):**

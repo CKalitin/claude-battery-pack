@@ -26,6 +26,21 @@
 | Molex off-the-shelf Micro-Fit cable assemblies (Digi-Key) | Catalog | Fixed lengths, straight-through | Only fits harnesses with Micro-Fit at both ends; we have none | ✗ not useful here |
 | WellPCB, OurPCB/cableharnessassembly.com, RushPCB, Miniproto | Quote by email or review | — | Fails W2, or no configurator found | ✗ |
 
+**Live quotes 2026-11-27 (pre-CAD lengths, drawings `docs/harness-drawings/harness_*_preCAD.pdf`, each with a BOM page; qty 1):**
+
+| Assembly | Loombotic instant quote (unit, qty 1) | qty 10+ | NextPCB tool estimate |
+|---|---|---|---|
+| A BMS LV harness (10 branches, GV14 consigned) | **$1,040.10** (quote #822) | $967.29 | $99 min, final after review |
+| B Charger DC set (3 cables) | **$236.84** (#823) | $220.26 | $99 min |
+| C Inverter DC set (2 cables, PP45) | **$277.77** (#824) | $258.33 | $99 min |
+| D Mains set | **$440.30** (#825) | $409.48 | $99 min |
+| E Fan pigtail (2 wires + XH) | **$249.56** (#826) | $232.09 | $99 min |
+| **Total** | **$2,244.57** | | ≈ $495 + review |
+
+- Loombotic has a floor of about $230–250 per design even for a 2-wire pigtail (E).
+- The first A quote (#820, drawing without a BOM) was $1,012.35. Without a BOM page, the B quote failed ("couldn't find a Bill of Materials").
+- These are instant AI quotes; Loombotic says an engineer reviews every order ⚠️.
+
 **Price and quality (searched 2026-11-27):**
 - **No independent reviews exist** for any of the three harness services (Loombotic: directory listing only; NextPCB: own pages only; PCBWay: no harness-specific reviews). All three claim IPC/WHMA-A-620, which is the quality bar to hold them to. Loombotic and NextPCB claim 100 % electrical test.
 - **Price is per design, not per wire.** NextPCB's $99 minimum per harness design means **15 separate harnesses ≈ $1,400** vs ≈ $105 in docs/budget.md.
@@ -50,7 +65,7 @@ Coordinates are option D (x front +, y, z up; mm). BMS connectors (pcb lane):
 |---|---|---|
 | −x | J1 sense-flex FPC (the flex's own tail) | — |
 | −x | J2 shunt, Micro-Fit 2×4 | per H1 |
-| −y (x −105…−84) | J3 power, 1×3 | B+, LOAD+, GND |
+| −y (x −105…−84) | J3 power, **1×4** | B+, LOAD+, GND, CHASSIS (IMD reference; Chris OK'd 2026-11-27) |
 | +x | J4 GV14 coil, 1×2 | X1, X2 |
 | +x | J5 LED board, 1×3 | 5V, DATA, GND |
 | +y (new edge, plug room y 40…65 confirmed free) | J6 charger relay, 1×3 | 86, 85, AC_SENSE |
@@ -65,6 +80,7 @@ Coordinates are option D (x front +, y, z up; mm). BMS connectors (pcb lane):
 |---|---|---|---|---|---|
 | **H1 Shunt** | Shunt pigtail receptacle → J2 | The existing harness is the module's pigtail, **soldered directly to the shunt module PCB** (Chris, 2026-11-27 ✓). Its free end is a **10-position 2×5 Mini-Fit-Jr-style receptacle, 8 loaded, non-catalog Tesla coding** (bridge between ckts 6–7, non-standard polarization). **No catalog mate known** ⚠️. H1 = a plug that mates with it → J2 ([tesla-shunt.md §3a](tesla-shunt.md)) | Candidate: Mini-Fit Jr. plug 39-01-3103 + 5558 terminals, **test fit first** ⚠️ | Receptacle ckt → signal: 1 VDD, 2 PC4, 3 MISO, 4 SCK, 5 OC_FLAG, 6 GND, 7 NSS, 8 MOSI, 9–10 empty. To J2 (proposal): VDD, GND, NSS, SCK, MISO, MOSI, OC_FLAG → J2-1…7; PC4 unused | ⚠️ length to confirm (v16.1 route 188 mm) |
 | **H2 Power taps** | B+ (in-bar, (135, −15, 256)); LOAD+ (2151 inverter stud (64, −37, 285)); GND (node A (−143, −55, 253)) → J3 | 3 × 18 AWG | B+: M6 ring + **Eaton ATM-FHID inline holder, 5 A ATM**; LOAD+: M10 (3/8″) ring + ATM-FHID, 2 A; GND: M8 ring ⚠️ (node-A bolt size unknown) | B+ → J3-1; LOAD+ → J3-2; GND → J3-3 | B+ ≈ 360, LOAD+ ≈ 280, GND ≈ 220 mm (holders within 178 mm of the ring, W3) |
+| **H2b IMD chassis reference** | J3-4 → ring lug under a rear-plate screw: top-row +y corner screw, ≈ (−158, +y wall, z ≈ 281) ⚠️ exact screw set by tower17 | 1 × 22 AWG green/yellow | M4 ring (rear-plate screws are M4 button heads) | CHASSIS → J3-4 | ≈ 100 mm |
 | **H3 Outputs** | J4 → GV14 coil; J6 → charger relay coil (+ AC sense); J7 → inverter CN301 | 6 × 20 AWG | GV14: its own **38 cm flying leads**, red X1+ / black X2−, terminated by the vendor at full length (no cut; W1, R7). Relay: 2 × 6.3 mm FASTON receptacles + boots on pins 85/86 ⚠️ (coil tab size to check). CN301: **JST XHP-2 + SXH-001T** | J4: X1, X2. J6: 86, 85, AC_SENSE. J7: CN301-1, CN301-2 (*proposals*) | GV14 ≈ 270 (lead 380 ✓), relay ≈ 310, CN301 ≈ 210 mm |
 | **H4 Lid + front** | J8 → lid button; J5 → LED board; J9 → box-air NTC | 2 + 3 + 2 | Button: its own terminals (part TBD ⚠️); LED link: Micro-Fit 1×3 (5 V, GND, DATA); NTC: 10 k NTC on a 2-wire lead, sealed tip, near the inverter AC end | J5: 5V, DATA, GND. J8: BTN, GND. J9: NTC, GND (*proposals*) | button ≈ 250 + 150 loop, LED ≈ 310, NTC ≈ 200 mm |
 | **H5 AC-present sense** | Charger side of the relay (−141, 66, 250) → BMS | 1 × 22 AWG + ring/FASTON piggyback | piggyback FASTON on relay pin 30 ⚠️ | → J6-3 AC_SENSE (*proposal*); no return wire (ground via J3) | ≈ 260 mm |
@@ -114,6 +130,6 @@ Coordinates are option D (x front +, y, z up; mm). BMS connectors (pcb lane):
 ## 7. Open items
 - tower17 CAD: route every harness and replace the ⚠️ lengths (W6 loops included); then quotes: NextPCB (live tool) and Loombotic (needs an account).
 - Chris: the existing shunt harness, its far-end connector and length (H1).
-- Chris: Loombotic vs NextPCB (sponsored?) vs PCBWay.
+- Chris: vendor. Loombotic ≈ $2,245 vs NextPCB ≈ $495 (estimate, or $0 if Zep sponsors) vs PCBWay (unquoted).
 - ⚠️ Parts still to pick: lid C14 inlet, NEMA 5-15R outlet, push-button, NTC lead, U.FL antenna (with their terminals).
 - ⚠️ Confirm: Tesla J1 housing, shunt node-A/B bolt size, relay coil tab size, fan lead wires and length, NPB-360 TB wire range for 10 AWG.
