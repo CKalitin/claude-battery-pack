@@ -9,9 +9,16 @@ Usage: python3 place.py W H [out.kicad_pcb]      e.g.  python3 place.py 90 55
 import sys, os, itertools
 import pcbnew
 from courtyards import BOM, LIB, crtyd_bbox
+FET = os.environ.get("PRE") == "fet"       # precharge by P-MOSFET instead of the G6S relay
+CC = os.environ.get("LAYOUT") == "cc"      # credit-card region template
+if FET:
+    S23 = ("Package_TO_SOT_SMD", "SOT-23"); R04 = ("Resistor_SMD", "R_0402_1005Metric")
+    BOM = [b for b in BOM if not (b[0] == "PRE" and "AC05" not in b[1])]
+    BOM += [("PRE", "precharge P-FET 40 V (SOT-23)", S23, 1), ("PRE", "gate pull-down N-FET", S23, 1),
+            ("PRE", "gate divider + pulldown", R04, 3)]
 
 W, H = float(sys.argv[1]), float(sys.argv[2])
-OUT = sys.argv[3] if len(sys.argv) > 3 else f"bms_area_{int(W)}x{int(H)}.kicad_pcb"
+OUT = sys.argv[3] if len(sys.argv) > 3 else f"bms_area_{W:g}x{H:g}{'_fet' if os.environ.get('PRE') == 'fet' else ''}.kicad_pcb"
 GAP = 0.2            # extra space between courtyards [mm] (courtyards already carry IPC-7351 excess)
 EDGE = 0.5           # courtyard to board edge [mm]
 
@@ -34,6 +41,21 @@ def regions(W, H):
         "PRE":     (W * 0.52 + GAP, H * 0.62, W - EDGE - CON_D - GAP, H - EDGE),
         "OUT":     (W * 0.70 + GAP, EDGE, W - EDGE - CON_D - GAP, H * 0.62 - GAP),
     }
+def regions_cc(W, H):
+    m = 8.6; c = EDGE + CON_D; b = H - EDGE - 7.6     # bottom strip holds the 28.3 mm AC05 lying along x
+    return {
+        "CONN_L": (EDGE, m, c, H - m), "CONN_R": (W - c, m, W - EDGE, H - m),
+        "CONN_B": (m, H - EDGE - 11.5, m + 16, H - EDGE),
+        "PRE":   (m + 16 + GAP, b, W - c - GAP, H - EDGE),
+        "AFE":   (c + GAP, EDGE, c + 24, H * 0.55),
+        "SHUNT": (c + GAP, H * 0.55 + GAP, c + 24, H - 12.2),
+        "MCU":   (c + 24 + GAP, EDGE, W * 0.70, H * 0.62 - GAP),
+        "OUT":   (W * 0.70 + GAP, EDGE, W - c - GAP, H * 0.62 - GAP),
+        "PWR":   (c + 24 + GAP, H * 0.62, W - c - GAP, b - GAP),
+    }
+if CC:
+    regions = regions_cc
+
 BLOCK_OF = {"AFE": "AFE", "IMD": "AFE", "BTN": "OUT", "MCU": "MCU", "TEST": "MCU", "SHUNT": "SHUNT", "PWR": "PWR",
             "COIL": "OUT", "CHGR": "OUT", "INV": "OUT", "PRE": "PRE"}
 CONN_EDGE = {"J1": "CONN_L", "J2": "CONN_L", "J3": "CONN_B", "J4": "CONN_R", "J5": "CONN_R"}

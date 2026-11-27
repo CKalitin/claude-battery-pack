@@ -81,6 +81,24 @@ The 150 × 90 claim (accepted into `spec/interface.md` §4, `aa40b9f`) is withdr
 - **No board fuse:** the 2 A ATM fuse at the copper end already protects both the wire and the board (best part is no part).
 - ⚠️ **GV14 pick-up current:** the coil draws 3.9 A for 75 ms at pick-up, through the B+ tap's **2 A ATM** fuse. Check the ATM fuse's time–current curve near 2× its rating (main-battery's harness).
 
+## 10. Credit-card attempt (85.6 × 53.98 mm, ISO 7810 ID-1), 2026-11-27
+Chris asked for credit-card size if it costs little effort and doesn't force a layout that won't work.
+
+| Variant | Courtyards [mm²] | Occupancy | Result |
+|---|---|---|---|
+| G6S precharge relay | 2,539 | 55 % | ✗ the 8.8 × 15.3 relay has no room beside the AC05 in the bottom strip |
+| **P-MOSFET precharge** (2 × SOT-23 + 3 × 0402 replace the relay and its driver) | 2,411 | **52 %** | **✓ 109 parts, 0 overlaps** (`PRE=fet LAYOUT=cc python3 bms-size/place.py 85.6 53.98`) |
+
+![credit card](bms_cc_fet_placement.png)
+
+**Plan:** the space claim stays 95 × 55 (accepted). The layout targets 85.6 × 53.98 and shrinks only if the real placement passes its gate. Area proofs show area and edges fit, not routability (§11).
+
+## 11. What the area proof does and doesn't prove
+- **Placed at real positions:** what decides fit (connectors on their edges and mating direction, M3 holes, the ESP32 module, the AC05, the TQFP-48).
+- **Not at real positions:** about 70 small passives (≈ 10 % of the area). Moving them to their pins doesn't change their area, but it does decide routing channels and pin escape. Their critical spot is the BQ76952's cell filters and NTC caps around the TQFP.
+- **Routability is estimated, not proven:** from occupancy (52–55 %, the "normal, 4-layer comfortable" band). It becomes proven only at the placement gate, with satellites at their pins and the ratsnest from the real schematic.
+- **If credit card fails there:** fall back to 95 × 55, which is already reserved.
+
 ## 8. Sources
 - KiCad 10.0.8 footprint libraries (`/usr/share/kicad/footprints`, PPA `kicad-10.0-releases`) ✓
 - TI BQ76952 datasheet SLUSE13B (Nov 2021): Table 16-3 unused pins, Figure 16-1 application ✓
