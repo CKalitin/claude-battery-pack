@@ -62,6 +62,8 @@
 - **NextPCB (Zep)** is the PCB sponsor (2026-11-25). Their offer (2026-11-26): either sponsor the front board's revisions, or a fixed amount per round. Chris prefers **front board only, fab + assembly, up to 3 rounds**.
 - **Flex PCB: shop around** (Chris, 2026-11-27). Don't commit the flex to NextPCB; quote it at several fabs and pick the cheapest that meets the spec.
 - PCBWay (Liam) declined politely on 2026-11-26; Chris would work with them on a later project.
+- **BMS board: fully assembled (PCBA) by NextPCB; PCBWay second choice** (Chris to the pcb lane, 2026-11-27; relayed by pcb, f959173). ⚠️ Open with Chris: the NextPCB offer above covers the front board only, and PCBWay declined on 2026-11-26.
+- **BMS schematic must be human-readable:** parts drawn wired together, not only connected by net labels (Chris to the pcb lane, 2026-11-27; relayed by pcb).
 - Assembly (PCBA) wanted on both boards, the flex included.
 
 ## 7. Open items Chris has asked for (carry until done)
