@@ -26,7 +26,7 @@ This is the baseline. There's no earlier version to compare against, so this sec
 | Electronics placement | Everything *above* the module, nothing beside it | **Kept.** v13 still puts the board and converters on decks above the cells. |
 | Compression | End plates with tie rods | **Kept.** The rod heights were finally optimised in v13. |
 | Cell carrier | MJF PA12 3D-printed carrier | Dropped in v05: not a SendCutSend process. |
-| Shell form | Shoebox | Replaced by the Tower A form in v02. |
+| Shell form | Shoebox | Replaced by the tower form in v02. |
 
 ## Energy check
 
@@ -50,7 +50,7 @@ $$E = N_s \cdot V_\text{nom} \cdot C = 8 \times 3.2 \times 50 = 1280\ \text{Wh}$
 
 ## Why it moved on
 
-The project goal shifted from "a box that works" to the **Tower A** design brief: end plates that double as handles and feet, plus a recognisable silhouette. v02 kept this internal stack unchanged and wrapped the new exterior around it.
+The project goal shifted from "a box that works" to the **tower** design brief: end plates that double as handles and feet, plus a recognisable silhouette. v02 kept this internal stack unchanged and wrapped the new exterior around it.
 
 ---
 [Version index](../README.md) · next → [v02–v03](../v02-v03-tower/README.md)

@@ -61,7 +61,7 @@ def shot(fname, title, meshes, hide=(), explode=None, view=(1.0, -1.15, 0.62), s
     except Exception:
         f1 = f2 = ImageFont.load_default()
     d.text((80, 60), title, fill="#EEEEEE", font=f1)
-    d.text((80, 135), "Tower A v9 cell module  |  4S1P EVE LF105, 12.8 V 105 Ah 1.34 kWh  |  187 x 164 x 212 mm  |  10.4 kg", fill="#AAAAAA", font=f2)
+    d.text((80, 135), "Claude battery pack v9 cell module  |  4S1P EVE LF105, 12.8 V 105 Ah 1.34 kWh  |  187 x 164 x 212 mm  |  10.4 kg", fill="#AAAAAA", font=f2)
     im.save(f)
 
 

@@ -61,7 +61,7 @@ def shot(fname, title, meshes, hide=(), explode=None, view=(1.0, -1.15, 0.62), s
     except Exception:
         f1 = f2 = ImageFont.load_default()
     d.text((80, 60), title, fill="#EEEEEE", font=f1)
-    d.text((80, 135), "Tower A v6  |  4S1P EVE LF100MA on edge, 12.8 V 1.28 kWh  |  180 x 269 body  |  all SendCutSend", fill="#AAAAAA", font=f2)
+    d.text((80, 135), "Claude battery pack v6  |  4S1P EVE LF100MA on edge, 12.8 V 1.28 kWh  |  180 x 269 body  |  all SendCutSend", fill="#AAAAAA", font=f2)
     im.save(f)
 
 MAT.update({"g10_frame": ("#C9C46A", 0.2, 1), "screws_strap": ("#C9CCD1", 0.6, 1)})

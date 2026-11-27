@@ -1,4 +1,4 @@
-"""Tower A v14: 4S2P EVE LF105 (12.8 V, 210 Ah, 2.69 kWh), 500 A for 30 s / 210 A continuous. Power train in bolted copper:
+"""Claude battery pack v14: 4S2P EVE LF105 (12.8 V, 210 Ah, 2.69 kWh), 500 A for 30 s / 210 A continuous. Power train in bolted copper:
 Class T JJN-500 -> TE EV200 contactor; Tesla shunt low side; MRBF branches; M10 terminal risers through the lid. Controls-only board.
 G10 deck 2 isolates the inverter. Checkerboard front panel for airflow; rear grille only inside the fan circle. See docs/v14-baseline.md.
 Was v13: v12 + body lead-in lip (30 deg, nests the lid facet), tie rods at 0.207h/0.793h, Z (joggle) pack straps.

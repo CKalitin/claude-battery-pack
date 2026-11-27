@@ -13,7 +13,7 @@ This doc records the whole exploration: what was tried, what was rejected and wh
 |---|---|---|
 | R1 | ≥ 1 kWh | Owner's principles list (`blog-notes.md`) |
 | R2 | Busbars on top: inspectable, torqueable, away from the shell | Owner, v06 rejection |
-| R3 | Narrow, tall "Tower A" proportion; body ≈ 190 mm wide | Design brief, v02 |
+| R3 | Narrow, tall tower proportion; body ≈ 190 mm wide | Design brief, v02 |
 | R4 | Few cells and few joints (assembly time) | Owner: "I will not spend 200 hours doing assembly" |
 | R5 | LFP chemistry: thermally stable, no BMS heroics | v01 decision |
 | R6 | Buyable from a stocked reseller with a real datasheet. No email-the-vendor parts | Owner's standing rule |

@@ -1,4 +1,4 @@
-"""Tower A v10: 8S1P LF105 (25.6 V, 105 Ah, 2.69 kWh), 24 V MEAN WELL gear. Was v9: inverter + control board stand side by side in front of the cells; one deck (charger) above.
+"""Claude battery pack v10: 8S1P LF105 (25.6 V, 105 Ah, 2.69 kWh), 24 V MEAN WELL gear. Was v9: inverter + control board stand side by side in front of the cells; one deck (charger) above.
 Was v8 compact: 4S1P EVE LF105 upright, busbars on top, control board standing in front of the cells, 270 inside.
 Every fabricated part made by SendCutSend. Module centred at x = 0; the shell and decks are placed around it.
 Units mm. x = length (front plate at +x), y = width, z = up. Body bottom at z = 0. One coordinate system for everything.

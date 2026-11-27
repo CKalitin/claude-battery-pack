@@ -1,6 +1,6 @@
 # Tesla Model S shunt module (1016792-00-C): pack integration notes
 
-This is the single source of truth for the shunt in Tower A. Reverse-engineering detail (netlist, protocol, firmware) lives in the shunt repo: [CKalitin/tesla-model-s-2012-shunt-resistor](https://github.com/CKalitin/tesla-model-s-2012-shunt-resistor).
+This is the single source of truth for the shunt in the pack. Reverse-engineering detail (netlist, protocol, firmware) lives in the shunt repo: [CKalitin/tesla-model-s-2012-shunt-resistor](https://github.com/CKalitin/tesla-model-s-2012-shunt-resistor).
 
 > ⚠️ Values marked **(U)** are **unconfirmed**: first hand measurements or one-count meter readings. Re-measure before freezing CAD or firmware constants.
 
@@ -15,12 +15,12 @@ This is the single source of truth for the shunt in Tower A. Reverse-engineering
 | Feature | Value |
 |---|---|
 | Bar | 1/8" (3.175 mm) copper, **35 × 83.5 mm** |
-| Bolts | On the long centre line, **15 mm from each end**, so **53.5 mm** apart. Thread and size **unknown** |
+| Bolts | On the long centre line, **15 mm from each end**, so **53.5 mm** apart. **Through bolts** (owner, 2026-11-24 ✓). Thread and size **unknown**: modelled as **M8** until measured ⚠️ |
 | Module PCB | **2 mm** thick, **25 mm** wide, centred along the bar; overhangs the bar's long edge by **8 mm**, so the footprint is **43 × 25 mm** |
 | Component height | **5 mm** above the copper |
-| Connector | **On top of the 8 mm overhang strip** (the part of the PCB that hangs past the bar's long edge), at one end of the module. Top is **5 mm above the PCB (7 mm above the copper)**. Wires exit **straight up**, normal to the bar. |
+| Connector | **On the side that overhangs the copper** (owner, 2026-11-24 ✓): **on top of the 8 mm overhang strip** (the part of the PCB that hangs past the bar's long edge), at one end of the module. Top is **5 mm above the PCB (7 mm above the copper)**. Wires exit **straight up**, normal to the bar. |
 | Keepout | Connector footprint × **≥ 35 mm** above the connector top, for the mated plug and the wire bend (estimate) |
-| Still unknown | Bolt thread, exact connector part number, which way the connector faces |
+| Still unknown | Bolt thread, exact connector part number, which way the connector faces, which end of the strip it sits at (v16 models the end away from node B ⚠️) |
 
 ## 3. Interface
 
@@ -93,6 +93,10 @@ An earlier attempt measured against the NUCLEO GND through a jumper and read abo
 - R_sh ≈ 20 µΩ.
 - Leaning towards VSS bonded at bolt "A". The sign flip on bolt "B" sits below one meter count, so this is **not conclusive**.
 - **Action:** physically mark bolt "A".
+
+## 6a. Harness (v16.1, modelled)
+- J1 plug (Mini-Fit Jr 2×5 envelope 9.6 × 21 × 13 mm ⚠️) on the **+x overhang**, the side facing the front board. Wires go straight up 30 mm, then +y to y 7 to stay out of the Z-strap's lift-out prism, over the contactor, and down into j_shunt (Micro-Fit 3.0 2×4) on the board's top edge. 7 × 22 AWG (J1 pins 1–7), 188 mm. Details: [signal-wiring.md](signal-wiring.md).
+- Board ground is a separate 18 AWG wire from a ring under the **node-A nut** (the cell side), per §5. J1 pin 2 still connects to the same ground through the bar, as analysed in §5.
 
 ## 7. Open items (deferred: characterise the shunt properly)
 

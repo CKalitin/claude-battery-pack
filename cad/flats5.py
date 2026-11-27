@@ -1,4 +1,4 @@
-"""Flat patterns for every SendCutSend part of Tower A v5 + DFM checks.
+"""Flat patterns for every SendCutSend part of Claude battery pack v5 + DFM checks.
 Bent parts are unfolded analytically with SCS's .063 5052 numbers (K .42, Ri .035"): BA = th*(Ri + K*T), OSSB = (Ri+T)*tan(th/2).
 DXF layers: CUT (profile + holes), BEND (bend centre lines). Units mm.
 """

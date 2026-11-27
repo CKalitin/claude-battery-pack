@@ -1,4 +1,4 @@
-"""FAST render of Tower A v14: plain v1-v11 style (flat colours, edge lines), ~10 s/view. Default for iteration."""
+"""FAST render of Claude battery pack v14: plain v1-v11 style (flat colours, edge lines), ~10 s/view. Default for iteration."""
 import os, glob, sys
 os.environ.setdefault("DISPLAY", ":99")
 import pyvista as pv
@@ -62,7 +62,7 @@ def shot(fname, title, meshes, hide=(), explode=None, view=(1.0, -1.15, 0.62), s
     except Exception:
         f1 = f2 = ImageFont.load_default()
     d.text((80, 60), title, fill="#EEEEEE", font=f1)
-    d.text((80, 135), "Tower A v14 (plain render)  |  4S2P EVE LF105, 12.8 V 210 Ah 2.69 kWh  |  500 A for 30 s", fill="#AAAAAA", font=f2)
+    d.text((80, 135), "Claude battery pack v14 (plain render)  |  4S2P EVE LF105, 12.8 V 210 Ah 2.69 kWh  |  500 A for 30 s", fill="#AAAAAA", font=f2)
     im.save(f)
 
 if __name__ == "__main__":
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     def keep(*pre):
         return {k: v for k, v in M.items() if k.startswith(pre)}
     if "all" in which or "hero" in which:
-        shot("v14p_01_hero.png", "Tower A v14", M, view=(1.0, -1.25, 0.55), focal=(0, 0, 175), dist=1150)
+        shot("v14p_01_hero.png", "Claude battery pack v14", M, view=(1.0, -1.25, 0.55), focal=(0, 0, 175), dist=1150)
     if "all" in which or "rear" in which:
         shot("v14p_02_rear.png", "Rear: full grid, NF-A14 exhaust", M, view=(-1.1, 0.9, 0.45), focal=(0, 0, 175), dist=1150)
     if "all" in which or "open" in which:

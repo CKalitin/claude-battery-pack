@@ -1,0 +1,33 @@
+v16 top-down assembly check (cad/assembly_v16.py). Each step's parts are swept out along their insertion path
+through everything installed before them; each nut gets a socket-wall check (thin-wall 3/8 in drive, OD in mm).
+
+[0 shell] 8 parts placed (reference: open body, rear plate and fan in place)
+[1 pack module (bench-built) lowered into the body] 33 parts; sweep 330 mm; CLEAR  (carriage bolts in both flange square holes before the collectors go on (+: M10 for the 5191, -: M8 node A))
+[2 tray 1 with the charger pre-screwed from below (bench) + plate standoffs] 8 parts; sweep 330 mm; CLEAR  (charger screws enter from under tray 1, so the charger rides in on the tray)
+[3 front board + diffuser lowered in front of the module] 21 parts; sweep 330 mm; CLEAR  (screws through the diffuser from the front (front plate still off); flex tail into the FPC from above)
+[4 front plate + light pipe (moves in along -x)] 3 parts; sweep 40 mm; CLEAR
+[5 power module (bench-built, flipped) lowered onto the standoffs, MRBF fuses not yet on] 31 parts; sweep 330 mm; CLEAR  (shunt-bar hole drops over the node-A bolt; on the bench the 2151 M10 nut is torqued before the SB175 + cheeks go on)
+    socket 23.5 mm on hw_m10nut_2151: clear
+[5b 2151 MRBF fuses (30 A, 50 A) onto their studs] 6 parts; sweep 150 mm; CLEAR  (body wall's top facets (y >= 88.6 above z 300): the module can't drop in with the fuses fitted)
+[6 node-A nut + GND ring] 3 parts; sweep 120 mm; CLEAR
+    socket 18.0 mm on hw_nut_nodeA: clear
+[7 Blue Sea 5191 + MRBF 250 A on the + flange M10] 7 parts; sweep 200 mm; CLEAR
+    socket 23.5 mm on hw_m10nut_main: clear
+[8 charger leads] 5 parts; sweep 120 mm; CLEAR
+    socket 18.0 mm on hw_nut_charger: clear
+[9 tray 2 + inverter (pre-screwed from below) onto the posts] 4 parts; sweep 330 mm; CLEAR
+[10 inverter leads (PP45 on), - nut, LOAD+ ring] 8 parts; sweep 120 mm; CLEAR
+    socket 18.0 mm on hw_nut_inverter: clear
+    socket 18.0 mm on hw_nut_neg_nodeB: clear
+[11 signal harness] 23 parts; sweep 80 mm; CLEAR
+[12 AC leads] 2 parts; sweep 80 mm; CLEAR
+[13 Z-strap (service disconnect) + B+ ring] 8 parts; sweep 150 mm; CLEAR  (the strap's 150 mm sweep doubles as the service check: it comes out with every lead in place)
+    socket 18.0 mm on hw_nut_main: clear
+    socket 15.0 mm on hw_nut_strapfoot: clear
+[14 lid with pass-throughs, button wired] 8 parts; sweep 120 mm; CLEAR  (plug j_btn before the lid closes)
+[service] fuse replacement, lid off: lug + nut + leads on that stud moved aside, fuse lifted 150 mm
+    bs5191_fuse_0: CLEAR
+    bs2151_fuse_0: CLEAR
+    bs2151_fuse_1: CLEAR
+parts not in any step: ['term_chg_dc_tb', 'term_chg_sig_df11', 'term_chg_ac_c14', 'term_inv_dc_pp45', 'term_inv_sig_cn301', 'term_inv_ac_cn500']
+(77 s)

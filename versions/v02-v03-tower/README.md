@@ -1,4 +1,4 @@
-# v02–v03 · Tower A exterior
+# v02–v03 · Tower exterior
 
 > **The design gets its identity:** a red U-body between two aluminium end plates that act as both handles and feet. v03 adds the 120 V charger and inverter on decks above the cells.
 
@@ -20,7 +20,7 @@
 
 | Aspect | v01 | v02–v03 |
 |---|---|---|
-| Exterior | Shoebox shell | U-body plus two structural end plates (Tower A) |
+| Exterior | Shoebox shell | U-body plus two structural end plates (tower form) |
 | Carrying | None | Handle slots in both end plates, 52 mm above the body |
 | Standing | Shell floor | End-plate feet, 18 mm below the body |
 | Lid joint | Flanged lid | Joggle lip that sits flush inside the U |

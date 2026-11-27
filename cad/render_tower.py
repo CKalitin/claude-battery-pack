@@ -67,13 +67,13 @@ def shot(fname, title, hide=(), only=None, explode=False, view=(1.0, -1.15, 0.62
     p.camera.zoom(zoom)
     tc = "#EEEEEE" if dark else "#111111"
     p.add_text(title, position=(50, size[1] - 80), font_size=15, color=tc, font="arial")
-    p.add_text("Tower A  |  1.28 kWh 8S LFP  |  300 x 206 x 349 mm  |  build123d", position=(50, size[1] - 118),
+    p.add_text("Claude battery pack  |  1.28 kWh 8S LFP  |  300 x 206 x 349 mm  |  build123d", position=(50, size[1] - 118),
                font_size=9, color="#9A9AA0", font="courier")
     p.screenshot(os.path.join(OUT, fname))
     p.close()
 
 INT = ("int_cell", "int_carrier", "int_liner", "int_busbar", "int_riser", "int_flex", "int_power", "int_bms", "int_imd", "int_mica", "int_comp", "int_pwr_contactor", "int_pwr_fuse", "int_pwr_shunt", "int_pwr_precharge")
-shot("t_hero.png", "Tower A", hide=INT + ("ledboard",), zoom=1.15)
+shot("t_hero.png", "Claude battery pack", hide=INT + ("ledboard",), zoom=1.15)
 #shot("t_front.png", "Front plate: WE WILL WIN", hide=INT, view=(1, 0.0001, 0), parallel=True, zoom=1.25, size=(1400, 1800))
 shot("t_exploded.png", "Exploded: plates, U body, lid", explode=True, view=(1.0, -1.3, 0.75), zoom=1.05, size=(1800, 1500))
 shot("t_cutaway.png", "Section: internals inside the U", hide=("lid", "pem_lid", "plate_front", "screws_f", "feet_f", "pipe_f"),
