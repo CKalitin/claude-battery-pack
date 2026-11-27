@@ -59,3 +59,13 @@ No power current on the board. The CAN transceiver and the pack-fan header are d
 | Antenna | U.FL coax from the WROOM-1U to a flex antenna behind the clear acrylic light-pipe slot in the front plate, as in v16; ≈ 150–200 mm coax ⚠️. The lid and shell are aluminium, so a PCB antenna under the lid won't radiate | signal-wiring.md |
 | Taps | B+ = in-bar after the main fuse, before the GV14; LOAD+ = 2151 inverter-fuse stud. 18 AWG. **B+ fuse 5 A ATM** (was 2 A: the GV14's 3.9 A, 75 ms pick-up is 195 % of a 2 A fuse; 5 A still protects 18 AWG). LOAD+ fuse 2 A ATM (precharge peak 1.46 A) | signal-wiring.md §3b–3d; pcb 2026-11-27 |
 | IMD chassis reference | The BMS board sits on the G10 bridge, so no mounting hole reaches chassis metal. Instead, one 22 AWG lead from J3-4 to an M4 ring under a rear-plate screw (top-row +y corner ⚠️, tower17 sets it). Replaces v16's plated mounting hole (Chris OK'd, 2026-11-27) | harnesses.md H2b |
+
+## 5. Front LED board (pcb lane; NextPCB sponsored)
+| Item | Value | Ref |
+|---|---|---|
+| Pixels | ≈ 287 lit pixels on the front checkerboard ((k+j) even; pitch 7.78125 mm; "WE WILL WIN" dark). ⚠️ Option D grid (≈ 19 cols) set by tower17 | tower15 front_holes / air_holes |
+| LEDs | 5 V addressable RGB 2020, one per lit pixel: Würth WL-ICLED 1312020030000 (alt. Inolux IN-PI20TAT5R5G5B) ⚠️ audit pending | pcb 2026-11-27 |
+| Power | Firmware cap **≤ 5 W typical, ≤ 10 W peak** (full white ≈ 86 W is not allowed; front = air exit, cooling marginal). LED rail switched fully off by a load switch on the BMS when the display is off | converters.md §4; pcb |
+| Stack | Front plate (6061 .125, Ø4.8) → 2.5 mm → white acrylic diffuser 3.0 mm (Ø6 air holes) → **3 mm gap** (spacers on the 4 M3 standoffs) ⚠️ tentative until a mock-up → LED board 1.6 mm (LEDs on its front face) → standoffs to the module front end plate | pcb 2026-11-27 |
+| Link | J5 (5V, DATA, GND) from the BMS | §4 |
+| Display | Digits on the 15.6 mm lit lattice + full-height SOC fill bar | pcb |
