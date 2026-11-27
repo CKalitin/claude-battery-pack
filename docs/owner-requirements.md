@@ -34,6 +34,7 @@
 | Tall, narrow tower proportions; cells upright (on-edge and squat layouts rejected) | early |
 | Charger and inverter stacked; control electronics on the front PCB's back, facing the bay | v12–v15 |
 | Don't grow the envelope without a reason; no dead space. **2026-11-27: Chris dislikes the empty rear end (fan + AC column + cell-level void, ≈ 91 mm behind the module) — layout to be reworked** | early / 2026-11-27 |
+| **Cells are the dominant constraint: everything above the cells (converters, power bay, control board) fits inside the plan footprint of the cells' top faces; nothing goes past it.** "We're setting the area as the top of the cells as the constraint, and you're not allowed to go above that." The charger and inverter caused the overrun, so replace them (handoff-converters.md) ⚠️ footprint = cans (295 × 130) or module (312 × 158) not yet confirmed | 2026-11-27 |
 | Full rear hole grid (looks better) | v14 |
 | Roadster-red gloss powder coat on the shell | v12 |
 | The pack has no name. Never "Tower A" | 2026-11-24 |
@@ -61,7 +62,8 @@
 - Assembly (PCBA) wanted on both boards, the flex included.
 
 ## 7. Open items Chris has asked for (carry until done)
-- Rework the layout so the rear void disappears (2026-11-27: "take two steps back… I want to solve this problem", not a 10 mm trim): study in architecture.md, **Chris picked B (side power spine) on 2026-11-27.** **Keep the GV14 contactor** (Chris, 2026-11-27), so W 190 → 204 mm: the 55.7 mm contactor body passes beside the 135 mm charger, and a 190 box leaves a 48.8 mm strip (13.3 mm short). See option_b_width.png. Packing check then showed W 204 is too narrow for an all-busbar spine; awaiting choice B1/B2 (architecture.md §4a).
+- Rework the layout so the rear void disappears (2026-11-27: "take two steps back… I want to solve this problem", not a 10 mm trim): study in architecture.md, **Chris picked B (side power spine) on 2026-11-27.** **Keep the GV14 contactor** (Chris, 2026-11-27), so W 190 → 204 mm: the 55.7 mm contactor body passes beside the 135 mm charger, and a 190 box leaves a 48.8 mm strip (13.3 mm short). See option_b_width.png. Packing check then showed W 204 is too narrow for an all-busbar spine; awaiting choice B1/B2 (architecture.md §4a). **Superseded the same day:** Chris traced the root cause to the charger and inverter and reopened their selection under the cell-footprint rule (§3). Option B is paused; see `docs/handoff-converters.md`.
+- **Find a new charger + inverter (or a combined unit) that fits within the cells' top-face footprint** (2026-11-27; `docs/handoff-converters.md`). Work moves to Chris's own server.
 - Inverter 400 W continuous: bench test, then decide the cooling fix (cooling.md).
 - Control board schematic: a separate agent, later.
 - Send the Zep reply (draft in Gmail).

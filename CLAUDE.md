@@ -3,6 +3,8 @@
 Owner: Chris Kalitin. Goal: Claude designs a complete, beautiful ~1 kWh+ battery pack end to end. Current version **v16.3** (C1 power module, Blue Sea 5191/2151 fuse blocks, pack 424 mm inside with AC at the rear; v16.1 adds the modelled signal wiring, the top-down assembly proof and the cooling re-run; v16.2 makes the pack busbars bend-legal Zs, D28; v16.3: Mylar insulators, SCS ≈ $1,825 under the $2,000 sponsorship cap, coil leads, structure check — docs/structure.md). See `versions/v16-c1-power-module/README.md`, `docs/v16-decisions.md` (D1–D35), `docs/v16-calcs.txt`, `docs/signal-wiring.md`, `docs/cooling.md`, `docs/v16-assembly-check.txt`, `docs/contactor-mounting.md`.
 
 ## Read first
+**START HERE (2026-11-27): `docs/handoff-converters.md`. Current task: replace the charger and inverter so everything fits within the cells' top-face footprint. Option B / W 204 is paused.**
+
 0. **`docs/owner-requirements.md`: every requirement and standing decision from Chris, dated. Chat memory is not kept between sessions: when Chris states a requirement or decision, add it there in the same session.**
 1. `docs/v14-baseline.md`: one-page spec.
 2. `docs/v14-design-review.md`: decisions (§0) and every issue found.
@@ -96,7 +98,7 @@ Both read the STLs that `run_tower14.py` writes, so rebuild first. Run renders i
 - ⚠️ **Inverter at 400 W continuous isn't proven**: the pack fan gives it 0.2–0.6× MEAN WELL's forced-air condition (docs/cooling.md). Bench test; then rear blanking sheet or the MEAN WELL 4020 fan.
 - ⚠️ Tesla J1 part number and strip end (docs/signal-wiring.md §7). NPB-450 DF11 pinout and GV141BAX coil exit closed 2026-11-27.
 - ✓ EOL swelling: M6 316 A4-70 rods (D36). ⚠️ end-plate local stress at the nuts at 30 kN not modelled.
-- ⚠️ **Architecture rework (D38, docs/architecture.md): side power spine + 2 × 92 mm fans recommended; owner chose B + GV14 (W 204), 2026-11-27; next: CAD sandbox.**
+- ⚠️ **Architecture rework (D38, docs/architecture.md): B + GV14 (W 204) chosen, then paused 2026-11-27. The new rule is that everything fits within the cell top-face footprint; next is a new charger and inverter (docs/handoff-converters.md).**
 - ⚠️ 4020 inverter fan doesn't fit (35.8 mm under the lid, docs/cooling.md option C). NTS-400P terminal side confirmed from MEAN WELL's photo (TB1 at +y).
 - Pack busbars are bend-legal Zs since v16.2 (D28) but still priced as v16.1 flat .187 blanks ⚠️ re-quote bent; ⚠️ 14 mm band neck under the − riser (4.9 A/mm²). G10 .063/.125 out of stock at SCS (docs/v16-bom.md).
 
