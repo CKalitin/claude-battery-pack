@@ -71,7 +71,7 @@ Where it goes: a subsystem gets its own `docs/<topic>.md` (as `cells.md` and `te
 - **BQ76952:** chosen in early versions with no recorded comparison.
 - **Enclosure material and Roadster-red powder coat:** no rationale or SendCutSend finish options recorded.
 - **Service bays (`v14-design-notes.md` §12):** only option 2, the chosen one, is written up. Options 1 and 3, and the diagrams of them, aren't in the repo.
-- **Budget (README):** prices undated and unsourced, and it predates v14.
+- ~~**Budget (README):** undated~~ → `docs/budget.md` (option D, dated, 2026-11-27).
 - **Full Battery:** named as the vendor in v07–v13 with no reason given.
 
 ## Rendering: two renderers
