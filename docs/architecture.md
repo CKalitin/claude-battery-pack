@@ -68,6 +68,32 @@ Figure rows A–C; the rest are evaluated in the table only.
 - ⚠️ **Cooling.** The pressure-flow curve with two 92 mm fans and a different flow path has to be re-run (`cooling_v16.py`). Moving the inverter against the −y wall changes its side gap.
 - ⚠️ **Re-done downstream:** shell flats, the SCS quote (shorter but wider; expected cheaper), the harness, the assembly order and the structure check.
 
+## 4a. Spine packing check (2026-11-27, before CAD): W 204 as approved does not fit
+Figure: `versions/v16-c1-power-module/renders/spine_packing.png` (`cad/analysis/spine_packing_fig.py`).
+- **The strip** runs from the fan face to the front board's back parts: x −131.9 to 152, so **284 mm**. At W 204 it is 59.8 mm wide beside the charger.
+- **In single file the bay parts need ≈ 390 mm:**
+
+| Part | Length [mm] |
+|---|---|
+| Shunt | 83.5 |
+| SB175 | 55.6 |
+| GV14 | 72.5 |
+| 5191 | 62 |
+| 2151 | 88.5 |
+| Gaps | ≈ 30 |
+
+- **Parts can only share the width in pairs:**
+  - 5191 + 2151 (both +, 23 + 23 mm with fuses) fit side by side in 59.8.
+  - Shunt + SB175 (35 + 25.4 + 10 mm for +/−) = 70 do not.
+- **Strip volume:** 284 × 59.8 × 97 = 1.6 L, against ≈ 2.3 L for the v16 bay. The study's "≈ 0 void" for W 204 was wrong: the strip was not packed before it was claimed.
+
+| Fix | Strip use | Cost |
+|---|---|---|
+| **B1: W 204, SB175 off the plane** (two short 1/0 AWG leads from the plane up to an SB175 held in the lid), 5191 beside the 2151 | 272 of 284 mm | +2 cables, +4 lugs; breaks "busbars, not cables" for the output only |
+| **B2: W 225** (+35 vs today), everything bolted to the plane in two lanes (shunt + SB175, 5191 + 2151) | 272 of 284 mm | Box 334 × 225 × 320 inside, ≈ 23.6 L (−6 % vs A, no void); squatter |
+| Shunt or bay at cell level beside the cells (21 mm slot, y 79–100) | — | ✗ bolts sideways; the rods sit in the slot |
+| Shunt on a raised plane over the fuses | — | ✗ fuses can't lift out |
+
 ## 5. Recommendation
 Adopt B: a side power spine plus twin 92 mm fans. Build it first as a sandbox in `cad/concepts/` against the current module, and prove the spine packing and the assembly sweep before changing `tower15.py`. Owner decisions needed:
 1. W +14 mm (GV14), or a FET switch at W 190.
