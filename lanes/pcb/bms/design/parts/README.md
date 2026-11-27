@@ -38,7 +38,7 @@ U1 and U2 are audited by the pcb session; the rest by `pcb-bms-part-audits`. ✓
 | Load | Typ [µA] | Datasheet max [µA] |
 |---|---|---|
 | BQ76952 ([bq76952.md](bq76952.md)) | 1.0 | 3.1 |
-| IMD divider, doubled: 14.6 V / 6.4 MΩ (decisions B7) | 2.3 | 2.3 |
+| IMD divider (pcb's; value from decisions B7, update if raised) | 2.3 | 2.3 |
 | Buck LMR60430 | 0.7 | 1.0 |
 | B+ TVS | ≪ 1 | 1.0 |
 | Precharge P-FETs (series) + NPNs | ≈ 0.1 | 1.1 |
@@ -59,9 +59,10 @@ U1 and U2 are audited by the pcb session; the rest by `pcb-bms-part-audits`. ✓
 3. TVS is SMAJ15A, also on LOAD+.
 4. Button: 1 kΩ + TVS to TS2 and a **BAS116 to the ESP32 pin** (else the dead ESP32 holds TS2 low).
 5. Inverter remote: latching relay; "safe state with no firmware" = **unchanged** (initialise at boot).
-6. USB VBUS feeds the **3.3 V LDO through a power mux**, not the 5 V rail (a direct diode would back-feed the buck and the LEDs).
+6. USB VBUS feeds the **3.3 V LDO through a power mux**, not the 5 V rail: the buck cannot be back-driven at its output (usb-c.md §4a).
 7. Self-test replaces per-output LEDs: 5 digital GPIOs (+1 optional), 0 ADC.
 8. LED rail via an eFuse (2.58 A limit); data buffer powered from the switched rail.
+9. Test points: rails only (§8); no output test points. Tag-Connect is replaced by USB-C plus IO0/EN/GND pads.
 
 ## For other lanes
 - Harness (main-battery): Micro-Fit **wire insulation ≤ 1.85 mm**; 18 AWG terminal 43030-0038; box NTC lead is AWG30.

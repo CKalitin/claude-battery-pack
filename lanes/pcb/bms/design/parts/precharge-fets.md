@@ -75,7 +75,6 @@ Q I_DSS ≤ 1 µA at 25 °C (≤ 15 µA at 70 °C, spec at −40 V) in series; t
 | R_be | 100 kΩ | 0402 |
 | R_M | **22 kΩ mid node → GND** (self-test bleed; 0.66 mA when Q1 is on) | 0603 |
 | Sense | `SNS_PRE` BSS138 gate sense on the mid node ([self-test.md](self-test.md)); LOAD+ via BQ PACK | no indicator LEDs (Chris, 2026-11-27) |
-| TP | each gate, mid node, Q2 drain | |
 
 ## 8. Rules / traps
 - Q2's source is the mid node: its R_gs and C_gs go to the **mid node**, not B+.

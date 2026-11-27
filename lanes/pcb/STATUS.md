@@ -1,9 +1,9 @@
 # pcb status
 
-Current task: BMS board phase 1, part selection and datasheet audits (BQ76952 + ESP32 by me; support parts by teammate `pcb-bms-part-audits`)
+Current task: BMS phase 1 gate: independent parts review (`pcb-review-parts`) running on 15 audits
 Blockers: none hard. Chris: sign off `lanes/pcb/bms/design/intent.md` (phase 0) before the schematic starts. main-battery: shunt pigtail test-fit (J2 Micro-Fit 2×4 vs Mini-Fit Jr 2×5)
-Next step: teammate round 2 (latching relay, USB-C, LED switch and buffer, J3 1×4, J2 Mini-Fit Jr option, self-test senses); then the phase 1 gate with a pcb-review-parts reviewer
-Last result: round 1 of the support-part audits committed (11 audits, 45 datasheets). Key findings: GV14 FETs must be 100 V (Sensata forbids an external coil diode); charger relay needs no flyback (clamping FET). IMD resistance doubled for sleep current
+Next step: fix the review findings, close the phase 1 gate, then the schematic (after Chris signs off intent.md)
+Last result: all part audits committed (619abc4): latching relay KEMET EE2 for the inverter remote (zero holding current), USB-C via a TPS2116 mux to 3V3 only, LED eFuse TPS259530, digital self-test senses, J3 1×4. Teammate pcb-bms-part-audits shut down
 
 ## Notes
 - Project: `lanes/pcb/bms/` (design/intent.md, parts/, datasheets/, decisions.md). Size proof: `lanes/pcb/bms-area.md`. Skills: `lanes/pcb/skills/` (pcb-design, pcb-review), linked into `~/.claude/skills/`. kicad-happy v3.0.2 is the second reviewer.

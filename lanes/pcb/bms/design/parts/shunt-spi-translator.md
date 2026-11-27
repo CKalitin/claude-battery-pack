@@ -36,7 +36,7 @@ TXU0104 / TXB0104: ✗ wrong directions / auto-direction.
 | 5 / 10 | A4Y ← B4 | MISO | |
 | 6, 9 | NC | open | |
 | 7 | GND | | |
-| 8 | OE | 3V3 through 10 kΩ; TP | floating or low = all outputs Hi-Z (§9.1) |
+| 8 | OE | 3V3 through 10 kΩ | floating or low = all outputs Hi-Z (§9.1) |
 | 14 | VCCB | 5V | 100 nF |
 
 - Inputs have ≈ 5 MΩ internal pull-downs (§9.3.1): unused/unplugged MISO sits low. External pull-ups ≤ 1 MΩ ✓.

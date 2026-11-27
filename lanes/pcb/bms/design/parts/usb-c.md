@@ -33,11 +33,20 @@ USB4105: 48 V; 5 A over the VBUS pins; −40…+85 °C; 20 000 cycles; shell sta
 Layout: D+/D− as a 90 Ω differential pair, receptacle → USBLC6 → resistors → module, no stubs.
 
 ## 4. Power: VBUS → mux → LDO only
+
+### 4a. Can the buck be back-driven at its output? **No.**
+| LMR60430 datasheet (SNAS875E) | Says |
+|---|---|
+| §6.1 abs max | SW to PGND ≤ **V_IN + 0.3 V** |
+| §8.3 | if the input falls below the output, "the output capacitors discharge through the device back to the input. This uncontrolled current flow can damage the device." |
+With no pack (V_IN = 0), a diode from VBUS into the 5 V rail drives SW through L1 to ≈ 4.6 V: the high-side body diode conducts into B+, past the abs max, and tries to power the whole B+ net from the laptop. **So VBUS must not reach the buck output** (the brief's "VBUS → diode → 5 V rail" needs a second blocking element in the buck path, or has to join downstream).
+
 | Option | Back-feed | Drop | Verdict |
 |---|---|---|---|
 | One Schottky VBUS → 5 V rail | **drives the buck output with VIN = 0** (through the high-side body diode into B+) and lets USB feed the LEDs | 0.3–0.5 V | ✗ R3 |
 | Two Schottkys OR into the LDO input | blocked | 0.3–0.5 V both paths; reverse leakage µA–mA hot | works, two parts |
 | 2 × LM66100 ideal diodes | blocked | low | two parts (not audited) |
+| Ideal-diode mux into the **whole 5 V rail** (TI TPS2121, 4.5 A, 56 mΩ typ, VQFN-HR 2 × 2.5; SLVSEA3F) | blocked both ways, buck protected | ≈ 0.14 V at 2.45 A: rail min ≈ 4.76 V vs the shunt's 4.7 V ⚠️ | works and matches the brief literally; ✗ puts a part in the 3 A path, ≈ 200 µA while running, USB can reach the LEDs and shunt (needs firmware care), one more fine-pitch footprint |
 | **TPS2116** priority mux into the LDO input | **reverse-current blocking on both inputs** | 40 mΩ | **✓ one part** |
 
 ```

@@ -82,9 +82,9 @@ Q_BQ (upper) source = lower drain, ≈ 0.1 V at pick-up → V_GS ≈ 4.9 V ✓.
 
 **Pick-up voltage at the coil, pack 10.0 V** (⚠️ estimated path resistances): ATM 5 A fuse ≈ 18 mΩ, 4 Micro-Fit contacts ≤ 40 mΩ, coil leads 2 × 0.38 m 20 AWG ≈ 26 mΩ, harness 18 AWG ≈ 8 mΩ, board ≈ 20 mΩ, FETs ≤ 62 mΩ → ≈ 0.17 Ω → 0.68 V → **9.3 V ≥ 8 V** ✓. With a hot coil (+14 % at 60 °C, pick-up ≈ 9.1 V ⚠️) the margin is only 0.2 V at 10 V: firmware shouldn't close below ≈ 10.5 V.
 
-## 9. Self-test and test points
+## 9. Self-test
 - No indicator LED (Chris, 2026-11-27). `SNS_GV14` senses X2 (BSS138 gate sense): both-FET short, single-FET short (each tested alone), open coil and shorted coil. Procedure in [self-test.md](self-test.md).
-- TP on X2, both gates, both buffer inputs.
+- No output test points or force hooks (Chris); firmware reads the node.
 
 ## 10. Layout
 Power loop J3 → J4 → Q_BQ → Q_ESP → GND: ≥ 2 mm traces (3.9 A pulse). Creepage on X2 ≥ 80 V: ≥ 0.6 mm to logic.

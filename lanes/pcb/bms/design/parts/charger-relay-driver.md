@@ -57,7 +57,6 @@
 | R_pd | 100 kΩ gate → GND | off while GPIO floats (R2) |
 | R_g | 100 Ω–1 kΩ optional | not required |
 | Self-test | `SNS_RLY` BSS138 gate sense on the drain ([self-test.md](self-test.md)) | no indicator LED (Chris, 2026-11-27) |
-| TP | gate, drain | |
 
 ## 8. Sleep leakage
 I_DSS ≤ 0.5 µA at 12 V, ≤ 50 µA at 60 V (25 °C). At 14.6 V ≈ 0.5–1 µA ⚠️.

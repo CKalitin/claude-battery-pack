@@ -9,6 +9,8 @@ NODE ──100k (0603)──┬── G  BSS138  D ── GPIO (internal pull-up
 GPIO LOW  = node high (> 1.5 V)      GPIO HIGH = node low (< 0.75 V)
 ```
 
+No per-output LEDs, no force hooks and no test points on switched outputs (Chris): only the rail test points of intent §8 (B+, LOAD+, 5V, 3V3, REG1, GND) and the USB port's IO0/EN/GND pads.
+
 ## 1. Requirements
 | # | Requirement | From |
 |---|---|---|
