@@ -1,9 +1,9 @@
 # pcb status
 
-Current task: BMS phase 1 gate: independent re-check of the review fixes (`pcb-review-parts-recheck` running)
-Blockers: none hard. Chris: sign off `lanes/pcb/bms/design/intent.md` (phase 0) before the schematic starts. main-battery: shunt pigtail test-fit (J2 Micro-Fit 2×4 vs Mini-Fit Jr 2×5)
-Next step: review the teammate's fixes, a short re-review, close the phase 1 gate, then the schematic (after Chris signs off intent.md)
-Last result: every review finding addressed and committed (6c47ab5): charger relay needs ESP32 AND BQ DCHG; mandatory OTP with a 31-row register list and bench procedure; precharge pump fails safe (simulated); full part values; pin map moves CHG_RLY_EN off GPIO39 (reset pull-up)
+Current task: BMS phase 1 gate PASSED; waiting for Chris's intent sign-off to start the schematic
+Blockers: Chris: sign off lanes/pcb/bms/design/intent.md (BMS requirements) so the schematic can start
+Next step: after sign-off, phase 3 schematic (hierarchical, wired, Chris's HVC style) with schlib + a pcb-review-schematic reviewer
+Last result: phase 1 closed (gates/phase1.md) after two independent reviews. The re-check's R1 blocker is fixed: the BQ setting that would have stopped DDSG/DCHG ever enabling the contactor and charger relay
 
 ## Notes
 - Project: `lanes/pcb/bms/` (design/intent.md, parts/, datasheets/, decisions.md). Size proof: `lanes/pcb/bms-area.md`. Skills: `lanes/pcb/skills/` (pcb-design, pcb-review), linked into `~/.claude/skills/`. kicad-happy v3.0.2 is the second reviewer.
