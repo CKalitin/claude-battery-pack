@@ -7,7 +7,7 @@
 |---|---|---|
 | R1 | pcb designs the board autonomously: minor part selection (ESP32 and BQ76952 fixed), schematic, routing | Chris 2026-11-27 |
 | R2 | Human-readable schematic: parts actually wired, not net labels only | Chris 2026-11-27 |
-| R3 | BMS board entirely PCBA by **PCBWay** (replaces "NextPCB, PCBWay second"); front/LED board by NextPCB | Chris 2026-11-27, relayed by main-battery; owner-requirements §6 |
+| R3 | BMS board entirely PCBA by **PCBWay, or possibly NextPCB** (Chris 2026-11-27: "we may use NextPCB for this board"; not final). Design to the rules both fabs meet; pick the fab at order time. Earlier: (replaces "NextPCB, PCBWay second"); front/LED board by NextPCB | Chris 2026-11-27, relayed by main-battery; owner-requirements §6 |
 | R4 | Meets the standard of an experienced PCB designer (UBC Solar) | Chris 2026-11-27 |
 
 ## Candidates

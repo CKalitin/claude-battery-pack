@@ -10,4 +10,4 @@
   - 95 × 55 mm: courtyards 2,421 mm² from real footprints; 49 % occupancy sits in the 40–60 % "4-layer comfortable" band.
   - 150 × 90 withdrawn: built on guessed allowances 3× too high (trap T1 in bms-area.md).
   - Plugs on the −x and +x edges and the rear of the −y edge.
-  - BMS fab: PCBWay full PCBA (Chris).
+  - BMS fab: PCBWay full PCBA, **or possibly NextPCB** (Chris, 2026-11-27, not final). Design to both fabs' common rules; MPN-based BOM works at both.
