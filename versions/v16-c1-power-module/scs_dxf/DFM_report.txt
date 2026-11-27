@@ -1,0 +1,29 @@
+SCS 5052 .063: BA90 2.452  OSSB90 2.489  BD90 2.526 mm (SCS lists .096" = 2.438)
+               BA30 0.817  OSSB30 0.667  BD30 0.517
+body_half_A: flat (504.0, 414.4)  bends [(98.0, 30, 'down'), (112.5, 30, 'down'), (127.0, 30, 'down'), (404.7, 30, 'down')] + 8 tab bends
+  segment 0: flat 97.6 mm  (need >= 6.5)  OK
+  segment 1: flat 13.7 mm  (need >= 6.6)  OK
+  segment 2: flat 13.7 mm  (need >= 6.6)  OK
+  segment 3: flat 276.9 mm  (need >= 6.6)  OK
+  segment 4: flat 9.3 mm  (need >= 6.5)  OK
+  closest hole edge to a bend centre line: 8.1 mm  (need >= 6.0)  OK
+  tab flanges (formed) [45.0, 22.2, 22.2, 22.2] mm  (min formed flange 7.7)
+body_half_B: flat (504.0, 366.4)  bends [(50.0, 30, 'up'), (64.5, 30, 'up'), (79.0, 30, 'up'), (356.7, 30, 'up')] + 6 tab bends
+  segment 0: flat 49.6 mm  (need >= 6.5)  OK
+  segment 1: flat 13.7 mm  (need >= 6.6)  OK
+  segment 2: flat 13.7 mm  (need >= 6.6)  OK
+  segment 3: flat 276.9 mm  (need >= 6.6)  OK
+  segment 4: flat 9.3 mm  (need >= 6.5)  OK
+  closest hole edge to a bend centre line: 8.1 mm  (need >= 6.0)  OK
+  tab flanges (formed) [22.2, 22.2, 22.2] mm  (min formed flange 7.7)
+lid: flat (423.0, 252.5)  bends [(21.3, 30, 'down'), (35.7, 30, 'down'), (50.2, 30, 'down'), (202.3, 30, 'down'), (216.8, 30, 'down'), (231.3, 30, 'down')]
+  segment 0: flat 20.8 mm  (need >= 6.5)  OK
+  segment 1: flat 13.7 mm  (need >= 6.6)  OK
+  segment 2: flat 13.7 mm  (need >= 6.6)  OK
+  segment 3: flat 151.3 mm  (need >= 6.6)  OK
+  segment 4: flat 13.7 mm  (need >= 6.6)  OK
+  segment 5: flat 13.7 mm  (need >= 6.6)  OK
+  segment 6: flat 20.8 mm  (need >= 6.5)  OK
+  closest hole edge to a bend centre line: 7.4 mm  (need >= 6.0)  OK
+  U-channel 2:1: base 151 vs 2 x leg 84  OK
+one-piece U body would be: base 149 vs 2 x leg 597 -> FAIL (so split into 2 L halves)

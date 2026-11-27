@@ -88,14 +88,15 @@ The Tesla module's PCB overhangs the bar by 8 mm on its +x long edge, and J1 sit
 | T16 | **v16 merge dropped the AC leads and the fan lead** (they shared the `cable_` prefix with the v15 bay cables) | Restored in harness.py; the fan lead re-routed |
 | T17 | **Control parts sat on LED-board air holes** (v15 layout) | Air holes under any control part (+2.5 mm) removed: 287 → 244 air holes (`tower15.CTRL`, `ctrl_blocks`) |
 | T18 | Inline fuse holder modelled as a Ø10 capsule fitted anywhere; the real holder is 39.6 × 10.4 × 15 mm | Model the catalog envelope (Bussmann ATM-FHID) |
+| T19 | Coil-lead exit assumed at the base end; the GV14 drawing puts it on the cap rim, 90° from the terminals, which inverted faces the 2151 at 0–4 mm. Rotating the contactor 180° is not allowed: the break rating is for A1(+) → A2(−) only (GV14 rev 28-Apr-2022 p. 6) | Read the lead exit off the drawing before placing anything against a relay or contactor face |
 
 ## 5. Sources
 | Value | Source | |
 |---|---|---|
 | GV141BAX coil B: 3.9 A pick-up (75 ms), 0.23 A hold, 2.8 W; flying leads A = 38 cm; red X1+, black X2− | Gigavac GV14 datasheet, Rev 28-Apr-2022 (RS-hosted copy) | ✓ |
-| Coil lead exit position | Not dimensioned in the datasheet | ⚠️ |
+| Coil lead exit: X1/X2 leave through two notches in the cap rim (terminal end), 90° from the A1–A2 axis, opposite the aux notches. Inverted with A1(+) at −x, that is the +y face, at the copper. Exit height in the notch not dimensioned | Sensata GV14 datasheet rev 28-Apr-2022 p. 3 (upright-mount top view), read 2026-11-27 | ✓ side / ⚠️ height |
 | NTS-400P CN301: 2-pin, open = run, short = remote off, JST S2B-XH-A; CN100: fan 12 V 0.4 A, PWM, JST XH 3-pin | MEAN WELL NTS-400P-SPEC 2026-03-26 / 2023-12-11 | ✓ |
-| NPB-450 DF11: pin count and pinout | Not yet read | ⚠️ |
+| NPB-450 control connector: HRS DF11-14DP on the unit, mate DF11-14DS + DF11-**SC crimps. 1 A1, 2 A0 (CAN address; NFC model: N.C.), 3 +3.3 V, 4 GND(signal), 5 Battery Full, 6 Charger OK (TTL, ref GND-AUX), 7 Remote ON-OFF (short to 8 = on), 8 +12 V aux, 9–10 GND-AUX, 11 CANH, 12 CANL (isolated, ref GND-AUX), 13–14 NTC 5 k | MEAN WELL NPB-450-SPEC 2026-07-06, read 2026-11-27. The A0/A1 order differs between two tables in the same file ⚠️ (not used: address set by DIP/app) | ✓ |
 | Tesla J1: 10-pin Mini-Fit (U), pins 1–7 | [tesla-shunt.md](tesla-shunt.md) §3 | ⚠️ |
 | 18 AWG 105 °C = 20 A; 10 AWG 105 °C = 60 A (30 °C); × 0.85 at 50 °C | 33 CFR 183.425 table 5 (= ABYC E-11 table) | ✓ |
 | ATM-FHID 1.56 × 0.41 × 0.59 in, 16 AWG, 20 A | Zoro listing (Eaton Bussmann), 2026-11-25 | ✓ |
@@ -110,14 +111,14 @@ The Tesla module's PCB overhangs the bar by 8 mm on its +x long edge, and J1 sit
 | Micro-Fit 1×2 / 1×3 receptacles, R/A headers (43650 series), crimp terminals 43030 | Molex | ~6 housings, ~30 pins | ≈ $15 total ⚠️ | digikey.com |
 | Mini-Fit Jr 2×5 receptacle + terminals (shunt end) | Molex 39-01-2100 + 39-00-0039 ⚠️ confirm against J1 | 1 | ≈ $3 ⚠️ | digikey.com |
 | JST XHP-2, XHP-3 + SXH-001T | JST | 1 each | ≈ $1 ⚠️ | digikey.com |
-| Hirose DF11 receptacle (charger) | DF11-?DS ⚠️ pin count | 1 | ≈ $2 ⚠️ | digikey.com |
+| Hirose DF11 receptacle (charger) | DF11-14DS + DF11-2428SC crimps | 1 | ≈ $2 ⚠️ | digikey.com |
 | Ring terminals 18 AWG: M6 ×1, M8 ×2 (5/16″) | Any insulated, 22–18 AWG | 3 | ≈ $3 ⚠️ | — |
 | Wire 105 °C: 18, 20, 22, 24 AWG | Ancor / UL1015 | ~2 m total | ≈ $10 ⚠️ | — |
 | U.FL–U.FL 1.13 mm coax, 100 mm | any | 1 | ≈ $5 ⚠️ | — |
 
 ## 7. Open items
-- ⚠️ NPB-450 DF11 pin count and which pins carry remote and CAN.
-- ⚠️ GV141BAX coil lead exit (face and height): route assumes the top of the inverted body.
+- ✓ NPB-450 DF11: 14-pin; j_conv uses 7–8 (remote: short = on), 11–12 (CAN), 9 (GND-AUX). Remote is opto-isolated from pack−, so the BMS drives it with a dry contact (PhotoMOS), as modelled.
+- ✓ GV141BAX coil leads exit on the +y face at the cap rim, i.e. down at the copper, facing the 2151 (T19). Route v16.3: the 4.2 mm slot between the contactor body (y 59.85) and the 2151 base (y 64.0), below the MRBFs (z 250.3), −x to x 89, then up past the 2151's end. ⚠️ exit height in the notch; the leads lie on the bus_mod_load copper there (silicone 20 AWG, 12 V) — add a Kapton strip if chafe shows.
 - ⚠️ Tesla J1 exact part number and which end of the overhang strip it sits at (the route works for either).
 - ✓ NTS-400P terminal side **confirmed 2026-11-25** from MEAN WELL's own photos (NTS-400P-SPEC 2026-03-26 p1, "DC input side"; saved as `docs/img/nts400p_dc_end_meanwell.png`, `nts400p_iso_meanwell.png`): cover up, PCB down, looking at the DC end the PP45 pairs (TB1) are on the **right** and the white JST connector left of them. Facing the DC end from outside = facing −x in the pack, right = +y, so TB1 is at +y and the drawing is a top view. The model was right; the mirrored keep-out is no longer needed.
 - The board's schematic must take: 2 A board fuse on B+, precharge relay + resistor between j_pwr 1 and 2, coil driver for 3.9 A pick-up, CN301 dry contact (relay or photo-MOS, it must look like a relay contact), plated IMD mounting hole.

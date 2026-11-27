@@ -123,9 +123,14 @@ def add(c, Zp1, SBX):
          "2151 inverter-fuse stud (ring M8, on the lug) + 2 A ATM inline fuse", "j_pwr pin 2", "precharge target + load-bus sense (through the 50 A MRBF)")
 
     # ---------------- 3. contactor coil -> j_coil (2 x 20 AWG, the GV141BAX's own 38 cm flying leads, cut + crimped) ----------------
-    # Lead exit: the GV14 drawing does not dimension it. Modelled at the base end (top, as mounted upside down) on the +x side. UNCONFIRMED.
+    # Lead exit (GV14 datasheet p.3, upright-mount top view, checked 2026-11-27): X1/X2 leave through notches in the CAP rim
+    # (terminal end), on the side 90 deg from the A1-A2 axis, opposite the aux-lead notches. Inverted with A1(+) at -x, that is
+    # the +y side, down at the copper. Leads rise along the +y face of the body, then over the top.
     pb, pe = board_plug("j_coil"); c.add("plug_j_coil", pb)
-    wire("coil", [(140.0, 32.0, 298.2), (140.0, 32.0, 303.0), (150.0, 18.0, 311.0), (XBUS, 14.0, 309.0), (pe[0], pe[1], 304.0), pe], 2, "20",
+    # The rim there faces the 2151 (contactor body to y 59.85, 2151 base from y 64.0): the leads leave the notch, lie in that
+    # 4.2 mm slot below the MRBFs (fuse bottoms at z 250.3) and run -x to x 89, past the 2151's end, then rise. ⚠️ slot height.
+    zc = Zp1 + 3.7
+    wire("coil", [(122.0, 61.9, zc), (89.0, 61.9, zc), (88.0, 62.0, 296.0), (100.0, 40.0, 312.0), (104.0, 14.0, 314.0), (XBUS, 14.0, 309.0), (pe[0], pe[1], 304.0), pe], 2, "20",
          "GV141BAX flying leads (red X1+, black X2-)", "j_coil", "coil B 12 V: 3.9 A pick-up 75 ms, 0.23 A hold (GV14 rev 28-Apr-2022)")
 
     # ---------------- 4. converter control -> j_conv (charger DF11 4 x 24 AWG + inverter CN301 2 x 24 AWG) ----------------
@@ -144,7 +149,7 @@ def add(c, Zp1, SBX):
     # ---------------- 5. lid push-button -> j_btn (2 x 22 AWG, 250 mm service loop so the lid can be set beside the pack) ----------------
     pb, pe = board_plug("j_btn"); c.add("plug_j_btn", pb)
     zb = 288.1                                                                    # switch body bottom (tower15 pushbutton depth 30)
-    wire("button", [(75.0, -70.0, zb), (75.0, -70.0, 284.0), (90.0, -84.0, 286.0), (152.0, -84.0, 288.0), (XBUS, -82.0, 300.0), (pe[0], pe[1], 300.0), pe], 2, "22",
+    wire("button", [(75.0, -58.0, zb), (75.0, -58.0, 284.0), (90.0, -84.0, 286.0), (152.0, -84.0, 288.0), (XBUS, -82.0, 300.0), (pe[0], pe[1], 300.0), pe], 2, "22",
          "lid push-button", "j_btn", "lid off: unplug j_btn first (loop lets the lid stand on its side beside the pack)")
 
     # ---------------- 6. NF-A14 fan -> j_fan (4 x 24 AWG, Noctua cable + NA-EC1 extension) ----------------
@@ -168,6 +173,7 @@ def add(c, Zp1, SBX):
         HARNESS[k] = dict(n=3, awg="16", r=3.5, length_mm=0, frm={"ac_in": "lid IEC C14 inlet", "ac_out": "inverter CN500 (JST VH)"}[k],
                           to={"ac_in": "charger C14 via right-angle C13 (L-com ACPWRC-C13LR)", "ac_out": "lid NEMA 5-15 outlet"}[k], note="mains: own route at the rear, never bundled with the low-voltage leads")
     c.allow += [("sig_ac", "panel_"), ("sig_ac", "keepout_"), ("sig_ac", "term_")]
+    c.allow += [("contactor_gv141bax", "sig_coil")]                # the coil leads leave the cap-rim notch (GV14 p.3)
 
     # ---------------- 7. antenna coax (ESP32-S3-WROOM-1U U.FL -> flex antenna above the board edge) ----------------
     xa = XB - 2.2

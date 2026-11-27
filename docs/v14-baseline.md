@@ -12,11 +12,11 @@
 | Item | Baseline | Ref |
 |---|---|---|
 | Cells | 8 × EVE LF105, **4S2P fixed**. 12.8 V nominal (10.0–14.6 V), 210 Ah, 2.69 kWh | R §0a, [cells](cells.md) |
-| Rating | **500 A for ≤ 30 s, 210 A continuous** (1C continuous, 3C for 30 s per cell ⚠️ reseller source, see cells.md T4) | R §0a |
+| Rating | **500 A for ≤ 30 s, 210 A continuous: hardware capability; the firmware enforces EVE rev E Tables 12–13 by SOC and temperature** (500 A needs ≥ 30 % SOC, ≥ 10 ℃). Superseded detail: owner-requirements.md §5, D37 | cells.md T4 |
 | Busbars | COP-125, 25 mm. Series bars A (+y, cells 1–4), B (−y, 3–6), C (+y, 5–8); collectors pack− (−y, 1–2) and pack+ (−y, 7–8); pairs alternate orientation | R §0a |
 | Terminal screws | M4 × 8 A2 flange head + washer, ≈ 2 N·m. Holes 6.6 mm (also fit M6) ⚠️ thread | R C3 |
 | Pack straps | COP-187, 25 mm, Z-joggles; land on the fuse and shunt, never the PCB | R C1, §0a |
-| Compression | 4 × M5 rods at 0.207 h / 0.793 h; 736 N per rod (≈ 0.74 N·m); assemble at 30–40 % SOC | v13, R m3 |
+| Compression | 4 × M6 316 A4-70 rods (v16.3, D36; were M5) at 0.207 h / 0.793 h; 736 N per rod (≈ 0.74 N·m); assemble at 30–40 % SOC | v13, R m3 |
 | Matching | Same date code; pair by 1 kHz AC IR; voltage-match at 3.65 V before bolting | N §7 |
 
 ## Power path (all bolted copper, nothing on the PCB)

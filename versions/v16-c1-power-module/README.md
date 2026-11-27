@@ -4,6 +4,25 @@
 
 ![bay](renders/c1_module_gv14up_close_b.jpg)
 
+## v16.3 (2026-11-27): Mylar insulators, SCS under $2,000, coil leads, structure
+- **Mylar .010** for the cell-top sheet and the 9 cell insulators (D29). The stack is 12.1 mm shorter; the shell is unchanged. The end plates grow 1.6 mm so the standoffs meet hex-to-hex and tray 1 stays at z 218.45. The collectors now follow the cell pitch, and the + Z and 5191 moved with them (5191 stud at x 128.8). The board standoffs become 14 mm ⚠️.
+- **SCS order ≈ $1,825** (was ≈ $2,361; sponsorship cap $2,000):
+  - Mylar: $470 → $60.
+  - Identical end plates at qty 2: $163 → $107.
+  - .125 front/rear plates: rear $300 → $232 live.
+  - The body halves and lid are now quoted live from DXF flats with bend lines (D35). SCS's importer had refused the bent STEPs, not the parts.
+  - Still unpriced: shell taps/PEM (estimated in), bends on the pack busbars and Z-strap ⚠️.
+- **Coil leads** follow the real GV14 exit (cap rim, +y face, under the 2151 MRBFs), D32 / signal-wiring T19.
+- **Lid button** moved y −70 → −58 (the hole crossed a bend, D34).
+- **Structure** ([docs/structure.md](../../docs/structure.md)):
+  - Load path cells → end plates → 4 × M4 → body U-beam → plates (feet / handles).
+  - Margins ≥ 15× at 5 g. Nothing slender is in compression; the rods are in tension.
+  - **New risk:** EVE rev E puts EOL swelling at ≤ 30 kN; the M5 rods reach proof at 25.6 kN.
+- **500 A burst** is now sourced to EVE rev E Tables 2/13 (cells.md T4 closed). Firmware must derate below 30 % SOC / 10 ℃.
+- Checks: module 0 interferences, + to − 13.7 mm, pack to chassis 7.4 mm, pack to series bars 10.0 mm, fuse lift-out ✓; assembly all CLEAR.
+
+![load path](renders/structure_load_path.png)
+
 ## v16.2 (2026-11-25): bend-legal pack busbars
 Both pack busbars are now one 1/8″ copper part each: the flat collector (or band) plus a tab bent into a **Z** (R 0.050″). The proposed C-shape breaks SendCutSend's U-channel rule (base ≥ 2 × flange: 31.5 mm vs 74.6 mm). The + Z leaves the collector's −y edge; the 5191 stud moves to (135, −64.5) and the block points +y; the Z-strap gets shorter. The − Z leaves the band at y −72, so the node-A hole sits 8.8 mm from the bend line. G10 plate and tray 1 notches follow. Details and losing options: [D28](../../docs/v16-decisions.md). Checks: 0 interferences; + to − 13.7 mm; pack to chassis 7.4 mm; assembly check all clear.
 

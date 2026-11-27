@@ -30,4 +30,4 @@ through everything installed before them; each nut gets a socket-wall check (thi
     bs2151_fuse_0: CLEAR
     bs2151_fuse_1: CLEAR
 parts not in any step: ['term_chg_dc_tb', 'term_chg_sig_df11', 'term_chg_ac_c14', 'term_inv_dc_pp45', 'term_inv_sig_cn301', 'term_inv_ac_cn500']
-(77 s)
+(81 s)
