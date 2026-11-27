@@ -58,7 +58,7 @@ Other sizes, a two-board split and double-sided assembly were not studied.
 So the placeholder's ≤ 10 mm is too tight for the connectors; 12 mm fits under the lid. The v15 model's 15 mm relay does not fit and must change.
 
 ## 4. Open
-- ⚠️ Precharge resistor: pulse energy depends on the inverter's input capacitance (unknown). 25 × 12 mm footprint assumed. interface.md §4 sets **10 Ω / 10 W**; a 10 W part is likely nearer 50 × 10 mm (about +200 mm², still fits the fill) ⚠️ part and height not checked.
+- Precharge resistor chosen by main-battery (docs/power-train.md §9): Vishay AC05000001009JAC00, 10 Ω 5 W axial wirewound, Ø7.5 × 18 mm body, THT lying flat, ≈ 10 mm tall; leave a few mm of air around it. At layout: form the leads (63 mm pitch as supplied), trim tails ≤ 2.5 mm, state both in the assembly notes.
 - ⚠️ Board temperature above the inverter: not analysed.
 - ⚠️ Antenna (interface.md §4): U.FL coax, ≈ 150–200 mm, to a flex antenna behind the front-plate light-pipe slot.
 - `cad/tower15.py` CTRL models the WROOM-1U as 18 × 25.5 mm; 18 × 19.2 mm is the 1U size ⚠️.
