@@ -2,7 +2,7 @@
 
 **Trigger:** Chris, 2026-11-27. The rule now is that cells are the dominant constraint: everything above the cells (converters, power bay, fan, a separate BMS board) fits inside the module footprint, **312 × 158 mm including the end plates**. The charger and inverter are what broke this rule, so the search is reopened rather than tweaked (`handoff-converters.md`, `owner-requirements.md` §3, §5).
 
-**Status (2026-11-27):** **Chris picked option D** (D39) and no USB-C for now. Open: charger-stop method (relay vs PB-230-12, §6 Q2) and the BMS board's responsibilities before sizing it (Q3). No CAD until those are settled.
+**Status (2026-11-27):** **Chris picked option D** (D39) and no USB-C for now. Charger stop: **NPB-360 + normally-open DC relay** (Q2). BMS scope confirmed (Q3); board size and placement next.
 
 Packing model: `cad/analysis/converter_packing.py` (3D boxes plus a checker for clashes, footprint, lid height, + to − gaps and fuse lift-out). Figures are in `versions/v16-c1-power-module/renders/conv_*.png`.
 
@@ -168,7 +168,7 @@ So the strip is **≥ 59 mm**, which leaves **≤ 96 mm of width for the convert
 
 ## 6. Decisions for Chris (answers 2026-11-27 in brackets)
 - **Q1 Combined unit.** [**Separate units, D.**] The MultiPlus fits only standing upright: the lid goes to ≈ z 590 (≈ 590 mm inside height vs 318), +2.3 kg, plus Victron's 10 cm-clearance and not-over-batteries notes. Separate units (D): z 333.
-- **Q2 Charger control for the NPB-360** (it has no remote and no CAN). [Chris likes the relay; asked whether the PB-230-12 has CAN. **It doesn't:** it has only a remote-stop input (CN105), a fixed 3-stage curve (14.4 / 13.6 V, no voltage adjustment found), 16 A and 81.5 % efficiency (≈ 52 W loss at 16 A, vs 37 W for the NPB-360 at 20 A). Its case is 190 × 96 × 49, 7.3 mm longer than the NPB-360, which still fits deck 1 (260 of 312). Pending.]
+- **Q2 Charger control for the NPB-360** (it has no remote and no CAN). [Chris likes the relay; asked whether the PB-230-12 has CAN. **It doesn't:** it has only a remote-stop input (CN105), a fixed 3-stage curve (14.4 / 13.6 V, no voltage adjustment found), 16 A and 81.5 % efficiency (≈ 52 W loss at 16 A, vs 37 W for the NPB-360 at 20 A). Its case is 190 × 96 × 49, 7.3 mm longer than the NPB-360, which still fits deck 1 (260 of 312). **→ Chris: NPB-360 + relay.**]
   - (a) a normally-open DC relay in the charger + lead, closed by the BMS (+1 part, fail-safe);
   - (b) stop charging by opening the GV14 (no part, but it drops the outlets too);
   - (c) PB-230-12: 16 A, has a remote, 81.5 % efficient;
@@ -223,7 +223,8 @@ So the strip is **≥ 59 mm**, which leaves **≤ 96 mm of width for the convert
 ## 10. Open items
 - Chris: Q1–Q4 (§6).
 - ⚠️ NPB-360 fan flow and direction; box air rise without the NF-A14 (re-run `cooling_v16.py`).
-- ⚠️ BMS board size and connector edge (pcb lane).
+- ⚠️ BMS board size and connector edge (pcb lane, scope confirmed in owner-requirements §5).
+- ⚠️ Charger relay: catalog part, chassis-mounted (not on the PCB), ≥ 20 A DC continuous, rated for closing onto the NPB-360 output capacitors; firmware closes it only after the GV14 is closed.
 - ⚠️ Inside width: pack copper on the strip at y −77 needs 7 mm to the wall (inside ≥ 168) or rails moved 5 mm inboard.
 - ⚠️ True outlines: GV14, 5191, SB175, NTS CN500/TB1 positions, NPB-360 C14 position.
 - After the pick: `tower17.py` + bay module, interference/clearance/assembly checks, fast renders, BOM and SCS total.
