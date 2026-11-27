@@ -158,19 +158,25 @@ def opt_D(chg=("chg_npb360", 182.7, 96.0, 49.0, "NPB-360-12TB\n182.7 × 96 × 49
     p.append(B("keep_chg_ac_c13", -126 + cl, -86 + cl, FY - 51, FY - 6, Z_D1, Z_D1 + ch, "keep", "C13\n36+4"))
     # deck 2: G10 over the charger only (the strip stays open to the lid: fuse lift-out)
     z2 = Z_D1 + ch + 2.5 + G10
-    p.append(B("g10_deck2", -156, 120, -21.5, FY, z2 - G10, z2, "g10"))
+    p.append(B("g10_deck2", -156, 110, -21.5, 53.0, z2 - G10, z2, "g10"))          # notched at the rear +y corner for the relay
+    p.append(B("g10_deck2c", 110, 120, -17.0, 53.0, z2 - G10, z2, "g10"))          # and at the front -y corner for the GV14
+    p.append(B("g10_deck2b", -126, 120, 53.0, FY, z2 - G10, z2, "g10"))
+    # charger N.O. relay: TE V23134-B1052-C642 (Mini ISO F4, bracket), 25.9 x 29.9 x 51.9, next to the charger's TB (+)
+    p.append(B("relay_chg", -156, -126.1, 53.1, FY, Z_D1, Z_D1 + 51.9, "pos", "TE F4\nrelay"))
     # inverter flat, DC end at the rear (PP45 + MEAN WELL's 10 CFM fan 5 cm from the DC face), AC (CN500) at the front
     p.append(B("inv_nts400p", -86, 100, -21.5, FY, z2, z2 + 34, "inv", "NTS-400P-112\n186 × 100.5 × 34"))
-    p.append(B("keep_inv_pp45", -128, -86, 20, 50, z2, z2 + 34, "keep", "PP45\n42"))
-    p.append(B("fan_inv_4020", -156, -136, 9, 49, z2, z2 + 40, "fan", "40×40\nfan"))
-    p.append(B("keep_inv_cn500", 100, 120, 15, 55, z2, z2 + 34, "keep", "CN500\n20"))
+    # NTS-400P drawing (SPEC 2026-03-26 p.6): TB1 (PP45) near one long edge of the DC end, CN500 near the OTHER long edge
+    # of the AC end; turned end-for-end vs v16 (TB1 was +y), so TB1 faces the strip (-y) and CN500 is at +y.
+    p.append(B("keep_inv_pp45", -128, -86, -10, 20, z2, z2 + 34, "keep", "PP45\n42"))
+    p.append(B("fan_inv_4020", -156, -136, -10, 30, z2, z2 + 40, "fan", "40×40\nfan"))
+    p.append(B("keep_inv_cn500", 100, 120, 45, 75, z2, z2 + 34, "keep", "CN500\n20"))
     # separate BMS board, flat over the inverter on 6 mm standoffs, parts <= 10 mm
     # pcb lane space claim 2026-11-27 (spec/requests/pcb-bms-space-claim.md): 150 x 90, top <= 12 mm incl. mated plugs,
     # 25 mm right-angle plug room beyond -x, and beyond -y for x -105..-62. Carried by a G10 .125 bridge over the inverter
     # (no holes in the NTS-400P), the bridge on 4 posts standing on deck 2 beyond the inverter's ends.
     zr = z2 + 34 + 1.0
     p.append(B("g10_bms_bridge", -112, 108, -15, 75, zr, zr + G10, "g10", None))
-    for i, (x, y) in enumerate(((-109, -12), (-109, 72), (105, -12), (105, 72))):   # M3 standoffs at the bridge corners
+    for i, (x, y) in enumerate(((-109, -14), (-109, 72), (105, -12), (105, 40))):   # M3 standoffs at the bridge corners
         p.append(B(f"bms_post_{i}", x - 3, x + 3, y - 3, y + 3, z2, zr, "g10", None))
     zb = zr + G10 + 3.0
     p.append(B("bms_board", -105, 45, -15, 75, zb, zb + 1.6, "bms", "BMS board 150 × 90 (pcb lane claim)"))
@@ -180,12 +186,16 @@ def opt_D(chg=("chg_npb360", 182.7, 96.0, 49.0, "NPB-360-12TB\n182.7 × 96 × 49
     # power bay strip (y -79 .. -20)
     p += bay_strip(-20.0, zp1, 156, lid)
     # GV14 (body 59.9 x 55.7, flange 72.5) and the 5191 on the + riser in the front corner
-    p.append(B("ct_gv14", 96.1, 156, -79, -23.3, zp1 + 2, zp1 + 59.9, "ct", "GV141BAX\n59.9 × 55.7"))
+    # GV141BAX (Sensata GV14 datasheet, upright drawing): round body dia 59.9, 55.7 to the stud seat, flange 80.5 x 68.3
+    # holes at the (now top) end, turned diagonal so it stays inside the body's square. Inverted: studs down into the plane.
+    cx, cy, r = 126.0, -49.05, 29.95
+    for i, (a, b) in enumerate(((r, 12.4), (12.4, r), (21.2, 21.2))):
+        p.append(B(f"ct_gv14_{i}", cx - a, cx + a, cy - b, cy + b, zp1 + 2, zp1 + 55.7, "ct", "GV141BAX\nØ59.9" if i == 0 else None))
     p.append(B("pos_riser", 122, 148, -77, -46, Z_BB, zp1, "pos", None))          # + collector Z-tab (cells 7-8), as C1
     p.append(B("pos_inbar", 122, 148, -46, -12, zp1 - 3.175, zp1, "pos", None))    # riser flange -> 5191 tab (under the GV14)
     p.append(B("bs5191", 122, 147, -20, 40.9, zp1, zp1 + 31.5, "pos", "5191\n(MRBF 250)"))
     p.append(B("bs5191_fuse", 121, 148.8, -19, 4, zp1 + 31.5, zp1 + 47.8, "fuse", None))
-    p += lid_conns(lid, (138, 63), (138, 25), (-120, -55))
+    p += lid_conns(lid, (138, 20), (138, 58), (-120, -55))
     return dict(title=title or "Option D: MEAN WELL NPB-360-12TB (20 A) + NTS-400P-112 (400 W) + 40 mm fan; bay strip on −y",
                 parts=p, lid_in=lid,
                 levels=[("deck 1: charger + power-bay strip", Z_D1, Z_D1 + ch), ("deck 2: inverter (strip open above)", z2, z2 + 34),
@@ -193,8 +203,8 @@ def opt_D(chg=("chg_npb360", 182.7, 96.0, 49.0, "NPB-360-12TB\n182.7 × 96 × 49
                 allow=[("g10_", "g10_"), ("g10_bayplate", "shunt"), ("g10_bayplate", "rail_"), ("rail_neg", "shunt"), ("rail_neg", "sb175"),
                        ("rail_pos", "sb175"), ("rail_pos", "bs2151"), ("g10_deck1", "pos_riser"), ("g10_bayplate", "pos_riser"),
                        ("keep_chg", "chg_"), ("keep_inv", "inv_"), ("bms_board", "keep_bms"), ("bs2151_fuse", "bs2151"), ("bs5191_fuse", "bs5191"),
-                       ("keep_inv_pp45", "fan_"), ("rail_pos", "ct_"), ("g10_bayplate", "ct_"), ("pos_riser", "bs5191"), ("ct_", "bs5191"),
-                       ("sb175", "lid_"), ("g10_deck1", "keep_"), ("g10_deck2", "keep_inv"), ("bms_post", "g10_deck2"), ("bms_post", "g10_bms"), ("g10_bms_bridge", "keep_"), ("pos_inbar", "pos_riser"), ("pos_inbar", "bs5191"),
+                       ("keep_inv_pp45", "fan_"), ("rail_pos", "ct_"), ("g10_bayplate", "ct_"), ("pos_riser", "bs5191"), ("ct_", "bs5191"), ("ct_gv14", "ct_gv14"),
+                       ("sb175", "lid_"), ("g10_deck1", "keep_"), ("g10_deck2", "keep_inv"), ("bms_post", "g10_deck2"), ("bms_post", "g10_bms"), ("g10_bms_bridge", "keep_"), ("pos_inbar", "pos_riser"), ("relay_chg", "keep_chg_dc"), ("relay_chg", "g10_deck1"), ("pos_inbar", "bs5191"),
                        ("pos_inbar", "ct_"), ("pos_riser", "ct_"), ("rail_pos", "pos_inbar"), ("g10_bayplate", "pos_inbar"), ("g10_bayplate", "bs5191")])
 
 def opt_B():

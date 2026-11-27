@@ -134,25 +134,59 @@ So the strip is **≥ 59 mm**, which leaves **≤ 96 mm of width for the convert
 - **Branch fuses (R9):** inverter input at 400 W / 11 V / 0.89 ≈ 41 A → **MRBF 50 A kept**. Charger 20 A → **MRBF 30 A kept**.
 - **Undervoltage ladder:** NTS-400P cuts out at 10.0 ± 0.3 V (2.5 V/cell) and alarms at 11 V. The ladder (2.90 firmware → 2.80 BQ UV → 2.75 inverter) stays enforced by firmware and the BQ, as today. The inverter is unchanged.
 - **Standby:** unchanged, since the inverter is the same; the NPB-360 leaks < 1 mA from the battery. **13.8 days ON-idle** as today.
-- **Heat, UPS case** (inverting and charging at once):
+- **Heat, UPS case** (inverting at 400 W while charging at 20 A), from `cad/analysis/cooling_D.py`:
 
   | Source | Loss |
   |---|---|
-  | Inverter at 400 W (η 89 %) | 49 W |
-  | NPB-360 at 20 A × 14.2 V (η 88.5 %) | 37 W |
-  | GV14 coil | 2.8 W |
-  | BMS board | 2 W |
-  | **Total** | **≈ 91 W** (77 W today) |
+  | Inverter at 400 W (η **89 %**, the -112 column; cooling_v16 used 91 %, the -212 value) | 49.4 W |
+  | NPB-360 at 20 A × 14.2 V (η 88.5 %) | 36.9 W |
+  | GV14 coil, BMS, shunt, 40 mm fan, charger-relay coil, power path | 8.3 W |
+  | **Total** | **94.6 W** (77 W in v16) |
 
-  At 300 W inverter output the total is ≈ 79 W.
-- **Air path:**
-  - MEAN WELL's 10 CFM fan blows rear → front along the inverter, which **meets the inverter's rated condition**: 100 % load to 40 ℃.
-  - The NPB-360's own fan (switched on at 50 ℃ internal) cools the charger.
-  - ⚠️ **Box air rise with only the converter fans:** about 10 K if both fans move air through the box (≈ 27 m³/h), up to about 24 K if only the 40 mm fan does (≈ 11 m³/h effective). The NPB-360 fan's flow is not published ⚠️.
-  - Re-run `cooling_v16.py` in the CAD phase. If the rise is above 15 K, either:
-    - cap the charge current at 10 A while the inverter runs above 300 W (firmware, no parts); or
-    - add a second 40 mm fan at the rear wall over the charger's DC end (space exists at x −156…−136, y −17…+5).
+- **Fan (2026-11-27 model).** The Sunon MF40201VX-1000U-G99 is 10.8 CFM free air and 72 Pa shut-off ⚠️ (distributor data; Sunon's own sheet not found). MEAN WELL's drawing shows a "10 CFM FAN" blowing **into** the DC end from 5 cm away, so intake is the right direction.
+
+  | Fan inlet in the rear plate | Fan flow | Box air rise, UPS case (mixed / front-only bound) |
+  |---|---|---|
+  | 21 standard Ø4.8 grid holes (as drawn) | **5.4 CFM** ✗ half of MEAN WELL's condition | 19.3 / 44.2 K |
+  | **Same 21 positions at Ø6.5** (grid look kept, no part) | 7.7 CFM | 15.2 / 41.6 K |
+  | Ø38 cutout + 40 mm wire guard (+1 part) | 8.4 CFM | 14.3 / 40.9 K |
+  | Ø38 cutout, rear grid blanked behind except the fan (+1 sheet) | 7.8 CFM | 15.1 / 15.1 K |
+  | Two 40 mm fans + blanking sheet | 2 × 6.5 CFM | 10.2 / 10.2 K (no room for a 2nd fan at the rear without a re-layout) |
+
+  - "Mixed" assumes all the fan's air leaves at box temperature.
+  - "Front-only" counts only the air that leaves through the front. With the full rear grid, most of the fan's air leaks back out of the rear holes beside it, which is the same short circuit as v16.
+- **Single loads** (Ø6.5 fan holes, mixed): charging only ≈ 7 K; inverting at 400 W only ≈ 9 K. **Only the UPS case (both at full power) is marginal.**
+- **Decision needed:**
+  - **(a) No part (recommended):** Ø6.5 holes in front of the fan, plus a firmware thermostat. The NPB-360 can't be throttled, only switched, so above a set box-air temperature (e.g. 45 ℃) while inverting the BMS opens the charger relay, and closes it again when the air cools.
+  - **(b)** Blanking sheet behind the rear grid (cooling.md option B): front-only = mixed = 15 K, +1 SCS part.
+  - **(c)** Re-layout for a second fan.
+
+  The inverter bench test (owner-req §7) checks whichever is picked.
 - **The NF-A14 pack fan is no longer needed for the converters,** and it doesn't fit under the new rule: 140 mm is taller than the deck.
+
+## 4a. Charger relay (D39 follow-up, 2026-11-27)
+| Candidate | Contacts at 14 V | Coil | Mounting | Verdict |
+|---|---|---|---|---|
+| **TE V23134-B1052-C642** (Power Relay F4, Mini ISO, 1 form A, **bracket**; TE 3-1393303-4) | 40 A continuous at 85 ℃ (60 A at 23 ℃); make 120 A; **break 60 A**; 2 × 10⁵ ops at 40 A 14 VDC | 12 V, 90 Ω, **1.6 W** (2.4 W at 14.6 V), operate 7.2 V | Bracket, one screw; 6.3 mm QC tabs; 25.9 × 29.9 × 51.9 mm, 35 g | **✓ picked.** Automotive part rated for this exact voltage. CAD 21.21, 170 in stock (Newark via [Octopart](https://octopart.com/search?q=V23134-B1052-C642), 2026-11-27) |
+| TE T9AP1D52-12 (T9A, flanged, QC) | NO 20 A at 28 VDC resistive | 12 V 1 W; **max coil 110 % = 13.2 V** < 14.6 V pack | flange | ✗ coil over-voltage at a full pack; 20 A is the bare limit |
+| Panasonic CB1 and other PCB automotive relays | 40 A | — | PCB | ✗ would put 20 A through the BMS board |
+| Small DC contactor (Gigavac, TE EV) | ≥ 100 A | 1.7–8 W | studs | ✗ oversized, costlier |
+
+**Placement.** The relay sits in deck 1's rear +y corner (x −156…−126, y 53…79) next to the charger's + terminal, with deck 2 notched above it. Re-checked: 0 issues.
+
+**Rules.**
+- The relay closes only after the GV14 is closed and AC is present.
+- A flyback diode across the coil goes on the BMS board.
+- The QC terminals are + potential: keep ≥ 10 mm to the charger's − terminal, or boot them ⚠️ (CAD).
+
+## 4b. Dimensions confirmed this pass (2026-11-27)
+| Part | Before | Now | Source |
+|---|---|---|---|
+| GV141BAX | 59.9 × 55.7 box, flange 72.5 ⚠️ | **Round body Ø59.9; 55.7 base to stud seat; 72.5 overall with studs; flange 80.5 long, holes 68.3 apart (M5/#10); stud pitch 26.7 (M8 × 1.25, 10 N·m max); 0.44 kg.** The flange turns diagonal in the inverted mount so it stays inside the Ø59.9 square | Sensata GV14 Series datasheet, upright dimensions (RS copy) ✓ |
+| NTS-400P TB1 / CN500 | TB1 at +y (v16); CN500 position unknown | TB1 near one long edge of the DC end; **CN500 near the opposite long edge of the AC end**; the "10 CFM fan" is drawn blowing into the DC end, 5 cm away. Turned end-for-end in option D, so TB1 faces the strip (−y) and CN500 is at +y, beside the lid outlet | NTS-400P-SPEC 2026-03-26 p.6 ✓ |
+| Blue Sea 5191 | 60.9 | 61.9 long (Eaton CF bar drawing, v16 note); 1 mm, packing unaffected | v16-decisions notes ✓ |
+| SB175 busbar contact depth (89.8 below the mating face) | ⚠️ | **Still ⚠️.** The SB175 datasheet points to a separate "busbar contact drawing on website", which Anderson's site search did not return. The datasheet confirms 180BBS: 1/4-20 stud, lock nut 110G56, **200 A wire-to-busbar** (≥ 175 ✓) | Anderson SB175 datasheet (RS copy) |
+| NPB-360 C14 position | ⚠️ | Inlet on the right half of the input face (viewed from outside), I/O switch on the left; no dimensions on MEAN WELL's drawing ⚠️ | NPB-360-SPEC 2026-07-06 p.5 |
 
 ## 5. Path taken (this session)
 1. **The rule.** The footprint is fixed (312 × 158) and height is free. So the question became which converters, packed with the bay, fit that plan.
@@ -222,9 +256,9 @@ So the strip is **≥ 59 mm**, which leaves **≤ 96 mm of width for the convert
 
 ## 10. Open items
 - Chris: Q1–Q4 (§6).
-- ⚠️ NPB-360 fan flow and direction; box air rise without the NF-A14 (re-run `cooling_v16.py`).
+- Chris: cooling (a) firmware thermostat + Ø6.5 fan holes / (b) blanking sheet / (c) second fan (§4). ⚠️ NPB-360 internal fan flow and direction unpublished.
 - ⚠️ BMS board size and connector edge (pcb lane, scope confirmed in owner-requirements §5).
-- ⚠️ Charger relay: catalog part, chassis-mounted (not on the PCB), ≥ 20 A DC continuous, rated for closing onto the NPB-360 output capacitors; firmware closes it only after the GV14 is closed.
+- ✓ Charger relay: TE V23134-B1052-C642 (§4a).
 - ⚠️ Inside width: pack copper on the strip at y −77 needs 7 mm to the wall (inside ≥ 168) or rails moved 5 mm inboard.
-- ⚠️ True outlines: GV14, 5191, SB175, NTS CN500/TB1 positions, NPB-360 C14 position.
+- ✓ GV14 and NTS connector positions (§4b). ⚠️ SB175 busbar-contact depth; NPB-360 C14 exact position.
 - After the pick: `tower17.py` + bay module, interference/clearance/assembly checks, fast renders, BOM and SCS total.

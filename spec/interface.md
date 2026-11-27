@@ -11,16 +11,16 @@ Single source of truth for numbers that more than one lane uses. Only `main-batt
 | DC out | SB175 on the lid, **175 A** continuous; hardware 500 A / 30 s, firmware-limited to EVE rev E Tables 12–13 | D37 |
 | Main fuse | MRBF 250 A in Blue Sea 5191 | power-train.md |
 | Branch fuses | MRBF on Blue Sea 2151: inverter **50 A**, charger **30 A** | converters.md §4 |
-| Contactor | Gigavac GV141BAX (GV14), coil 12 V, 3.9 A pick-up ⚠️, 0.23 A hold (2.8 W) | contactor-mounting.md |
+| Contactor | Gigavac GV141BAX (GV14): round body Ø59.9, 55.7 to the stud seat, M8 studs 26.7 apart; coil 12 V, 3.9 A pick-up ⚠️, 0.23 A hold (2.8 W) | Sensata GV14 datasheet; converters.md §4b |
 | Shunt | Tesla 1016792-00-C, low side; board ground at node A | tesla-shunt.md |
 
 ## 2. Converters (D39, 2026-11-27)
 | Item | Value | Ref |
 |---|---|---|
 | Charger | MEAN WELL **NPB-360-12TB**: 20 A, CV set to 14.2 V by VR, 2-stage by DIP. **No remote, no CAN** | converters.md |
-| Charger stop | **Normally-open DC relay in the charger + lead**, coil driven by the BMS; closed only after the GV14 is closed. Part ⚠️ TBD (catalog, chassis-mounted, ≥ 20 A DC, rated for closing onto the charger's output capacitors) | D39 |
+| Charger stop | **TE V23134-B1052-C642** N.O. relay (Mini ISO F4, bracket, 12 V 90 Ω coil, 1.6–2.4 W, operate 7.2 V) in the charger + lead, next to the charger TB. BMS drives the coil (low side + flyback diode); closes only after the GV14 is closed and AC is present; opens on cold (< 2 ℃), full, fault, or box air over the thermostat limit (cooling decision pending) | converters.md §4a |
 | Inverter | MEAN WELL **NTS-400P-112**: 400 W, 120 V 60 Hz, power-saving DIP SW4 on; remote off = dry contact on CN301 (relay or PhotoMOS) | NTS-400P-SPEC 2026-03-26 |
-| Inverter fan | 40 × 40 × 20, 10 CFM, on the inverter's own CN100 (not a BMS output) | cooling.md, converters.md |
+| Inverter fan | Sunon MF40201VX-1000U-G99, 40 × 40 × 20, 10.8 CFM, intake at the rear wall 5 cm from the DC end, on the inverter's own CN100 (not a BMS output) | converters.md §4 |
 | Pack fan | **none** (NF-A14 dropped) ⚠️ pending the cooling re-run | converters.md §4 |
 
 ## 3. Envelope
