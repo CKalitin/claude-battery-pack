@@ -256,7 +256,7 @@ So the strip is **≥ 59 mm**, which leaves **≤ 96 mm of width for the convert
 
 ## 10. Open items
 - Chris: Q1–Q4 (§6).
-- Chris: cooling (a) firmware thermostat + Ø6.5 fan holes / (b) blanking sheet / (c) second fan (§4). ⚠️ NPB-360 internal fan flow and direction unpublished.
+- **Cooling and fan hole spacing: open item, iterate after the CAD** (Chris, 2026-11-27). Options: (a) firmware thermostat + Ø6.5 fan holes, (b) blanking sheet, (c) second fan (§4). ⚠️ NPB-360 internal fan flow and direction unpublished.
 - ⚠️ BMS board size and connector edge (pcb lane, scope confirmed in owner-requirements §5).
 - ✓ Charger relay: TE V23134-B1052-C642 (§4a).
 - ⚠️ Inside width: pack copper on the strip at y −77 needs 7 mm to the wall (inside ≥ 168) or rails moved 5 mm inboard.

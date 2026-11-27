@@ -8,7 +8,7 @@
   - BMS 95 × 55 accepted (spec §4).
   - Budget: `docs/budget.md`, ≈ $2,930, SCS ≈ $1,580.
   - New docs: `docs/afe.md`, `docs/enclosure.md`.
-- **Blockers / waiting on:** Chris: cooling (a) thermostat + Ø6.5 fan holes / (b) blanking sheet / (c) 2nd fan; go for CAD. pcb: proving sizes. Zep's (NextPCB) reply.
+- **Blockers / waiting on:** Chris: go for CAD (cooling and fan-hole spacing deferred to after the CAD, his call). pcb: proving sizes. Zep's (NextPCB) reply.
 - **Next step:** CAD `tower17.py` once Chris says go.
 - **Key decisions so far (with reasons):**
   - Cells are the dominant constraint: nothing goes outside the module footprint (Chris).
