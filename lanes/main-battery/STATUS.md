@@ -1,20 +1,14 @@
 # main-battery status
 
-- **Current task (Chris, 2026-11-27):** reopen the charger/inverter search so that everything above the cells fits in the module footprint (≈ 312 × 158 mm incl. end plates). Brief: `docs/handoff-converters.md`. Deliver `docs/converters.md`, a top-view packing figure per serious candidate, and a recommendation. No CAD until Chris picks.
-- **Last result (2026-11-27):** option D follow-ups done and pushed.
-  - Cooling: `cad/analysis/cooling_D.py`, converters.md §4. The 40 mm fan gets only 5.4 CFM through the Ø4.8 grid; with Ø6.5 holes 7.7 CFM. The UPS case is ≈ 15 K mixed; single loads 7–9 K.
-  - Charger relay: TE V23134-B1052-C642 (§4a).
-  - GV14 and NTS connector dims confirmed (§4b).
-  - BMS 95 × 55 accepted (spec §4).
-  - Budget: `docs/budget.md`, ≈ $2,930, SCS ≈ $1,580.
-  - New docs: `docs/afe.md`, `docs/enclosure.md`.
-- **Blockers / waiting on:**
-  - Chris: harness vendor (Loombotic ≈ $2,245 vs NextPCB ≈ $495).
-  - Chris: test-fit a Molex Mini-Fit Jr 10-circuit plug 39-01-3103 on the shunt's Tesla receptacle, plus calipers across 5 cavities (16.8 mm = Mini-Fit). This decides H1/J2.
-  - Zep (NextPCB): reply on board sponsorship.
-  - Subagent cad-tower17: CAD still running.
-- **In progress:** subagent `cad-tower17` (background) is building the option D CAD (tower17.py, run/clearance/assembly checks, harness routing + measured lengths, fast renders, cooling re-run, BOM) and commits as "main-battery (cad agent):". Don't edit cad/ while it runs.
-- **Next step:** review the CAD agent's result and relay it to Chris.
+Current task: option D follow-ups. The CAD subagent (cad-tower17) is building tower17; harness vendor and shunt connector are being settled.
+Blockers: Chris: pick the harness vendor (NextPCB ≈ $495 vs Loombotic ≈ $2,245) and OK ordering Molex 39-01-3103/39-28-1103 for the shunt test-fit. Zep (NextPCB): sponsorship reply.
+Next step: review the CAD subagent's result when it finishes (tower17, checks, measured harness lengths, renders), relay it to Chris, then shut the subagent down.
+Last result: Loombotic live quotes for 5 harnesses ($2,244.57); shunt connector = original Tesla pigtail with a non-catalog keyed 2×5 Mini-Fit-style plug (docs/tesla-shunt.md §3a); spec §5 front LED board.
+
+## Teammates
+- cad-tower17 (CAD, started on Sonnet before Chris's Opus rule): running, no commits yet.
+- main-battery-shunt-connector: finished and shut down.
+
 - **Key decisions so far (with reasons):**
   - Cells are the dominant constraint: nothing goes outside the module footprint (Chris).
   - Separate BMS board; the front zone is for the LED board only (Chris).
