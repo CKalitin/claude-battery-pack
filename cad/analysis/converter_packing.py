@@ -175,14 +175,18 @@ def opt_D(chg=("chg_npb360", 182.7, 96.0, 49.0, "NPB-360-12TB\n182.7 × 96 × 49
     # 25 mm right-angle plug room beyond -x, and beyond -y for x -105..-62. Carried by a G10 .125 bridge over the inverter
     # (no holes in the NTS-400P), the bridge on 4 posts standing on deck 2 beyond the inverter's ends.
     zr = z2 + 34 + 1.0
-    p.append(B("g10_bms_bridge", -112, 108, -15, 75, zr, zr + G10, "g10", None))
-    for i, (x, y) in enumerate(((-109, -14), (-109, 72), (105, -12), (105, 40))):   # M3 standoffs at the bridge corners
+    # pcb lane claim rev 2026-11-27 (spec/requests/pcb-bms-space-claim.md): 95 x 55 board, x -105..-10, y -15..40,
+    # parts <= 12 mm, 25 mm plug room beyond -x, +x, and -y for x -105..-84. G10 .125 bridge over the inverter
+    # (no holes in the NTS-400P) on 4 posts on deck 2 beyond the inverter's ends.
+    p.append(B("g10_bms_bridge", -112, 108, -15, 43, zr, zr + G10, "g10", None))
+    for i, (x, y) in enumerate(((-109, -14), (-109, 40), (105, -12), (105, 40))):   # M3 standoffs at the bridge corners
         p.append(B(f"bms_post_{i}", x - 3, x + 3, y - 3, y + 3, z2, zr, "g10", None))
     zb = zr + G10 + 3.0
-    p.append(B("bms_board", -105, 45, -15, 75, zb, zb + 1.6, "bms", "BMS board 150 × 90 (pcb lane claim)"))
-    p.append(B("keep_bms_parts", -105, 45, -15, 75, zb + 1.6, zb + 13.6, "keep", None))
-    p.append(B("keep_bms_plugs_x", -130, -105, -15, 75, zb + 1.6, zb + 13.6, "keep", "plugs"))
-    p.append(B("keep_bms_plugs_y", -105, -62, -40, -15, zb + 1.6, zb + 13.6, "keep", "plugs"))
+    p.append(B("bms_board", -105, -10, -15, 40, zb, zb + 1.6, "bms", "BMS 95 × 55"))
+    p.append(B("keep_bms_parts", -105, -10, -15, 40, zb + 1.6, zb + 13.6, "keep", None))
+    p.append(B("keep_bms_plugs_x", -130, -105, -15, 40, zb + 1.6, zb + 13.6, "keep", "plugs"))
+    p.append(B("keep_bms_plugs_xp", -10, 15, -15, 40, zb + 1.6, zb + 13.6, "keep", "plugs"))
+    p.append(B("keep_bms_plugs_y", -105, -84, -40, -15, zb + 1.6, zb + 13.6, "keep", "plugs"))
     # power bay strip (y -79 .. -20)
     p += bay_strip(-20.0, zp1, 156, lid)
     # GV14 (body 59.9 x 55.7, flange 72.5) and the 5191 on the + riser in the front corner
