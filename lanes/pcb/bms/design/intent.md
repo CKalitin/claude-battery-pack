@@ -42,7 +42,7 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | Cell monitor | **BQ7695204PFBR** (BQ76952 family; SPI + CRC; REG1 on at 3.3 V by default, so no OTP is needed to boot) in TQFP-48. Cells on VC0–VC3 + VC16 (VC4–VC15 tied to VC3, Table 16-3). **4 NTCs on the BQ** (TS1, TS3, DFETOFF, DCHG: SPI mode uses HDQ and CFETOFF); flex NTC 5, the board NTC and the box NTC on ESP32 ADC1. Balancing internal, ≈ 50 mA | parts/bq76952.md |
 | Current | Tesla shunt over SPI, through **TXU0304** (3 out, 1 in); OC (5 V) → divider → ESP32 | tesla-shunt.md §3 |
 | Contactor | Low-side driver for 3.9 A / 75 ms pick-up: **2 × 100 V N-FETs in series** (BSZ146N10LS5), each gated by its own 5 V buffer: one from the ESP32, one from **BQ76952 DDSG** = hardware AND. **No external coil clamp: Sensata forbids it** (internal TVS; X2 reaches B+ + 55 V). Self-test sense on X2 | parts/gv14-driver.md |
-| Precharge | **2 P-MOSFETs in series, same orientation**, B+ → AC05 10 Ω → LOAD+; each FET with its own driver and its own control line; ≤ 0.5 s timeout; LOAD+ measured (BQ PACK pin and/or ESP32 ADC) for "precharge done" | Chris 2026-11-27 |
+| Precharge | **2 P-MOSFETs in series, same orientation**, B+ → AC05 10 Ω → LOAD+; each with its own driver and control line; **one channel AC-coupled = hardware time limit ≤ 1 s** (B10); LOAD+ measured by the BQ PACK pin (1 V threshold) for "precharge done" | Chris 2026-11-27; decisions B10 |
 | Charger relay | Low-side DMN61D8L (internal 60 V clamp; **no flyback diode**, which TE says slows release and risks contact welding), 0.16–0.20 A; self-test sense on the drain | parts/charger-relay-driver.md |
 | Inverter remote | **Latching relay, zero holding current in either state** (Chris): KEMET EE2-5TNUH-L double-coil, set/reset by 2 × DMN61D8L pulses from ESP32 GPIOs; pole B reads the state back. PhotoMOS AQY212S is the runner-up | parts/inverter-remote.md |
 | AC present | Divider from J6 AC_SENSE → ESP32 ADC | interface §4 |
@@ -51,7 +51,10 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | Board supply | B+ (J3) → TVS → **5 V buck, EN ← BQ76952 REG1** → 3.3 V (LDO) → ESP32, TXU0304 A-side | v14-design-notes §9 |
 | Sleep | **≤ 10 µA typical in SHUTDOWN** (≈ 4.5 µA typ, ≈ 10.7 µA summing 25 °C datasheet maxima: parts/README.md budget, IMD halved); nothing else may draw from B+ when off; bench-measure | v14-design-notes §9 |
 | Wake / off | Button → TS2 wakes from SHUTDOWN; same button to an ESP32 GPIO; long press = SHUTDOWN. **No charger wake** (D33). LD held low | v14-design-notes §9a; D33 |
-| UV latch | Every UV trip latches (BQ SHUTDOWN is the hardware latch); re-enable by button with min cell ≥ 3.00 V | v14-design-notes §9a |
+| UV latch | Every UV trip latches (BQ SHUTDOWN at 2.60 V is the hardware latch); re-enable by button with min cell ≥ 3.00 V. **Works with a dead ESP32 only because the thresholds are in OTP** (B9). Firmware rule: any ALERT/XDSG drops GV14_EN and requires a full precharge before re-closing (review m1) | v14-design-notes §9a; decisions B9 |
+| Charge stop in hardware | Charger relay = ESP32 CHG_RLY_EN **AND** BQ DCHG (COV, OTC, UTC) | decisions B8 |
+| OTP bring-up | Mandatory bench step before any pack connection: cells disconnected, 10–12 V on BAT and VC16 (test pads), the ESP32 writes and checks OTP | decisions B9 |
+| USB rules | Flash with AC unplugged or the laptop on battery (an earthed laptop + earthed chassis bonds pack− to earth through USB; review m10). When the BQ is absent (USB only), firmware holds every output off (m11) | review m10, m11 |
 | Safe states | With no firmware: GV14 off (both FETs off), precharge off, charger relay open; inverter remote **keeps its last latched state** (harmless: with the GV14 open the inverter has no power) | design |
 | Telemetry | **ESP32-S3-WROOM-1U-N8** (8 MB flash, no PSRAM), Wi-Fi, U.FL external antenna | parts/esp32-s3.md |
 
