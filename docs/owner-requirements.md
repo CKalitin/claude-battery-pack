@@ -38,7 +38,7 @@
 | **Cells are the dominant constraint: everything above the cells (converters, power bay, control board) fits inside the plan footprint of the cells' top faces; nothing goes past it.** "We're setting the area as the top of the cells as the constraint, and you're not allowed to go above that." The charger and inverter caused the overrun, so replace them (handoff-converters.md) **Footprint = the module including the end plates (≈ 312 × 158 mm)** (Chris, 2026-11-27). No height cap above the cells, "but be reasonable" | 2026-11-27 |
 | Full rear hole grid (looks better) | v14 |
 | **40 mm inverter fan screwed flat onto the rear plate** ("I'd like it screwed onto the rear plate"): no spacer frame; the fan sits 7.95 mm past the footprint at the rear wall, an accepted exception like the rear-wall hardware (D41a) | 2026-11-28 |
-| Shell facet size (D40: F 8 mm as built vs the v16 15 mm look): **open**, Chris asked for a diagram of the options (versions/v17-option-d/renders/facet_options.png, 2026-11-28) | 2026-11-28 |
+| **Shell facets: keep the v16 look (F = 15 mm)**: "V16 look matters to me" (Chris, 2026-11-28), so D40's 8 mm facets are out. Method open: **B** (shell 8 mm deeper, thicker floor) or **D** (end plates chamfered 6 mm, G10 frame/floor narrowed); both modelled with env V17_FACET and rendered (v17p_*_facetB/D.jpg). C (W 190) breaks the footprint rule | 2026-11-28 |
 | Roadster-red gloss powder coat on the shell | v12 |
 | The pack has no name. Never "Tower A" | 2026-11-24 |
 | Renders: label only parts visible in that view | Nov 2026 |

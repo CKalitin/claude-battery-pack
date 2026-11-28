@@ -1,9 +1,9 @@
 # main-battery status
 
-Current task: cell shipping time to the Blaine, WA parcel depot (Chris); v17 fan flush done.
-Blockers: Chris: facet option A–D (facet_options.png); shunt harness end Micro-Fit 3.0 (as J2) or Mini-Fit Jr. Zep (NextPCB): sponsorship + harness reply.
-Next step: read vendor shipping policies / transit to Blaine 98230, update cells.md §4–5.
-Last result: fan flat on rear plate, checks PASS (cfc1fc2); new shunt harness: cut 200 mm (route 142).
+Current task: v16 facet look (F 15) per Chris: building variants B (8 mm deeper) and D (notched end plates), checks + exterior renders.
+Blockers: Chris: shunt harness end Micro-Fit 3.0 (as J2) or Mini-Fit Jr; cell order route (Docan quote for 8?). Zep (NextPCB): sponsorship + harness reply.
+Next step: send B/D renders + check results; Chris picks B or D; then make it the v17 default.
+Last result: cells: no US reseller has 8 in stock today; Docan Houston ~1-1.5 wk to Blaine (min 16, quote for 8); Full Battery 3 in stock (cells.md 4a).
 
 ## Teammates
 - cad-tower17: finished (v17 pushed), shutdown requested.
