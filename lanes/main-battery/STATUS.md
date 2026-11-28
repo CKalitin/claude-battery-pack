@@ -1,9 +1,9 @@
 # main-battery status
 
-Current task: v16 facet look (F 15) per Chris: building variants B (8 mm deeper) and D (notched end plates), checks + exterior renders.
-Blockers: Chris: shunt harness end Micro-Fit 3.0 (as J2) or Mini-Fit Jr; cell order route (Docan quote for 8?). Zep (NextPCB): sponsorship + harness reply.
-Next step: send B/D renders + check results; Chris picks B or D; then make it the v17 default.
-Last result: cells: no US reseller has 8 in stock today; Docan Houston ~1-1.5 wk to Blaine (min 16, quote for 8); Full Battery 3 in stock (cells.md 4a).
+Current task: v16 facet look: variants B and D built, checked and rendered (facet_compare.jpg); waiting on Chris to pick.
+Blockers: Chris: pick facet method B (8 mm taller) or D (same height, notched end plates; recommended); shunt harness end Micro-Fit 3.0 or Mini-Fit Jr; send the Docan quote draft? Zep (NextPCB): sponsorship + harness reply.
+Next step: make the chosen variant the v17 default, re-run all checks, BOM/flats, update spec + decisions.
+Last result: B and D: 0 interferences, clearance PASS; B 414.6 mm tall overall, D 406.6 (same as now). Docan quote email drafted.
 
 ## Teammates
 - cad-tower17: finished (v17 pushed), shutdown requested.
