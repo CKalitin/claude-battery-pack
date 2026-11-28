@@ -58,7 +58,7 @@ The board measures the cells (BQ76952) and current (Tesla shunt over SPI), and d
 | Safe states | With no firmware: GV14 off (both FETs off), precharge off, charger relay open; inverter remote **keeps its last latched state** (harmless: with the GV14 open the inverter has no power) | design |
 | Telemetry | **ESP32-S3-WROOM-1U-N8** (8 MB flash, no PSRAM), Wi-Fi, U.FL external antenna | parts/esp32-s3.md |
 
-## 5. Power budget (awake, worst case) ⚠️ estimates until part audits
+## 5. Power budget (awake, worst case; parts sized in parts/ audits)
 | Load | 5 V rail | 3.3 V rail |
 |---|---|---|
 | ESP32-S3 Wi-Fi TX peaks | — | 350 mA peak, ≈ 100 mA average |
@@ -73,7 +73,7 @@ Coil currents (GV14, charger relay) come straight from B+ through their drivers,
 
 ## 7. Manufacturing
 - Fab: **PCBWay full PCBA** (or NextPCB if Zep sponsors both boards; owner-req §6). Design to rules both meet (0.15/0.15 mm, 0.3/0.6 mm vias).
-- Quantity: **5** assembled (PCBWay minimum) ⚠️ Chris to confirm.
+- Quantity: **5** assembled (PCBWay minimum; Chris 2026-11-27).
 - Single-sided assembly. THT parts: the AC05 resistor and the Micro-Fit headers (or SMT Micro-Fit if available: phase 1).
 - 4-layer standard 1.6 mm stack-up, ENIG ⚠️ (TQFP-48 0.5 mm pitch and the 0.5 mm FPC prefer ENIG).
 
