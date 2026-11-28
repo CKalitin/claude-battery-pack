@@ -1,6 +1,6 @@
 # pcb status
 
-Current task: BMS phase 1 gate PASSED; explained to Chris what the intent sign-off covers and the bring-up bench tests
+Current task: BMS phase 1 gate PASSED; no schematic exists yet (Chris asked for a PDF export), it starts on his intent sign-off
 Blockers: Chris: sign off lanes/pcb/bms/design/intent.md (BMS requirements) so the schematic can start
 Next step: after sign-off, phase 3 schematic (hierarchical, wired, Chris's HVC style) with schlib + a pcb-review-schematic reviewer
 Last result: phase 1 closed (gates/phase1.md) after two independent reviews. The re-check's R1 blocker is fixed: the BQ setting that would have stopped DDSG/DCHG ever enabling the contactor and charger relay
