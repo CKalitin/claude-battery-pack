@@ -1,9 +1,9 @@
 # main-battery status
 
-Current task: option D CAD delivered (v17, all checks pass); verifying it and relaying it to Chris.
-Blockers: Chris: harness vendor (NextPCB ≈ $495 vs Loombotic ≈ $2,245); OK to order Molex 39-01-3103/39-28-1103 for the shunt test-fit; v17 choices: fan spacer past the footprint (D41) and the facet look change F 15→8 mm (D40). Zep (NextPCB): sponsorship reply.
-Next step: re-run checks to verify, regenerate harness drawings with CAD lengths, then wait for Chris on vendor, test-fit, fan spacer and look change (F 8 mm).
-Last result: v17 CAD pushed: 0 interferences, + to − 12.5 mm, pack-to-chassis 7.3 mm, assembly PASS, box 19.2 L (−24 %), SCS ≈ $1,823; cooling UPS case 15–21 K still open.
+Current task: v17 follow-ups: fan moved flat onto the rear plate (Chris), facet options diagram sent, re-running checks.
+Blockers: Chris: pick the shell facet option A–D (versions/v17-option-d/renders/facet_options.png). Zep (NextPCB): sponsorship + harness reply (vendor choice waits on it).
+Next step: confirm checks pass with the flush fan, commit, then the cooling hole-spacing iteration (agreed open item).
+Last result: decisions recorded: fan flush on rear plate (D41a), no Molex order (UBC Solar has housings), harness vendor waits for Zep; @loombotic on X: 11 posts since Jun 2025.
 
 ## Teammates
 - cad-tower17: finished (v17 pushed), shutdown requested.

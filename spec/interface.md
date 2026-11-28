@@ -20,7 +20,7 @@ Single source of truth for numbers that more than one lane uses. Only `main-batt
 | Charger | MEAN WELL **NPB-360-12TB**: 20 A, CV set to 14.2 V by VR, 2-stage by DIP. **No remote, no CAN** | converters.md |
 | Charger stop | **TE V23134-B1052-C642** N.O. relay (Mini ISO F4, bracket, 12 V 90 Ω coil, 1.6–2.4 W, operate 7.2 V) in the charger + lead, next to the charger TB. BMS drives the coil (low side + flyback diode); closes only after the GV14 is closed and AC is present; opens on cold (< 2 ℃), full, fault, or box air over the thermostat limit (cooling decision pending) | converters.md §4a |
 | Inverter | MEAN WELL **NTS-400P-112**: 400 W, 120 V 60 Hz, power-saving DIP SW4 on; remote off = dry contact on CN301 (relay or PhotoMOS) | NTS-400P-SPEC 2026-03-26 |
-| Inverter fan | Sunon MF40201VX-1000U-G99, 40 × 40 × 20, 10.8 CFM, intake at the rear wall (x −156…−136) on a **7.95 mm SCS 6061 .313 frame spacer**, 50 mm from the inverter DC face; on the inverter's own CN100 (not a BMS output). Fan inlet holes: open item (as drawn Ø4.8 → 4.8 CFM) | D41; README cooling |
+| Inverter fan | Sunon MF40201VX-1000U-G99, 40 × 40 × 20, 10.8 CFM, intake **screwed flat onto the rear plate** (x −163.95…−143.95, Chris 2026-11-28, D41a), 58 mm from the inverter DC face; on the inverter's own CN100 (not a BMS output). Fan inlet holes: open item (as drawn Ø4.8 → 4.8 CFM) | D41a; README cooling |
 | Pack fan | **none** (NF-A14 dropped) ⚠️ pending the cooling re-run | converters.md §4 |
 
 ## 3. Envelope
@@ -28,7 +28,7 @@ Single source of truth for numbers that more than one lane uses. Only `main-batt
 |---|---|---|
 | Footprint for everything above the cells | **x ±156, y ±79** (module incl. end plates, 312 × 158) | owner-req §3 |
 | Box (v17 as built) | Inside **336.9 × 170.8**, lid inside **z 333**; outer 348.1 × 190 × 406.6 incl. feet (19.2 L inside vs 25.2). Rear plate inner face x −163.95, front x 173.0 | versions/v17-option-d/README.md |
-| Footprint exceptions | Front zone 17 mm (LED board, 3 mm gap, diffuser, light pipe, antenna, LED/coax/PE leads); rear-wall fan spacer frame + fan screws + chassis lug (rear plate sits 7.95 mm behind the footprint because the rod ends stand 6 mm proud); lid-mounted parts. No converter, copper, fan or board outside | D41, clearance_v17 |
+| Footprint exceptions | Front zone 17 mm (LED board, 3 mm gap, diffuser, light pipe, antenna, LED/coax/PE leads); rear-wall 40 mm fan (7.95 mm past) + fan screws + chassis lug (rear plate sits 7.95 mm behind the footprint because the rod ends stand 6 mm proud); lid-mounted parts. No converter, copper or board outside | D41, clearance_v17 |
 | Lid inside | **z 333** (can tops z 201.85); z 335 if the shunt pigtail plugs straight into J2 | converters.md §3; harnesses.md H1 |
 | Deck 1 / deck 2 tops | z 221.6 / 276.3 | converter_packing.py |
 | Power-bay strip | y −79…−20, the full length, open to the lid (fuse lift-out) | converters.md §3 |
