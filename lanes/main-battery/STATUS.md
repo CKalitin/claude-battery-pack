@@ -1,9 +1,9 @@
 # main-battery status
 
-Current task: v17 follow-ups: fan moved flat onto the rear plate (Chris), facet options diagram sent, re-running checks.
-Blockers: Chris: pick the shell facet option A–D (versions/v17-option-d/renders/facet_options.png). Zep (NextPCB): sponsorship + harness reply (vendor choice waits on it).
-Next step: confirm checks pass with the flush fan, commit, then the cooling hole-spacing iteration (agreed open item).
-Last result: decisions recorded: fan flush on rear plate (D41a), no Molex order (UBC Solar has housings), harness vendor waits for Zep; @loombotic on X: 11 posts since Jun 2025.
+Current task: cell shipping time to the Blaine, WA parcel depot (Chris); v17 fan flush done.
+Blockers: Chris: facet option A–D (facet_options.png); shunt harness end Micro-Fit 3.0 (as J2) or Mini-Fit Jr. Zep (NextPCB): sponsorship + harness reply.
+Next step: read vendor shipping policies / transit to Blaine 98230, update cells.md §4–5.
+Last result: fan flat on rear plate, checks PASS (cfc1fc2); new shunt harness: cut 200 mm (route 142).
 
 ## Teammates
 - cad-tower17: finished (v17 pushed), shutdown requested.
