@@ -84,6 +84,20 @@ These weren't compared at the time. That is a documentation gap, recorded here s
 - "Regular price $99" strike-throughs are anchors, not market prices.
 - Ignore Alibaba and AliExpress "EVE Grade A" listings unless a test report and QR date codes come with the order (§6).
 
+### 4a. Stock and shipping time to Blaine, WA (checked 2026-11-28, in Chrome)
+Blaine is in the lower 48, so every US reseller's domestic ground service applies. Time = processing + ground transit.
+
+| Vendor | Stock 2026-11-28 | Ships from | Processing | Transit (vendor's own words) | Price | Notes |
+|---|---|---|---|---|---|---|
+| **Full Battery** (fullbattery.com/products/lf105) | **3 in stock** (need 8); "next shipment ETA Nov 18" note is stale | US warehouse, state not stated ⚠️ (Wyoming corp.) | ships same day | "US delivery within 2–5 days" (product page), "2–7 days" lower 48 (About Us); UPS Ground UN3480, free | $65; **$59 each for 8** | **Beyond stock = fresh production, ≈ 60 days.** Voltage-matched; busbar + bolts. **Also ships to Canada by UPS Standard** (could skip Blaine) ⚠️ price/terms not read |
+| **Docan Power, USA stock** (docanpower.com/eve-105ah-raw-cell-usa-stock) | 2,200 listed | Houston, TX 77084 | 1–2 working days | "Delivery 2–5 days via fast express" | $52.50 | **Online minimum 16 cells**; 8 needs "Get Quote" ⚠️. Claims test report + intact QR codes for Grade A |
+| 18650batterystore (US) | **Sold out** (4-pack $99, i.e. $24.75/cell, notify-me) | Georgia | 1 business day (4 pm ET cutoff) | UPS/FedEx Ground "1 to 5 business days" | — | **Does not ship to Canada.** Final sale; 5-day DOA window |
+| Battery Junction | **Out of stock, no ship date** | US | — | — | $59.95 | — |
+| 18650battery.com | **Sold out** | Houston | — | — | — | — |
+| evcomponents.com | "In stock" $32.90 | ⚠️ likely China ("ships by Air Express", global delivery) | — | "1–3 days" ⚠️ implausible for UN3480 by air | — | Not a US depot; treat with §6 caution |
+
+**Result:** no reseller has 8 in stock and ready to ship today. Fastest realistic options: Docan's Houston stock (quote for 8, about 1 week door to door), or Full Battery's 3 now plus 5 from fresh production (≈ 60 days; buying all 8 as one matched batch is better).
+
 ## 5. Getting cells into Canada
 
 Plan of record: order from a US reseller, ship to a parcel depot in Blaine, WA, and drive the cells across the border.
