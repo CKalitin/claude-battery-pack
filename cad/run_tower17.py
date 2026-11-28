@@ -90,7 +90,7 @@ if __name__ == "__main__":
     print(f"check done at {time.time() - t0:.0f} s", flush=True)
     if "--fast" in sys.argv:
         sys.exit()
-    OUT = os.path.join(HERE, "out_tower17"); stl = os.path.join(OUT, "stl")
+    OUT = os.path.join(HERE, "out_tower17" + (("_" + t.VARIANT) if t.VARIANT else "")); stl = os.path.join(OUT, "stl")
     os.makedirs(stl, exist_ok=True)
     for f in os.listdir(stl):
         os.remove(os.path.join(stl, f))
@@ -98,7 +98,8 @@ if __name__ == "__main__":
         s.label = n
         export_stl(s, os.path.join(stl, f"{n}.stl"), tolerance=0.05, angular_tolerance=0.15)
     ver = os.path.join(HERE, "..", "versions", "v17-option-d"); os.makedirs(ver, exist_ok=True)
-    export_step(Compound(label="claude_battery_pack_v17_assembly", children=list(parts.values())),
+    if not t.VARIANT:
+      export_step(Compound(label="claude_battery_pack_v17_assembly", children=list(parts.values())),
                 os.path.join(ver, "claude_battery_pack_v17_assembly.step"))
     bb = Compound(children=[v for v in parts.values()]).bounding_box()
     print("overall", [round(v, 1) for v in (bb.size.X, bb.size.Y, bb.size.Z)], f"total {time.time() - t0:.0f} s")

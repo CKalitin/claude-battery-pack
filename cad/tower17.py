@@ -11,7 +11,7 @@ SendCutSend rules this file is built to (sendcutsend.com bending guidelines + ca
   copper .125: die .63", min flange .471", joggle .506"-3.75" (docs/contactor-mounting.md)
   G10 .125 designed; SCS stock out of .125 in Nov 2026 (docs/v16-bom.md) ⚠️
 """
-import math
+import math, os
 from build123d import *
 
 IN = 25.4
@@ -67,8 +67,14 @@ FX, FY = 156.0, 79.0                                             # footprint rul
 ROD_Y, ROD_D = 72.0, 6.0
 
 # ======================= vertical stack =======================
-Z_FLOOR = T
-Z_CELL = Z_FLOOR + G10_FLOOR
+# Facet variant (D40 follow-up, Chris 2026-11-28 "V16 look matters"): env V17_FACET = "" (as built, F 8) | "B" | "D"
+#   B: F 15, shell bottom 8 mm lower (ZS = -8), G10 floor 8 mm thicker; everything above the floor unchanged, box 8 mm taller
+#   D: F 15, module end-plate bottom corners chamfered 6 mm, G10 frame narrowed to ±73, G10 floor to ±65.9
+VARIANT = os.environ.get("V17_FACET", "")
+RAISE = 8.0 if VARIANT == "B" else 0.0
+ZS = -RAISE                                                      # shell outer bottom
+Z_FLOOR = ZS + T
+Z_CELL = T + G10_FLOOR                                           # fixed: in variant B the G10 floor grows downward (Z_CELL - Z_FLOOR)
 Z_CBODY = Z_CELL + CELL_BODY                                     # 201.85
 Z_TERM = Z_CELL + CELL_TOT
 Z_G10TOP = Z_CBODY
@@ -110,7 +116,7 @@ XD1 = XD0 + ACR_DIFF
 XF = XD1 + PANEL_GAP                                             # front plate inner face 173.0
 L_IN = XF - XR
 XM = (XF + XR) / 2
-F = 8.0                                                          # facet length (v16: 15; D40: floor facets must clear the 158 end plates)
+F = 15.0 if VARIANT in ("B", "D") else 8.0                     # facet length (v16: 15; D40: floor facets must clear the 158 end plates)
 CNR = F * (math.cos(math.radians(30)) + math.cos(math.radians(60)))
 A_FLAT = W / 2 - CNR
 SEAM_Y = 24.0
@@ -128,7 +134,7 @@ LID_SCREW_Z = (SEAM_Z + WALL_TOP) / 2
 # end plates (front/rear shell plates)
 PW = W + 16.0
 FOOT, HANDLE = 18.0, 52.0
-PZ0, PZ1 = -FOOT, H + HANDLE
+PZ0, PZ1 = ZS - FOOT, H + HANDLE
 PR, LEG, ARCH_H, ARCH_R = 26.7, 40.0, 15.0, 13.3
 SLOT_L, SLOT_H, SLOT_TOP = 83.3, 28.3, 15.0
 
@@ -241,7 +247,7 @@ def sheet_extrude(oml, x0, x1, inside_left=True):
 
 def half_oml(side):
     s = side
-    pts = [(SEAM_Y + (0.25 if s > 0 else -0.25), 0.0), (s * A_FLAT, 0.0), (s * (A_FLAT + F * c30), F * s30), (s * W / 2, CNR), (s * W / 2, WALL_TOP),
+    pts = [(SEAM_Y + (0.25 if s > 0 else -0.25), ZS), (s * A_FLAT, ZS), (s * (A_FLAT + F * c30), ZS + F * s30), (s * W / 2, ZS + CNR), (s * W / 2, WALL_TOP),
            (s * (W / 2 - LIP_L * s30), WALL_TOP + LIP_L * c30)]
     return pts, (s < 0)
 
@@ -260,7 +266,7 @@ def body_half(side):
         for (y, z) in SCREW_YZ:
             if abs(y) < 1e-6:                                    # floor tab: half A only
                 if side < 0:
-                    t = box(xa, xb, -5.0, 5.0, T, z + TAB_H / 2)
+                    t = box(xa, xb, -5.0, 5.0, Z_FLOOR, z + TAB_H / 2)
                     t -= cyl_x(xa - 1, xb + 1, y, z, TAB_TAP / 2)
                     b += t
                 continue
@@ -274,7 +280,7 @@ def body_half(side):
     for x in ep_x:
         for y in (-HOLD_Y, HOLD_Y):
             if (y > SEAM_Y) == (side > 0):
-                b -= cyl_z(x, y, -1, T + 1, 2.25)
+                b -= cyl_z(x, y, ZS - 1, Z_FLOOR + 1, 2.25)
     for x in LID_SCREW_X:
         b -= cyl_y(x, side * (W / 2 + 1), side * (W / 2 - T - 1), LID_SCREW_Z, 4.25 / 2)
     return b
@@ -501,6 +507,9 @@ def module_endplates():
             c, n = tslot(x, y, EP_TOP, -1); p -= c; nuts.append(n)
         for (yy, zz) in CB_SO_YZ:
             p -= cyl_x(x - EP_T / 2 - 1, x + EP_T / 2 + 1, yy, zz, 1.25)
+        if VARIANT == "D":                                       # 6 mm x 45 deg corner chamfers: clear the 15 mm floor facets (profile cut, free at SCS)
+            for s in (-1, 1):
+                p -= Pos(x, s * EP_W / 2, Z_CELL) * Rot(45, 0, 0) * Box(EP_T + 2, 6.0 * 2 ** 0.5, 6.0 * 2 ** 0.5)
         eps.append(p)
     return Compound(eps), Compound(nuts)
 
@@ -531,7 +540,8 @@ def spacers():
     return Compound([box(x - G10_SPACER / 2, x + G10_SPACER / 2, -CELL_W / 2, CELL_W / 2, Z_CELL, Z_CBODY) for x in spacer_x])
 
 def g10_floor():
-    f = box(-STACK_L / 2 - 0.5, STACK_L / 2 + 0.5, -72.0, 72.0, Z_FLOOR, Z_CELL)
+    _fy = 65.9 if VARIANT in ("B", "D") else 72.0           # B, D: clear the 15 mm floor facet
+    f = box(-STACK_L / 2 - 0.5, STACK_L / 2 + 0.5, -_fy, _fy, Z_FLOOR, Z_CELL)
     for x in ep_x:
         for y in (-HOLD_Y, HOLD_Y):
             f -= cyl_z(x, y, Z_FLOOR - 1, Z_CELL + 1, 2.25)
@@ -539,7 +549,7 @@ def g10_floor():
 
 def g10_frame():
     z0 = Z_CELL
-    xo, yo = STACK_L / 2 + 6.0, EP_W / 2 + 2.4                   # y 81.4 (v16: 82): drops past the lips (inner |y| 81.76)
+    xo, yo = STACK_L / 2 + 6.0, (73.0 if VARIANT == "D" else EP_W / 2 + 2.4)   # D: ±73 clears the facet; y 81.4 (v16: 82): drops past the lips (inner |y| 81.76)
     f = box(-xo, xo, -yo, yo, z0, z0 + G10_FRAME)
     xi = STACK_L / 2 - EP_T
     f -= box(-xi, xi, -(CELL_W / 2 + 0.3), CELL_W / 2 + 0.3, z0 - 1, z0 + G10_FRAME + 1)
@@ -574,7 +584,7 @@ def holddown_screws():
     out = []
     for x in ep_x:
         for y in (-HOLD_Y, HOLD_Y):
-            out.append(cyl_z(x, y, -2.2, 0, 3.8) + cyl_z(x, y, 0, Z_CELL + 9.5, 1.95))
+            out.append(cyl_z(x, y, ZS - 2.2, ZS, 3.8) + cyl_z(x, y, ZS, Z_CELL + 9.5, 1.95))
     return Compound(out)
 
 BB_W = 25.0

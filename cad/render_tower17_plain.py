@@ -6,7 +6,8 @@ os.environ.setdefault("DISPLAY", ":99")
 import pyvista as pv
 
 D = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(D, "out_tower17")
+_V = os.environ.get("V17_FACET", "")
+OUT = os.path.join(D, "out_tower17" + (("_" + _V) if _V else ""))
 IMG = os.path.join(OUT, "img"); os.makedirs(IMG, exist_ok=True)
 JPG = os.path.join(D, "..", "versions", "v17-option-d", "renders"); os.makedirs(JPG, exist_ok=True)
 RED, GRAPH = "#B0121C", "#3E4045"
@@ -227,7 +228,7 @@ BAY = ("g10_bay", "bay_standoffs", "shunt", "sb175", "g10_sb", "contactor", "bs2
 
 def jpg(name):
     from PIL import Image
-    Image.open(os.path.join(IMG, name)).convert("RGB").resize((2400, 1800)).save(os.path.join(JPG, name.replace(".png", ".jpg")), quality=88)
+    Image.open(os.path.join(IMG, name)).convert("RGB").resize((2400, 1800)).save(os.path.join(JPG, name.replace(".png", (f"_facet{_V}" if _V else "") + ".jpg")), quality=88)
 
 if __name__ == "__main__":
     M = load()
