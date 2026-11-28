@@ -91,21 +91,6 @@
    "bends": 0
   },
   {
-   "key": "fan_spacer",
-   "label": "fan_spacer (6061 .313, 40 x 40 frame) NEW",
-   "qty": 1,
-   "p16": 53.43,
-   "f": 0.2,
-   "each": 10.46,
-   "total": 10.46,
-   "note": "scaled from the end plate",
-   "ok": "\u26a0\ufe0f",
-   "w": 40.0,
-   "h": 40.0,
-   "cut": 319.0,
-   "bends": 0
-  },
-  {
    "key": "g10_floor",
    "label": "g10_floor (G10 .187)",
    "qty": 1,
@@ -376,7 +361,7 @@
    "bends": 0
   }
  ],
- "total": 1822.9712098159084,
- "total_area": 1717.0510449079552,
- "total_cut": 1930.9995376700303
+ "total": 1812.5138654603893,
+ "total_area": 1712.0510449079552,
+ "total_cut": 1912.9766860128234
 }

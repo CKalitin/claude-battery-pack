@@ -101,7 +101,7 @@ STEPS = [
     ("8 deck 2 (bench: inverter + bridge posts screwed from below; PP45, CN100, CN301, CN500 plugged in) lowered onto its 4 posts; 4 nylon M4 from above",
         ("deck2", "inverter_nts400p", "screws_inv", "bridge_posts", "screws_bridge_posts_bot", "screws_d2_top", "plug_pp45", "plug_cn100",
          "plug_cn301", "plug_cn500"), UP, 360.0, "loose lead ends parked to the sides"),
-    ("9 fan spacer + 40 mm fan lowered to the rear wall; M3 from outside, nyloc nuts inside", ("fan_spacer", "fan_4020", "screws_fan", "nuts_fan"), UP, 120.0, ""),
+    ("9 40 mm fan lowered to the rear wall, flat on the rear plate; M3 from outside, nyloc nuts inside", ("fan_4020", "screws_fan", "nuts_fan"), UP, 120.0, ""),
     ("10 BMS bridge (bench: standoffs, board, 4 x M3) lowered onto the posts; 4 M3 from above", ("g10_bms_bridge", "bms_", "screws_bms", "screws_bridge"), UP, 120.0, ""),
     ("11 charger leads: P1b on relay 87 + lug on the 2151 charger stud, P2 lug on node B", ("w_p1b", "w_p2", "lug_pos_chg", "lug_neg_chg",
         "plug_relay_87", "nut_2151_chg"), UP, 120.0, ""),

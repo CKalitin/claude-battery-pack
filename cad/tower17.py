@@ -98,8 +98,8 @@ Z_P1 = Z_P0 + CU                                                 # copper top 25
 W = 174.0                                                        # body outer width (inside 170.8); D40
 W_IN = W - 2 * T
 # The rod ends stand 6 mm past each end plate (x ±161.9) and the rear wall tabs are 1.6 thick, so the plates cannot sit
-# on the footprint (v17 finding): rear inner face = -156 - 7.95 (the fan spacer's thickness), front = LED zone.
-FAN_SP = 0.313 * IN                                              # 7.95: 40 mm fan spacer frame, SCS 6061 .313
+# on the footprint (v17 finding): rear inner face = -156 - 7.95 (rod ends + nuts), front = LED zone. The fan screws flat onto it (D41a).
+FAN_SP = 0.313 * IN                                              # 7.95: rear-plate offset (was the fan spacer frame, dropped D41a)
 XR = -(FX + FAN_SP)                                              # rear plate inner face -163.95
 LED_SO = 7.0                                                     # LED board standoffs on the front end plate
 XL0 = STACK_L / 2 + LED_SO                                       # LED board back face 162.9
@@ -724,15 +724,7 @@ def inverter():
 def inverter_screws():
     return Compound([cyl_z(x, y, Z_DECK2 - 2.0, Z_DECK2, 2.8) + cyl_z(x, y, Z_DECK2, Z_D2 + 1.8, 1.3) for (x, y) in INV_SCREW_XY])
 
-FAN_X0 = -FX                                                     # fan inlet face (footprint edge); spacer behind it
-
-def fan_spacer():
-    """40 x 40 frame, bore 37, 4 x M3: closes the 7.95 gap so the fan draws only through the rear grid."""
-    f = box(XR, FAN_X0, FAN_Y - 20, FAN_Y + 20, FAN_Z - 20, FAN_Z + 20)
-    f -= cyl_x(XR - 1, FAN_X0 + 1, FAN_Y, FAN_Z, 18.5)
-    for (y, z) in FAN_SCREW_YZ:
-        f -= cyl_x(XR - 1, FAN_X0 + 1, y, z, 1.7)
-    return f
+FAN_X0 = XR                                                      # fan inlet face flat on the rear plate (Chris 2026-11-28, D41a): 7.95 past the footprint
 
 def fan():
     x0 = FAN_X0
@@ -872,7 +864,6 @@ def build(harness=True):
     p["screws_d2_top"] = d2_screws_top()
     p["inverter_nts400p"] = inverter()
     p["screws_inv"] = inverter_screws()
-    p["fan_spacer"] = fan_spacer()
     p["fan_4020"] = fan()
     p["screws_fan"] = fan_screws()
     p["nuts_fan"] = fan_nuts()

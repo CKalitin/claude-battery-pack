@@ -27,7 +27,7 @@ def R(n, a, K):                              # quadratic resistance of n paralle
 # ---- geometry: as built in cad/tower17.py (2026-11-27)
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 import tower17 as t
-BORE_R = 18.5                                # fan spacer bore (tower17.fan_spacer): only this opening feeds the fan
+BORE_R = 18.5                                # the fan's own Ø37 inlet, flat on the rear plate (D41a): only this opening feeds the fan
 def lens(d, r, R_):                          # overlap area of a hole (radius r) with the bore (radius R_), centres d apart
     if d >= r + R_: return 0.0
     if d <= R_ - r: return math.pi * r * r

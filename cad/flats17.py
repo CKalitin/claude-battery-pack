@@ -203,7 +203,6 @@ def v17():
     p = t.build(harness=False)
     from_solid("plate_front", p["plate_front"], "x"); from_solid("plate_rear", p["plate_rear"], "x")
     from_solid("module_endplate", p["module_endplates"].solids()[0], "x", qty=2)
-    from_solid("fan_spacer", p["fan_spacer"], "x")
     from_solid("diffuser_f", p["diffuser_f"], "x")
     from_solid("pipe_f", p["pipe_f"], "z")
     for n in ("g10_floor", "g10_frame", "deck1", "deck2", "g10_bay", "g10_bms_bridge"):

@@ -64,7 +64,6 @@ PARTS = [
     ("plate_front", "plate_front (6061 .125, hole grid)", 1, "plate_front", 206.02, "v16.3"),
     ("plate_rear", "plate_rear (6061 .125, full grid)", 1, "plate_rear", 232.39, "v16.3 live quote"),
     ("module_endplate", "module_endplate (6061 .313)", 2, "module_endplate", 53.43, "v16.3 live quote; SO_Y moved, same part otherwise"),
-    ("fan_spacer", "fan_spacer (6061 .313, 40 x 40 frame) NEW", 1, "module_endplate", 53.43, "scaled from the end plate"),
     ("g10_floor", "g10_floor (G10 .187)", 1, "g10_floor", 97.15, "v16.3 quote, unchanged"),
     ("g10_frame", "g10_frame (G10 .187; 1.2 mm narrower)", 1, "g10_frame", 95.70, "v16.3 quote"),
     ("deck1", "deck1 (G10 .125 design, priced .187)", 1, "tray1", 92.85, "scaled from tray 1"),

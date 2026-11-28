@@ -18,7 +18,7 @@ everything installed before; screws/nuts get a driver or socket path (tool OD in
     socket 23.5 mm on nut_5191_m10: clear
 [8 deck 2 (bench: inverter + bridge posts screwed from below; PP45, CN100, CN301, CN500 plugged in) lowered onto its 4 posts; 4 nylon M4 from above] 11 parts; sweep 360 mm: CLEAR  (loose lead ends parked to the sides)
     driver on screws_d2_top (4 screws): clear
-[9 fan spacer + 40 mm fan lowered to the rear wall; M3 from outside, nyloc nuts inside] 4 parts; sweep 120 mm: CLEAR
+[9 40 mm fan lowered to the rear wall, flat on the rear plate; M3 from outside, nyloc nuts inside] 3 parts; sweep 120 mm: CLEAR
     nut driver 9 mm x 40 mm along +x on nuts_fan: clear
 [10 BMS bridge (bench: standoffs, board, 4 x M3) lowered onto the posts; 4 M3 from above] 19 parts; sweep 120 mm: CLEAR
     driver on screws_bridge (4 screws): clear
@@ -43,4 +43,4 @@ everything installed before; screws/nuts get a driver or socket path (tool OD in
     strap_main (service disconnect), every other lead in place: CLEAR
 parts not in any step: []
 OVERALL: PASS
-(39 s)
+(116 s)
